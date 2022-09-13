@@ -161,10 +161,12 @@
   <ItemGroup>
     <ClInclude Include="..\public\Alligator.h" />
     <ClInclude Include="..\public\Angry.h" />
+    <ClInclude Include="..\public\Atros.h" />
     <ClInclude Include="..\public\AuraBlue.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\BackGroundRect.h" />
     <ClInclude Include="..\Public\BackGroundTree.h" />
+    <ClInclude Include="..\public\Baphomet.h" />
     <ClInclude Include="..\public\Bigfoot.h" />
     <ClInclude Include="..\public\Bloodymurderer.h" />
     <ClInclude Include="..\public\BlueFire.h" />
@@ -196,6 +198,7 @@
     <ClInclude Include="..\public\Loading.h" />
     <ClInclude Include="..\public\LogRect.h" />
     <ClInclude Include="..\public\Maiden.h" />
+    <ClInclude Include="..\public\Minorous.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\public\Fire.h" />
     <ClInclude Include="..\Public\FireDragon.h" />
@@ -226,6 +229,7 @@
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
     <ClInclude Include="..\public\Shadow.h" />
+    <ClInclude Include="..\public\Skeleton.h" />
     <ClInclude Include="..\public\SkillIcon.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\public\SkillWnd.h" />
@@ -253,7 +257,9 @@
     <ClInclude Include="..\Public\Wind.h" />
     <ClInclude Include="..\public\Wing.h" />
     <ClInclude Include="..\public\WorldHpBar.h" />
+    <ClInclude Include="..\public\Wraith.h" />
     <ClInclude Include="..\Public\XBox.h" />
+    <ClInclude Include="..\public\Zombie.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -262,10 +268,12 @@
   <ItemGroup>
     <ClCompile Include="..\private\Alligator.cpp" />
     <ClCompile Include="..\private\Angry.cpp" />
+    <ClCompile Include="..\private\Atros.cpp" />
     <ClCompile Include="..\private\AuraBlue.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\BackGroundRect.cpp" />
     <ClCompile Include="..\Private\BackGroundTree.cpp" />
+    <ClCompile Include="..\private\Baphomet.cpp" />
     <ClCompile Include="..\private\Bigfoot.cpp" />
     <ClCompile Include="..\private\Bloodymurderer.cpp" />
     <ClCompile Include="..\private\BlueFire.cpp" />
@@ -296,6 +304,7 @@
     <ClCompile Include="..\private\Loading.cpp" />
     <ClCompile Include="..\private\LogRect.cpp" />
     <ClCompile Include="..\private\Maiden.cpp" />
+    <ClCompile Include="..\private\Minorous.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\private\Fire.cpp" />
     <ClCompile Include="..\Private\FireDragon.cpp" />
@@ -326,6 +335,7 @@
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
+    <ClCompile Include="..\private\Skeleton.cpp" />
     <ClCompile Include="..\private\SkillIcon.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\private\SkillWnd.cpp" />
@@ -353,7 +363,9 @@
     <ClCompile Include="..\Private\Wind.cpp" />
     <ClCompile Include="..\private\Wing.cpp" />
     <ClCompile Include="..\private\WorldHpBar.cpp" />
+    <ClCompile Include="..\private\Wraith.cpp" />
     <ClCompile Include="..\Private\XBox.cpp" />
+    <ClCompile Include="..\private\Zombie.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

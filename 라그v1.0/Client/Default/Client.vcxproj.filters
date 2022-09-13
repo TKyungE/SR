@@ -324,6 +324,24 @@
     </Filter>
     <Filter Include="04.UI\TextBox">
       <UniqueIdentifier>{9cf041f7-5cfd-4487-b5b9-46da967fc22a}</UniqueIdentifier>
+    <Filter Include="02.GameObject\Monster\06.Atros">
+      <UniqueIdentifier>{1ff0c171-6ca1-4330-a298-542fcc8a7872}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\07.Baphomet">
+      <UniqueIdentifier>{23bbeb28-6c20-4641-ae3a-028a83f8cca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\08.Minorous">
+      <UniqueIdentifier>{27c0ba8b-e28b-407c-940a-270dec162b40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\09.Skeleton">
+      <UniqueIdentifier>{e6100df6-26ca-474a-bc27-cf096e4ea0f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\10.Wraith">
+      <UniqueIdentifier>{81805274-9c59-4713-9541-4dedfe709984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\11.Zombie">
+      <UniqueIdentifier>{0846c6be-4632-42b2-a7e6-a6ff28ae5c56}</UniqueIdentifier>
+
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -626,7 +644,26 @@
     </ClInclude>
     <ClInclude Include="..\Public\TextBox.h">
       <Filter>04.UI\TextBox</Filter>
+   </ClInclude>
+    <ClInclude Include="..\public\Atros.h">
+      <Filter>02.GameObject\Monster\06.Atros</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Baphomet.h">
+      <Filter>02.GameObject\Monster\07.Baphomet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Minorous.h">
+      <Filter>02.GameObject\Monster\08.Minorous</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Skeleton.h">
+      <Filter>02.GameObject\Monster\09.Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Zombie.h">
+      <Filter>02.GameObject\Monster\11.Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Wraith.h">
+      <Filter>02.GameObject\Monster\10.Wraith</Filter>
+  </ClInclude>
+    
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -916,7 +953,26 @@
     </ClCompile>
     <ClCompile Include="..\Private\TextBox.cpp">
       <Filter>04.UI\TextBox</Filter>
+</ClCompile>
+    <ClCompile Include="..\private\Atros.cpp">
+      <Filter>02.GameObject\Monster\06.Atros</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Baphomet.cpp">
+      <Filter>02.GameObject\Monster\07.Baphomet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Minorous.cpp">
+      <Filter>02.GameObject\Monster\08.Minorous</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Skeleton.cpp">
+      <Filter>02.GameObject\Monster\09.Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Zombie.cpp">
+      <Filter>02.GameObject\Monster\11.Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Wraith.cpp">
+      <Filter>02.GameObject\Monster\10.Wraith</Filter>
+</ClCompile>
+   
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
