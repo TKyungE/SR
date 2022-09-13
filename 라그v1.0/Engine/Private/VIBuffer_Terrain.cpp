@@ -74,6 +74,13 @@ _bool CVIBuffer_Terrain::Picking(_float4x4 WorldMatrix, _float3 * pPickPoint)
 				iIndex
 			};
 
+	//_uint iIndices[4] = {
+	//((m_tVIBInfo_Derived.m_iNumVerticesZ - 1) * (m_tVIBInfo_Derived.m_iNumVerticesX - 1)) + (m_tVIBInfo_Derived.m_iNumVerticesZ -1),
+	//((m_tVIBInfo_Derived.m_iNumVerticesZ - 1) * (m_tVIBInfo_Derived.m_iNumVerticesX - 1)) + ((m_tVIBInfo_Derived.m_iNumVerticesZ - 1) + (m_tVIBInfo_Derived.m_iNumVerticesX - 1)),
+	//m_tVIBInfo_Derived.m_iNumVerticesX - 1,
+	//0
+	//};
+
 			if (true == pPicking->Intersect_InLocalSpace(m_pVerticesPos[iIndices[0]], m_pVerticesPos[iIndices[1]], m_pVerticesPos[iIndices[2]], pPickPoint))
 				goto Coll;
 			
