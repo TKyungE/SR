@@ -18,9 +18,7 @@ public:
 	{
 		_float3		vPos;
 		_float3		vScale;
-		_uint	iIndex;
-		_uint iTrun;
-	}INDEXPOS;
+	}WALL;
 private:
 	Transparent_Wall(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	Transparent_Wall(const Transparent_Wall& rhs);
@@ -37,7 +35,7 @@ private:
 	CCollider*	m_pColliderCom = nullptr;
 	CRenderer*	m_pRendererCom = nullptr;
 
-	INDEXPOS	m_IndexPos;
+	WALL	m_IndexPos;
 private:
 	HRESULT SetUp_Components(void);
 public:

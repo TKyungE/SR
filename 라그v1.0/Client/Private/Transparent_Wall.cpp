@@ -29,10 +29,12 @@ HRESULT Transparent_Wall::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	//memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
+	memcpy(&m_IndexPos, pArg, sizeof(WALL));
 
-	m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 5.f));
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,_float3(10.f, 0.5f, 10.f));
+	m_pTransformCom->Set_Scaled(m_IndexPos.vScale);
+
+	m_IndexPos.vPos.y += 0.5f * m_IndexPos.vScale.y;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
 	return S_OK;
 }
@@ -74,13 +76,9 @@ HRESULT Transparent_Wall::Render(void)
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	g_bCollider = true;
-
 	if (g_bCollider)
 		m_pColliderCom->Render();
-
-	g_bCollider = false;
-
+	
 	return S_OK;
 }
 
