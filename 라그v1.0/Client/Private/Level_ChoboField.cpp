@@ -12,7 +12,7 @@
 #include "BackGroundTree.h"
 #include "Layer.h"
 #include "Portal.h"
-
+#include "Transparent_Wall.h"
 
 CLevel_ChoboField::CLevel_ChoboField(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -170,6 +170,20 @@ HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_CHOBOFIELD, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
+
+
+	for (auto& iter : m_vecWall)
+	{
+		Transparent_Wall::WALL Wall;
+		ZeroMemory(&Wall, sizeof(Transparent_Wall::WALL));
+		
+		Wall.vPos = iter.BackGroundPos;
+		Wall.vScale = iter.vScale;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Transparent_Wall"), LEVEL_CHOBOFIELD, pLayerTag, &Wall)))
+			return E_FAIL;
+	}
+
 	//CGameObject::INFO tInfo;
 	//for (int i = 0; i < 100; ++i)
 	//{
@@ -571,7 +585,7 @@ void CLevel_ChoboField::LoadData()
 
 
 	_float3 vPos1, vPos2;
-	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize;
+	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize, iWallSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
@@ -579,6 +593,7 @@ void CLevel_ChoboField::LoadData()
 	_tchar str5[MAX_PATH];
 	_tchar str6[MAX_PATH];
 	_tchar str7[MAX_PATH];
+	_tchar str8[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
@@ -593,6 +608,7 @@ void CLevel_ChoboField::LoadData()
 	ReadFile(hFile, str5, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str6, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str7, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str8, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 
 
@@ -603,6 +619,7 @@ void CLevel_ChoboField::LoadData()
 	iHouse2Size = stoi(str5);
 	iPortalSize = stoi(str6);
 	iNPCSize = stoi(str7);
+	iWallSize = stoi(str8);
 
 
 
@@ -771,6 +788,24 @@ void CLevel_ChoboField::LoadData()
 			NPCPos.iIndex = Index;
 
 			m_vecNPC.push_back(NPCPos);
+		}
+
+		for (_uint i = 0; i < iWallSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+			_float3 BackPos, Scale;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+
+			INDEXPOS WallPos;
+			ZeroMemory(&WallPos, sizeof(INDEXPOS));
+		
+			WallPos.BackGroundPos = BackPos;
+			WallPos.vScale = Scale;
+
+			m_vecWall.push_back(WallPos);
 		}
 
 		if (0 == dwByte)

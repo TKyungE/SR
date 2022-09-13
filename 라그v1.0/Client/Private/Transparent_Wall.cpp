@@ -32,6 +32,7 @@ HRESULT Transparent_Wall::Initialize(void * pArg)
 	memcpy(&m_IndexPos, pArg, sizeof(WALL));
 
 	m_pTransformCom->Set_Scaled(m_IndexPos.vScale);
+	m_IndexPos.vPos.y = 0.f;
 
 	m_IndexPos.vPos.y += 0.5f * m_IndexPos.vScale.y;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
