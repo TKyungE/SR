@@ -1,3 +1,15 @@
-﻿  TextBox.cpp
+﻿  Town.cpp
+  Loader.cpp
+  Level_ChoboField.cpp
+  Level_MidBoss.cpp
+c:\users\jjh\desktop\sr\라그v1.0\client\private\level_midboss.cpp(590): warning C4244: '초기화 중': 'int'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\jjh\desktop\sr\라그v1.0\client\private\level_midboss.cpp(591): warning C4244: '초기화 중': 'int'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Level_GamePlay.cpp
+c:\users\jjh\desktop\sr\라그v1.0\client\private\level_gameplay.cpp(846): warning C4244: '초기화 중': 'int'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\jjh\desktop\sr\라그v1.0\client\private\level_gameplay.cpp(847): warning C4244: '초기화 중': 'int'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  LetterBox.cpp
+  Camera_Dynamic.cpp
+  코드를 생성하고 있습니다...
+TextBox.obj : warning LNK4099: 'vc140.pdb' PDB를 'TextBox.obj' 또는 'C:\Users\JJH\Desktop\SR\라그v1.0\Client\Bin\vc140.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
   Client.vcxproj -> C:\Users\JJH\Desktop\SR\라그v1.0\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)
