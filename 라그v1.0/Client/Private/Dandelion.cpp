@@ -78,7 +78,7 @@ void CDandelion::Tick(_float fTimeDelta)
 			Safe_AddRef(pGameInstance);
 			CGameObject::INFO tInfo;
 			tInfo.pTarget = this;
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 			Safe_Release(pGameInstance);
 			m_bAngry = true;
 		}
@@ -559,11 +559,11 @@ HRESULT CDandelion::Skill_DefaultAttack(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 	tInfo.vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 	
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DandelionAttack"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DandelionAttack"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -663,7 +663,7 @@ void CDandelion::Check_Front()
 		Safe_AddRef(pGameInstance);
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 		Safe_Release(pGameInstance);
 	}
 }
@@ -832,9 +832,9 @@ HRESULT CDandelion::RespawnMonster()
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.5f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 0.7f,0.7f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
