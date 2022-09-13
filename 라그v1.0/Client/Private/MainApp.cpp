@@ -6,6 +6,8 @@
 #include "SoundMgr.h"
 #include "Loading.h"
 
+
+//test
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
 {
