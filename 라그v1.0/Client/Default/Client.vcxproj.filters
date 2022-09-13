@@ -322,6 +322,9 @@
     <Filter Include="02.GameObject\Transparent_Wall">
       <UniqueIdentifier>{ae255d11-cb57-4cb9-bfc6-cbf716344943}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\TextBox">
+      <UniqueIdentifier>{9cf041f7-5cfd-4487-b5b9-46da967fc22a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -621,6 +624,9 @@
     <ClInclude Include="..\Public\Transparent_Wall.h">
       <Filter>02.GameObject\Transparent_Wall</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TextBox.h">
+      <Filter>04.UI\TextBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -907,6 +913,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Transparent_Wall.cpp">
       <Filter>02.GameObject\Transparent_Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TextBox.cpp">
+      <Filter>04.UI\TextBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

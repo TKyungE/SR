@@ -290,6 +290,7 @@ void CPlayer::CheckColl()
 	{
 		m_bTalk = false;
 		g_bTalk = false;
+		g_bCut = false;
 	}
 
 	Safe_Release(pInstance);
@@ -686,10 +687,8 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk)
-	{
-		ERR_MSG(TEXT("Quest"));
-	}
-
+		g_bCut = true;
+		
 	Safe_Release(pInstance);
 }
 

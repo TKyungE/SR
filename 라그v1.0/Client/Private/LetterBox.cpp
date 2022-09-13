@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\LetterBox.h"
 #include "GameInstance.h"
+#include "Camera_Dynamic.h"
 
 CLetterBox::CLetterBox(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -22,7 +23,7 @@ HRESULT CLetterBox::Initialize_Prototype()
 
 HRESULT CLetterBox::Initialize(void * pArg)
 {
-	/*if (FAILED(__super::Initialize(pArg)))
+	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
@@ -31,14 +32,17 @@ HRESULT CLetterBox::Initialize(void * pArg)
 	m_fSizeX = (_float)g_iWinSizeX;
 	m_fSizeY = (_float)g_iWinSizeY * 0.25f;
 	m_fX = g_iWinSizeX * 0.5f;
-	m_fUpY = g_iWinSizeY * 0.25f;
-	m_fDownY = g_iWinSizeY * 0.75f;
+	m_fUpY = g_iWinSizeY * -0.125f;
+	m_fDownY = g_iWinSizeY * 1.125f;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));*/
+	m_pUpTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
+	m_pUpTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fUpY + g_iWinSizeY * 0.5f, 0.f));
+
+	m_pDownTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
+	m_pDownTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fDownY + g_iWinSizeY * 0.5f, 0.f));
 
 	return S_OK;
 }
@@ -47,16 +51,30 @@ void CLetterBox::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	RECT		rcRect;
-	SetRect(&rcRect, (int)(m_fX - m_fSizeX * 0.5f), (int)(m_fY - m_fSizeY * 0.5f), (int)(m_fX + m_fSizeX * 0.5f), (int)(m_fY + m_fSizeY * 0.5f));
+	if ((g_iWinSizeY * 0.125f) > m_fUpY && g_bCut)
+		m_fUpY += 2.f;
+		
+	if ((g_iWinSizeY * 0.875f) < m_fDownY && g_bCut)
+		m_fDownY -= 2.f;
+
+	if (!g_bCut)
+	{
+		if (m_fUpY > (g_iWinSizeY * -0.125f))
+			m_fUpY -= 2.f;
+		if (m_fDownY < (g_iWinSizeY * 1.125f))
+			m_fDownY += 2.f;
+	}
+
+	m_pUpTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fUpY + g_iWinSizeY * 0.5f, 0.f));
+	m_pDownTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fDownY + g_iWinSizeY * 0.5f, 0.f));
 }
 
 void CLetterBox::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (nullptr != m_pRendererCom && g_bTalk)
-		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_UI, this);
+	if (nullptr != m_pRendererCom && (m_fUpY > (g_iWinSizeY * -0.125f)) && (m_fDownY < (g_iWinSizeY * 1.125f)))
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
 HRESULT CLetterBox::Render()
@@ -64,8 +82,8 @@ HRESULT CLetterBox::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	/*if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;*/
+	if (FAILED(m_pUpTransformCom->Bind_OnGraphicDev()))
+	return E_FAIL;
 
 	_float4x4		ViewMatrix;
 	D3DXMatrixIdentity(&ViewMatrix);
@@ -79,7 +97,12 @@ HRESULT CLetterBox::Render()
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
-	//m_pVIBufferCom->Render();
+	m_pUpVIBufferCom->Render();
+
+	if (FAILED(m_pDownTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+	
+	m_pDownVIBufferCom->Render();
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
@@ -94,13 +117,15 @@ HRESULT CLetterBox::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_SpaceUI"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_LetterBox"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
-	/*if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
-		return E_FAIL;*/
+	if (FAILED(__super::Add_Components(TEXT("Com_UpVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pUpVIBufferCom)))
+		return E_FAIL;
 
+	if (FAILED(__super::Add_Components(TEXT("Com_DownVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pDownVIBufferCom)))
+		return E_FAIL;
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
@@ -109,8 +134,11 @@ HRESULT CLetterBox::SetUp_Components()
 	TransformDesc.fSpeedPerSec = 5.f;
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
 
-	/*if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
-		return E_FAIL;*/
+	if (FAILED(__super::Add_Components(TEXT("Com_UpTransform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pUpTransformCom, &TransformDesc)))
+	return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_DownTransform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pDownTransformCom, &TransformDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -141,7 +169,7 @@ CLetterBox * CLetterBox::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		ERR_MSG(TEXT("Failed to Created : CSpace"));
+		ERR_MSG(TEXT("Failed to Created : CLetterBox"));
 		Safe_Release(pInstance);
 	}
 
@@ -154,7 +182,7 @@ CGameObject * CLetterBox::Clone(void * pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		ERR_MSG(TEXT("Failed to Cloned : CSpace"));
+		ERR_MSG(TEXT("Failed to Cloned : CLetterBox"));
 		Safe_Release(pInstance);
 	}
 

@@ -67,7 +67,7 @@ void CWorldHpBar::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 	OnBillboard();
-	if (nullptr != m_pRendererCom)
+	if (nullptr != m_pRendererCom && !g_bCut)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 

@@ -40,6 +40,8 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
+	HRESULT On_SamplerState();
+	HRESULT Off_SamplerState();
 
 public:
 	static CSpace* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

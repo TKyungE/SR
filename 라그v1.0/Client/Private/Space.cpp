@@ -54,7 +54,7 @@ void CSpace::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (nullptr != m_pRendererCom && g_bTalk)
+	if (nullptr != m_pRendererCom && g_bTalk && !g_bCut)
 		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_UI, this);
 }
 
@@ -75,12 +75,18 @@ HRESULT CSpace::Render()
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 
+	if (FAILED(Off_SamplerState()))
+		return E_FAIL;
+
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
 	m_pVIBufferCom->Render();
 
 	if (FAILED(Release_RenderState()))
+		return E_FAIL;
+
+	if (FAILED(On_SamplerState()))
 		return E_FAIL;
 
 	return S_OK;
@@ -101,7 +107,6 @@ HRESULT CSpace::SetUp_Components()
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -111,7 +116,6 @@ HRESULT CSpace::SetUp_Components()
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
-
 
 	return S_OK;
 }
@@ -133,6 +137,30 @@ HRESULT CSpace::Release_RenderState()
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
+	return S_OK;
+}
+
+HRESULT CSpace::On_SamplerState()
+{
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+	return S_OK;
+}
+
+HRESULT CSpace::Off_SamplerState()
+{
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+
 	return S_OK;
 }
 

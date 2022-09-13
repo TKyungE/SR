@@ -126,7 +126,7 @@ void CInventory::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 	if (m_tInfo.bHit == false)
 	{
-		if (nullptr != m_pRendererCom)
+		if (nullptr != m_pRendererCom && !g_bCut)
 			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_UI, this);
 
 		m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));

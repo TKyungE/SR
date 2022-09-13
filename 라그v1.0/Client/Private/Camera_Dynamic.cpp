@@ -121,6 +121,12 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 
 	m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 
+	if (g_bCut && m_CameraDesc.fFovy > D3DXToRadian(40.f))
+		m_CameraDesc.fFovy -= D3DXToRadian(0.25f);
+
+	else if (!g_bCut && m_CameraDesc.fFovy < D3DXToRadian(60.f))
+		m_CameraDesc.fFovy += D3DXToRadian(0.25f);
+
 	if (FAILED(Bind_OnGraphicDev()))
 		return;
 }
