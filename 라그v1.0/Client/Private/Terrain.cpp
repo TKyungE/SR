@@ -44,6 +44,8 @@ HRESULT CTerrain::Initialize(void* pArg)
 		m_tInfo.iMp = 91;
 	else if (m_tInfo.iLevelIndex == LEVEL_MIDBOSS)
 		m_tInfo.iMp = 112;
+	else if (m_tInfo.iLevelIndex == LEVEL_TOWN2)
+		m_tInfo.iMp = 80;
 	else
 		m_tInfo.iMp = 111;
 	

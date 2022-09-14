@@ -38,6 +38,7 @@ public:
 	HRESULT Loading_ForTownLevel();
 	HRESULT Loading_ForChoboLevel();
 	HRESULT Loading_ForMidBoss();
+	HRESULT Loading_ForTown2();
 
 	HRESULT Loading_Static(LEVEL Level);
 	HRESULT Loading_Prototype();

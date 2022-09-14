@@ -32,8 +32,64 @@ HRESULT CHouse3::Initialize(void * pArg)
 
 	//memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
 
-	SetPos();
+	//SetPos();
 
+	//============================================================================================================
+	_float3 vScale = _float3(3.f,3.f,3.f);
+
+	m_pTransformComCube->Set_Scaled(vScale);
+	_float3 vPos = _float3(10.f, 0.f, 30.f);
+	vPos.y += 0.5f * vScale.y;
+	m_pTransformComCube->Set_State(CTransform::STATE_POSITION, vPos);
+
+	//============================================================================================================
+	_float3 vPos2 = m_pTransformComCube->Get_State(CTransform::STATE_POSITION);
+	_float3 vScale2 = _float3(3.f, 3.f, 1.f);
+	m_pTransformCom->Set_Scaled(vScale2);
+	vPos2.x += 0.5f * vScale.x;
+	vPos2.y -= 0.52f;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos2);
+
+	m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), 1);
+	m_pTransformCom->Turn(_float3(0.f,0.f,1.f), 0.8f);
+
+
+	//============================================================================================================
+
+	_float3 vPos3 = m_pTransformComCube->Get_State(CTransform::STATE_POSITION);
+
+	m_pTransformCom2->Set_Scaled(vScale);
+
+	vPos3.x += 0.175f * vScale.x;
+	vPos3.y -= 0.11f;
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos3);
+	m_pTransformCom2->Turn(_float3(0.f, 1.f, 0.f), 1);
+
+	//============================================================================================================
+
+	_float3 vPos4 = m_pTransformComCube->Get_State(CTransform::STATE_POSITION);
+	_float3 vScale3 = _float3(3.f, 2.575f, 3.f);
+	m_pTransformCom3->Set_Scaled(vScale3);
+
+	vPos4.x += 0.175f * vScale3.x;
+	vPos4.y += 0.81f;
+	m_pTransformCom3->Set_State(CTransform::STATE_POSITION, vPos4);
+	m_pTransformCom3->Turn(_float3(0.f, 1.f, 0.f), 1);
+	m_pTransformCom3->Turn(_float3(0.f, 0.f, 1.f), 0.61f);
+
+	//============================================================================================================
+
+	_float3 vPos5 = m_pTransformComCube->Get_State(CTransform::STATE_POSITION);
+	_float3 vScale4 = _float3(3.f, 2.575f, 3.f);
+	m_pTransformCom4->Set_Scaled(vScale3);
+
+	vPos5.x -= 0.5f * vScale3.x;
+	vPos5.y += 0.81f;
+	m_pTransformCom4->Set_State(CTransform::STATE_POSITION, vPos5);
+	m_pTransformCom4->Turn(_float3(0.f, 1.f, 0.f), -1);
+	m_pTransformCom4->Turn(_float3(0.f, 0.f, 1.f), -0.61f);
+
+	//============================================================================================================
 	return S_OK;
 }
 
@@ -50,11 +106,11 @@ void CHouse3::Late_Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
-	{
+	//if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	//{
 		if (nullptr != m_pRendererCom)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-	}
+	//}
 	Safe_Release(pInstance);
 }
 
@@ -66,8 +122,52 @@ HRESULT CHouse3::Render(void)
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
-	if (FAILED(RectHouse_Render()))
+	if (FAILED(m_pTransformComCube->Bind_OnGraphicDev()))
 		return E_FAIL;
+
+	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
+		return E_FAIL;
+
+	m_pVIBufferCube->Render();
+
+
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(5)))
+		return E_FAIL;
+	m_pVIBufferCom->Render();
+
+
+
+	if (FAILED(m_pTransformCom2->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(4)))
+		return E_FAIL;
+	m_pVIBufferCom2->Render();
+
+
+
+	if (FAILED(m_pTransformCom3->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(5)))
+		return E_FAIL;
+	m_pVIBufferCom3->Render();
+
+
+
+
+	if (FAILED(m_pTransformCom4->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(5)))
+		return E_FAIL;
+	m_pVIBufferCom4->Render();
+
+
+
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
@@ -89,12 +189,14 @@ HRESULT CHouse3::SetUp_Components(void)
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer3"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBufferCom4)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer4"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBufferCom5)))
-		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer5"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBufferCom6)))
-		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_House3"), (CComponent**)&m_pTextureCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture1"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_House3_Cube"), (CComponent**)&m_pTextureCom2)))
+		return E_FAIL;
+	
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBufferCube"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBufferCube)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -111,12 +213,10 @@ HRESULT CHouse3::SetUp_Components(void)
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform3"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom4, &TransformDesc)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Transform4"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom5, &TransformDesc)))
-		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Transform5"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom6, &TransformDesc)))
-		return E_FAIL;
 
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform6"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformComCube, &TransformDesc)))
+		return E_FAIL;
+	
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
 
@@ -132,13 +232,13 @@ HRESULT CHouse3::SetUp_RenderState(void)
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_POINT);
-
-	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+/*
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);*/
 	return S_OK;
 }
 
@@ -162,14 +262,12 @@ void CHouse3::SetPos(void)
 
 	_float3 vScale = _float3(3.f, 3.f, 3.f);
 
-	_uint iTurn = 3;
+	_uint iTurn = 0;
 
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom2->Set_Scaled(vScale);
 	m_pTransformCom3->Set_Scaled(vScale);
 	m_pTransformCom4->Set_Scaled(vScale);
-	m_pTransformCom5->Set_Scaled(vScale);
-	m_pTransformCom6->Set_Scaled(vScale);
 
 	for (_uint i = 0; i < iTurn; ++i)
 	{
@@ -179,14 +277,11 @@ void CHouse3::SetPos(void)
 
 	m_pTransformCom3->Turn(_float3(0.f, 1.f, 0.f), 1);
 	m_pTransformCom4->Turn(_float3(0.f, 1.f, 0.f), 1);
-	m_pTransformCom5->Turn(_float3(0.f, 1.f, 0.f), 1);
-	m_pTransformCom6->Turn(_float3(0.f, 1.f, 0.f), 1);
+
 	for (_uint i = 0; i < iTurn; ++i)
 	{
 		m_pTransformCom3->Turn(_float3(0.f, 1.f, 0.f), 1);
 		m_pTransformCom4->Turn(_float3(0.f, 1.f, 0.f), 1);
-		m_pTransformCom5->Turn(_float3(0.f, 1.f, 0.f), 1);
-		m_pTransformCom6->Turn(_float3(0.f, 1.f, 0.f), 1);
 	}
 
 
@@ -197,28 +292,28 @@ void CHouse3::SetPos(void)
 
 	//vCenter.x -= 0.3f;
 
-	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+	//m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
 
-	//==============================================================
-	_float3 vCenter = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	////==============================================================
+	//_float3 vCenter = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vCenter.x += 1.1f;
-	m_pTransformCom3->Set_State(CTransform::STATE_POSITION, vCenter);
-
-
-	//==============================================================
-
-	m_pTransformCom4->Set_State(CTransform::STATE_POSITION, vPos);
+	//vCenter.x += 1.1f;
+	//m_pTransformCom3->Set_State(CTransform::STATE_POSITION, vCenter);
 
 
-	//==============================================================
+	////==============================================================
+
+	//m_pTransformCom4->Set_State(CTransform::STATE_POSITION, vPos);
 
 
-	m_pTransformCom5->Set_State(CTransform::STATE_POSITION, vPos);
-	
-	//==============================================================
+	////==============================================================
 
-	m_pTransformCom6->Set_State(CTransform::STATE_POSITION, vPos);
+
+	//m_pTransformCom5->Set_State(CTransform::STATE_POSITION, vPos);
+	//
+	////==============================================================
+
+	//m_pTransformCom6->Set_State(CTransform::STATE_POSITION, vPos);
 
 }
 
@@ -226,9 +321,11 @@ HRESULT CHouse3::RectHouse_Render(void)
 {
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
 		return E_FAIL;
-	m_pVIBufferCom->Render();
+	m_pVIBufferCube->Render();
+
+	//m_pVIBufferCom->Render();
 
 
 
@@ -240,11 +337,11 @@ HRESULT CHouse3::RectHouse_Render(void)
 */
 
 
-	if (FAILED(m_pTransformCom3->Bind_OnGraphicDev()))
+	/*if (FAILED(m_pTransformCom3->Bind_OnGraphicDev()))
 		return E_FAIL;
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(2)))
 		return E_FAIL;
-	m_pVIBufferCom3->Render();
+	m_pVIBufferCom3->Render();*/
 
 
 	/*if (FAILED(m_pTransformCom4->Bind_OnGraphicDev()))

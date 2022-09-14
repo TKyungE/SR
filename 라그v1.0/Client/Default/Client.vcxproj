@@ -196,6 +196,7 @@
     <ClInclude Include="..\Public\LetterBox.h" />
     <ClInclude Include="..\public\Level_ChoboField.h" />
     <ClInclude Include="..\Public\Level_MidBoss.h" />
+    <ClInclude Include="..\Public\Level_Town2.h" />
     <ClInclude Include="..\public\Loading.h" />
     <ClInclude Include="..\public\LogRect.h" />
     <ClInclude Include="..\public\Maiden.h" />
@@ -303,6 +304,7 @@
     <ClCompile Include="..\Private\LetterBox.cpp" />
     <ClCompile Include="..\private\Level_ChoboField.cpp" />
     <ClCompile Include="..\Private\Level_MidBoss.cpp" />
+    <ClCompile Include="..\Private\Level_Town2.cpp" />
     <ClCompile Include="..\private\Loading.cpp" />
     <ClCompile Include="..\private\LogRect.cpp" />
     <ClCompile Include="..\private\Maiden.cpp" />

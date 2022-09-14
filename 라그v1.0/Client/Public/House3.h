@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CRenderer;
 class CTransform;
 class CVIBuffer_Rect2;
+class CVIBuffer_Cube;
 class CTexture;
 class CCollider;
 END
@@ -38,14 +39,13 @@ private:
 	CTransform* m_pTransformCom2 = nullptr;
 	CTransform* m_pTransformCom3 = nullptr;
 	CTransform* m_pTransformCom4 = nullptr;
-	CTransform* m_pTransformCom5 = nullptr;
-	CTransform* m_pTransformCom6 = nullptr;
+	CTransform* m_pTransformComCube = nullptr;
 	CVIBuffer_Rect2*	m_pVIBufferCom = nullptr;
 	CVIBuffer_Rect2*	m_pVIBufferCom2 = nullptr;
 	CVIBuffer_Rect2*	m_pVIBufferCom3 = nullptr;
 	CVIBuffer_Rect2*	m_pVIBufferCom4 = nullptr;
-	CVIBuffer_Rect2*	m_pVIBufferCom5 = nullptr;
-	CVIBuffer_Rect2*	m_pVIBufferCom6 = nullptr;
+	CVIBuffer_Cube*		m_pVIBufferCube = nullptr;
+	CTexture*	m_pTextureCom2 = nullptr;
 	CTexture*	m_pTextureCom = nullptr;
 	CCollider*	m_pColliderCom = nullptr;
 

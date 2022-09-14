@@ -174,11 +174,6 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	}
 
 
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House3"), LEVEL_TOWN, pLayerTag, nullptr)))
-		return E_FAIL;
-
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -370,17 +365,47 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	for (auto& iter : m_vecPortal)
+	auto iter = m_vecPortal.begin();
+
+	_uint iCount = 0;
+
+	for (; iter != m_vecPortal.end(); ++iter)
 	{
+		if (iCount == 1)
+		{
+			iCount = 0;
+			break;
+		}
 		CGameObject::INFO tInfo;
 		tInfo.iLevelIndex = LEVEL_TOWN;
-		tInfo.vPos = iter.BackGroundPos;
-		tInfo.vScale = iter.vScale;
+		tInfo.vPos = iter->BackGroundPos;
+		tInfo.vScale = iter->vScale;
 		tInfo.iNextLevel = LEVEL_GAMEPLAY;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
 			return E_FAIL;
 
+		++iCount;
+	}
+	
+	for (; iter != m_vecPortal.end(); ++iter)
+	{
+		if (iCount == 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		CGameObject::INFO tInfo;
+		tInfo.iLevelIndex = LEVEL_TOWN;
+		tInfo.vPos = iter->BackGroundPos;
+		tInfo.vScale = iter->vScale;
+		tInfo.iNextLevel = LEVEL_TOWN2;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
+			return E_FAIL;
+
+		++iCount;
 	}
 
 	Safe_Release(pGameInstance);
@@ -411,7 +436,7 @@ void CTown::Open_Level(void)
 
 void CTown::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/TownPos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/TownPos_1.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;

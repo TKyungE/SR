@@ -122,6 +122,9 @@ unsigned int APIENTRY Thread_Main(void* pArg)
 	case LEVEL_MIDBOSS:
 		pLoader->Loading_ForMidBoss();
 		break;
+	case LEVEL_TOWN2:
+		pLoader->Loading_ForTown2();
+		break;
 	}
 
 	LeaveCriticalSection(&pLoader->Get_CriticalSection());
@@ -192,6 +195,13 @@ HRESULT CLoader::Loading_ForChoboLevel()
 HRESULT CLoader::Loading_ForMidBoss()
 {
 
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_ForTown2()
+{
 	m_isFinished = true;
 
 	return S_OK;
@@ -822,6 +832,9 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/House/1/%d.png"), 6))))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_House3_Cube"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/BackGround/House/1/%d.dds"), 1))))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

@@ -349,6 +349,9 @@
     <Filter Include="02.GameObject\BackGroundObj\House\House3">
       <UniqueIdentifier>{2334e134-efea-417f-bcea-b1903c68255a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\Town2">
+      <UniqueIdentifier>{ec9ed82b-886d-42e1-ba62-ffa47ebfa9e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -672,6 +675,9 @@
     <ClInclude Include="..\Public\BackGroundRect.h">
       <Filter>02.GameObject\BackGroundObj\BackGroundRect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Level_Town2.h">
+      <Filter>01.Levels\Town2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -982,6 +988,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\BackGroundRect.cpp">
       <Filter>02.GameObject\BackGroundObj\BackGroundRect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Town2.cpp">
+      <Filter>01.Levels\Town2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
