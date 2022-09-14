@@ -162,6 +162,7 @@
     <ClInclude Include="..\public\Alligator.h" />
     <ClInclude Include="..\public\Angry.h" />
     <ClInclude Include="..\public\AuraBlue.h" />
+    <ClInclude Include="..\Public\BackBtn.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\BackGroundRect.h" />
     <ClInclude Include="..\Public\BackGroundTree.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="..\public\Byorgue.h" />
     <ClInclude Include="..\Public\Camera_Dynamic.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\CloseBtn.h" />
     <ClInclude Include="..\public\Dandelion.h" />
     <ClInclude Include="..\public\DandelionAttack.h" />
     <ClInclude Include="..\public\DefaultAttack.h" />
@@ -215,6 +217,7 @@
     <ClInclude Include="..\public\MeteorEff.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\MyButton.h" />
+    <ClInclude Include="..\Public\NextBtn.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\public\PlayerInfo.h" />
     <ClInclude Include="..\public\PlayerMpBar.h" />
@@ -226,6 +229,7 @@
     <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
+    <ClInclude Include="..\Public\ReceiveBtn.h" />
     <ClInclude Include="..\public\Shadow.h" />
     <ClInclude Include="..\public\SkillIcon.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
@@ -264,6 +268,7 @@
     <ClCompile Include="..\private\Alligator.cpp" />
     <ClCompile Include="..\private\Angry.cpp" />
     <ClCompile Include="..\private\AuraBlue.cpp" />
+    <ClCompile Include="..\Private\BackBtn.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\BackGroundRect.cpp" />
     <ClCompile Include="..\Private\BackGroundTree.cpp" />
@@ -273,6 +278,7 @@
     <ClCompile Include="..\private\BossSkillTarget.cpp" />
     <ClCompile Include="..\private\Byorgue.cpp" />
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
+    <ClCompile Include="..\Private\CloseBtn.cpp" />
     <ClCompile Include="..\private\Dandelion.cpp" />
     <ClCompile Include="..\private\DandelionAttack.cpp" />
     <ClCompile Include="..\private\DefaultAttack.cpp" />
@@ -316,6 +322,7 @@
     <ClCompile Include="..\private\MeteorEff.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\MyButton.cpp" />
+    <ClCompile Include="..\Private\NextBtn.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\private\PlayerInfo.cpp" />
     <ClCompile Include="..\private\PlayerMpBar.cpp" />
@@ -327,6 +334,7 @@
     <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />
+    <ClCompile Include="..\Private\ReceiveBtn.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
     <ClCompile Include="..\private\SkillIcon.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />

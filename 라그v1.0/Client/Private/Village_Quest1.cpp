@@ -123,7 +123,7 @@ HRESULT CVillage_Quest1::Render(void)
 	if (FAILED(m_pQuestTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pQuestTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pQuestTextureCom->Bind_OnGraphicDev(2)))
 		return E_FAIL;
 	
 	m_pQuestVIBufferCom->Render();

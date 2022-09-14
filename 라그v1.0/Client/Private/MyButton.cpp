@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Public\MyButton.h"
+#include "GameInstance.h"
 
 CMyButton::CMyButton(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -13,60 +14,170 @@ CMyButton::CMyButton(const CMyButton & rhs)
 
 HRESULT CMyButton::Initialize_Prototype()
 {
-	return E_NOTIMPL;
+	if (FAILED(__super::Initialize_Prototype()))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CMyButton::Initialize(void * pArg)
 {
-	return E_NOTIMPL;
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
+
+	m_fSizeX = 70.f;
+	m_fSizeY = 70.f;
+	m_fX = m_tInfo.vPos.x;
+	m_fY = m_tInfo.vPos.y;
+
+	if (FAILED(SetUp_Components()))
+		return E_FAIL;
+
+	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 0.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
+
+	return S_OK;
 }
 
 void CMyButton::Tick(_float fTimeDelta)
 {
+	__super::Tick(fTimeDelta);
 }
 
 void CMyButton::Late_Tick(_float fTimeDelta)
 {
+	__super::Late_Tick(fTimeDelta);
+
+	if (nullptr != m_pRendererCom)
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
 HRESULT CMyButton::Render()
 {
-	return E_NOTIMPL;
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	_float4x4		ViewMatrix;
+	D3DXMatrixIdentity(&ViewMatrix);
+
+	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
+
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+		return E_FAIL;
+
+	if (FAILED(SetUp_RenderState()))
+		return E_FAIL;
+
+	m_pVIBufferCom->Render();
+
+	if (FAILED(Release_RenderState()))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CMyButton::SetUp_Components()
 {
-	return E_NOTIMPL;
+	/* For.Com_Renderer */
+	if (FAILED(__super::Add_Components(TEXT("Com_Renderer"), LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), (CComponent**)&m_pRendererCom)))
+		return E_FAIL;
+
+	/* For.Com_Texture */
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Close_Button"), (CComponent**)&m_pTextureCom)))
+		return E_FAIL;
+
+	/* For.Com_VIBuffer */
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
+		return E_FAIL;
+
+	/* For.Com_Transform */
+	CTransform::TRANSFORMDESC		TransformDesc;
+	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
+
+	TransformDesc.fSpeedPerSec = 5.f;
+	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CMyButton::SetUp_RenderState()
 {
-	return E_NOTIMPL;
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
+	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	return S_OK;
 }
 
 HRESULT CMyButton::Release_RenderState()
 {
-	return E_NOTIMPL;
+	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	m_pGraphic_Device->SetTexture(0, nullptr);
+	return S_OK;
 }
 
 HRESULT CMyButton::On_SamplerState()
 {
-	return E_NOTIMPL;
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+	return S_OK;
 }
 
 HRESULT CMyButton::Off_SamplerState()
 {
-	return E_NOTIMPL;
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+
+	return S_OK;
 }
 
 CMyButton * CMyButton::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	return nullptr;
+	CMyButton*	pInstance = new CMyButton(pGraphic_Device);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		ERR_MSG(TEXT("Failed to Created : CTextBox"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 CGameObject * CMyButton::Clone(void * pArg)
 {
-	return nullptr;
+	CMyButton*	pInstance = new CMyButton(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		ERR_MSG(TEXT("Failed to Cloned : CTextBox"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 _float4x4 CMyButton::Get_World(void)
@@ -76,4 +187,10 @@ _float4x4 CMyButton::Get_World(void)
 
 void CMyButton::Free()
 {
+	__super::Free();
+
+	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pRendererCom);
+	Safe_Release(m_pTextureCom);
 }

@@ -26,6 +26,7 @@ HRESULT CTextBox::Initialize(void * pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
+
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = (_float)g_iWinSizeX * 0.85f;
@@ -97,7 +98,7 @@ HRESULT CTextBox::Render()
 
 	Safe_AddRef(pInstance);
 
-	pInstance->Get_Font()->DrawText(nullptr, m_wstr.c_str(), m_wstr.length(), &m_rcBox, DT_LEFT | DT_WORDBREAK, D3DCOLOR_ARGB(255, 0, 0, 0));
+	pInstance->Get_Font()->DrawText(nullptr, m_wstr.c_str(), (_int)m_wstr.length(), &m_rcBox, DT_LEFT | DT_WORDBREAK, D3DCOLOR_ARGB(255, 0, 0, 0));
 
 	Safe_Release(pInstance);
 
