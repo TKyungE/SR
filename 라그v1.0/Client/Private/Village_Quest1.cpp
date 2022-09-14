@@ -71,8 +71,13 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
 		return;
-	
+
 	Safe_AddRef(pInstance);
+
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk)
+	{
+		g_bCut = true;
+	}
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
 	{
@@ -97,6 +102,20 @@ void CVillage_Quest1::Late_Tick(_float fTimeDelta)
 	{
 		if (nullptr != m_pRendererCom)
 			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+	}
+
+	CGameObject* pTarget = nullptr;
+
+	if (pInstance->Collision(this, TEXT("Com_QuestCollider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
+	{
+		m_bTalk = true;
+		g_bTalk = true;
+	}
+	else
+	{
+		m_bTalk = false;
+		g_bTalk = false;
+		g_bCut = false;
 	}
 
 	Safe_Release(pInstance);

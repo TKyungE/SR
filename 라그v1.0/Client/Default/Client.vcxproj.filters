@@ -642,9 +642,6 @@
     <ClInclude Include="..\Public\TextBox.h">
       <Filter>04.UI\TextBox</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\MyButton.h">
-      <Filter>04.UI\Button</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\CloseBtn.h">
       <Filter>04.UI\Button\Close</Filter>
     </ClInclude>
@@ -946,9 +943,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\TextBox.cpp">
       <Filter>04.UI\TextBox</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\MyButton.cpp">
-      <Filter>04.UI\Button</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CloseBtn.cpp">
       <Filter>04.UI\Button\Close</Filter>

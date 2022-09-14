@@ -91,8 +91,6 @@ private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 
-	_bool m_bTalk = false;
-
 public:
 	_float3 Get_Pos();
 	_bool Get_Front() { return m_bFront; }

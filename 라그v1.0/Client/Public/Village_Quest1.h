@@ -48,6 +48,8 @@ private:
 private:
 	INDEXPOS	m_IndexPos;
 
+	_bool m_bTalk = false;
+
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);

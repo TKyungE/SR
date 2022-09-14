@@ -252,12 +252,12 @@ HRESULT CGameInstance::Add_ColiisionGroup(_uint iCollisionGroup, CGameObject * p
 	return m_pCollision_Manager->Add_ColiisionGroup(iCollisionGroup, pGameObject);
 }
 
-_bool CGameInstance::Collision(CGameObject * pGameObject, _uint iCollisionGroup, const _tchar* szColliderName, CGameObject** pTarget)
+_bool CGameInstance::Collision(CGameObject * pGameObject, const _tchar* szDestColliderName, _uint iCollisionGroup, const _tchar* szSourColliderName, CGameObject** pTarget)
 {
 	if (nullptr == m_pCollision_Manager)
 		return false;
 	
-	return m_pCollision_Manager->Collision(pGameObject, iCollisionGroup, szColliderName, pTarget);
+	return m_pCollision_Manager->Collision(pGameObject, szDestColliderName, iCollisionGroup, szSourColliderName, pTarget);
 }
 
 _float3 CGameInstance::Get_Collision(void)

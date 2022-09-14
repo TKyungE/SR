@@ -14,7 +14,7 @@ private:
 public:
 	HRESULT Reserve_Container(_uint iNumObjects);
 	HRESULT Add_ColiisionGroup(_uint iCollisionGroup, class CGameObject* pGameObject);
-	_bool Collision(CGameObject * pGameObject, _uint iCollisionGroup, const _tchar* szColliderName, CGameObject** pTarget);
+	_bool Collision(CGameObject * pGameObject, const _tchar* szDestColliderName, _uint iCollisionGroup, const _tchar* szSourColliderName, CGameObject** pTarget);
 	void Release_Objects(void);
 
 public:
@@ -27,7 +27,7 @@ private:
 	typedef list<class CGameObject*> GAMEOBJECTS;
 
 private:
-	_bool Collision_AABB(class CGameObject* _Dest, class CGameObject* _Sour, const _tchar* szColliderName);
+	_bool Collision_AABB(class CGameObject* _Dest, const _tchar* szDestColliderName, class CGameObject* _Sour, const _tchar* szSourColliderName);
 
 public:
 	virtual void Free(void) override;

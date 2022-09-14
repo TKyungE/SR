@@ -308,7 +308,7 @@ void CTornado::CheckColl()
 
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
 	{
 		pTarget->Set_Hp(m_tInfo.iDmg);
 		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
@@ -316,7 +316,7 @@ void CTornado::CheckColl()
 			pTarget->Set_Dead();
 		Set_Dead();
 	}
-	if (pInstance->Collision(this, COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
 	{
 		if (pTarget->Get_Info().iMp == 0)
 		{
@@ -327,7 +327,7 @@ void CTornado::CheckColl()
 			Set_Dead();
 		}
 	}
-	if (pInstance->Collision(this, COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
 	{
 		
 		pTarget->Set_Hp(m_tInfo.iDmg);

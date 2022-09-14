@@ -257,7 +257,7 @@ void CHpPotion::CheckColl()
 
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 	{
 		
 		Set_Dead();
@@ -275,7 +275,7 @@ void CHpPotion::CheckColl()
 			}
 		}
 	}
-	if (pInstance->Collision(this, COLLISION_PET, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PET, TEXT("Com_Collider"), &pTarget))
 	{
 		Set_Dead();
 		auto& iter = dynamic_cast<CInventory*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory")))->Get_InvenSlot()->begin();

@@ -90,7 +90,7 @@ HRESULT CTextBox::Render()
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
-	m_pVIBufferCom->Render();
+	//m_pVIBufferCom->Render();
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
