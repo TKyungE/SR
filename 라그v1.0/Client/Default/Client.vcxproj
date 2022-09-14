@@ -190,6 +190,8 @@
     <ClInclude Include="..\public\Help.h" />
     <ClInclude Include="..\public\House.h" />
     <ClInclude Include="..\Public\House3.h" />
+    <ClInclude Include="..\Public\House4.h" />
+    <ClInclude Include="..\Public\House5.h" />
     <ClInclude Include="..\public\HpPotion.h" />
     <ClInclude Include="..\Public\HuntQuest1.h" />
     <ClInclude Include="..\Public\InventorySlot.h" />
@@ -298,6 +300,8 @@
     <ClCompile Include="..\Private\Help.cpp" />
     <ClCompile Include="..\private\House.cpp" />
     <ClCompile Include="..\Private\House3.cpp" />
+    <ClCompile Include="..\Private\House4.cpp" />
+    <ClCompile Include="..\Private\House5.cpp" />
     <ClCompile Include="..\private\HpPotion.cpp" />
     <ClCompile Include="..\Private\HuntQuest1.cpp" />
     <ClCompile Include="..\Private\InventorySlot.cpp" />

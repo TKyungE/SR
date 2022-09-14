@@ -178,6 +178,11 @@ HRESULT CLevel_Town2::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House3"), LEVEL_TOWN2, pLayerTag, nullptr)))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House4"), LEVEL_TOWN2, pLayerTag, nullptr)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House5"), LEVEL_TOWN2, pLayerTag, nullptr)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
