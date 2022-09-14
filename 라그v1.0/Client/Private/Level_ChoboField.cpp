@@ -460,31 +460,6 @@ HRESULT CLevel_ChoboField::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBlank"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_EquipIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-
 
 	Safe_Release(pGameInstance);
 

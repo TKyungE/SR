@@ -14,12 +14,6 @@
 #include "Tornado.h"
 #include "Hit.h"
 #include "UseSkill.h"
-#include "HpBar.h"
-#include "MpBar.h"
-#include "IconBar.h"
-#include "InventoryIcon.h"
-#include "Inventory.h"
-#include "XBox.h"
 #include "LevelUp.h"
 #include "DmgFont.h"
 #include "FireSpear.h"
@@ -27,21 +21,10 @@
 #include "Meteor.h"
 #include "MeteorEff.h"
 #include "Rain.h"
-#include"EquipIcon.h"
-#include"SkillIcon.h"
-#include"StatsIcon.h"
-#include"QuickSlot.h"
-#include"SkillWnd.h"
-#include"StatsWnd.h"
-#include"PlusBox.h"
 #include"WorldHpBar.h"
-#include"PlayerMpBar.h"
 #include "FireDragon.h"
 #include "Wind.h"
 #include "Shadow.h"
-#include"ExpBar.h"
-#include"ExpLogo.h"
-#include"ExpBlank.h"
 #include "BackGroundRect.h"
 #include "Poring.h"
 #include "BackGroundTree.h"
@@ -51,8 +34,6 @@
 #include "PlayerInfo.h"
 #include "Wing.h"
 #include "House2.h"
-#include"SkillSlot.h"
-#include"HpPotion.h"
 #include "Default_NPC.h"
 #include "Village_Chief.h"
 #include "Village_Quest1.h"
@@ -73,8 +54,6 @@
 #include "SwordSlice.h"
 #include "DandelionAttack.h"
 #include "Maiden.h"
-#include"InventorySlot.h"
-#include"LogRect.h"
 #include "HuntQuest1.h"
 #include "Drain.h"
 #include "PowerTotem.h"
@@ -226,54 +205,10 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_UI"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/INTERFACE/Info%d.png"), 2))))
 		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Temp"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/QuickSlot/QuickSlot%d.png"), 9))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_StatsWnd"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/StatWnd/StatWnd%d.png"), 3))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_PlusBox"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/StatWnd/StatWnd%d.png"), 3))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_XBox"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/XBox/XBox%d.png"), 2))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Item"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/StatWnd/StatWnd%d.png"), 3))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_HpBar"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/HpBar/HpBar%d.png"), 2))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_ExpBar"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/ExpBar/ExpBar%d.png"), 2))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_ExpLogo"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/ExpBar/ExpLogo%d.png"), 2))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_ExpBlank"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/ExpBar/ExpBar%d.png"), 2))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_TePrototype_Component_Texture_QuickSlotxture_PlayerMpBar"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/HpBar/HpBar%d.png"), 2))))
-		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_WorldHpBar"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/HpBar/HpBar%d.png"), 3))))
 		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_MpBar"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/HpBar/HpBar%d.png"), 2))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Inventory"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/Inventory/Inventory%d.jpg"), 1))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_QuickSlot"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/QuickSlot/QuickSlot%d.jpg"), 1))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_SkillWnd"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/SkillWnd/SkillWnd%d.png"), 1))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_IconBar"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/IconBar%d.jpg"), 2))))
-		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_QuestUI"), 
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/Quest/QuestUI0%d.png"), 3))))
 		return E_FAIL;
@@ -284,19 +219,7 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/LetterBox/Black0%d.png"), 1))))
 		return E_FAIL;
 
-	//Icon 텍스쳐
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_EquipIcon"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/UIWnd/UIWnd%d.png"), 2))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_InventoryIcon"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/UIWnd/UIWnd%d.png"), 4))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_SkillIcon"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/UIWnd/UIWnd%d.png"), 6))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_StatsIcon"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/UIWnd/UIWnd%d.png"), 8))))
-		return E_FAIL;
+
 
 	// Terrain 텍스쳐
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Terrain"),
@@ -851,73 +774,11 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"),
 		CUI::Create(m_pGraphic_Device))))
 		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StatsWnd"),
-		CStatsWnd::Create(m_pGraphic_Device))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_HpPotion"),
-		CHpPotion::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_InvenSlot"),
-		CInventorySlot::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SkillSlot"),
-		CSkillSlot::Create(m_pGraphic_Device))))
-		return E_FAIL;
+	
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_WorldHpBar"),
 		CWorldHpBar::Create(m_pGraphic_Device))))
 		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlayerMpBar"),
-		CPlayerMpBar::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LogRect"),
-		CLogRect::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlusBox"),
-		CPlusBox::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Inventory"),
-		CInventory::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_HpBar"),
-		CHpBar::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ExpBar"),
-		CExpBar::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ExpLogo"),
-		CExpLogo::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ExpBlank"),
-		CExpBlank::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MpBar"),
-		CMpBar::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_IconBar"),
-		CIconBar::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_InventoryIcon"),
-		CInventoryIcon::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_EquipIcon"),
-		CEquipIcon::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_XBox"),
-		CXBox::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SkillIcon"),
-		CSkillIcon::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StatsIcon"),
-		CStatsIcon::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_QuickSlot"),
-		CQuickSlot::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SkillWnd"),
-		CSkillWnd::Create(m_pGraphic_Device))))
-		return E_FAIL;
+	
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SpaceUI"),
 		CSpace::Create(m_pGraphic_Device))))
 		return E_FAIL;

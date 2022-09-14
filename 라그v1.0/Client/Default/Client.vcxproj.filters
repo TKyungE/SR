@@ -79,24 +79,6 @@
     <Filter Include="03.Effect\Default\01.UseSkill">
       <UniqueIdentifier>{32cd0ec5-2fce-41ab-96e9-b83230ad0813}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\Inventory">
-      <UniqueIdentifier>{1bf3f18c-93ed-4069-8fb1-819e57454c4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi">
-      <UniqueIdentifier>{c93947ac-9ef8-4cc2-a4f6-24426048ddc3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\ExpBar">
-      <UniqueIdentifier>{9f16c13f-6e81-4e8a-988f-6ad324ceba14}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\IconBar">
-      <UniqueIdentifier>{e7dc98ab-bd50-495a-b6d8-42396e40bb6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\IconBar\InventoryIcon">
-      <UniqueIdentifier>{549b4616-248e-43fc-b67f-f16e616f0477}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\HpBar">
-      <UniqueIdentifier>{9be82122-acd2-4a44-92fa-c1aa06d8340f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.Effect\Default\02.LevelUp">
       <UniqueIdentifier>{5b590f51-993c-46bd-935f-d21e6519d9f6}</UniqueIdentifier>
     </Filter>
@@ -126,33 +108,6 @@
     </Filter>
     <Filter Include="03.Effect\Default\05.Wind">
       <UniqueIdentifier>{b3b81a1a-fbb2-4b96-8cd2-1d831f9b6cc6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\IconBar\EquipIcon">
-      <UniqueIdentifier>{e7ce73e9-4e9f-47d0-97fb-4e83880891b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\IconBar\StatsIcon">
-      <UniqueIdentifier>{ef13cef6-0851-4481-92eb-124f501b8d85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\IconBar\SkillIcon">
-      <UniqueIdentifier>{06dc74a7-77ae-4ba3-ba1a-f6eafe264697}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\Box">
-      <UniqueIdentifier>{751b8fde-459b-498d-91f3-31237fa15234}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\Box\PlusBox">
-      <UniqueIdentifier>{1de50e90-4cf1-4c10-8e34-427119f07610}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\Box\XBox">
-      <UniqueIdentifier>{3c789132-7195-434c-9375-2b055b0a36c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\QuickSlor">
-      <UniqueIdentifier>{3967bf9e-2d9f-4070-83dc-2a72fe4a1038}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StatsWnd">
-      <UniqueIdentifier>{6a9cb870-2145-4bbe-86d5-c816bb3565d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\SkillWnd">
-      <UniqueIdentifier>{e76fb6fe-566e-489b-a76d-080adf0a6e45}</UniqueIdentifier>
     </Filter>
     <Filter Include="04.UI\WorldHpBar">
       <UniqueIdentifier>{59e40b13-2353-4d51-9ce7-e372dc9a23d7}</UniqueIdentifier>
@@ -189,21 +144,6 @@
     </Filter>
     <Filter Include="02.GameObject\Wing">
       <UniqueIdentifier>{0bc110a1-b2b7-4777-89b4-9fba7c4f5948}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\HpPotin">
-      <UniqueIdentifier>{5d117f82-1d97-4935-9106-f16f3aeae0a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\QuickSlor\SkillSlot">
-      <UniqueIdentifier>{0fb58f8b-5190-47dc-98c2-0aaac717aa62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\ExpBar\ExpBlank">
-      <UniqueIdentifier>{eab1a906-b873-4df6-bb71-facde7b8f29d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\ExpBar\ExpLogo">
-      <UniqueIdentifier>{70adb16f-fd14-433b-ad35-241e5412555a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\MpBar">
-      <UniqueIdentifier>{7dcf0f6e-2d0b-4c4b-b950-95c09d6749df}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\NPC\00.Default">
       <UniqueIdentifier>{42b918b4-0659-4a8f-8919-5a07b097b36a}</UniqueIdentifier>
@@ -277,12 +217,6 @@
     <Filter Include="02.GameObject\Camera">
       <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\Inventory\InventorySLot">
-      <UniqueIdentifier>{f07b9a8b-503c-4296-98da-67207a1ecdce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\LogRect">
-      <UniqueIdentifier>{1800de47-275d-479a-b035-e32c2be8f886}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Levels\MidBoss">
       <UniqueIdentifier>{b1e7dcf6-c4ff-48e1-9f9b-13ecdaded839}</UniqueIdentifier>
     </Filter>
@@ -307,12 +241,6 @@
     <Filter Include="03.Effect\Skill\10.FireBall">
       <UniqueIdentifier>{b0fa95fc-101c-407a-b6b2-a7647d04e2a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\LetterBox">
-      <UniqueIdentifier>{3f1c8a83-8b29-4f58-89c9-5c86d08946b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\Space">
-      <UniqueIdentifier>{71782fd7-2b3c-45d1-8f47-1335fc2bc54d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Quest">
       <UniqueIdentifier>{077a13e2-8529-4285-9bc4-d4467de55eb5}</UniqueIdentifier>
     </Filter>
@@ -321,9 +249,6 @@
     </Filter>
     <Filter Include="02.GameObject\Transparent_Wall">
       <UniqueIdentifier>{ae255d11-cb57-4cb9-bfc6-cbf716344943}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\TextBox">
-      <UniqueIdentifier>{9cf041f7-5cfd-4487-b5b9-46da967fc22a}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Monster\06.Atros">
       <UniqueIdentifier>{957fc631-ff7b-4e60-b1af-5df90af08288}</UniqueIdentifier>
@@ -342,6 +267,24 @@
     </Filter>
     <Filter Include="02.GameObject\Monster\11.Zombie">
       <UniqueIdentifier>{15ef5e40-2083-40f2-b2db-6696dc2f5baf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\Space">
+      <UniqueIdentifier>{b341f337-c548-4109-aeff-d27ba0f48839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\LetterBox">
+      <UniqueIdentifier>{1915b703-b739-457f-a44f-e1fbe23c977e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\00.PlayerUI">
+      <UniqueIdentifier>{16026755-84b2-400d-b714-ca74b480a0cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\00.PlayerUI\00.HpUI">
+      <UniqueIdentifier>{7226c583-ab33-4424-ad98-5dc318290090}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\00.PlayerUI\01.MpUI">
+      <UniqueIdentifier>{96da9941-0e54-4a0b-a4a2-a94281e5cd9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\00.PlayerUI\02.ExpUI">
+      <UniqueIdentifier>{831239b2-0f39-4024-b93b-311994b4561a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -414,24 +357,6 @@
     <ClInclude Include="..\public\UseSkill.h">
       <Filter>03.Effect\Default\01.UseSkill</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Inventory.h">
-      <Filter>04.UI\Inventory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\ExpBar.h">
-      <Filter>04.UI\StateUi\ExpBar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\XBox.h">
-      <Filter>04.UI\Box\XBox</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\InventoryIcon.h">
-      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\IconBar.h">
-      <Filter>04.UI\StateUi\IconBar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\HpBar.h">
-      <Filter>04.UI\StateUi\HpBar</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\UI.h">
       <Filter>04.UI</Filter>
     </ClInclude>
@@ -462,31 +387,7 @@
     <ClInclude Include="..\Public\Wind.h">
       <Filter>03.Effect\Default\05.Wind</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\PlusBox.h">
-      <Filter>04.UI\Box\PlusBox</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\EquipIcon.h">
-      <Filter>04.UI\StateUi\IconBar\EquipIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\SkillIcon.h">
-      <Filter>04.UI\StateUi\IconBar\SkillIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\StatsIcon.h">
-      <Filter>04.UI\StateUi\IconBar\StatsIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\QuickSlot.h">
-      <Filter>04.UI\QuickSlor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\SkillWnd.h">
-      <Filter>04.UI\SkillWnd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\StatsWnd.h">
-      <Filter>04.UI\StatsWnd</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\WorldHpBar.h">
-      <Filter>04.UI\WorldHpBar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\PlayerMpBar.h">
       <Filter>04.UI\WorldHpBar</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Shadow.h">
@@ -518,21 +419,6 @@
     </ClInclude>
     <ClInclude Include="..\public\Wing.h">
       <Filter>02.GameObject\Wing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\HpPotion.h">
-      <Filter>04.UI\HpPotin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\SkillSlot.h">
-      <Filter>04.UI\QuickSlor\SkillSlot</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\ExpBlank.h">
-      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\ExpLogo.h">
-      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\MpBar.h">
-      <Filter>04.UI\StateUi\MpBar</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Default_NPC.h">
       <Filter>02.GameObject\NPC\00.Default</Filter>
@@ -603,12 +489,6 @@
     <ClInclude Include="..\public\Maiden.h">
       <Filter>02.GameObject\Boss\Meiden</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\InventorySlot.h">
-      <Filter>04.UI\Inventory\InventorySLot</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\LogRect.h">
-      <Filter>04.UI\LogRect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Level_MidBoss.h">
       <Filter>01.Levels\MidBoss</Filter>
     </ClInclude>
@@ -630,20 +510,11 @@
     <ClInclude Include="..\public\FireBall.h">
       <Filter>03.Effect\Skill\10.FireBall</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\LetterBox.h">
-      <Filter>04.UI\LetterBox</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Space.h">
-      <Filter>04.UI\Space</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\HuntQuest1.h">
       <Filter>02.GameObject\Quest\HuntQuest</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Transparent_Wall.h">
       <Filter>02.GameObject\Transparent_Wall</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\TextBox.h">
-      <Filter>04.UI\TextBox</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Zombie.h">
       <Filter>02.GameObject\Monster\11.Zombie</Filter>
@@ -662,6 +533,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Wraith.h">
       <Filter>02.GameObject\Monster\10.Wraith</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Space.h">
+      <Filter>04.UI\Space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LetterBox.h">
+      <Filter>04.UI\LetterBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -722,24 +599,6 @@
     <ClCompile Include="..\private\UseSkill.cpp">
       <Filter>03.Effect\Default\01.UseSkill</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\XBox.cpp">
-      <Filter>04.UI\Box\XBox</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ExpBar.cpp">
-      <Filter>04.UI\StateUi\ExpBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\HpBar.cpp">
-      <Filter>04.UI\StateUi\HpBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\IconBar.cpp">
-      <Filter>04.UI\StateUi\IconBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Inventory.cpp">
-      <Filter>04.UI\Inventory</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\InventoryIcon.cpp">
-      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\UI.cpp">
       <Filter>04.UI</Filter>
     </ClCompile>
@@ -767,31 +626,7 @@
     <ClCompile Include="..\Private\Wind.cpp">
       <Filter>03.Effect\Default\05.Wind</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\PlusBox.cpp">
-      <Filter>04.UI\Box\PlusBox</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\EquipIcon.cpp">
-      <Filter>04.UI\StateUi\IconBar\EquipIcon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\SkillIcon.cpp">
-      <Filter>04.UI\StateUi\IconBar\SkillIcon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\StatsIcon.cpp">
-      <Filter>04.UI\StateUi\IconBar\StatsIcon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\QuickSlot.cpp">
-      <Filter>04.UI\QuickSlor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\SkillWnd.cpp">
-      <Filter>04.UI\SkillWnd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\StatsWnd.cpp">
-      <Filter>04.UI\StatsWnd</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\WorldHpBar.cpp">
-      <Filter>04.UI\WorldHpBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\PlayerMpBar.cpp">
       <Filter>04.UI\WorldHpBar</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Shadow.cpp">
@@ -823,21 +658,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Wing.cpp">
       <Filter>02.GameObject\Wing</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\HpPotion.cpp">
-      <Filter>04.UI\HpPotin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\SkillSlot.cpp">
-      <Filter>04.UI\QuickSlor\SkillSlot</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\ExpBlank.cpp">
-      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\ExpLogo.cpp">
-      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\MpBar.cpp">
-      <Filter>04.UI\StateUi\MpBar</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Default_NPC.cpp">
       <Filter>02.GameObject\NPC\00.Default</Filter>
@@ -911,12 +731,6 @@
     <ClCompile Include="..\private\Maiden.cpp">
       <Filter>02.GameObject\Boss\Meiden</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\InventorySlot.cpp">
-      <Filter>04.UI\Inventory\InventorySLot</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\LogRect.cpp">
-      <Filter>04.UI\LogRect</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Level_MidBoss.cpp">
       <Filter>01.Levels\MidBoss</Filter>
     </ClCompile>
@@ -938,20 +752,11 @@
     <ClCompile Include="..\private\FireBall.cpp">
       <Filter>03.Effect\Skill\10.FireBall</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\LetterBox.cpp">
-      <Filter>04.UI\LetterBox</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Space.cpp">
-      <Filter>04.UI\Space</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\HuntQuest1.cpp">
       <Filter>02.GameObject\Quest\HuntQuest</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Transparent_Wall.cpp">
       <Filter>02.GameObject\Transparent_Wall</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\TextBox.cpp">
-      <Filter>04.UI\TextBox</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Zombie.cpp">
       <Filter>02.GameObject\Monster\11.Zombie</Filter>
@@ -970,6 +775,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Wraith.cpp">
       <Filter>02.GameObject\Monster\10.Wraith</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LetterBox.cpp">
+      <Filter>04.UI\LetterBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Space.cpp">
+      <Filter>04.UI\Space</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

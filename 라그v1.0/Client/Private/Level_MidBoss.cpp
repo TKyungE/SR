@@ -254,35 +254,6 @@ HRESULT CLevel_MidBoss::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBlank"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Inventory"), LEVEL_MIDBOSS, TEXT("Layer_Inventory"), &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_EquipIcon"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillIcon"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
-		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
