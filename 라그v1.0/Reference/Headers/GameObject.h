@@ -40,6 +40,7 @@ public:
 		_int	     iTargetDmg;
 		_int		 iExp;//ui 고유번호
 		_int		 iMaxExp;//ui 사용키
+		_int		 iLv;
 		_int		 iMoney;
 		_bool		 bDead;
 		_bool		 bHit;//ui 온오프

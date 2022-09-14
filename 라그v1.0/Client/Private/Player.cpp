@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Layer.h"
 #include "KeyMgr.h"
+#include "StatInfo.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -44,10 +45,14 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tFrame.fFrameSpeed = 0.1f;
 	if (m_tInfo.iMaxHp <= 0)
 	{
+		m_tInfo.iLv = 1;
 		m_tInfo.fX = 0.5f;
-		m_tInfo.iMaxHp = 99999;
+		m_tInfo.iDmg = 10;
+		m_tInfo.iMaxHp = 30000;
 		m_tInfo.iHp = m_tInfo.iMaxHp;
-		m_tInfo.iMp = 1000;
+		m_tInfo.iMaxMp = 1000;
+		m_tInfo.iMp = m_tInfo.iMaxMp;
+		m_tInfo.iMaxExp = 100;
 		m_tInfo.iExp = 0;
 	}
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
@@ -68,7 +73,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//Pet
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), m_tInfo.iLevelIndex, TEXT("Layer_Pet"), &tInfo);
 
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -77,7 +81,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 void CPlayer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	
+	Check_Stat();
 	OnTerrain();
 	Move_Frame(fTimeDelta);
 	Get_PickingPoint();
@@ -101,8 +105,11 @@ void CPlayer::Tick(_float fTimeDelta)
 		{
 			m_tInfo.iHp += 10;
 		}
-		m_tInfo.iMp += 10;
-		m_tInfo.iExp += 100;
+		if (m_tInfo.iMp<m_tInfo.iMaxMp)
+		{
+			m_tInfo.iMp += 10;
+		}
+		m_tInfo.iExp += 10;
 	}
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
@@ -129,6 +136,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 
 	Motion_Change();
 	Check_Hit();
+	LevelUp();
 	if (m_tInfo.iMp > 0)
 	{
 		Use_Skill();
@@ -243,23 +251,7 @@ void CPlayer::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	//if (pInstance->Collision(this, COLLISION_BOSS, &pTarget))
-	//{
-	//	_float3 vBackPos;
-	//	if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-	//	{
-	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-	//	}
-	//	else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-	//	{
-	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-	//	}
-	//	vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
-	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	//}
 	if (pInstance->Collision(this, COLLISION_NPC, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
@@ -576,13 +568,6 @@ void CPlayer::Use_Skill()
 		m_tInfo.iMp -= 5;
 	}
 	
-	if (CKeyMgr::Get_Instance()->Key_Down('L'))
-	{
-		CGameObject::INFO tInfo;
-		tInfo.pTarget = this;
-		//tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		pInstance->Add_GameObject(TEXT("Prototype_GameObject_LevelUp"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-	}
 	
 
 	Safe_Release(pInstance);
@@ -696,7 +681,7 @@ HRESULT CPlayer::Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos)
 	CGameObject::INFO tInfo;
 
 	tInfo.vPos = _vPos;
-
+	tInfo.pTarget = this;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderCloud"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -713,7 +698,7 @@ HRESULT CPlayer::Skill_Tornado(const _tchar * pLayerTag, _float3 _vPos)
 	CGameObject::INFO tInfo;
 
 	tInfo.vPos = _vPos;
-
+	tInfo.pTarget = this;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tornado"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -728,8 +713,8 @@ HRESULT CPlayer::Skill_FireBall(const _tchar * pLayerTag, _float3 _vPos)
 
 	CGameObject::INFO tInfo;
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	//tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	tInfo.vTargetPos = _vPos;
+	tInfo.pTarget = this;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireBall"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -1108,6 +1093,51 @@ void CPlayer::Get_PickingPoint(void)
 
 	Safe_Release(pGameInstance);
 	return;
+}
+
+void CPlayer::LevelUp()
+{
+
+	if (m_tInfo.iExp > m_tInfo.iMaxExp)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.pTarget = this;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LevelUp"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+		Safe_Release(pGameInstance);
+
+		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_StatsPoint(5);
+		m_tInfo.iExp = 0;
+		m_tInfo.iHp = m_tInfo.iMaxHp;
+		m_tInfo.iMp = m_tInfo.iMaxMp;
+		m_tInfo.iMaxExp += 10;
+		++m_tInfo.iLv;
+	}
+}
+
+void CPlayer::Check_Stat()
+{
+	if (!m_bCheckStat)
+	{
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		if (nullptr == pGameInstance)
+			return;
+		Safe_AddRef(pGameInstance);
+		m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
+		Safe_Release(pGameInstance);
+		m_bCheckStat = true;
+	}
+
+	if (m_StatInfo != nullptr)
+	{
+		m_StatDmg = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iSTR * 10;
+		m_StatHp = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iDEX * 100;
+		m_StatMp = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iINT * 20;
+	}
+	m_tInfo.iDmg = 10 + m_StatDmg;
+	m_tInfo.iMaxHp = 30000 + m_StatHp;
+	m_tInfo.iMaxMp = 1000 + m_StatMp;
 }
 
 

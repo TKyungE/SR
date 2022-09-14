@@ -30,7 +30,7 @@ HRESULT CPlayerMp::Initialize(void* pArg)
 	m_fSizeX = 182.f;
 	m_fSizeY = 13.f;
 	m_fX = 50.f;
-	m_fY = 120.f;
+	m_fY = 112.f;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
@@ -67,12 +67,6 @@ HRESULT CPlayerMp::Render()
 
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
-
-	_float4x4		ViewMatrix;
-	D3DXMatrixIdentity(&ViewMatrix);
-
-	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
 		return E_FAIL;

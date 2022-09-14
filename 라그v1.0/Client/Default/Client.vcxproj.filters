@@ -286,6 +286,15 @@
     <Filter Include="04.UI\00.PlayerUI\02.ExpUI">
       <UniqueIdentifier>{831239b2-0f39-4024-b93b-311994b4561a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\01.Status">
+      <UniqueIdentifier>{8663d5f1-175d-48ad-9e00-cdfebb1183d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\01.Status\StatInfo">
+      <UniqueIdentifier>{3ea42d03-c52f-4340-8d09-9da0c8d3ea2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\02.QuickSlot">
+      <UniqueIdentifier>{d98b12a7-b2dc-45c9-8818-c0c620df96b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -549,6 +558,15 @@
     <ClInclude Include="..\public\PlayerExp.h">
       <Filter>04.UI\00.PlayerUI\02.ExpUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\StatInfo.h">
+      <Filter>04.UI\01.Status\StatInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status.h">
+      <Filter>04.UI\01.Status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\QuickSlot.h">
+      <Filter>04.UI\02.QuickSlot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -799,6 +817,15 @@
     </ClCompile>
     <ClCompile Include="..\private\PlayerExp.cpp">
       <Filter>04.UI\00.PlayerUI\02.ExpUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\StatInfo.cpp">
+      <Filter>04.UI\01.Status\StatInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status.cpp">
+      <Filter>04.UI\01.Status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\QuickSlot.cpp">
+      <Filter>04.UI\02.QuickSlot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

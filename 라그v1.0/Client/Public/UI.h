@@ -31,11 +31,13 @@ private: /* For.Components */
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
-
+public:
+	_bool	Get_Status() { return m_bStatus; }
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
-
+	RECT					m_rcLv;
+	_bool					m_bStatus = false;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

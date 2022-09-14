@@ -214,6 +214,7 @@
     <ClInclude Include="..\public\Poring.h" />
     <ClInclude Include="..\public\Portal.h" />
     <ClInclude Include="..\public\PowerTotem.h" />
+    <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
     <ClInclude Include="..\public\Shadow.h" />
@@ -221,6 +222,8 @@
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
     <ClInclude Include="..\Public\Space.h" />
+    <ClInclude Include="..\public\StatInfo.h" />
+    <ClInclude Include="..\public\Status.h" />
     <ClInclude Include="..\public\Stone.h" />
     <ClInclude Include="..\public\Sword.h" />
     <ClInclude Include="..\public\SwordSlice.h" />
@@ -301,6 +304,7 @@
     <ClCompile Include="..\private\Poring.cpp" />
     <ClCompile Include="..\private\Portal.cpp" />
     <ClCompile Include="..\private\PowerTotem.cpp" />
+    <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
@@ -308,6 +312,8 @@
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\Space.cpp" />
+    <ClCompile Include="..\private\StatInfo.cpp" />
+    <ClCompile Include="..\private\Status.cpp" />
     <ClCompile Include="..\private\Stone.cpp" />
     <ClCompile Include="..\private\Sword.cpp" />
     <ClCompile Include="..\private\SwordSlice.cpp" />

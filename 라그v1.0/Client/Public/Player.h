@@ -73,6 +73,7 @@ public:
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free(void) override;
 private:
+	CGameObject*  m_StatInfo;
 	_float3 m_vTargetLook;
 	_float3 m_vTarget;
 	_bool	m_bUseSkill = false;
@@ -90,9 +91,11 @@ private:
 	_float	m_fFly_fY = 0.f;
 	STATE				m_ePreState;
 	STATE				m_eCurState;
-
 	_bool m_bTalk = false;
-
+	_bool	m_bCheckStat = false;
+	_int	m_StatDmg = 0;
+	_int	m_StatHp = 0;
+	_int	m_StatMp = 0;
 public:
 	_float3 Get_Pos();
 	_bool Get_Front() { return m_bFront; }
@@ -108,7 +111,8 @@ private:
 	HRESULT TextureRender();
 	void Check_Hit();
 	void Get_PickingPoint(void);
-
+	void LevelUp();
+	void Check_Stat();
 private:
 	_float3 m_fPickPoint = { 0.f, 0.f, 0.f };
 };

@@ -47,6 +47,7 @@ HRESULT CSkeleton::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 9999;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
+	m_tInfo.iExp = 10;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -651,6 +652,7 @@ void CSkeleton::Check_Front()
 
 	if (m_tInfo.bDead && m_eCurState != DEAD)
 	{
+		m_tInfo.pTarget->Set_Exp(m_tInfo.iExp);
 		m_eCurState = DEAD;
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;

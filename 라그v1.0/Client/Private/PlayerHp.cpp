@@ -66,22 +66,16 @@ HRESULT CPlayerHp::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
-
-	_float4x4		ViewMatrix;
-	D3DXMatrixIdentity(&ViewMatrix);
-
-	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
-
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
-		return E_FAIL;
-
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+		return E_FAIL;
 	m_pVIBufferCom->Render();
+
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;

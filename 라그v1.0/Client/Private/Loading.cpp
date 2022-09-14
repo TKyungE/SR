@@ -45,8 +45,6 @@ void CLoading::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	RECT		rcRect;
-	SetRect(&rcRect, (int)(m_fX - m_fSizeX * 0.5f), (int)(m_fY - m_fSizeY * 0.5f), (int)(m_fX + m_fSizeX * 0.5f), (int)(m_fY + m_fSizeY * 0.5f));
 
 }
 

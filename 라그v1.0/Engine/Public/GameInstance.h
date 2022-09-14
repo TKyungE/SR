@@ -30,6 +30,7 @@ public: /* For.Engine */
 public: /* For.Graphic_Device */	
 	void		Render_Begin(void);
 	void		Render_End(HWND hWnd = 0);
+	LPD3DXFONT	Get_Font(void);
 
 public: /* For.Input_Device */
 	_char Get_DIKState(_uchar eKeyID);

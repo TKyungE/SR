@@ -109,7 +109,7 @@ HRESULT CThunderCloud::Create_Sword(const _tchar * pLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	CGameObject::INFO tInfo;
-
+	tInfo.pTarget = m_tInfo.pTarget;
 	_float iSour = rand() % 6000 * 0.0001f;
 	_float iTemp = rand() % 4000 * 0.0001f;
 
