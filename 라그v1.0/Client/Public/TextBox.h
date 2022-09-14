@@ -34,12 +34,19 @@ private:
 
 private:
 	_float4x4				m_ProjMatrix;
-	_float					m_fX, m_fUpY, m_fDownY, m_fSizeX, m_fSizeY;
+	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
+	RECT					m_rcBox;
+	wstring					m_wstr;
+	_int					m_i = 0;
+	_float m_fTimeDelta = 0.f;
+	_bool m_bFontRender = false;
 
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
+	HRESULT On_SamplerState();
+	HRESULT Off_SamplerState();
 
 public:
 	static CTextBox* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

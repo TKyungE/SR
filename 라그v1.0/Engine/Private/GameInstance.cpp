@@ -108,6 +108,22 @@ void CGameInstance::Render_End(HWND hWnd)
 	m_pGraphic_Device->Render_End(hWnd);
 }
 
+LPD3DXSPRITE CGameInstance::Get_Sprite(void)
+{
+	if (nullptr == m_pGraphic_Device)
+		return nullptr;
+
+	return m_pGraphic_Device->Get_Sprite();
+}
+
+LPD3DXFONT CGameInstance::Get_Font(void)
+{
+	if (nullptr == m_pGraphic_Device)
+		return nullptr;
+
+	return m_pGraphic_Device->Get_Font();
+}
+
 _char CGameInstance::Get_DIKState(_uchar eKeyID)
 {
 	if (nullptr == m_pInput_Device)

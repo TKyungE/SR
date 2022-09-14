@@ -32,9 +32,9 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 
 	m_tInfo.vPos.y += 0.3f;
 	_float3 vQuestPos = m_tInfo.vPos;
-	vQuestPos.y += 0.65f;
+	vQuestPos.y += 0.8f;
 
-	m_pQuestTransformCom->Set_Scaled(_float3(0.4f, 0.4f, 0.4f));
+	m_pQuestTransformCom->Set_Scaled(_float3(0.8f, 0.8f, 1.f));
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_pQuestTransformCom->Set_State(CTransform::STATE_POSITION, vQuestPos);

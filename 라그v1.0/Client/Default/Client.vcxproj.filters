@@ -325,6 +325,9 @@
     <Filter Include="04.UI\TextBox">
       <UniqueIdentifier>{9cf041f7-5cfd-4487-b5b9-46da967fc22a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\Button">
+      <UniqueIdentifier>{966ec960-d5ac-4b8b-afa5-23b23fba33ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -627,6 +630,9 @@
     <ClInclude Include="..\Public\TextBox.h">
       <Filter>04.UI\TextBox</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\MyButton.h">
+      <Filter>04.UI\Button</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -916,6 +922,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\TextBox.cpp">
       <Filter>04.UI\TextBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MyButton.cpp">
+      <Filter>04.UI\Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

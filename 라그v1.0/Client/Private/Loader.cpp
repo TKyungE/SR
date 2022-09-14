@@ -85,6 +85,7 @@
 #include "FireBall.h"
 #include "Transparent_Wall.h"
 #include "LetterBox.h"
+#include "TextBox.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -268,13 +269,16 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/IconBar%d.jpg"), 2))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_QuestUI"), 
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/Quest/QuestUI0%d.png"), 3))))
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/Quest/QuestUI0%d.png"), 2))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_SpaceUI"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/Space/Space0%d.png"), 1))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_LetterBox"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/LetterBox/Black0%d.png"), 1))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_TextBox"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/Quest/TextBox/TextBox0%d.dds"), 1))))
 		return E_FAIL;
 
 	//Icon ÅØ½ºÃÄ
@@ -778,6 +782,9 @@ HRESULT CLoader::Loading_Prototype()
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LetterBox"),
 		CLetterBox::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_TextBox"),
+		CTextBox::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	//Player °´Ã¼
