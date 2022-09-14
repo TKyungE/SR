@@ -50,7 +50,7 @@ public: /* For.Object_Manager */
 	HRESULT Add_Prototype(const _tchar* pPrototypeTag, class CGameObject* pPrototype);
 	HRESULT Add_GameObject(const _tchar* pPrototypeTag, _uint iLevelIndex, const _tchar* pLayerTag, void* pArg = nullptr);
 	class CLayer* Find_Layer(_uint iLevelIndex, const _tchar* pLayerTag);
-	CGameObject* Find_Object(const _tchar* pLayerTag, _uint iIndex);
+	//CGameObject* Find_Object(const _tchar* pLayerTag, _uint iIndex);
 	class CComponent* Get_Component(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pComponentTag, _uint iIndex = 0);
 
 public: /* For.Component_Manager */

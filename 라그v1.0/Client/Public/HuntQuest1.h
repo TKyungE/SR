@@ -13,6 +13,7 @@ public:
 		_uint iHuntGoal;
 		LEVEL eLevelIndex;
 		MONSTERTYPE eMonType;
+		CQuest* pQuest;
 	}QINFO;
 
 private:

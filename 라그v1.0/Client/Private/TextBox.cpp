@@ -98,7 +98,7 @@ HRESULT CTextBox::Render()
 
 	Safe_AddRef(pInstance);
 
-	pInstance->Get_Font()->DrawText(nullptr, m_wstr.c_str(), (_int)m_wstr.length(), &m_rcBox, DT_LEFT | DT_WORDBREAK, D3DCOLOR_ARGB(255, 0, 0, 0));
+	//pInstance->Get_Font()->DrawText(nullptr, m_wstr.c_str(), (_int)m_wstr.length(), &m_rcBox, DT_LEFT | DT_WORDBREAK, D3DCOLOR_ARGB(255, 0, 0, 0));
 
 	Safe_Release(pInstance);
 

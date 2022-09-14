@@ -1,3 +1,110 @@
-﻿  Village_Quest1.cpp
-  Client.vcxproj -> C:\Users\JJH\Desktop\SR\라그v1.0\Client\Default\..\Bin\Client.exe
+﻿  BackBtn.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Camera_Dynamic.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  HuntQuest1.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Level_GamePlay.cpp
+c:\users\603jh\desktop\sr\라그v1.0\client\private\level_gameplay.cpp(846): warning C4244: '초기화 중': 'int'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\603jh\desktop\sr\라그v1.0\client\private\level_gameplay.cpp(847): warning C4244: '초기화 중': 'int'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  건너뛰고 있습니다... (관련된 변경 내용 없음)
+  Client.cpp
+  WorldHpBar.cpp
+  Wing.cpp
+  Village_Quest2.cpp
+  Village_Quest1.cpp
+  Village_Chief.cpp
+  UseSkill.cpp
+  ThunderCloud.cpp
+  SwordSlice.cpp
+  Sword.cpp
+  Stone.cpp
+  StatsWnd.cpp
+  StatsIcon.cpp
+  SkillWnd.cpp
+  SkillIcon.cpp
+  Shadow.cpp
+  Rain.cpp
+  PowerTotem.cpp
+  Poring.cpp
+  PoisonArrow.cpp
+  PlusBox.cpp
+  PlayerMpBar.cpp
+  MeteorEff.cpp
+  Meteor.cpp
+  Loading.cpp
+  LevelUp.cpp
+  House.cpp
+  Hit.cpp
+  FireSpear.cpp
+  FireBall.cpp
+  Fire.cpp
+  ExpLogo.cpp
+  ExpBlank.cpp
+  ExpBar.cpp
+  EquipIcon.cpp
+  Engineer.cpp
+  Drain.cpp
+  DmgFont.cpp
+  Default_NPC.cpp
+  DefaultAttack.cpp
+  DandelionAttack.cpp
+  BossSkillTarget.cpp
+  BlueFire.cpp
+  BackGround.cpp
+  AuraBlue.cpp
+  Angry.cpp
+  XBox.cpp
+  Wind.cpp
+  UI.cpp
+  Transparent_Wall.cpp
+  Tornado.cpp
+  ThunderSword.cpp
+  TextBox.cpp
+  TerrainRect.cpp
+  Terrain.cpp
+  Space.cpp
+  Sky.cpp
+  ReceiveBtn.cpp
+  NextBtn.cpp
+  MpBar.cpp
+  Monster.cpp
+  IconBar.cpp
+  HpBar.cpp
+  House2.cpp
+  Help.cpp
+  FireDragon.cpp
+  CloseBtn.cpp
+  BackGroundTree.cpp
+  BackGroundRect.cpp
+  LetterBox.cpp
+  SkillSlot.cpp
+  QuickSlot.cpp
+  PlayerInfo.cpp
+  Maiden.cpp
+  LogRect.cpp
+  Loader.cpp
+  HpPotion.cpp
+  ElderWilow.cpp
+  Dandelion.cpp
+  Byorgue.cpp
+  Bloodymurderer.cpp
+  Bigfoot.cpp
+  Alligator.cpp
+  Player.cpp
+  InventorySlot.cpp
+  InventoryIcon.cpp
+  Inventory.cpp
+  Town.cpp
+  Portal.cpp
+  Level_Logo.cpp
+  Level_ChoboField.cpp
+  MainApp.cpp
+  Level_MidBoss.cpp
+  Level_Loading.cpp
+  Client.vcxproj -> C:\Users\603jh\Desktop\SR\라그v1.0\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)

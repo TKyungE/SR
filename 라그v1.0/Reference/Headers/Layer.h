@@ -23,7 +23,7 @@ public:
 	void Late_Tick(_float fTimeDelta);
 	GAMEOBJECTS Get_Objects() { return m_GameObjects; }
 
-	class CGameObject* Find_GameObject(_uint iIndex);
+	//class CGameObject* Find_GameObject(_uint iIndex);
 private:
 	list<class CGameObject*>			m_GameObjects;
 public:

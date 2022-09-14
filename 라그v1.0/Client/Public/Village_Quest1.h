@@ -9,6 +9,7 @@ class CTransform;
 class CVIBuffer_Rect;
 class CTexture;
 class CCollider;
+class CQuest;
 END
 
 BEGIN(Client)
@@ -49,6 +50,7 @@ private:
 	INDEXPOS	m_IndexPos;
 
 	_bool m_bTalk = false;
+	CQuest* m_pQuest = nullptr;
 
 private:
 	HRESULT SetUp_Components(void);

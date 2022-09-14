@@ -204,13 +204,13 @@ CLayer * CGameInstance::Find_Layer(_uint iLevelIndex, const _tchar * pLayerTag)
 	return m_pObject_Manager->Find_Layer(iLevelIndex, pLayerTag);
 }
 
-CGameObject * CGameInstance::Find_Object(const _tchar * pLayerTag, _uint iIndex)
-{
-	if (nullptr == m_pObject_Manager)
-		return nullptr;
-
-	return m_pObject_Manager->Find_Object(pLayerTag, iIndex);
-}
+//CGameObject * CGameInstance::Find_Object(const _tchar * pLayerTag, _uint iIndex)
+//{
+//	if (nullptr == m_pObject_Manager)
+//		return nullptr;
+//
+//	return m_pObject_Manager->Find_Object(pLayerTag, iIndex);
+//}
 
 CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pComponentTag, _uint iIndex)
 {

@@ -27,7 +27,7 @@ HRESULT CHuntQuest1::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	m_bActive = true;
+	//m_bActive = true;
 
 	memcpy(&m_tQInfo, pArg, sizeof(QINFO));
 
