@@ -38,6 +38,21 @@ HRESULT CUI::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+
+	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.bDead = false;
+	tInfo.pTarget = m_tInfo.pTarget;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlayerHp"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlayerMp"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+		return E_FAIL;
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 

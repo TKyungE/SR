@@ -540,6 +540,15 @@
     <ClInclude Include="..\Public\LetterBox.h">
       <Filter>04.UI\LetterBox</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\PlayerHp.h">
+      <Filter>04.UI\00.PlayerUI\00.HpUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PlayerMp.h">
+      <Filter>04.UI\00.PlayerUI\01.MpUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PlayerExp.h">
+      <Filter>04.UI\00.PlayerUI\02.ExpUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -781,6 +790,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Space.cpp">
       <Filter>04.UI\Space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerHp.cpp">
+      <Filter>04.UI\00.PlayerUI\00.HpUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerMp.cpp">
+      <Filter>04.UI\00.PlayerUI\01.MpUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerExp.cpp">
+      <Filter>04.UI\00.PlayerUI\02.ExpUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

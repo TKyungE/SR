@@ -206,7 +206,10 @@
     <ClInclude Include="..\public\MeteorEff.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\public\PlayerExp.h" />
+    <ClInclude Include="..\public\PlayerHp.h" />
     <ClInclude Include="..\public\PlayerInfo.h" />
+    <ClInclude Include="..\public\PlayerMp.h" />
     <ClInclude Include="..\public\PoisonArrow.h" />
     <ClInclude Include="..\public\Poring.h" />
     <ClInclude Include="..\public\Portal.h" />
@@ -290,7 +293,10 @@
     <ClCompile Include="..\private\MeteorEff.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\private\PlayerExp.cpp" />
+    <ClCompile Include="..\private\PlayerHp.cpp" />
     <ClCompile Include="..\private\PlayerInfo.cpp" />
+    <ClCompile Include="..\private\PlayerMp.cpp" />
     <ClCompile Include="..\private\PoisonArrow.cpp" />
     <ClCompile Include="..\private\Poring.cpp" />
     <ClCompile Include="..\private\Portal.cpp" />

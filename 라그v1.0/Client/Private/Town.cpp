@@ -240,6 +240,7 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 	tInfo.iLevelIndex = LEVEL_TOWN;
 	tInfo.bHit = false;
 	tInfo.bDead = false;
+	tInfo.pTarget = Info.pTarget;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;

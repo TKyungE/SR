@@ -70,7 +70,8 @@
 #include "Skeleton.h"
 #include "Wraith.h"
 #include "Zombie.h"
-
+#include "PlayerHp.h"
+#include "PlayerMp.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -785,7 +786,12 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LetterBox"),
 		CLetterBox::Create(m_pGraphic_Device))))
 		return E_FAIL;
-
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlayerHp"),
+		CPlayerHp::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlayerMp"),
+		CPlayerMp::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	//Player °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pGraphic_Device))))
