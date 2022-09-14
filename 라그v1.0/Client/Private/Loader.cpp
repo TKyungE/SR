@@ -91,7 +91,7 @@
 #include "Skeleton.h"
 #include "Wraith.h"
 #include "Zombie.h"
-
+#include "House3.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -818,6 +818,10 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_HouseCube"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/BackGround/House/%d.dds"), 1))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_House3"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/House/1/%d.png"), 6))))
+		return E_FAIL;
+
 
 	Safe_Release(pGameInstance);
 
@@ -970,7 +974,9 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Transparent_Wall"),
 		Transparent_Wall::Create(m_pGraphic_Device))))
 		return E_FAIL;
-
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_House3"),
+		CHouse3::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	
 
 	//sky °´Ã¼

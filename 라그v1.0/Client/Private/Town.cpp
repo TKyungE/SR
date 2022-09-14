@@ -56,11 +56,11 @@ void CTown::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
-	
-	
+
+
 	/*CGameObject* Dest;
 	CGameObject* Sour;*/
-	
+
 	/*if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
 	{
 		m_bNextLevel = true;
@@ -104,9 +104,9 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_TOWN, pLayerTag, &info)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_TOWN, pLayerTag,&info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_TOWN, pLayerTag, &info)))
 		return E_FAIL;
-	
+
 	for (auto& iter : m_vecTree)
 	{
 		CBackGroundTree::INDEXPOS indexpos;
@@ -114,7 +114,7 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iIndex = iter.iIndex;
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
-		
+
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_TOWN, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
@@ -128,7 +128,7 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vPos = iter.BackGroundPos;
 		indexpos.iTrun = iter.iTrun;
 
-		
+
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_TOWN, pLayerTag, &indexpos)))
 			return E_FAIL;
@@ -143,7 +143,7 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vPos = iter.BackGroundPos;
 		indexpos.iTrun = iter.iTrun;
 
-	
+
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_TOWN, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
@@ -172,12 +172,18 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Transparent_Wall"), LEVEL_TOWN, pLayerTag, &Wall)))
 			return E_FAIL;
 	}
-	
+
+
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House3"), LEVEL_TOWN, pLayerTag, nullptr)))
+		return E_FAIL;
+
 
 	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
+
 HRESULT CTown::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
@@ -274,7 +280,7 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LogRect"), LEVEL_TOWN, TEXT("Layer_Log"), &tInfo)))
 		return E_FAIL;*/
 
-	
+
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
@@ -374,9 +380,9 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
 			return E_FAIL;
-		
+
 	}
-	
+
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
@@ -411,9 +417,9 @@ void CTown::LoadData()
 		return;
 
 	DWORD	dwByte = 0;
-	
-	
-	_float3 vPos1,vPos2;
+
+
+	_float3 vPos1, vPos2;
 	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize, iWallSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
