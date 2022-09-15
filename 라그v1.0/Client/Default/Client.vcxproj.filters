@@ -340,6 +340,48 @@
     <Filter Include="04.UI\Button\Next">
       <UniqueIdentifier>{c72a100b-62c5-4919-9c3f-83fb657a841a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\06.Atros">
+      <UniqueIdentifier>{e6cae052-15ae-474e-91d6-064c0afad733}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\07.Baphomet">
+      <UniqueIdentifier>{8d3e5807-8064-447c-b93a-c89f514d74a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\08.Minorous">
+      <UniqueIdentifier>{8cde6eef-272e-42dd-87f8-db403fe033e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\09.Skeleton">
+      <UniqueIdentifier>{79fba136-75d1-4bab-b6ca-fbdf21ab41dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\10.Wraith">
+      <UniqueIdentifier>{e30c10c8-3fb5-4526-8b36-979efbda1634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\11.Zombie">
+      <UniqueIdentifier>{aeab8326-a1d6-4144-a07f-dc145a325fe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Desert">
+      <UniqueIdentifier>{9586cf90-4a99-4214-9a34-2f08de2e8c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Town2">
+      <UniqueIdentifier>{759e2c83-a2c7-4027-a401-3f9678461290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\House3">
+      <UniqueIdentifier>{5b4ab8dd-1405-40d8-99ab-298686e6fe24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\House4">
+      <UniqueIdentifier>{417727ea-2531-47c4-8cfd-66c92cb714bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\House5">
+      <UniqueIdentifier>{1642948f-524b-4151-b041-d1bb4ce8625b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\House6">
+      <UniqueIdentifier>{e007ae1d-a186-40ca-9e2b-344c391bfc8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\House7">
+      <UniqueIdentifier>{2049d722-dcc4-49b4-a39c-7a7d5313b0fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\ItemBox">
+      <UniqueIdentifier>{035a835f-5fff-442a-bfbb-18fb84cca757}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -657,6 +699,48 @@
     <ClInclude Include="..\Public\TextBox.h">
       <Filter>04.UI\TextBox</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Atros.h">
+      <Filter>02.GameObject\Monster\06.Atros</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Baphomet.h">
+      <Filter>02.GameObject\Monster\07.Baphomet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Minorous.h">
+      <Filter>02.GameObject\Monster\08.Minorous</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Skeleton.h">
+      <Filter>02.GameObject\Monster\09.Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Wraith.h">
+      <Filter>02.GameObject\Monster\10.Wraith</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Zombie.h">
+      <Filter>02.GameObject\Monster\11.Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Desert1.h">
+      <Filter>01.Levels\Desert</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Town2.h">
+      <Filter>01.Levels\Town2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\House3.h">
+      <Filter>02.GameObject\BackGroundObj\House3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\House4.h">
+      <Filter>02.GameObject\BackGroundObj\House4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\House5.h">
+      <Filter>02.GameObject\BackGroundObj\House5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\House6.h">
+      <Filter>02.GameObject\BackGroundObj\House6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\House7.h">
+      <Filter>02.GameObject\BackGroundObj\House7</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ItemBox.h">
+      <Filter>02.GameObject\BackGroundObj\ItemBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -961,6 +1045,48 @@
     </ClCompile>
     <ClCompile Include="..\Private\MyButton.cpp">
       <Filter>04.UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Atros.cpp">
+      <Filter>02.GameObject\Monster\06.Atros</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Baphomet.cpp">
+      <Filter>02.GameObject\Monster\07.Baphomet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Minorous.cpp">
+      <Filter>02.GameObject\Monster\08.Minorous</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Skeleton.cpp">
+      <Filter>02.GameObject\Monster\09.Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Wraith.cpp">
+      <Filter>02.GameObject\Monster\10.Wraith</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Zombie.cpp">
+      <Filter>02.GameObject\Monster\11.Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Desert1.cpp">
+      <Filter>01.Levels\Desert</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Town2.cpp">
+      <Filter>01.Levels\Town2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\House3.cpp">
+      <Filter>02.GameObject\BackGroundObj\House3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\House4.cpp">
+      <Filter>02.GameObject\BackGroundObj\House4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\House5.cpp">
+      <Filter>02.GameObject\BackGroundObj\House5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\House6.cpp">
+      <Filter>02.GameObject\BackGroundObj\House6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\House7.cpp">
+      <Filter>02.GameObject\BackGroundObj\House7</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ItemBox.cpp">
+      <Filter>02.GameObject\BackGroundObj\ItemBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
