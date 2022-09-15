@@ -91,7 +91,7 @@ void CAlligator::Tick(_float fTimeDelta)
 			if (m_tFrame.iFrameStart == 3)
 			{
 				m_fDeadTime += fTimeDelta;
-				if (m_fDeadTime > 3.f)
+				if (m_fDeadTime > 2.f)
 				{
 					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
 					m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);

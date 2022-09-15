@@ -91,7 +91,7 @@ void CElderWilow::Tick(_float fTimeDelta)
 			if (m_tFrame.iFrameStart == 2)
 			{
 				m_fDeadTime += fTimeDelta;
-				if (m_fDeadTime > 3.f)
+				if (m_fDeadTime > 2.f)
 				{
 					DropItem();
 					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
@@ -921,23 +921,6 @@ void CElderWilow::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	/*if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
-	{
-		_float3 vBackPos;
-		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-		}
-		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-		}
-		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}*/
 	if (pInstance->Collision(this, COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
@@ -960,5 +943,15 @@ void CElderWilow::CheckColl()
 
 void CElderWilow::DropItem()
 {
-//	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &tInfo);
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	tInfo.iLv = 2;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Item"), &tInfo);
+
+	Safe_Release(pGameInstance);
 }

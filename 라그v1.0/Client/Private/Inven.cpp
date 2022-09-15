@@ -34,14 +34,9 @@ HRESULT CInven::Initialize(void* pArg)
 	Safe_AddRef(pGameInstance);
 	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
-	m_vecItem.reserve(25);
-	for (int i = 0; i < 25; ++i)
+	m_vecItem.reserve(24);
+	for (int i = 0; i < 24; ++i)
 	{
-		if (i == 24)
-		{
-			m_vecItem.push_back(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(24));
-			break;
-		}
 		m_vecItem.push_back(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i));
 	}
 	for (int i = 0; i < 24; ++i)
@@ -52,13 +47,17 @@ HRESULT CInven::Initialize(void* pArg)
 	m_fSizeY = 550.f;
 	m_fX = 850.f;
 	m_fY = 350.f;
-
+	
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 	Set_Slot();
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::HPPOTION, 0);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemCount(115, 0);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::MPPOTION, 1);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemCount(77, 1);
 	return S_OK;
 }
 
@@ -68,41 +67,61 @@ void CInven::Tick(_float fTimeDelta)
 
 	if (dynamic_cast<CUI*>(m_tInfo.pTerrain)->Get_Inven() == false)
 	{
+		dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(false);
 		Set_Dead();
 		return;
 	}
-	Check_Slot();
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
-	_int iDest = rand() % 6;
+	_int iDest;
+	for (int i = 0; i < 24; ++i)
+	{
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+		{
+			iDest = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iSlotNum;
+			m_pSlotTrans[iDest]->Set_State(CTransform::STATE_POSITION, _float3((float)ptMouse.x - g_iWinSizeX * 0.5f, -(float)ptMouse.y + g_iWinSizeY * 0.5f, 0.f));
+			if (PtInRect(&m_rcSlot[i], ptMouse))
+			{
+				if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+				{
+					m_pSlotTrans[iDest]->Set_State(CTransform::STATE_POSITION, _float3((float)(m_rcSlot[iDest].left + 23) - g_iWinSizeX * 0.5f, -(float)(m_rcSlot[iDest].top + 23) + g_iWinSizeY * 0.5f, 0.f));
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemCount(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i).iCount, iDest);
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i).eItemNum, iDest);
+					
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemCount(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iCount,i);
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().eItemNum, i);
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemSlot(i, i);
+					
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(false);
+				}
 
+			}
+		}
+	}
 	for (int i = 0; i < 24; ++i)
 	{
 		if (PtInRect(&m_rcSlot[i], ptMouse))
 		{
 			if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
 			{
-				switch (iDest)
+				if (m_vecItem[i].eItemNum != CStatInfo::EITEM_END && !dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
 				{
-				case 0:
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::HPPOTION, i);
-					break;
-				case 1:
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::MPPOTION, i);
-					break;
-				case 2:
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::PETEGG, i);
-					break;
-				case 3:
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::ROBE, i);
-					break;
-				case 4:
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::STAFF, i);
-					break;
-				case 5:
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::EITEM_END, i);
-					break;
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(true);
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MouseItem(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i));
+				}
+			}
+		}
+	}
+	for (int i = 0; i < 24; ++i)
+	{
+		if (PtInRect(&m_rcSlot[i], ptMouse))
+		{
+			if (CKeyMgr::Get_Instance()->Key_Down(VK_RBUTTON))
+			{
+				if (m_vecItem[i].eItemNum != CStatInfo::EITEM_END && !dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+				{
+					UseItem(m_vecItem[i].eItemNum, i);
 				}
 			}
 		}
@@ -112,6 +131,8 @@ void CInven::Tick(_float fTimeDelta)
 void CInven::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+
+	Check_Slot();
 
 	if (nullptr != m_pRendererCom && !g_bCut)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
@@ -144,6 +165,21 @@ HRESULT CInven::Render()
 		m_pSlotTrans[i]->Bind_OnGraphicDev();
 		m_pSlotBuffer[i]->Render();
 	}
+	wstring szCount[24];
+	for (int i = 0; i < 24; ++i)
+	{
+		szCount[i] = TEXT("");
+		szCount[i] += to_wstring(m_vecItem[i].iCount);
+	}
+	
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	for (int i = 0; i < 24; ++i)
+	{
+		if(m_vecItem[i].iCount > 1)
+			pGameInstance->Get_Font()->DrawText(nullptr, szCount[i].c_str(), (int)szCount[i].length(), &m_rcCount[i], DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
+	}
+	Safe_Release(pGameInstance);
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
@@ -241,7 +277,16 @@ void CInven::Set_Slot()
 			++k;
 		}
 	}
-
+	k = 0;
+	for (int i = 0; i < 6; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			m_rcCount[k] = { int(722.f + 63.f * j),int(182.f + 60.f * i),int(768.f + 63.f * j),int(203.f + 60.f * i) };
+			++k;
+		}
+	}
+	
 }
 
 void CInven::Check_Slot()
@@ -251,6 +296,23 @@ void CInven::Check_Slot()
 	{
 		iDest = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i).iSlotNum;
 		m_vecItem[iDest] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i);
+	}
+}
+
+void CInven::UseItem(CStatInfo::EITEM _eItem,_int Index)
+{
+	switch (_eItem)
+	{
+	case CStatInfo::HPPOTION:
+		m_tInfo.pTarget->Set_Hp(-1000);
+		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(-1, Index);
+		break;
+	case CStatInfo::MPPOTION:
+		m_tInfo.pTarget->Set_Mp(100);
+		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(-1, Index);
+		break;
+	default:
+		break;
 	}
 }
 

@@ -28,6 +28,8 @@ HRESULT CStatInfo::Initialize(void * pArg)
 		return E_FAIL;
 
 	ZeroMemory(&m_tStat, sizeof(STAT));
+	ZeroMemory(&m_MouseItem, sizeof(ITEM));
+
 	for (int i = 0; i < 24; ++i)
 	{
 		ZeroMemory(&m_tItem[i], sizeof(ITEM));
@@ -36,8 +38,6 @@ HRESULT CStatInfo::Initialize(void * pArg)
 	}
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	
-
-
 	return S_OK;
 }
 

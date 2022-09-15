@@ -298,6 +298,12 @@
     <Filter Include="04.UI\03.Inven">
       <UniqueIdentifier>{8284592b-dd0b-44f7-9a00-e0515cdd6f43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Item">
+      <UniqueIdentifier>{a643e431-63b9-4b4a-a314-33d0f5db4f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Item\00.HpPotion">
+      <UniqueIdentifier>{8bd4f351-6480-4a3e-b184-54b2a4f97ab8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -573,6 +579,9 @@
     <ClInclude Include="..\public\Inven.h">
       <Filter>04.UI\03.Inven</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\HpPotion.h">
+      <Filter>05.Item\00.HpPotion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -835,6 +844,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Inven.cpp">
       <Filter>04.UI\03.Inven</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HpPotion.cpp">
+      <Filter>05.Item\00.HpPotion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

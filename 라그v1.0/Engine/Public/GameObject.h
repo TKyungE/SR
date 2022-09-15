@@ -65,7 +65,7 @@ public: // 여기에 갯 셋 만들어서 인포 +- 관리하면될듯
 	void	Set_LevelIndex(_int _iLevelIndex) { m_tInfo.iLevelIndex = _iLevelIndex; };
 	void	Set_Hp(_int _iDmg) { m_tInfo.iHp -= _iDmg; }
 	void	Set_Hit(_int _iDmg, _float3 _vPos) { m_tInfo.bHit = true; m_tInfo.iTargetDmg = _iDmg; m_tInfo.vTargetPos = _vPos; }
-	void	Set_Mp(_int _iMp) { m_tInfo.iMp += _iMp; }
+	void	Set_Mp(_int _iMp) { m_tInfo.iMp += _iMp; if (m_tInfo.iMp > m_tInfo.iMaxMp) { m_tInfo.iMp = m_tInfo.iMaxMp; } }
 	void	Set_UiMP(_int _iMp) { m_tInfo.iMp = _iMp; }
 	void	Set_bHit(bool _bHit) { m_tInfo.bHit = _bHit; }
 	void	Set_Exp(_int _iExp) { m_tInfo.iExp += _iExp; }

@@ -86,6 +86,7 @@ void CStatus::Tick(_float fTimeDelta)
 
 	if (dynamic_cast<CUI*>(m_tInfo.pTerrain)->Get_Status() == false)
 	{
+		dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(false);
 		Set_Dead();
 		return;
 	}

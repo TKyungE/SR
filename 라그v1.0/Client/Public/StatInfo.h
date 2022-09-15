@@ -45,11 +45,18 @@ public:
 private:
 	STAT m_tStat;
 	ITEM m_tItem[24];
+	_bool	m_bMousePick = false;
+	ITEM m_MouseItem;
 public:
 	ITEM Get_Item(_int iNum) { return m_tItem[iNum]; }
 	STAT Get_Stat() { return m_tStat; }
+	_bool Get_MousePick() { return m_bMousePick; }
+	ITEM Get_MouseItem() { return m_MouseItem; }
+	void Set_MouseItem(ITEM _MouseItem) { m_MouseItem = _MouseItem; }
+	void Set_MousePick(_bool _Pick) {m_bMousePick = _Pick;}
 	void Set_ItemNum(EITEM _ItemNum, _int iNum) { m_tItem[iNum].eItemNum = _ItemNum; }
-	void Set_ItemCount(_int _ItemCount, _int iNum) { m_tItem[iNum].iCount += _ItemCount; }
+	void Set_ItemCount(_int _ItemCount, _int iNum) { m_tItem[iNum].iCount = _ItemCount; }
+	void Set_UseItemCount(_int _ItemCount, _int iNum) { m_tItem[iNum].iCount += _ItemCount; }
 	void Set_ItemSlot(_int _ItemSlot, _int iNum) { m_tItem[iNum].iSlotNum = _ItemSlot; }
 	void Set_STR(_int _iSTR) { m_tStat.iSTR += _iSTR; }
 	void Set_DEX(_int _iDEX) { m_tStat.iDEX += _iDEX; }

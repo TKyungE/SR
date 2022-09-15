@@ -88,6 +88,7 @@ private:
 	_bool	m_bCamera = false;
 	_bool   m_bRide = false;
 	_bool	m_bFly = false;
+	_bool	m_bUI = false;
 	_float	m_fFly_fY = 0.f;
 	STATE				m_ePreState;
 	STATE				m_eCurState;
@@ -103,6 +104,7 @@ public:
 	void Set_Camera(_bool bCamera) { m_bCamera = bCamera; }
 	_bool Get_Fly() { return m_bFly; }
 	void Set_Fly(_bool _bFly) {	m_bFly = _bFly;}
+	void Set_UI(_bool _UI) { m_bUI = _UI; }
 private:
 	void Player_Move(_float fTimeDelta);
 	void Motion_Change();

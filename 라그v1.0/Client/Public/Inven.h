@@ -38,6 +38,7 @@ private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 	RECT					m_rcSlot[24];
+	RECT					m_rcCount[24];
 	vector<CStatInfo::ITEM>			m_vecItem;
 	CGameObject*			m_StatInfo;
 private:
@@ -46,6 +47,7 @@ private:
 	HRESULT Release_RenderState();
 	void	Set_Slot();
 	void	Check_Slot();
+	void	UseItem(CStatInfo::EITEM _eItem, _int Index);
 public:
 	static CInven* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

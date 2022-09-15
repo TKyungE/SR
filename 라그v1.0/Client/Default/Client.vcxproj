@@ -185,6 +185,7 @@
     <ClInclude Include="..\public\FireBall.h" />
     <ClInclude Include="..\public\Help.h" />
     <ClInclude Include="..\public\House.h" />
+    <ClInclude Include="..\public\HpPotion.h" />
     <ClInclude Include="..\Public\HuntQuest1.h" />
     <ClInclude Include="..\public\Inven.h" />
     <ClInclude Include="..\Public\LetterBox.h" />
@@ -276,6 +277,7 @@
     <ClCompile Include="..\private\FireBall.cpp" />
     <ClCompile Include="..\Private\Help.cpp" />
     <ClCompile Include="..\private\House.cpp" />
+    <ClCompile Include="..\private\HpPotion.cpp" />
     <ClCompile Include="..\Private\HuntQuest1.cpp" />
     <ClCompile Include="..\private\Inven.cpp" />
     <ClCompile Include="..\Private\LetterBox.cpp" />

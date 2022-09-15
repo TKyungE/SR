@@ -2,6 +2,7 @@
 #include "..\Public\UI.h"
 #include "GameInstance.h"
 #include "KeyMgr.h"
+#include "Player.h"
 
 CUI::CUI(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -83,7 +84,7 @@ void CUI::Tick(_float fTimeDelta)
 			tInfo.pTerrain = this;
 			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Status"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
 				return;
-
+			dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(true);
 			Safe_Release(pGameInstance);
 			m_bStatus = true;
 			break;
@@ -107,7 +108,7 @@ void CUI::Tick(_float fTimeDelta)
 				tInfo.pTerrain = this;
 				if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Inven"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
 					return;
-
+				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(true);
 				Safe_Release(pGameInstance);
 				m_bInven = true;
 				break;

@@ -50,8 +50,8 @@ void CPlayerExp::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	_float fX = m_fSizeX * ((float)m_tInfo.pTarget->Get_Info().iExp / (float)m_tInfo.pTarget->Get_Info().iMaxExp);
-
-	m_pTransformCom2->Set_Scaled(_float3(fX, m_fSizeY, 1.f));
+	if(fX > 0.f)
+		m_pTransformCom2->Set_Scaled(_float3(fX, m_fSizeY, 1.f));
 
 }
 
