@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Client_Defines.h"
-#include "GameObject.h"
+#include "MyButton.h"
 
 BEGIN(Engine)
 class CTexture;
@@ -35,11 +34,17 @@ private:
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
+
 	RECT					m_rcBox;
 	wstring					m_wstr;
-	_int					m_i = 0;
-	_float m_fTimeDelta = 0.f;
-	_bool m_bFontRender = false;
+	_int					m_iIndex = 0;
+	_int					m_iScriptIndex = 0;
+	_float					m_fTimeDelta = 0.f;
+	_bool					m_bFontRender = false;
+	vector<wstring>			m_vScript;
+
+	vector<CMyButton*>	m_vButtonArray;
+	CMyButton*		m_pButton = nullptr;
 
 private:
 	HRESULT SetUp_Components();
@@ -47,6 +52,9 @@ private:
 	HRESULT Release_RenderState();
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
+	HRESULT Create_Buttons(void);
+	void Running_TextBox(void);
+	void Print_Text(void);
 
 public:
 	static CTextBox* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

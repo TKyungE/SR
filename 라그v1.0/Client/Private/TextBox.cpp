@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\TextBox.h"
 #include "GameInstance.h"
+#include "MyButton.h"
 
 CTextBox::CTextBox(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -42,6 +43,11 @@ HRESULT CTextBox::Initialize(void * pArg)
 
 	m_rcBox = { 180, 500, 1120, 650 };
 
+	m_vScript.push_back(TEXT("(1,2,3,4) Baby, got me looking so crazy 빠져버리는 daydream Got me feeling you 너도 말해줄래 누가 내게 뭐라든 남들과는 달라 "));
+	m_vScript.push_back(TEXT("넌 Maybe you could be the one 날 믿어봐 한번 I'm not looking for just fun Maybe I could be the one Oh baby 예민하대 나 "));
+	m_vScript.push_back(TEXT("lately 너 없이는 매일 매일이 yeah 재미없어 어쩌지 I just want you Call my phone right now I just wanna hear you're mine "));
+	m_vScript.push_back(TEXT("'Cause I know what you like boy You're my chemical hype boy 내 지난날들은 눈 뜨면 잊는 꿈 Hype boy 너만 원해 Hype boy 내가 "));
+
 	return S_OK;
 }
 
@@ -49,15 +55,18 @@ void CTextBox::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	wstring wstr = TEXT("(1,2,3,4) Baby, got me looking so crazy 빠져버리는 daydream Got me feeling you 너도 말해줄래 누가 내게 뭐라든 남들과는 달라 넌 Maybe you could be the one 날 믿어봐 한번 I'm not looking for just fun Maybe I could be the one Oh baby 예민하대 나 lately 너 없이는 매일 매일이 yeah 재미없어 어쩌지 I just want you Call my phone right now I just wanna hear you're mine 'Cause I know what you like boy You're my chemical hype boy 내 지난날들은 눈 뜨면 잊는 꿈 Hype boy 너만 원해 Hype boy 내가 ");
-
-	if (m_i < wstr.length() && m_fTimeDelta > 0.03f)
+	if (0 == m_vButtonArray.size())
 	{
-		m_wstr += wstr[m_i];
-		++m_i;
-		m_fTimeDelta = 0.f;
-		m_bFontRender = true;
+		if (FAILED(Create_Buttons()))
+		{
+			ERR_MSG(TEXT("Failed to Create Buttons"));
+			return;
+		}
 	}
+	else
+		Running_TextBox();
+
+	Print_Text();
 
 	m_fTimeDelta += fTimeDelta;
 }
@@ -90,7 +99,7 @@ HRESULT CTextBox::Render()
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
-	//m_pVIBufferCom->Render();
+	m_pVIBufferCom->Render();
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
@@ -98,7 +107,7 @@ HRESULT CTextBox::Render()
 
 	Safe_AddRef(pInstance);
 
-	//pInstance->Get_Font()->DrawText(nullptr, m_wstr.c_str(), (_int)m_wstr.length(), &m_rcBox, DT_LEFT | DT_WORDBREAK, D3DCOLOR_ARGB(255, 0, 0, 0));
+	pInstance->Get_Font()->DrawText(nullptr, m_wstr.c_str(), (_int)m_wstr.length(), &m_rcBox, DT_LEFT | DT_WORDBREAK, D3DCOLOR_ARGB(255, 0, 0, 0));
 
 	Safe_Release(pInstance);
 
@@ -177,6 +186,127 @@ HRESULT CTextBox::Off_SamplerState()
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 
 	return S_OK;
+}
+
+HRESULT CTextBox::Create_Buttons(void)
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return E_FAIL;
+
+	Safe_AddRef(pInstance);
+
+	CMyButton::BINFO tBInfo;
+	tBInfo.vPos = _float3(g_iWinSizeX * 0.75f, g_iWinSizeY * 0.92f, 0.f);
+
+	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Close_Button"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
+	{
+		ERR_MSG(TEXT("Failed to Add GameObject : Close_Button"));
+		return E_FAIL;
+	}
+	m_pButton = tBInfo.pOut;
+	m_vButtonArray.push_back(m_pButton);
+
+	tBInfo.vPos = _float3(g_iWinSizeX * 0.8f, g_iWinSizeY * 0.92f, 0.f);
+
+	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Back_Button"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
+	{
+		ERR_MSG(TEXT("Failed to Add GameObject : Back_Button"));
+		return E_FAIL;
+	}
+	m_pButton = tBInfo.pOut;
+	m_vButtonArray.push_back(m_pButton);
+
+	tBInfo.vPos = _float3(g_iWinSizeX * 0.85f, g_iWinSizeY * 0.92f, 0.f);
+
+	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Next_Button"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
+	{
+		ERR_MSG(TEXT("Failed to Add GameObject : Next_Button"));
+		return E_FAIL;
+	}
+	m_pButton = tBInfo.pOut;
+	m_vButtonArray.push_back(m_pButton);
+
+	Safe_Release(pInstance);
+	
+	return S_OK;
+}
+
+void CTextBox::Running_TextBox(void)
+{
+	for (auto& iter : m_vButtonArray)
+	{
+		if (iter->Get_Clicked())
+		{
+			switch (iter->Get_Type())
+			{
+			case CMyButton::BUTTON_CLOSE:
+			{
+				for (auto& iterator : m_vButtonArray)
+					iterator->Set_Dead();
+
+				m_vButtonArray.clear();
+				
+				Set_Dead();
+				
+				if (g_bCut)
+					g_bCut = false;
+				
+				break;
+			}
+			case CMyButton::BUTTON_BACK:
+			{
+				if (m_iScriptIndex > 0)
+				{
+					--m_iScriptIndex;
+					m_wstr = TEXT("");
+					m_iIndex = 0;
+				}
+				iter->TurnOff_Clicked();
+				break;
+			}
+			case CMyButton::BUTTON_NEXT:
+			{
+				if (m_iScriptIndex < m_vScript.size() - 1)
+				{
+					++m_iScriptIndex;
+					m_wstr = TEXT("");
+					m_iIndex = 0;
+				}
+
+				iter->TurnOff_Clicked();
+				break;
+			}
+			case CMyButton::BUTTON_RECEIVE:
+			{
+				if (m_iScriptIndex < m_vScript.size())
+				{
+					++m_iScriptIndex;
+					m_wstr = TEXT("");
+					m_iIndex = 0;
+				}
+
+				iter->TurnOff_Clicked();
+				break;
+			}
+			}
+
+			break;
+		}
+	}
+}
+
+void CTextBox::Print_Text(void)
+{
+	wstring wstr = m_vScript[m_iScriptIndex];
+
+	if (m_iIndex < wstr.length() && m_fTimeDelta > 0.03f)
+	{
+		m_wstr += wstr[m_iIndex];
+		++m_iIndex;
+		m_fTimeDelta = 0.f;
+		m_bFontRender = true;
+	}
 }
 
 CTextBox * CTextBox::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

@@ -3,12 +3,12 @@
 #include "GameInstance.h"
 
 CReceiveBtn::CReceiveBtn(LPDIRECT3DDEVICE9 pGraphic_Device)
-	: CGameObject(pGraphic_Device)
+	: CMyButton(pGraphic_Device)
 {
 }
 
 CReceiveBtn::CReceiveBtn(const CReceiveBtn & rhs)
-	: CGameObject(rhs)
+	: CMyButton(rhs)
 {
 }
 
@@ -25,13 +25,10 @@ HRESULT CReceiveBtn::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
+	m_tBInfo.pOut = this;
+	memcpy(pArg, &m_tBInfo, sizeof(BINFO));
 
-	m_fSizeX = 70.f;
-	m_fSizeY = 70.f;
-	m_fX = m_tInfo.vPos.x;
-	m_fY = m_tInfo.vPos.y;
+	m_eType = BUTTON_RECEIVE;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
@@ -39,12 +36,42 @@ HRESULT CReceiveBtn::Initialize(void * pArg)
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 0.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 
+	SetRect(&m_rcBtn, (int)(m_fX - m_fSizeX * 0.35f), (int)(m_fY - m_fSizeY * 0.15f), (int)(m_fX + m_fSizeX * 0.35f), (int)(m_fY + m_fSizeY * 0.15f));
+
 	return S_OK;
 }
 
 void CReceiveBtn::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	POINT ptMouse;
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
+
+	if (PtInRect(&m_rcBtn, ptMouse))
+	{
+		if (CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON) && m_bMouseCheck)
+		{
+			m_bClicked = true;
+			if (g_bCut)
+				g_bCut = false;
+
+			m_iTex = 2;
+		}
+		else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
+		{
+			m_bMouseCheck = true;
+			m_iTex = 2;
+		}
+		else
+			m_iTex = 1;
+	}
+	else
+	{
+		m_iTex = 0;
+		m_bMouseCheck = false;
+	}
 }
 
 void CReceiveBtn::Late_Tick(_float fTimeDelta)
@@ -69,7 +96,7 @@ HRESULT CReceiveBtn::Render()
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iTex)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))
@@ -116,57 +143,13 @@ HRESULT CReceiveBtn::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CReceiveBtn::SetUp_RenderState()
-{
-	if (nullptr == m_pGraphic_Device)
-		return E_FAIL;
-
-	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-	return S_OK;
-}
-
-HRESULT CReceiveBtn::Release_RenderState()
-{
-	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-	m_pGraphic_Device->SetTexture(0, nullptr);
-	return S_OK;
-}
-
-HRESULT CReceiveBtn::On_SamplerState()
-{
-	if (nullptr == m_pGraphic_Device)
-		return E_FAIL;
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	return S_OK;
-}
-
-HRESULT CReceiveBtn::Off_SamplerState()
-{
-	if (nullptr == m_pGraphic_Device)
-		return E_FAIL;
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-
-	return S_OK;
-}
-
 CReceiveBtn * CReceiveBtn::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CReceiveBtn*	pInstance = new CReceiveBtn(pGraphic_Device);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		ERR_MSG(TEXT("Failed to Created : CTextBox"));
+		ERR_MSG(TEXT("Failed to Created : CReceiveBtn"));
 		Safe_Release(pInstance);
 	}
 
@@ -179,7 +162,7 @@ CGameObject * CReceiveBtn::Clone(void * pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		ERR_MSG(TEXT("Failed to Cloned : CTextBox"));
+		ERR_MSG(TEXT("Failed to Cloned : CReceiveBtn"));
 		Safe_Release(pInstance);
 	}
 

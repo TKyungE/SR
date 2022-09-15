@@ -83,10 +83,17 @@ void CPlayer::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 	
 	OnTerrain();
-	Move_Frame(fTimeDelta);
-	Get_PickingPoint();
 	Key_Input(fTimeDelta);
-	Player_Move(fTimeDelta);
+
+	if (!g_bCut)
+	{
+		Player_Move(fTimeDelta);
+		Move_Frame(fTimeDelta);
+		Get_PickingPoint();
+	}
+	else
+		m_eCurState = IDLE;
+
 	if (m_tInfo.iHp >= m_tInfo.iMaxHp)
 	{
 		m_tInfo.iHp = m_tInfo.iMaxHp;

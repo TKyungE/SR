@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Client_Defines.h"
-#include "GameObject.h"
+#include "MyButton.h"
 
 BEGIN(Engine)
 class CTexture;
@@ -12,7 +11,7 @@ END
 
 BEGIN(Client)
 
-class CNextBtn final : public CGameObject
+class CNextBtn final : public CMyButton
 {
 private:
 	CNextBtn(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -33,16 +32,8 @@ private:
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 
 private:
-	_float4x4				m_ProjMatrix;
-	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
-
-private:
 	HRESULT SetUp_Components();
-	HRESULT SetUp_RenderState();
-	HRESULT Release_RenderState();
-	HRESULT On_SamplerState();
-	HRESULT Off_SamplerState();
-
+	
 public:
 	static CNextBtn* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

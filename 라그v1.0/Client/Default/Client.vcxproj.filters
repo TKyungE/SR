@@ -639,9 +639,6 @@
     <ClInclude Include="..\Public\Transparent_Wall.h">
       <Filter>02.GameObject\Transparent_Wall</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TextBox.h">
-      <Filter>04.UI\TextBox</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\CloseBtn.h">
       <Filter>04.UI\Button\Close</Filter>
     </ClInclude>
@@ -653,6 +650,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\NextBtn.h">
       <Filter>04.UI\Button\Next</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MyButton.h">
+      <Filter>04.UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TextBox.h">
+      <Filter>04.UI\TextBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -955,6 +958,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\NextBtn.cpp">
       <Filter>04.UI\Button\Next</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MyButton.cpp">
+      <Filter>04.UI\Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
