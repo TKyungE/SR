@@ -27,6 +27,7 @@ public:
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free(void) override;
 public:
+	enum EITEM{HPPOTION,MPPOTION,PETEGG,ROBE,STAFF,EITEM_END};
 	typedef struct tagStat
 	{
 		_int iSTR;
@@ -35,10 +36,21 @@ public:
 		_int iLUK;
 		_int iStatsPoint;
 	}STAT;
+	typedef struct tagItem
+	{
+		EITEM eItemNum;
+		_int iSlotNum;
+		_int iCount;
+	}ITEM;
 private:
 	STAT m_tStat;
+	ITEM m_tItem[24];
 public:
+	ITEM Get_Item(_int iNum) { return m_tItem[iNum]; }
 	STAT Get_Stat() { return m_tStat; }
+	void Set_ItemNum(EITEM _ItemNum, _int iNum) { m_tItem[iNum].eItemNum = _ItemNum; }
+	void Set_ItemCount(_int _ItemCount, _int iNum) { m_tItem[iNum].iCount += _ItemCount; }
+	void Set_ItemSlot(_int _ItemSlot, _int iNum) { m_tItem[iNum].iSlotNum = _ItemSlot; }
 	void Set_STR(_int _iSTR) { m_tStat.iSTR += _iSTR; }
 	void Set_DEX(_int _iDEX) { m_tStat.iDEX += _iDEX; }
 	void Set_INT(_int _iINT) { m_tStat.iINT += _iINT; }

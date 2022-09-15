@@ -34,21 +34,21 @@ HRESULT CStatus::Initialize(void* pArg)
 
 	m_fSizeX = 300.f;
 	m_fSizeY = 550.f;
-	m_fX = 500.f;
+	m_fX = 450.f;
 	m_fY = 350.f;
-	m_rcStat[0] = { 460,260,700,300 };
-	m_rcStat[1] = { 460,302,700,340 };
-	m_rcStat[2] = { 460,332,700,365 };
-	m_rcStat[3] = { 455,400,600,450 };
-	m_rcStat[4] = { 460,445,700,500 };
-	m_rcStat[5] = { 460,475,700,500 };
-	m_rcStat[6] = { 460,505,700,550 };
-	m_rcStat[7] = { 460,535,700,580 };
+	m_rcStat[0] = { 410,260,700,300 };
+	m_rcStat[1] = { 410,302,700,340 };
+	m_rcStat[2] = { 410,332,700,365 };
+	m_rcStat[3] = { 415,400,600,450 };
+	m_rcStat[4] = { 410,445,700,500 };
+	m_rcStat[5] = { 410,475,700,500 };
+	m_rcStat[6] = { 410,505,700,550 };
+	m_rcStat[7] = { 410,535,700,580 };
 
-	m_rcButton[0] = { 600,445,620,465 };
-	m_rcButton[1] = { 600,475,620,495 };
-	m_rcButton[2] = { 600,504,620,524 };
-	m_rcButton[3] = { 600,533,620,553 };
+	m_rcButton[0] = { 550,445,620,465 };
+	m_rcButton[1] = { 550,475,620,495 };
+	m_rcButton[2] = { 550,504,620,524 };
+	m_rcButton[3] = { 550,533,620,553 };
 
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
@@ -62,7 +62,7 @@ HRESULT CStatus::Initialize(void* pArg)
 
 	_float fSizeX = 20.f;
 	_float fSizeY = 20.f;
-	_float fX = 610.f;
+	_float fX = 560.f;
 	_float fY = 455.f;
 
 	m_pTransformCom2->Set_Scaled(_float3(fSizeX, fSizeY, 1.f));
@@ -85,8 +85,10 @@ void CStatus::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	if (dynamic_cast<CUI*>(m_tInfo.pTerrain)->Get_Status() == false)
+	{
 		Set_Dead();
-
+		return;
+	}
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);

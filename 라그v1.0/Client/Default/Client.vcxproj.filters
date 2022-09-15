@@ -295,6 +295,9 @@
     <Filter Include="04.UI\02.QuickSlot">
       <UniqueIdentifier>{d98b12a7-b2dc-45c9-8818-c0c620df96b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\03.Inven">
+      <UniqueIdentifier>{8284592b-dd0b-44f7-9a00-e0515cdd6f43}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -567,6 +570,9 @@
     <ClInclude Include="..\public\QuickSlot.h">
       <Filter>04.UI\02.QuickSlot</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Inven.h">
+      <Filter>04.UI\03.Inven</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -826,6 +832,9 @@
     </ClCompile>
     <ClCompile Include="..\private\QuickSlot.cpp">
       <Filter>04.UI\02.QuickSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Inven.cpp">
+      <Filter>04.UI\03.Inven</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -27,7 +27,13 @@ HRESULT CStatInfo::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	ZeroMemory(&m_tStat, sizeof(m_tStat));
+	ZeroMemory(&m_tStat, sizeof(STAT));
+	for (int i = 0; i < 24; ++i)
+	{
+		ZeroMemory(&m_tItem[i], sizeof(ITEM));
+		m_tItem[i].iSlotNum = i;
+		m_tItem[i].eItemNum = EITEM_END;
+	}
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	
 
