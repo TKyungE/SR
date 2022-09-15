@@ -10,6 +10,7 @@
 #include "Level_ChoboField.h"
 #include "Level_MidBoss.h"
 #include "Level_Town2.h"
+#include "Level_Desert1.h"
 
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -72,6 +73,10 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 				break;
 			case LEVEL_TOWN2:
 				pNewLevel = CLevel_Town2::Create(m_pGraphic_Device);
+				break;
+			case LEVEL_DESERT1:
+				pNewLevel = CLevel_Desert1::Create(m_pGraphic_Device);
+				break;
 			}
 
 			if (nullptr == pNewLevel)

@@ -97,6 +97,16 @@ HRESULT CHouse5::Initialize(void * pArg)
 	//============================================================================================================
 
 
+	_float3 vScale3 = _float3(1.f, 1.f, 1.f);
+
+	m_pTransformCom6->Set_Scaled(vScale3);
+	_float3 vPos6 = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos6.x += 0.71f * vScale.x;
+	vPos6.z -= 0.5f * vScale.z;
+	vPos6.y += 0.25f * vScale.y;
+
+	m_pTransformCom6->Set_State(CTransform::STATE_POSITION, vPos6);
+
 	////============================================================================================================
 
 
@@ -120,6 +130,23 @@ HRESULT CHouse5::Initialize(void * pArg)
 void CHouse5::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 1.f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_OBJECT, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CHouse"));
+		return;
+	}
+
+	Safe_Release(pInstance);
+
 }
 
 void CHouse5::Late_Tick(_float fTimeDelta)
@@ -130,11 +157,11 @@ void CHouse5::Late_Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	//if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
-	//{
+	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	{
 		if (nullptr != m_pRendererCom)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-	//}
+	}
 	Safe_Release(pInstance);
 }
 
@@ -192,6 +219,14 @@ HRESULT CHouse5::Render(void)
 	m_pVIBufferCom4->Render();
 
 
+	if (FAILED(m_pTransformCom6->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
+		return E_FAIL;
+	m_pVIBufferCom5->Render();
+
+
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 
@@ -212,8 +247,11 @@ HRESULT CHouse5::SetUp_Components(void)
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer3"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBufferCom4)))
 		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer4"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBufferCom5)))
+		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer4"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBufferComCube)))
+
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer5"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBufferComCube)))
 		return E_FAIL;
 
 
@@ -239,7 +277,8 @@ HRESULT CHouse5::SetUp_Components(void)
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform4"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom5, &TransformDesc)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform5"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom6, &TransformDesc)))
+		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;

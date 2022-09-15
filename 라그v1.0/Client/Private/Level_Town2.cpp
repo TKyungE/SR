@@ -12,6 +12,9 @@
 #include "Layer.h"
 #include "Portal.h"
 #include "Transparent_Wall.h"
+#include "House3.h"
+#include "House6.h"
+
 
 //bool g_bCollider = false;
 //bool g_bTalk = false;
@@ -161,6 +164,7 @@ HRESULT CLevel_Town2::Ready_Layer_BackGround(const _tchar * pLayerTag)
 			return E_FAIL;
 	}
 
+
 	for (auto& iter : m_vecWall)
 	{
 		Transparent_Wall::WALL Wall;
@@ -173,15 +177,41 @@ HRESULT CLevel_Town2::Ready_Layer_BackGround(const _tchar * pLayerTag)
 			return E_FAIL;
 	}
 
+	CHouse3::INDEXPOS index;
+	ZeroMemory(&index, sizeof(CHouse3::INDEXPOS));
+	index.vPos = _float3(10.f, 0.f, 30.f);
 
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House3"), LEVEL_TOWN2, pLayerTag, nullptr)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House3"), LEVEL_TOWN2, pLayerTag, &index)))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House4"), LEVEL_TOWN2, pLayerTag, nullptr)))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House5"), LEVEL_TOWN2, pLayerTag, nullptr)))
+		return E_FAIL;
+
+
+	CHouse6::INDEXPOS index2;
+	ZeroMemory(&index2, sizeof(CHouse6::INDEXPOS));
+	index2.vPos = _float3(27.f, 0.f, 11.f);
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House6"), LEVEL_TOWN2, pLayerTag, &index2)))
+		return E_FAIL;
+
+	CHouse6::INDEXPOS index3;
+	ZeroMemory(&index3, sizeof(CHouse6::INDEXPOS));
+	index3.vPos = _float3(23.f, 0.f, 27.f);
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House6"), LEVEL_TOWN2, pLayerTag, &index3)))
+		return E_FAIL;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House7"), LEVEL_TOWN2, pLayerTag, nullptr)))
+		return E_FAIL;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ItemBox"), LEVEL_TOWN2, pLayerTag, nullptr)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -198,13 +228,15 @@ HRESULT CLevel_Town2::Ready_Layer_Player(const _tchar * pLayerTag)
 	{
 		CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 		memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
-		Info.iLevelIndex = LEVEL_TOWN2;
+		
 		if (Info.iLevelIndex == LEVEL_TOWN)
 		{
-			Info.vPos = m_vBackPos;
-		}
-		else 
 			Info.vPos = m_vPlayerPos;
+		}
+		else
+			Info.vPos = m_vBackPos;
+
+		Info.iLevelIndex = LEVEL_TOWN2;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_TOWN2, pLayerTag, &Info)))
 			return E_FAIL;
@@ -402,7 +434,7 @@ HRESULT CLevel_Town2::Ready_Layer_Portal(const _tchar * pLayerTag)
 
 		++iCount;
 	}
-	
+
 	for (; iter != m_vecPortal.end(); ++iter)
 	{
 		if (iCount == 1)
@@ -415,7 +447,7 @@ HRESULT CLevel_Town2::Ready_Layer_Portal(const _tchar * pLayerTag)
 		tInfo.iLevelIndex = LEVEL_TOWN2;
 		tInfo.vPos = iter->BackGroundPos;
 		tInfo.vScale = iter->vScale;
-		tInfo.iNextLevel = LEVEL_TOWN2;
+		tInfo.iNextLevel = LEVEL_DESERT1;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 			return E_FAIL;

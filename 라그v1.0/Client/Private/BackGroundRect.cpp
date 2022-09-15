@@ -46,6 +46,33 @@ void CBackGroundRect::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	//OnTerrain();
+
+	if (m_IndexPos.iIndex == 5 || m_IndexPos.iIndex == 6)
+	{
+		_float4x4 WorldMatrix;
+		WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+
+		WorldMatrix.m[0][0] = 5.f;
+		WorldMatrix.m[1][1] = 10.f;
+
+		WorldMatrix.m[2][2] = 5.f;
+
+		m_pColliderCom->Set_Transform(WorldMatrix, 0.1f);
+
+		CGameInstance* pInstance = CGameInstance::Get_Instance();
+		if (nullptr == pInstance)
+			return;
+
+		Safe_AddRef(pInstance);
+
+		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_OBJECT, this)))
+		{
+			ERR_MSG(TEXT("Failed to Add CollisionGroup : CHouse"));
+			return;
+		}
+
+		Safe_Release(pInstance);
+	}
 }
 
 void CBackGroundRect::Late_Tick(_float fTimeDelta)
@@ -100,6 +127,9 @@ HRESULT CBackGroundRect::Render(void)
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 
+	if (g_bCollider)
+		m_pColliderCom->Render();
+
 	return S_OK;
 }
 
@@ -130,6 +160,10 @@ HRESULT CBackGroundRect::SetUp_Components(void)
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.f);
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
+		return E_FAIL;
+
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
 
 	return S_OK;

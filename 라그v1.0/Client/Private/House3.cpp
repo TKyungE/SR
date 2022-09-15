@@ -30,7 +30,7 @@ HRESULT CHouse3::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	//memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
+	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
 
 	//SetPos();
 
@@ -38,7 +38,7 @@ HRESULT CHouse3::Initialize(void * pArg)
 	_float3 vScale = _float3(3.f,3.f,3.f);
 
 	m_pTransformComCube->Set_Scaled(vScale);
-	_float3 vPos = _float3(10.f, 0.f, 30.f);
+	_float3 vPos = m_IndexPos.vPos;
 	vPos.y += 0.5f * vScale.y;
 	m_pTransformComCube->Set_State(CTransform::STATE_POSITION, vPos);
 
@@ -96,6 +96,23 @@ HRESULT CHouse3::Initialize(void * pArg)
 void CHouse3::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	m_pColliderCom->Set_Transform(m_pTransformComCube->Get_WorldMatrix(), 1.f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_OBJECT, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CHouse"));
+		return;
+	}
+
+	Safe_Release(pInstance);
+
 }
 
 void CHouse3::Late_Tick(_float fTimeDelta)
@@ -106,11 +123,11 @@ void CHouse3::Late_Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	//if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
-	//{
+	if (pInstance->IsInFrustum(m_pTransformComCube->Get_State(CTransform::STATE_POSITION), m_pTransformComCube->Get_Scale()))
+	{
 		if (nullptr != m_pRendererCom)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-	//}
+	}
 	Safe_Release(pInstance);
 }
 

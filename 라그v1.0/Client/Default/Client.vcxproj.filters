@@ -358,6 +358,18 @@
     <Filter Include="02.GameObject\BackGroundObj\House\House5">
       <UniqueIdentifier>{457899a5-3536-431a-bfc9-e75a2a62adaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\House\House6">
+      <UniqueIdentifier>{014cd644-b398-444b-b34d-73e9f54db308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\House\House7">
+      <UniqueIdentifier>{cbb487e1-790c-4f70-a724-827b534ad9c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\House\ItemBox">
+      <UniqueIdentifier>{1b445781-ba29-4626-a34b-e1f3d3ce36cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Desert1">
+      <UniqueIdentifier>{155b5f09-b8c0-4f69-be12-eb9f0d598fd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -690,6 +702,18 @@
     <ClInclude Include="..\Public\House5.h">
       <Filter>02.GameObject\BackGroundObj\House\House5</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\House6.h">
+      <Filter>02.GameObject\BackGroundObj\House\House6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\House7.h">
+      <Filter>02.GameObject\BackGroundObj\House\House7</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ItemBox.h">
+      <Filter>02.GameObject\BackGroundObj\House\ItemBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Desert1.h">
+      <Filter>01.Levels\Desert1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1009,6 +1033,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\House5.cpp">
       <Filter>02.GameObject\BackGroundObj\House\House5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\House6.cpp">
+      <Filter>02.GameObject\BackGroundObj\House\House6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\House7.cpp">
+      <Filter>02.GameObject\BackGroundObj\House\House7</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ItemBox.cpp">
+      <Filter>02.GameObject\BackGroundObj\House\ItemBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Desert1.cpp">
+      <Filter>01.Levels\Desert1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

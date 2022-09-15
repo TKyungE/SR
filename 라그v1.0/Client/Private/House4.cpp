@@ -141,6 +141,34 @@ HRESULT CHouse4::Initialize(void * pArg)
 void CHouse4::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	_float4x4 WorldMatrix;
+	WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos.z += 1.f;
+	
+	WorldMatrix.m[1][1] = 1.f;
+
+	WorldMatrix.m[2][2] = 2.f;
+
+	*(_float3*)&WorldMatrix.m[3][0] = vPos;
+	m_pColliderCom->Set_Transform(WorldMatrix, 1.f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_OBJECT, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CHouse"));
+		return;
+	}
+
+	Safe_Release(pInstance);
+
+
 }
 
 void CHouse4::Late_Tick(_float fTimeDelta)
@@ -151,11 +179,11 @@ void CHouse4::Late_Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	//if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
-	//{
+	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	{
 		if (nullptr != m_pRendererCom)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-	//}
+	}
 	Safe_Release(pInstance);
 }
 
