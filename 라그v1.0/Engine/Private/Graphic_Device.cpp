@@ -68,7 +68,7 @@ HRESULT CGraphic_Device::InitDevice(const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DD
 	tFontInfo.Width = 10;
 	tFontInfo.Weight = FW_HEAVY;
 	tFontInfo.CharSet = HANGEUL_CHARSET;
-	lstrcpy(tFontInfo.FaceName, L"±Ã¼­");
+	lstrcpy(tFontInfo.FaceName, L"µ¸¿ò");
 	
 	if (FAILED(D3DXCreateFontIndirect(m_pDevice, &tFontInfo, &m_pFont)))
 	{

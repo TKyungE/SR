@@ -24,7 +24,7 @@ public:
 	void Late_Tick(_float fTimeDelta);
 	void Clear(_uint iLevelIndex);
 	class CLayer* Find_Layer(_uint iLevelIndex, const _tchar* pLayerTag);
-	class CGameObject* Find_Object(const _tchar* pLayerTag, _uint iIndex);
+	//class CGameObject* Find_Object(const _tchar* pLayerTag, _uint iLevelIndex);
 	
 private:
 	map<const _tchar*, class CGameObject*>			m_Prototypes;

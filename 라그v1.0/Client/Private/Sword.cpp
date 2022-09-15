@@ -306,7 +306,7 @@ void CSword::CheckColl()
 
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 	{
 		pTarget->Set_Hp(m_tInfo.iDmg);
 		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));

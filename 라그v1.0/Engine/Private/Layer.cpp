@@ -56,15 +56,15 @@ void CLayer::Late_Tick(_float fTimeDelta)
 	}
 }
 
-CGameObject * CLayer::Find_GameObject(_uint iIndex)
-{
-	auto& iter = m_GameObjects.begin();
-
-	for (_uint i = 0; i < iIndex; ++i)
-		++iter;
-
-	return *iter;
-}
+//CGameObject * CLayer::Find_GameObject(_uint iIndex)
+//{
+//	auto& iter = m_GameObjects.begin();
+//
+//	for (_uint i = 0; i < iIndex; ++i)
+//		++iter;
+//
+//	return *iter;
+//}
 
 CLayer * CLayer::Create()
 {

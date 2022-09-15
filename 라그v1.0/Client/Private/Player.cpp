@@ -83,13 +83,17 @@ void CPlayer::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 	
 	OnTerrain();
-	Move_Frame(fTimeDelta);
-
-	Get_PickingPoint();
 
 	Key_Input(fTimeDelta);
 
-	Player_Move(fTimeDelta);
+	if (!g_bCut)
+	{
+		Player_Move(fTimeDelta);
+		Move_Frame(fTimeDelta);
+		Get_PickingPoint();
+	}
+	else
+		m_eCurState = IDLE;
 
 	if (m_tInfo.iHp >= m_tInfo.iMaxHp)
 	{
@@ -217,7 +221,7 @@ void CPlayer::CheckColl()
 
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -234,7 +238,7 @@ void CPlayer::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	if (pInstance->Collision(this, COLLISION_TOTEM, TEXT("Com_Collider"),&pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_TOTEM, TEXT("Com_Collider"),&pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -268,7 +272,7 @@ void CPlayer::CheckColl()
 
 	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	//}
-	if (pInstance->Collision(this, COLLISION_NPC, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_NPC, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -284,17 +288,6 @@ void CPlayer::CheckColl()
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}
-	if (pInstance->Collision(this, COLLISION_NPC, TEXT("Com_QuestCollider"), &pTarget))
-	{
-		m_bTalk = true;
-		g_bTalk = true;
-	}
-	else
-	{
-		m_bTalk = false;
-		g_bTalk = false;
-		g_bCut = false;
 	}
 
 	Safe_Release(pInstance);
@@ -689,9 +682,6 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		if (m_fFly_fY > 0.f)
 			m_fFly_fY = 0.f;
 	}
-
-	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk)
-		g_bCut = true;
 		
 	Safe_Release(pInstance);
 }

@@ -88,7 +88,7 @@ void CPortal::Late_Tick(_float fTimeDelta)
 	}
 
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 		m_bLevel = true;
 
 	Safe_Release(pInstance);

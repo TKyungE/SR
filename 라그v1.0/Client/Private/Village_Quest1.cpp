@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\Village_Quest1.h"
 #include "GameInstance.h"
+#include "HuntQuest1.h"
 
 CVillage_Quest1::CVillage_Quest1(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -32,9 +33,9 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 
 	m_tInfo.vPos.y += 0.3f;
 	_float3 vQuestPos = m_tInfo.vPos;
-	vQuestPos.y += 0.65f;
+	vQuestPos.y += 0.8f;
 
-	m_pQuestTransformCom->Set_Scaled(_float3(0.4f, 0.4f, 0.4f));
+	m_pQuestTransformCom->Set_Scaled(_float3(0.8f, 0.8f, 1.f));
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_pQuestTransformCom->Set_State(CTransform::STATE_POSITION, vQuestPos);
@@ -71,8 +72,20 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
 		return;
-	
+
 	Safe_AddRef(pInstance);
+
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk)
+	{
+		g_bCut = true;
+		
+		CHuntQuest1::QINFO tQInfo;
+		tQInfo.eLevelIndex = (LEVEL)m_tInfo.iLevelIndex;
+		tQInfo.eMonType = MON_ALLIGATOR;
+		tQInfo.iHuntGoal = 5;
+		
+		
+	}
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
 	{
@@ -97,6 +110,20 @@ void CVillage_Quest1::Late_Tick(_float fTimeDelta)
 	{
 		if (nullptr != m_pRendererCom)
 			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+	}
+
+	CGameObject* pTarget = nullptr;
+
+	if (pInstance->Collision(this, TEXT("Com_QuestCollider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
+	{
+		m_bTalk = true;
+		g_bTalk = true;
+	}
+	else
+	{
+		m_bTalk = false;
+		g_bTalk = false;
+		g_bCut = false;
 	}
 
 	Safe_Release(pInstance);

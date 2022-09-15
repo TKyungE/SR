@@ -30,6 +30,8 @@ public: /* For.Engine */
 public: /* For.Graphic_Device */	
 	void		Render_Begin(void);
 	void		Render_End(HWND hWnd = 0);
+	LPD3DXSPRITE	Get_Sprite(void);
+	LPD3DXFONT		Get_Font(void);
 
 public: /* For.Input_Device */
 	_char Get_DIKState(_uchar eKeyID);
@@ -48,7 +50,7 @@ public: /* For.Object_Manager */
 	HRESULT Add_Prototype(const _tchar* pPrototypeTag, class CGameObject* pPrototype);
 	HRESULT Add_GameObject(const _tchar* pPrototypeTag, _uint iLevelIndex, const _tchar* pLayerTag, void* pArg = nullptr);
 	class CLayer* Find_Layer(_uint iLevelIndex, const _tchar* pLayerTag);
-	CGameObject* Find_Object(const _tchar* pLayerTag, _uint iIndex);
+	//CGameObject* Find_Object(const _tchar* pLayerTag, _uint iIndex);
 	class CComponent* Get_Component(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pComponentTag, _uint iIndex = 0);
 
 public: /* For.Component_Manager */
@@ -60,7 +62,7 @@ public:	/* for. Frustum*/
 	
 public: /* For.Collision_Manager */
 	HRESULT Add_ColiisionGroup(_uint iCollisionGroup, class CGameObject* pGameObject);
-	_bool Collision(CGameObject * pGameObject, _uint iCollisionGroup, const _tchar* szColliderName, CGameObject** pTarget);
+	_bool Collision(CGameObject * pGameObject, const _tchar* szDestColliderName, _uint iCollisionGroup, const _tchar* szSourColliderName, CGameObject** pTarget);
 	_float3 Get_Collision(void);
 
 public: /* For. Quest_Manager */

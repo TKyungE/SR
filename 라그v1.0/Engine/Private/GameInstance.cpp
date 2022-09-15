@@ -108,6 +108,22 @@ void CGameInstance::Render_End(HWND hWnd)
 	m_pGraphic_Device->Render_End(hWnd);
 }
 
+LPD3DXSPRITE CGameInstance::Get_Sprite(void)
+{
+	if (nullptr == m_pGraphic_Device)
+		return nullptr;
+
+	return m_pGraphic_Device->Get_Sprite();
+}
+
+LPD3DXFONT CGameInstance::Get_Font(void)
+{
+	if (nullptr == m_pGraphic_Device)
+		return nullptr;
+
+	return m_pGraphic_Device->Get_Font();
+}
+
 _char CGameInstance::Get_DIKState(_uchar eKeyID)
 {
 	if (nullptr == m_pInput_Device)
@@ -188,13 +204,13 @@ CLayer * CGameInstance::Find_Layer(_uint iLevelIndex, const _tchar * pLayerTag)
 	return m_pObject_Manager->Find_Layer(iLevelIndex, pLayerTag);
 }
 
-CGameObject * CGameInstance::Find_Object(const _tchar * pLayerTag, _uint iIndex)
-{
-	if (nullptr == m_pObject_Manager)
-		return nullptr;
-
-	return m_pObject_Manager->Find_Object(pLayerTag, iIndex);
-}
+//CGameObject * CGameInstance::Find_Object(const _tchar * pLayerTag, _uint iIndex)
+//{
+//	if (nullptr == m_pObject_Manager)
+//		return nullptr;
+//
+//	return m_pObject_Manager->Find_Object(pLayerTag, iIndex);
+//}
 
 CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pComponentTag, _uint iIndex)
 {
@@ -236,12 +252,12 @@ HRESULT CGameInstance::Add_ColiisionGroup(_uint iCollisionGroup, CGameObject * p
 	return m_pCollision_Manager->Add_ColiisionGroup(iCollisionGroup, pGameObject);
 }
 
-_bool CGameInstance::Collision(CGameObject * pGameObject, _uint iCollisionGroup, const _tchar* szColliderName, CGameObject** pTarget)
+_bool CGameInstance::Collision(CGameObject * pGameObject, const _tchar* szDestColliderName, _uint iCollisionGroup, const _tchar* szSourColliderName, CGameObject** pTarget)
 {
 	if (nullptr == m_pCollision_Manager)
 		return false;
 	
-	return m_pCollision_Manager->Collision(pGameObject, iCollisionGroup, szColliderName, pTarget);
+	return m_pCollision_Manager->Collision(pGameObject, szDestColliderName, iCollisionGroup, szSourColliderName, pTarget);
 }
 
 _float3 CGameInstance::Get_Collision(void)

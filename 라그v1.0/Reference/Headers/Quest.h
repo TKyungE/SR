@@ -14,6 +14,8 @@ protected:
 public:
 	_int Get_Index(void) { return m_iIndex; }
 	void Set_Index(_int iIndex) { m_iIndex = iIndex; }
+	_bool Get_Active(void) { return m_bActive; }
+	_bool Get_Clear(void) { return m_bClear; }
 
 public:
 	virtual HRESULT Initialize_Prototype(void);

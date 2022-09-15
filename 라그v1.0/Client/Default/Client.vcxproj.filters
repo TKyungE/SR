@@ -229,6 +229,9 @@
     <Filter Include="02.GameObject\Terrain\TerrainRect">
       <UniqueIdentifier>{1aeaeda5-7149-40ac-8889-6855c833cf44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\RectHouse">
+      <UniqueIdentifier>{5296e59f-0882-4402-bb8c-0d0508430126}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\BackGroundObj\Tree">
       <UniqueIdentifier>{b1f71cda-a31f-4f45-8be3-49ca2120de54}</UniqueIdentifier>
     </Filter>
@@ -322,53 +325,20 @@
     <Filter Include="04.UI\TextBox">
       <UniqueIdentifier>{9cf041f7-5cfd-4487-b5b9-46da967fc22a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Monster\06.Atros">
-      <UniqueIdentifier>{957fc631-ff7b-4e60-b1af-5df90af08288}</UniqueIdentifier>
+    <Filter Include="04.UI\Button">
+      <UniqueIdentifier>{966ec960-d5ac-4b8b-afa5-23b23fba33ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Monster\07.Baphomet">
-      <UniqueIdentifier>{d62ea5e9-f486-4de6-b1f4-79a1f91a5010}</UniqueIdentifier>
+    <Filter Include="04.UI\Button\Close">
+      <UniqueIdentifier>{64635088-c93e-4d3e-9045-7a74b0a4b9d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Monster\08.Minorous">
-      <UniqueIdentifier>{093ab3b2-c2ae-4cf6-b826-0e2ecd76c59e}</UniqueIdentifier>
+    <Filter Include="04.UI\Button\Back">
+      <UniqueIdentifier>{717ae362-30c2-4fd4-a5e7-e9bfa4e1aa9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Monster\09.Skeleton">
-      <UniqueIdentifier>{a36c6bc7-899a-4422-b8e9-48dc6a5e57de}</UniqueIdentifier>
+    <Filter Include="04.UI\Button\Receive">
+      <UniqueIdentifier>{0df7271f-7e30-463c-aeb8-19979646daaf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Monster\10.Wraith">
-      <UniqueIdentifier>{fd489378-6b25-4a12-9ff6-4b6c33cfa01e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Monster\11.Zombie">
-      <UniqueIdentifier>{15ef5e40-2083-40f2-b2db-6696dc2f5baf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\BackGroundRect">
-      <UniqueIdentifier>{8cb1788b-e060-49c1-932f-52a2f29c0052}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\House\House2">
-      <UniqueIdentifier>{5296e59f-0882-4402-bb8c-0d0508430126}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\House\House3">
-      <UniqueIdentifier>{2334e134-efea-417f-bcea-b1903c68255a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\Town2">
-      <UniqueIdentifier>{ec9ed82b-886d-42e1-ba62-ffa47ebfa9e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\House\House4">
-      <UniqueIdentifier>{a704d6b2-f6e1-4a42-8f47-c12b1eec52a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\House\House5">
-      <UniqueIdentifier>{457899a5-3536-431a-bfc9-e75a2a62adaf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\House\House6">
-      <UniqueIdentifier>{014cd644-b398-444b-b34d-73e9f54db308}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\House\House7">
-      <UniqueIdentifier>{cbb487e1-790c-4f70-a724-827b534ad9c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\House\ItemBox">
-      <UniqueIdentifier>{1b445781-ba29-4626-a34b-e1f3d3ce36cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\Desert1">
-      <UniqueIdentifier>{155b5f09-b8c0-4f69-be12-eb9f0d598fd0}</UniqueIdentifier>
+    <Filter Include="04.UI\Button\Next">
+      <UniqueIdentifier>{c72a100b-62c5-4919-9c3f-83fb657a841a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -519,6 +489,9 @@
     <ClInclude Include="..\public\Shadow.h">
       <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\BackGroundRect.h">
+      <Filter>02.GameObject\BackGroundObj</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Poring.h">
       <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClInclude>
@@ -583,7 +556,7 @@
       <Filter>02.GameObject\Terrain\TerrainRect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\House2.h">
-      <Filter>02.GameObject\BackGroundObj\House\House2</Filter>
+      <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\BackGroundTree.h">
       <Filter>02.GameObject\BackGroundObj\Tree</Filter>
@@ -666,53 +639,23 @@
     <ClInclude Include="..\Public\Transparent_Wall.h">
       <Filter>02.GameObject\Transparent_Wall</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CloseBtn.h">
+      <Filter>04.UI\Button\Close</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BackBtn.h">
+      <Filter>04.UI\Button\Back</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ReceiveBtn.h">
+      <Filter>04.UI\Button\Receive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NextBtn.h">
+      <Filter>04.UI\Button\Next</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MyButton.h">
+      <Filter>04.UI\Button</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\TextBox.h">
       <Filter>04.UI\TextBox</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Zombie.h">
-      <Filter>02.GameObject\Monster\11.Zombie</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Atros.h">
-      <Filter>02.GameObject\Monster\06.Atros</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Baphomet.h">
-      <Filter>02.GameObject\Monster\07.Baphomet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Minorous.h">
-      <Filter>02.GameObject\Monster\08.Minorous</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Skeleton.h">
-      <Filter>02.GameObject\Monster\09.Skeleton</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Wraith.h">
-      <Filter>02.GameObject\Monster\10.Wraith</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\House3.h">
-      <Filter>02.GameObject\BackGroundObj\House\House3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\BackGroundRect.h">
-      <Filter>02.GameObject\BackGroundObj\BackGroundRect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Level_Town2.h">
-      <Filter>01.Levels\Town2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\House4.h">
-      <Filter>02.GameObject\BackGroundObj\House\House4</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\House5.h">
-      <Filter>02.GameObject\BackGroundObj\House\House5</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\House6.h">
-      <Filter>02.GameObject\BackGroundObj\House\House6</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\House7.h">
-      <Filter>02.GameObject\BackGroundObj\House\House7</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\ItemBox.h">
-      <Filter>02.GameObject\BackGroundObj\House\ItemBox</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Level_Desert1.h">
-      <Filter>01.Levels\Desert1</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -848,6 +791,9 @@
     <ClCompile Include="..\private\Shadow.cpp">
       <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\BackGroundRect.cpp">
+      <Filter>02.GameObject\BackGroundObj</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Poring.cpp">
       <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClCompile>
@@ -912,7 +858,7 @@
       <Filter>02.GameObject\Terrain\TerrainRect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\House2.cpp">
-      <Filter>02.GameObject\BackGroundObj\House\House2</Filter>
+      <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\BackGroundTree.cpp">
       <Filter>02.GameObject\BackGroundObj\Tree</Filter>
@@ -1001,50 +947,20 @@
     <ClCompile Include="..\Private\TextBox.cpp">
       <Filter>04.UI\TextBox</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Zombie.cpp">
-      <Filter>02.GameObject\Monster\11.Zombie</Filter>
+    <ClCompile Include="..\Private\CloseBtn.cpp">
+      <Filter>04.UI\Button\Close</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Atros.cpp">
-      <Filter>02.GameObject\Monster\06.Atros</Filter>
+    <ClCompile Include="..\Private\BackBtn.cpp">
+      <Filter>04.UI\Button\Back</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Baphomet.cpp">
-      <Filter>02.GameObject\Monster\07.Baphomet</Filter>
+    <ClCompile Include="..\Private\ReceiveBtn.cpp">
+      <Filter>04.UI\Button\Receive</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Minorous.cpp">
-      <Filter>02.GameObject\Monster\08.Minorous</Filter>
+    <ClCompile Include="..\Private\NextBtn.cpp">
+      <Filter>04.UI\Button\Next</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Skeleton.cpp">
-      <Filter>02.GameObject\Monster\09.Skeleton</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Wraith.cpp">
-      <Filter>02.GameObject\Monster\10.Wraith</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\House3.cpp">
-      <Filter>02.GameObject\BackGroundObj\House\House3</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\BackGroundRect.cpp">
-      <Filter>02.GameObject\BackGroundObj\BackGroundRect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Level_Town2.cpp">
-      <Filter>01.Levels\Town2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\House4.cpp">
-      <Filter>02.GameObject\BackGroundObj\House\House4</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\House5.cpp">
-      <Filter>02.GameObject\BackGroundObj\House\House5</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\House6.cpp">
-      <Filter>02.GameObject\BackGroundObj\House\House6</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\House7.cpp">
-      <Filter>02.GameObject\BackGroundObj\House\House7</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ItemBox.cpp">
-      <Filter>02.GameObject\BackGroundObj\House\ItemBox</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Level_Desert1.cpp">
-      <Filter>01.Levels\Desert1</Filter>
+    <ClCompile Include="..\Private\MyButton.cpp">
+      <Filter>04.UI\Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
