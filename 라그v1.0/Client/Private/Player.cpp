@@ -80,16 +80,18 @@ void CPlayer::Tick(_float fTimeDelta)
 	
 	OnTerrain();
 
-	Key_Input(fTimeDelta);
-
 	if (!g_bCut)
 	{
+		Key_Input(fTimeDelta);
 		Player_Move(fTimeDelta);
 		Move_Frame(fTimeDelta);
 		Get_PickingPoint();
 	}
 	else
+	{
 		m_eCurState = IDLE;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	}
 
 	if (m_tInfo.iHp >= m_tInfo.iMaxHp)
 	{

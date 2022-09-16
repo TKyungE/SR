@@ -76,10 +76,6 @@
 #include "House6.h"
 #include "House7.h"
 #include "TextBox.h"
-#include "CloseBtn.h"
-#include "BackBtn.h"
-#include "NextBtn.h"
-#include "ReceiveBtn.h"
 #include "ItemBox.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -867,17 +863,8 @@ HRESULT CLoader::Loading_Prototype()
 		CTextBox::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Close_Button"),
-		CCloseBtn::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Back_Button"),
-		CBackBtn::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Next_Button"),
-		CNextBtn::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Receive_Button"),
-		CReceiveBtn::Create(m_pGraphic_Device))))
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MyButton"),
+		CMyButton::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	//Player °´Ã¼

@@ -262,18 +262,6 @@
     <Filter Include="04.UI\Button">
       <UniqueIdentifier>{966ec960-d5ac-4b8b-afa5-23b23fba33ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\Button\Close">
-      <UniqueIdentifier>{64635088-c93e-4d3e-9045-7a74b0a4b9d6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\Button\Back">
-      <UniqueIdentifier>{717ae362-30c2-4fd4-a5e7-e9bfa4e1aa9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\Button\Receive">
-      <UniqueIdentifier>{0df7271f-7e30-463c-aeb8-19979646daaf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\Button\Next">
-      <UniqueIdentifier>{c72a100b-62c5-4919-9c3f-83fb657a841a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Monster\06.Atros">
       <UniqueIdentifier>{e6cae052-15ae-474e-91d6-064c0afad733}</UniqueIdentifier>
     </Filter>
@@ -552,18 +540,6 @@
     <ClInclude Include="..\Public\Transparent_Wall.h">
       <Filter>02.GameObject\Transparent_Wall</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\CloseBtn.h">
-      <Filter>04.UI\Button\Close</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\BackBtn.h">
-      <Filter>04.UI\Button\Back</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\ReceiveBtn.h">
-      <Filter>04.UI\Button\Receive</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\NextBtn.h">
-      <Filter>04.UI\Button\Next</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\MyButton.h">
       <Filter>04.UI\Button</Filter>
     </ClInclude>
@@ -838,18 +814,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\TextBox.cpp">
       <Filter>04.UI\TextBox</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\CloseBtn.cpp">
-      <Filter>04.UI\Button\Close</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\BackBtn.cpp">
-      <Filter>04.UI\Button\Back</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ReceiveBtn.cpp">
-      <Filter>04.UI\Button\Receive</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\NextBtn.cpp">
-      <Filter>04.UI\Button\Next</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\MyButton.cpp">
       <Filter>04.UI\Button</Filter>
