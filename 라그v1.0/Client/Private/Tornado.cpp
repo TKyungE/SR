@@ -89,7 +89,7 @@ void CTornado::Late_Tick(_float fTimeDelta)
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 
 	Safe_AddRef(pInstance);
-
+	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
 	{
 		if (nullptr != m_pRendererCom)
@@ -245,9 +245,7 @@ HRESULT CTornado::SetUp_RenderState()
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	m_pGraphic_Device->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 
 	return S_OK;
 }
@@ -255,7 +253,7 @@ HRESULT CTornado::SetUp_RenderState()
 HRESULT CTornado::Release_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }

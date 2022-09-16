@@ -15,7 +15,7 @@ protected:
 
 public:
 	class CComponent* Find_Component(const _tchar* pComponentTag);
-
+	_float Get_CamDistance() const {return m_fCamDistance;}
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -75,13 +75,13 @@ public: // 여기에 갯 셋 만들어서 인포 +- 관리하면될듯
 	void	Set_UiPos(_float3 _vPos) { m_tInfo.vPos += _vPos; }
 protected:
 	LPDIRECT3DDEVICE9			m_pGraphic_Device = nullptr;
-
+	float						m_fCamDistance = 0.f;
 protected:
 	map<const _tchar*, class CComponent*>				m_Components;
 
 protected:
 	HRESULT Add_Components(const _tchar* pComponentTag, _uint iLevelIndex, const _tchar* pPrototypeTag,class CComponent** ppOut, void* pArg = nullptr);
-
+	void Compute_CamDistance(_float3 vWorldPos);
 public:	
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
 	virtual _float4x4 Get_World(void) = 0;

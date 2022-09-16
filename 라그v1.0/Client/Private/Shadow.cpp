@@ -49,7 +49,6 @@ void CShadow::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	
 
 }
 
@@ -59,8 +58,9 @@ void CShadow::Late_Tick(_float fTimeDelta)
 	Set_TargetPos();
 	OnBillboard();
 	OnTerrain();
+	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CShadow::Render()
@@ -240,9 +240,7 @@ HRESULT CShadow::SetUp_RenderState()
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	m_pGraphic_Device->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 
 	return S_OK;
 }
@@ -250,7 +248,7 @@ HRESULT CShadow::SetUp_RenderState()
 HRESULT CShadow::Release_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }

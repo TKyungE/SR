@@ -63,7 +63,7 @@ void CMeteorEff::Late_Tick(_float fTimeDelta)
 	Motion_Change();
 	OnBillboard();
 
-
+	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
@@ -211,9 +211,7 @@ HRESULT CMeteorEff::SetUp_RenderState()
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	m_pGraphic_Device->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 
 	return S_OK;
 }
@@ -221,7 +219,7 @@ HRESULT CMeteorEff::SetUp_RenderState()
 HRESULT CMeteorEff::Release_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }

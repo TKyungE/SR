@@ -143,7 +143,10 @@ void CPlayer::Tick(_float fTimeDelta)
 	}
 
 	Safe_Release(pInstance);
-	
+	if (m_tInfo.iMp > 0)
+	{
+		Use_Skill();
+	}
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -153,10 +156,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	Motion_Change();
 	Check_Hit();
 	LevelUp();
-	if (m_tInfo.iMp > 0)
-	{
-		Use_Skill();
-	}
+	
 	OnBillboard();
 	CheckColl();
 
