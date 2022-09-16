@@ -470,6 +470,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_UI(const _tchar * pLayerTag)
 	tInfo.iLevelIndex = LEVEL_CHOBOFIELD;
 	tInfo.bHit = false;
 	tInfo.bDead = false;
+	tInfo.pTarget = Info.pTarget;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;

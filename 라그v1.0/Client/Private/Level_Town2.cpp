@@ -300,15 +300,7 @@ HRESULT CLevel_Town2::Ready_Layer_UI(const _tchar * pLayerTag)
 	tInfo.iLevelIndex = LEVEL_TOWN2;
 	tInfo.bHit = false;
 	tInfo.bDead = false;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_TOWN2, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SpaceUI"), LEVEL_TOWN2, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LetterBox"), LEVEL_TOWN2, pLayerTag, &tInfo)))
-		return E_FAIL;
+	tInfo.pTarget = Info.pTarget;
 
 	Safe_Release(pGameInstance);
 

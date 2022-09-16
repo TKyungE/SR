@@ -263,6 +263,7 @@ HRESULT CLevel_MidBoss::Ready_Layer_UI(const _tchar * pLayerTag)
 	tInfo.iLevelIndex = LEVEL_MIDBOSS;
 	tInfo.bHit = false;
 	tInfo.bDead = false;
+	tInfo.pTarget = Info.pTarget;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
 		return E_FAIL;

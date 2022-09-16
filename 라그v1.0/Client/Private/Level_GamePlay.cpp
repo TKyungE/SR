@@ -513,6 +513,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 	tInfo.bHit = false;
 	tInfo.bDead = false;
+	tInfo.pTarget = Info.pTarget;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;

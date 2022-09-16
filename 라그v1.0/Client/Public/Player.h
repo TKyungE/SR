@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Client_Defines.h"
 #include "GameObject.h"
 
@@ -16,7 +15,7 @@ BEGIN(Client)
 class CPlayer final : public CGameObject
 {
 public:
-	enum STATE { IDLE,MOVE,SKILL,MOVE_LEFT, STATE_END };
+	enum STATE { IDLE, MOVE, SKILL, MOVE_LEFT, STATE_END };
 private:
 	CPlayer(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	CPlayer(const CPlayer& rhs);
@@ -43,7 +42,7 @@ private:
 	CTexture* m_pTextureComMove_Left_Back = nullptr;
 	CTexture* m_pTextureComSkill_Front = nullptr;
 	CTexture* m_pTextureComSkill_Back = nullptr;
-	
+
 	CTexture* m_pTextureComRide_IDLE_Front = nullptr;
 	CTexture* m_pTextureComRide_IDLE_Back = nullptr;
 	CTexture* m_pTextureComRide_Move_Front = nullptr;
@@ -63,7 +62,7 @@ private:
 	void Use_Skill();
 	void Key_Input(_float fTimeDelta);
 	HRESULT Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos);
-	HRESULT Skill_Tornado(const _tchar * pLayerTag,_float3 _vPos);
+	HRESULT Skill_Tornado(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_FireBall(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_FireSpear(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_Meteor(const _tchar * pLayerTag, _float3 _vPos);
@@ -73,6 +72,7 @@ public:
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free(void) override;
 private:
+	CGameObject*  m_StatInfo;
 	_float3 m_vTargetLook;
 	_float3 m_vTarget;
 	_bool	m_bUseSkill = false;
@@ -87,17 +87,23 @@ private:
 	_bool	m_bCamera = false;
 	_bool   m_bRide = false;
 	_bool	m_bFly = false;
+	_bool	m_bUI = false;
 	_float	m_fFly_fY = 0.f;
 	STATE				m_ePreState;
 	STATE				m_eCurState;
-
+	_bool m_bTalk = false;
+	_bool	m_bCheckStat = false;
+	_int	m_StatDmg = 0;
+	_int	m_StatHp = 0;
+	_int	m_StatMp = 0;
 public:
 	_float3 Get_Pos();
 	_bool Get_Front() { return m_bFront; }
 	void Set_Front(_bool bfront) { m_bFront = bfront; }
 	void Set_Camera(_bool bCamera) { m_bCamera = bCamera; }
 	_bool Get_Fly() { return m_bFly; }
-	void Set_Fly(_bool _bFly) {	m_bFly = _bFly;}
+	void Set_Fly(_bool _bFly) { m_bFly = _bFly; }
+	void Set_UI(_bool _UI) { m_bUI = _UI; }
 private:
 	void Player_Move(_float fTimeDelta);
 	void Motion_Change();
@@ -106,7 +112,8 @@ private:
 	HRESULT TextureRender();
 	void Check_Hit();
 	void Get_PickingPoint(void);
-
+	void LevelUp();
+	void Check_Stat();
 private:
 	_float3 m_fPickPoint = { 0.f, 0.f, 0.f };
 };

@@ -316,6 +316,36 @@
     <Filter Include="02.GameObject\BackGroundObj\ItemBox">
       <UniqueIdentifier>{035a835f-5fff-442a-bfbb-18fb84cca757}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\00.PlayerUI">
+      <UniqueIdentifier>{31984583-f1d0-40af-a1bf-f87aee1e8d50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\00.PlayerUI\00.HpUI">
+      <UniqueIdentifier>{f2c17650-91b9-4519-820d-3e907a7f6dfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\00.PlayerUI\01.MpUI">
+      <UniqueIdentifier>{17d7c9f7-65e2-4267-a046-0f238c9b1e0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\00.PlayerUI\02.ExpUI">
+      <UniqueIdentifier>{d90dc8cc-d30f-41c4-96ba-7cd0bedc2d78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\01.Status">
+      <UniqueIdentifier>{6b1cb9ab-53a3-465a-a1e6-34457075bedf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\01.Status\StatInfo">
+      <UniqueIdentifier>{183d9250-e7d2-4651-be91-7f291438584c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\02.QuickSlot">
+      <UniqueIdentifier>{7eff7da0-4682-498b-9028-6ea31844c8d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\03.Inven">
+      <UniqueIdentifier>{7d9fc007-b195-4495-98f6-30bf0d80c698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Item">
+      <UniqueIdentifier>{dc11aeab-463e-4e38-a4c1-8cbe6c77a459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Item\00.HpPotion">
+      <UniqueIdentifier>{c0e212bc-1652-40f0-bebb-2e53e0926ae4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -386,9 +416,6 @@
     </ClInclude>
     <ClInclude Include="..\public\UseSkill.h">
       <Filter>03.Effect\Default\01.UseSkill</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UI.h">
-      <Filter>04.UI</Filter>
     </ClInclude>
     <ClInclude Include="..\public\LevelUp.h">
       <Filter>03.Effect\Default\02.LevelUp</Filter>
@@ -612,6 +639,33 @@
     <ClInclude Include="..\Public\ItemBox.h">
       <Filter>02.GameObject\BackGroundObj\ItemBox</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Status.h">
+      <Filter>04.UI\01.Status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\HpPotion.h">
+      <Filter>05.Item\00.HpPotion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Inven.h">
+      <Filter>04.UI\03.Inven</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\QuickSlot.h">
+      <Filter>04.UI\02.QuickSlot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatInfo.h">
+      <Filter>04.UI\01.Status\StatInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PlayerExp.h">
+      <Filter>04.UI\00.PlayerUI\02.ExpUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PlayerMp.h">
+      <Filter>04.UI\00.PlayerUI\01.MpUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PlayerHp.h">
+      <Filter>04.UI\00.PlayerUI\00.HpUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI.h">
+      <Filter>04.UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -670,9 +724,6 @@
     </ClCompile>
     <ClCompile Include="..\private\UseSkill.cpp">
       <Filter>03.Effect\Default\01.UseSkill</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UI.cpp">
-      <Filter>04.UI</Filter>
     </ClCompile>
     <ClCompile Include="..\private\LevelUp.cpp">
       <Filter>03.Effect\Default\02.LevelUp</Filter>
@@ -895,6 +946,33 @@
     </ClCompile>
     <ClCompile Include="..\Private\ItemBox.cpp">
       <Filter>02.GameObject\BackGroundObj\ItemBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HpPotion.cpp">
+      <Filter>05.Item\00.HpPotion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\QuickSlot.cpp">
+      <Filter>04.UI\02.QuickSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Inven.cpp">
+      <Filter>04.UI\03.Inven</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Status.cpp">
+      <Filter>04.UI\01.Status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatInfo.cpp">
+      <Filter>04.UI\01.Status\StatInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PlayerMp.cpp">
+      <Filter>04.UI\00.PlayerUI\01.MpUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PlayerHp.cpp">
+      <Filter>04.UI\00.PlayerUI\00.HpUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PlayerExp.cpp">
+      <Filter>04.UI\00.PlayerUI\02.ExpUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI.cpp">
+      <Filter>04.UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

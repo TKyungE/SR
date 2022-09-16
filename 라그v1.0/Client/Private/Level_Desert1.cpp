@@ -593,15 +593,7 @@ HRESULT CLevel_Desert1::Ready_Layer_UI(const _tchar * pLayerTag)
 	tInfo.iLevelIndex = LEVEL_DESERT1;
 	tInfo.bHit = false;
 	tInfo.bDead = false;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_DESERT1, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SpaceUI"), LEVEL_DESERT1, pLayerTag, &tInfo)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LetterBox"), LEVEL_DESERT1, pLayerTag, &tInfo)))
-		return E_FAIL;
+	tInfo.pTarget = Info.pTarget;
 
 	Safe_Release(pGameInstance);
 

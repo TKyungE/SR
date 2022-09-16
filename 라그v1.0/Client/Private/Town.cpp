@@ -250,9 +250,18 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 
+	if (pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo")) == nullptr)
+	{
+		tInfo.pTarget = Info.pTarget;
+		tInfo.bDead = false;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatInfo"), LEVEL_STATIC, TEXT("Layer_StatInfo"), &tInfo)))
+			return E_FAIL;
+	}
+
 	tInfo.iLevelIndex = LEVEL_TOWN;
 	tInfo.bHit = false;
 	tInfo.bDead = false;
+	tInfo.pTarget = Info.pTarget;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "..\Public\UI.h"
 #include "GameInstance.h"
+#include "KeyMgr.h"
+#include "Player.h"
 
 CUI::CUI(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -31,12 +33,31 @@ HRESULT CUI::Initialize(void* pArg)
 	m_fSizeY = 180.0f;
 	m_fX = 150.f;
 	m_fY = 90.f;
-
+	m_rcLv = { 225,145,290,165 };
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
+
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+
+	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.bDead = false;
+	tInfo.pTarget = m_tInfo.pTarget;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlayerHp"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlayerMp"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlayerExp"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+		return E_FAIL;
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -45,9 +66,54 @@ void CUI::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	RECT		rcRect;
-	SetRect(&rcRect,(int)( m_fX - m_fSizeX * 0.5f),(int) (m_fY - m_fSizeY * 0.5f),(int)( m_fX + m_fSizeX * 0.5f),(int)( m_fY + m_fSizeY * 0.5f));
-	
+	if (CKeyMgr::Get_Instance()->Key_Down('S'))
+	{
+		switch (m_bStatus)
+		{
+		case true:
+			m_bStatus = false;
+			break;
+		case false:
+			CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+			Safe_AddRef(pGameInstance);
+			CGameObject::INFO tInfo;
+
+			tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+			tInfo.bDead = false;
+			tInfo.pTarget = m_tInfo.pTarget;
+			tInfo.pTerrain = this;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Status"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+				return;
+			dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(true);
+			Safe_Release(pGameInstance);
+			m_bStatus = true;
+			break;
+		}
+	}
+		if (CKeyMgr::Get_Instance()->Key_Down('I'))
+		{
+			switch (m_bInven)
+			{
+			case true:
+				m_bInven = false;
+				break;
+			case false:
+				CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+				Safe_AddRef(pGameInstance);
+				CGameObject::INFO tInfo;
+
+				tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+				tInfo.bDead = false;
+				tInfo.pTarget = m_tInfo.pTarget;
+				tInfo.pTerrain = this;
+				if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Inven"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+					return;
+				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(true);
+				Safe_Release(pGameInstance);
+				m_bInven = true;
+				break;
+			}
+		}
 }
 
 void CUI::Late_Tick(_float fTimeDelta)
@@ -63,14 +129,15 @@ HRESULT CUI::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
-
+	
 	_float4x4		ViewMatrix;
 	D3DXMatrixIdentity(&ViewMatrix);
 
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
+
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
 
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
 		return E_FAIL;
@@ -80,9 +147,17 @@ HRESULT CUI::Render()
 
 	m_pVIBufferCom->Render();
 
+	wstring szLv = L"";
+	szLv = to_wstring(m_tInfo.pTarget->Get_Info().iLv);
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	pGameInstance->Get_Font()->DrawText(nullptr, szLv.c_str(), szLv.length() , &m_rcLv, DT_LEFT, D3DCOLOR_ARGB(255, 0, 0, 0));
+
+	Safe_Release(pGameInstance);
+
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
-
 
 
 	return S_OK;

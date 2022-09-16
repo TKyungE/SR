@@ -90,7 +90,7 @@ void CElderWilow::Tick(_float fTimeDelta)
 			if (m_tFrame.iFrameStart == 2)
 			{
 				m_fDeadTime += fTimeDelta;
-				if (m_fDeadTime > 3.f)
+				if (m_fDeadTime > 2.f)
 				{
 					DropItem();
 					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
@@ -958,5 +958,15 @@ void CElderWilow::CheckColl()
 
 void CElderWilow::DropItem()
 {
-//	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &tInfo);
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	tInfo.iLv = 2;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Item"), &tInfo);
+
+	Safe_Release(pGameInstance);
 }
