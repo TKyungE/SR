@@ -1163,6 +1163,8 @@ void CPlayer::Check_Stat()
 	m_tInfo.iDmg = 10 + m_StatDmg;
 	m_tInfo.iMaxHp = 30000 + m_StatHp;
 	m_tInfo.iMaxMp = 1000 + m_StatMp;
+	if (m_tInfo.iMp < 0)
+		m_tInfo.iMp = 0;
 }
 
 

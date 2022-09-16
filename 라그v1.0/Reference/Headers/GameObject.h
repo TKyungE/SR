@@ -72,7 +72,7 @@ public: // 여기에 갯 셋 만들어서 인포 +- 관리하면될듯
 	void	Set_UiExp(_int _iExp) { m_tInfo.iExp = _iExp; }
 	void	Set_MaxExp(_int _MaxExp) { m_tInfo.iMaxExp += _MaxExp; }
 	void	Set_MaxHp(_int _iMaxHp) { m_tInfo.iMaxHp += _iMaxHp; }
-	void	Set_UiPos(_float3 _vPos) { m_tInfo.vPos += _vPos; }
+	void	Set_Money(_int _iMoney) { m_tInfo.iMoney += _iMoney; }
 protected:
 	LPDIRECT3DDEVICE9			m_pGraphic_Device = nullptr;
 	float						m_fCamDistance = 0.f;

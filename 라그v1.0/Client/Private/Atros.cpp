@@ -47,6 +47,7 @@ HRESULT CAtros::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 9999;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
+	m_tInfo.iExp = 20;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -651,6 +652,8 @@ void CAtros::Check_Front()
 
 	if (m_tInfo.bDead && m_eCurState != DEAD)
 	{
+		DropItem();
+		m_tInfo.pTarget->Set_Exp(m_tInfo.iExp);
 		m_eCurState = DEAD;
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
@@ -925,4 +928,22 @@ void CAtros::OnBillboard()
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
+void CAtros::DropItem()
+{
+	_int iDest = rand() % 2;
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	if (iDest == 0)
+		tInfo.iLv = 2;
+	else
+		tInfo.iLv = 23;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Item"), &tInfo);
+
+	Safe_Release(pGameInstance);
 }

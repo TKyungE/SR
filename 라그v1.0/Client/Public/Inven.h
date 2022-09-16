@@ -39,6 +39,7 @@ private:
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 	RECT					m_rcSlot[24];
 	RECT					m_rcCount[24];
+	RECT					m_rcMoneyBox;
 	vector<CStatInfo::ITEM>			m_vecItem;
 	CGameObject*			m_StatInfo;
 private:

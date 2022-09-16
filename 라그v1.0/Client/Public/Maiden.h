@@ -60,6 +60,7 @@ private:
 	HRESULT TextureRender();
 	void CheckColl();
 	void Create_BlueFire(_float fTimeDelta);
+	void	DropItem();
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
