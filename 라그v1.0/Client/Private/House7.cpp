@@ -306,6 +306,7 @@ HRESULT CHouse7::Render(void)
 
 	if (g_bCollider)
 		m_pColliderCom->Render();
+	return S_OK;
 }
 
 HRESULT CHouse7::SetUp_Components(void)

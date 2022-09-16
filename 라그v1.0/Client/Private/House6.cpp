@@ -242,6 +242,7 @@ HRESULT CHouse6::Render(void)
 
 	if (g_bCollider)
 		m_pColliderCom->Render();
+	return S_OK;
 }
 
 HRESULT CHouse6::SetUp_Components(void)
