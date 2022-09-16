@@ -13,6 +13,11 @@ BEGIN(Client)
 
 class CTextBox final : public CGameObject
 {
+public:
+	typedef struct tagTextInfo
+	{
+
+	}TINFO;
 private:
 	CTextBox(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CTextBox(const CTextBox& rhs);

@@ -85,6 +85,8 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 		
 		Safe_AddRef(pGameInstance);
 
+		/*pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Quest"))->Get_Objects()*/
+
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &m_tInfo)))
 			return;
 		

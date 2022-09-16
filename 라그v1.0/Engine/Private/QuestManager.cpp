@@ -7,56 +7,68 @@ CQuestManager::CQuestManager()
 {
 }
 
-HRESULT CQuestManager::Add_Quest(CQuest * pQuest, _int* pOut)
+HRESULT CQuestManager::Add_Prototype(const _tchar * pPrototypeTag, CQuest * pPrototype)
 {
-	if (nullptr == pQuest)
+	if (nullptr != Find_Prototype(pPrototypeTag))
 		return E_FAIL;
 	
-	_int i = 0;
-
-	for (auto& iter : m_Quest)
-		++i;
-
-	pQuest->Set_Index(i);
-
-	m_Quest.push_back(pQuest);
-
-	Safe_AddRef(pQuest);
-
-	*pOut = i;
+	m_Prototypes.emplace(pPrototypeTag, pPrototype);
 
 	return S_OK;
+}
+
+CQuest * CQuestManager::Add_Quest(const _tchar * pPrototypeTag, const _tchar* pQuestTag, void * pArg)
+{
+	CQuest* pPrototype = Find_Prototype(pPrototypeTag);
+	if (nullptr == pPrototype)
+		return nullptr;
+
+	CQuest* pQuest = pPrototype->Clone(pArg);
+	if (nullptr == pQuest)
+		return nullptr;
+	
+	m_Actives.emplace(pQuestTag, pQuest);
+
+	return pQuest;
 }
 
 void CQuestManager::Tick(void)
 {
-	for (auto& iter : m_Quest)
-		iter->Tick();
+	for (auto& Pair : m_Actives)
+	{
+		Pair.second->Tick();
+		if (Pair.second->Get_Clear())
+		{
+			m_Finished.emplace(Pair.first, Pair.second);
+			m_Actives.erase(Pair);
+		}
+	}
 }
 
-HRESULT CQuestManager::Release_Quest(_int iIndex)
+CQuest * CQuestManager::Find_Prototype(const _tchar * pPrototypeTag)
 {
-	if (iIndex < 0 || iIndex > m_Quest.size())
-		return E_FAIL;
-	
-	for (auto iter = m_Quest.begin(); iter != m_Quest.end();)
-	{
-		if (iIndex == (*iter)->Get_Index())
-		{
-			Safe_Release(*iter);
-			iter = m_Quest.erase(iter);
-		}
-		else
-			++iter;
-	}
+	auto iter = find_if(m_Prototypes.begin(), m_Prototypes.end(), CTag_Finder(pPrototypeTag));
 
-	return S_OK;
+	if (iter == m_Prototypes.end())
+		return nullptr;
+	
+	return iter->second;
 }
 
 void CQuestManager::Free(void)
 {
-	for (auto& iter : m_Quest)
-		Safe_Release(iter);
+	for (auto& Pair : m_Actives)
+		Safe_Release(Pair.second);
+
+	m_Actives.clear();
+
+	for (auto& Pair : m_Finished)
+		Safe_Release(Pair.second);
 	
-	m_Quest.clear();
+	m_Finished.clear();
+
+	for (auto& Pair : m_Prototypes)
+		Safe_Release(Pair.second);
+	
+	m_Prototypes.clear();
 }
