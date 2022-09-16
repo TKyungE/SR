@@ -38,7 +38,7 @@ HRESULT CHouse5::Initialize(void * pArg)
 
 	_float3 vScale = _float3(2.f, 2.f, 2.f);
 	m_pTransformCom->Set_Scaled(vScale);
-	_float3 vPos = _float3(5.f, 0.f, 24.f);
+	_float3 vPos = _float3(3.f, 0.f, 14.5f);
 	vPos.y += 0.5f * vScale.y;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
