@@ -392,4 +392,18 @@ _float4x4 CItemBox::Get_World(void)
 void CItemBox::Free(void)
 {
 	__super::Free();
+
+	Safe_Release(m_pRendererCom);
+	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pTransformCom2);
+	Safe_Release(m_pTransformCom3);
+	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pVIBufferCom2);
+	Safe_Release(m_pVIBufferComCube);
+	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pTextureCom2);
+	Safe_Release(m_pColliderCom);
+
+
+
 }

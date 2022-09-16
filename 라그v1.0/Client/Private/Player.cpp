@@ -61,10 +61,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &m_tInfo);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_MpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &m_tInfo);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &m_tInfo);
-	
 	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	tInfo.vPos = vPos;
 	tInfo.vPos.z += 0.35f;

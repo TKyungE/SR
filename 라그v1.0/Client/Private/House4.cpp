@@ -505,4 +505,23 @@ _float4x4 CHouse4::Get_World(void)
 void CHouse4::Free(void)
 {
 	__super::Free();
+	Safe_Release(m_pRendererCom);
+	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pTransformCom2);
+	Safe_Release(m_pTransformCom3);
+	Safe_Release(m_pTransformCom4);
+	Safe_Release(m_pTransformCom5);
+	Safe_Release(m_pTransformCom6);
+	Safe_Release(m_pTransformCom7);
+	Safe_Release(m_pTransformCom8);
+	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pVIBufferCom2);
+	Safe_Release(m_pVIBufferCom3);
+	Safe_Release(m_pVIBufferCom4);
+	Safe_Release(m_pVIBufferCom5);
+	Safe_Release(m_pVIBufferCom6);
+	Safe_Release(m_pVIBufferCom7);
+	Safe_Release(m_pVIBufferCom8);
+	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pColliderCom);
 }

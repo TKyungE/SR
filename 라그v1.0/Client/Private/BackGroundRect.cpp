@@ -270,7 +270,7 @@ _float4x4 CBackGroundRect::Get_World(void)
 void CBackGroundRect::Free(void)
 {
 	__super::Free();
-
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);
