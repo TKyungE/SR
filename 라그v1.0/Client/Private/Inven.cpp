@@ -186,8 +186,12 @@ HRESULT CInven::Render()
 	Safe_AddRef(pGameInstance);
 	for (int i = 0; i < 24; ++i)
 	{
-		if(m_vecItem[i].iCount > 1)
-			pGameInstance->Get_Font()->DrawText(nullptr, szCount[i].c_str(), (int)szCount[i].length(), &m_rcCount[i], DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
+		if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+		{
+			if (m_vecItem[i].iCount > 1)
+				pGameInstance->Get_Font()->DrawText(nullptr, szCount[i].c_str(), (int)szCount[i].length(), &m_rcCount[i], DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
+
+		}
 	}
 	Safe_Release(pGameInstance);
 
