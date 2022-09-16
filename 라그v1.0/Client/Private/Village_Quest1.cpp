@@ -78,11 +78,7 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk)
 	{
 		g_bCut = true;
-		
-		/*CHuntQuest1::QINFO tQInfo;
-		tQInfo.eLevelIndex = (LEVEL)m_tInfo.iLevelIndex;
-		tQInfo.eMonType = MON_ALLIGATOR;
-		tQInfo.iHuntGoal = 5;*/
+
 		CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 		if (nullptr == pGameInstance)
 			return;
