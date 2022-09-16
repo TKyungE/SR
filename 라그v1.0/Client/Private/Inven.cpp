@@ -9,11 +9,21 @@
 CInven::CInven(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
 {
+	for (_int i = 0; i < 24; ++i)
+	{
+		m_pSlotTrans[i] = nullptr;
+		m_pSlotBuffer[i] = nullptr;
+	}
 }
 
 CInven::CInven(const CInven & rhs)
 	: CGameObject(rhs)
 {
+	for (_int i = 0; i < 24; ++i)
+	{
+		m_pSlotBuffer[i] = rhs.m_pSlotBuffer[i];
+		m_pSlotTrans[i] = rhs.m_pSlotTrans[i];
+	}
 }
 
 HRESULT CInven::Initialize_Prototype()
@@ -350,11 +360,13 @@ _float4x4 CInven::Get_World(void)
 void CInven::Free()
 {
 	__super::Free();
+
 	for (int i = 0; i < 24; ++i)
 	{
 		Safe_Release(m_pSlotBuffer[i]);
 		Safe_Release(m_pSlotTrans[i]);
 	}
+
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
