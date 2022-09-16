@@ -197,36 +197,22 @@ HRESULT CTextBox::Create_Buttons(void)
 	Safe_AddRef(pInstance);
 
 	CMyButton::BINFO tBInfo;
-	tBInfo.vPos = _float3(g_iWinSizeX * 0.75f, g_iWinSizeY * 0.92f, 0.f);
-
-	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Close_Button"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
+	
+	for (_int i = 0; i < 3; ++i)
 	{
-		ERR_MSG(TEXT("Failed to Add GameObject : Close_Button"));
-		return E_FAIL;
+		tBInfo.vPos = _float3(g_iWinSizeX * (0.75f + (0.05f * i)), g_iWinSizeY * 0.92f, 0.f);
+		tBInfo.iType = i;
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_MyButton"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
+		{
+			ERR_MSG(TEXT("Failed to Add GameObject : MyButton"));
+			return E_FAIL;
+		}
+
+		m_pButton = tBInfo.pOut;
+		m_vButtonArray.push_back(m_pButton);
 	}
-	m_pButton = tBInfo.pOut;
-	m_vButtonArray.push_back(m_pButton);
-
-	tBInfo.vPos = _float3(g_iWinSizeX * 0.8f, g_iWinSizeY * 0.92f, 0.f);
-
-	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Back_Button"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
-	{
-		ERR_MSG(TEXT("Failed to Add GameObject : Back_Button"));
-		return E_FAIL;
-	}
-	m_pButton = tBInfo.pOut;
-	m_vButtonArray.push_back(m_pButton);
-
-	tBInfo.vPos = _float3(g_iWinSizeX * 0.85f, g_iWinSizeY * 0.92f, 0.f);
-
-	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Next_Button"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
-	{
-		ERR_MSG(TEXT("Failed to Add GameObject : Next_Button"));
-		return E_FAIL;
-	}
-	m_pButton = tBInfo.pOut;
-	m_vButtonArray.push_back(m_pButton);
-
+	
 	Safe_Release(pInstance);
 	
 	return S_OK;

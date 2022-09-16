@@ -3,20 +3,28 @@
 #include "Client_Defines.h"
 #include "GameObject.h"
 
+BEGIN(Engine)
+class CTexture;
+class CRenderer;
+class CTransform;
+class CVIBuffer_Rect;
+END
+
 BEGIN(Client)
 
-class CMyButton abstract : public CGameObject
+class CMyButton final : public CGameObject
 {
 public:
-	enum BUTTONTYPE { BUTTON_BACK, BUTTON_CLOSE, BUTTON_NEXT, BUTTON_RECEIVE, BUTTON_END };
+	enum BUTTONTYPE { BUTTON_CLOSE, BUTTON_BACK, BUTTON_NEXT, BUTTON_RECEIVE, BUTTON_END };
 public:
 	typedef struct tagButtonInfo
 	{
 		CMyButton* pOut;
 		_float3 vPos;
+		_int iType;
 	}BINFO;
 
-protected:
+private:
 	CMyButton(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CMyButton(const CMyButton& rhs);
 	virtual ~CMyButton() = default;
@@ -27,13 +35,19 @@ public:
 	void TurnOff_Clicked(void) { m_bClicked = false; }
 
 public:
-	virtual HRESULT Initialize_Prototype();
-	virtual HRESULT Initialize(void* pArg);
-	virtual void Tick(_float fTimeDelta);
-	virtual void Late_Tick(_float fTimeDelta);
-	virtual HRESULT Render();
+	virtual HRESULT Initialize_Prototype(void) override;
+	virtual HRESULT Initialize(void* pArg)override;
+	virtual void Tick(_float fTimeDelta)override;
+	virtual void Late_Tick(_float fTimeDelta)override;
+	virtual HRESULT Render(void) override;
 
-protected:
+private:
+	CTexture*				m_pTextureCom = nullptr;
+	CRenderer*				m_pRendererCom = nullptr;
+	CTransform*				m_pTransformCom = nullptr;
+	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
+
+private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 
@@ -46,15 +60,17 @@ protected:
 	BINFO m_tBInfo;
 	BUTTONTYPE m_eType = BUTTON_END;
 
-protected:
+private:
+	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 
 public:
-	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
-	virtual _float4x4 Get_World(void) = 0;
+	static CMyButton* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	virtual CGameObject* Clone(void* pArg = nullptr) override;
+	virtual _float4x4 Get_World(void) override;
 	virtual void Free() override;
 };
 
