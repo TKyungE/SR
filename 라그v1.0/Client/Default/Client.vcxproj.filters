@@ -313,6 +313,9 @@
     <Filter Include="02.GameObject\BackGroundObj\ItemBox">
       <UniqueIdentifier>{035a835f-5fff-442a-bfbb-18fb84cca757}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\TextBox">
+      <UniqueIdentifier>{235cc0cf-f996-4978-a1b4-604dc8efa4ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -606,6 +609,9 @@
     <ClInclude Include="..\Public\ItemBox.h">
       <Filter>02.GameObject\BackGroundObj\ItemBox</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TextBox.h">
+      <Filter>04.UI\TextBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -886,6 +892,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\ItemBox.cpp">
       <Filter>02.GameObject\BackGroundObj\ItemBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TextBox.cpp">
+      <Filter>04.UI\TextBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
