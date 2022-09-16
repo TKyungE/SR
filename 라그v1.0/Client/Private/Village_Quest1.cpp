@@ -79,12 +79,20 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	{
 		g_bCut = true;
 		
-		CHuntQuest1::QINFO tQInfo;
+		/*CHuntQuest1::QINFO tQInfo;
 		tQInfo.eLevelIndex = (LEVEL)m_tInfo.iLevelIndex;
 		tQInfo.eMonType = MON_ALLIGATOR;
-		tQInfo.iHuntGoal = 5;
+		tQInfo.iHuntGoal = 5;*/
+		CGameInstance* pGameInstance = CGameInstance::Get_Instance();
+		if (nullptr == pGameInstance)
+			return;
 		
-		
+		Safe_AddRef(pGameInstance);
+	
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), LEVEL_TOWN, TEXT("Layer_UI"), nullptr)))
+			return;
+
+		Safe_Release(pGameInstance);
 	}
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
