@@ -191,6 +191,7 @@ HRESULT CHouse3::Render(void)
 
 	if (g_bCollider)
 		m_pColliderCom->Render();
+	return S_OK;
 }
 
 HRESULT CHouse3::SetUp_Components(void)

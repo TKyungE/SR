@@ -43,7 +43,7 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_tFrame.fFrameSpeed = 0.06f;
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iDmg = 79;
+	m_tInfo.iDmg = 79 + (m_tInfo.pTarget->Get_Info().iDmg / 2);
 	m_tInfo.iMoney = 22;
 	return S_OK;
 }

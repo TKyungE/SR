@@ -108,7 +108,7 @@ void CSoundMgr::LoadBGMFile()
 
 		Result = m_System->createSound(szFullPath, FMOD_LOOP_NORMAL, 0, &m_Sound);
 			
-		int iLength = strlen(fd.name) + 1;
+		int iLength = (_int)strlen(fd.name) + 1;
 
 		TCHAR* pSoundKey = new TCHAR[iLength];
 		ZeroMemory(pSoundKey, sizeof(TCHAR) * iLength);
@@ -142,7 +142,7 @@ void CSoundMgr::LoadSoundFile()
 
 			Result = m_System->createSound(szFullPath, FMOD_LOOP_OFF, 0, &m_Sound);
 
-			int iLength = strlen(fd.name) + 1;
+			int iLength = (_int)strlen(fd.name) + 1;
 
 			TCHAR* pSoundKey = new TCHAR[iLength];
 			ZeroMemory(pSoundKey, sizeof(TCHAR) * iLength);

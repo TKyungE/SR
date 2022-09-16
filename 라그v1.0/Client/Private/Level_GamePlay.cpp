@@ -870,8 +870,8 @@ void CLEVEL_GamePlay::Create_Rain(_float fTimeDelta)
 		fRainTime = 0.f;
 		for (int i = 0; i < 30; ++i)
 		{
-			_float iSour = rand() % 60;
-			_float iTemp = rand() % 60;
+			_float iSour = _float(rand() % 60);
+			_float iTemp = _float(rand() % 60);
 
 			_float3 vPos = { 0.f,0.f,0.f };
 			tInfo.vPos.x = vPos.x + iSour;

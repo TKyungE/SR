@@ -152,7 +152,7 @@ HRESULT CUI::Render()
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	pGameInstance->Get_Font()->DrawText(nullptr, szLv.c_str(), szLv.length() , &m_rcLv, DT_LEFT, D3DCOLOR_ARGB(255, 0, 0, 0));
+	pGameInstance->Get_Font()->DrawText(nullptr, szLv.c_str(), (_int)szLv.length() , &m_rcLv, DT_LEFT, D3DCOLOR_ARGB(255, 0, 0, 0));
 
 	Safe_Release(pGameInstance);
 
