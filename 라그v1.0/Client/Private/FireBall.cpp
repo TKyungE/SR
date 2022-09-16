@@ -41,7 +41,7 @@ HRESULT CFireBall::Initialize(void* pArg)
 	m_tFrame.fFrameSpeed = 0.05f;
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iDmg = 523;
+	m_tInfo.iDmg = 523 + m_tInfo.pTarget->Get_Info().iDmg;
 	m_tInfo.iMoney = 11;
 
 
