@@ -38,7 +38,7 @@ HRESULT CItemBox::Initialize(void * pArg)
 
 	_float3 vScale = _float3(0.5f, 0.5f, 0.5f);
 	m_pTransformCom->Set_Scaled(vScale);
-	_float3 vPos = _float3(6.f, 0.f, 22.f);
+	_float3 vPos = _float3(4.f, 0.f, 12.7f);
 	vPos.y += 0.5f * vScale.y;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
@@ -177,6 +177,8 @@ HRESULT CItemBox::Render(void)
 
 	if (g_bCollider)
 		m_pColliderCom->Render();
+
+	return S_OK;
 }
 
 HRESULT CItemBox::SetUp_Components(void)

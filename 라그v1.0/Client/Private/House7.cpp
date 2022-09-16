@@ -38,7 +38,7 @@ HRESULT CHouse7::Initialize(void * pArg)
 
 	_float3 vScale = _float3(2.f, 2.f, 2.f);
 	m_pTransformCom->Set_Scaled(vScale);
-	_float3 vPos = _float3(22.f, 0.f, 8.f);
+	_float3 vPos = _float3(13.f, 0.f, 4.f);
 
 	m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), 1);
 
@@ -306,6 +306,7 @@ HRESULT CHouse7::Render(void)
 
 	if (g_bCollider)
 		m_pColliderCom->Render();
+	return S_OK;
 }
 
 HRESULT CHouse7::SetUp_Components(void)

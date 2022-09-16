@@ -179,7 +179,7 @@ HRESULT CLevel_Town2::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	CHouse3::INDEXPOS index;
 	ZeroMemory(&index, sizeof(CHouse3::INDEXPOS));
-	index.vPos = _float3(10.f, 0.f, 30.f);
+	index.vPos = _float3(6.f, 0.f, 17.5f);
 
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House3"), LEVEL_TOWN2, pLayerTag, &index)))
@@ -194,14 +194,14 @@ HRESULT CLevel_Town2::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	CHouse6::INDEXPOS index2;
 	ZeroMemory(&index2, sizeof(CHouse6::INDEXPOS));
-	index2.vPos = _float3(27.f, 0.f, 11.f);
+	index2.vPos = _float3(13.5f, 0.f, 6.f);
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House6"), LEVEL_TOWN2, pLayerTag, &index2)))
 		return E_FAIL;
 
 	CHouse6::INDEXPOS index3;
 	ZeroMemory(&index3, sizeof(CHouse6::INDEXPOS));
-	index3.vPos = _float3(23.f, 0.f, 27.f);
+	index3.vPos = _float3(13.f, 0.f, 17.f);
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House6"), LEVEL_TOWN2, pLayerTag, &index3)))
 		return E_FAIL;

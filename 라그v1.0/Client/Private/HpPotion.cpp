@@ -77,7 +77,7 @@ void CHpPotion::OnTerrain()
 
 	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.3f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
@@ -148,7 +148,7 @@ HRESULT CHpPotion::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	_float3 vScale = { 1.f,1.f,1.f };
+	_float3 vScale = { 0.7f,0.7f,0.7f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -263,7 +263,7 @@ void CHpPotion::OnBillboard()
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 1.f,1.f,1.f };
+	_float3 vScale = { 0.7f,0.7f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]* vScale.y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
@@ -273,11 +273,18 @@ void CHpPotion::CheckColl()
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
 		return;
-
+	_int iMoney = rand() % 100 + 50;
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
 	if (pInstance->Collision(this, TEXT("Com_Collider"),COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 	{
+		
+		if (m_tInfo.iLv == 2)
+		{
+			pTarget->Set_Money(iMoney);
+			Set_Dead();
+			return;
+		}
 		for (int i = 0; i < 24; ++i)
 		{
 			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i).eItemNum == m_tInfo.iLv)

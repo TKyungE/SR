@@ -38,7 +38,7 @@ HRESULT CHouse4::Initialize(void * pArg)
 
 	_float3 vScale = _float3(3.f, 3.f, 3.f);
 	m_pTransformCom->Set_Scaled(vScale);
-	_float3 vPos = _float3(25.f, 0.f, 23.f);
+	_float3 vPos = _float3(14.5f, 0.f, 13.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 
@@ -111,7 +111,7 @@ HRESULT CHouse4::Initialize(void * pArg)
 	vPos7.y += 0.45f * vScale.y;
 
 	m_pTransformCom7->Turn(_float3(0.f, 1.f, 0.f), 1);
-	m_pTransformCom7->Turn(_float3(0.f, 0.f, 1.f), -0.56);
+	m_pTransformCom7->Turn(_float3(0.f, 0.f, 1.f), -0.56f);
 
 	m_pTransformCom7->Set_State(CTransform::STATE_POSITION, vPos7);
 
@@ -128,7 +128,7 @@ HRESULT CHouse4::Initialize(void * pArg)
 	vPos8.y += 0.45f * vScale.y;
 
 	m_pTransformCom8->Turn(_float3(0.f, 1.f, 0.f), 1);
-	m_pTransformCom8->Turn(_float3(0.f, 0.f, 1.f), 0.56);
+	m_pTransformCom8->Turn(_float3(0.f, 0.f, 1.f), 0.56f);
 
 	m_pTransformCom8->Set_State(CTransform::STATE_POSITION, vPos8);
 
@@ -272,6 +272,7 @@ HRESULT CHouse4::Render(void)
 
 	if (g_bCollider)
 		m_pColliderCom->Render();
+	return S_OK;
 }
 
 HRESULT CHouse4::SetUp_Components(void)

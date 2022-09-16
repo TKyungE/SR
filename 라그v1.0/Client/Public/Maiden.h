@@ -60,6 +60,7 @@ private:
 	HRESULT TextureRender();
 	void CheckColl();
 	void Create_BlueFire(_float fTimeDelta);
+	void	DropItem();
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
@@ -82,7 +83,7 @@ private:
 	_bool				m_bIDLE = false;
 	_bool				m_bLastHeal = false;
 	_bool				m_bBlueFire = false;
-	_bool				m_bBlueFireTime = 0.f;
+	_float				m_bBlueFireTime = 0.f;
 	_bool				m_bStart = false;
 	_int				m_iSkillMove = 0;
 	_float				m_CollTime = 0.f;

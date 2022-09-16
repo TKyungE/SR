@@ -47,6 +47,7 @@ HRESULT CBloodymurderer::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 9999;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
+	m_tInfo.iExp = 30;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -651,6 +652,8 @@ void CBloodymurderer::Check_Front()
 
 	if (m_tInfo.bDead && m_eCurState != DEAD)
 	{
+		DropItem();
+		m_tInfo.pTarget->Set_Exp(m_tInfo.iExp);
 		m_eCurState = DEAD;
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
@@ -906,23 +909,6 @@ void CBloodymurderer::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	/*if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
-	{
-		_float3 vBackPos;
-		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-		}
-		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-		}
-		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}*/
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
@@ -941,4 +927,22 @@ void CBloodymurderer::CheckColl()
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
 	Safe_Release(pInstance);
+}
+void CBloodymurderer::DropItem()
+{
+	_int iDest = rand() % 2;
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	if (iDest == 0)
+		tInfo.iLv = 2;
+	else
+		tInfo.iLv = 21;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Item"), &tInfo);
+
+	Safe_Release(pGameInstance);
 }

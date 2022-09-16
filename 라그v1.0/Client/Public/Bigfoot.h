@@ -65,6 +65,7 @@ private:
 	void MonsterMove(_float fTimeDelta);
 	HRESULT RespawnMonster();
 	void CheckColl();
+	void	DropItem();
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;

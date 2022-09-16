@@ -176,19 +176,25 @@ HRESULT CInven::Render()
 		m_pSlotBuffer[i]->Render();
 	}
 	wstring szCount[24];
+	wstring szMoney = TEXT("");
 	for (int i = 0; i < 24; ++i)
 	{
 		szCount[i] = TEXT("");
 		szCount[i] += to_wstring(m_vecItem[i].iCount);
 	}
-	
+	szMoney += to_wstring(m_tInfo.pTarget->Get_Info().iMoney);
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 	for (int i = 0; i < 24; ++i)
 	{
-		if(m_vecItem[i].iCount > 1)
-			pGameInstance->Get_Font()->DrawText(nullptr, szCount[i].c_str(), (int)szCount[i].length(), &m_rcCount[i], DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
+		if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+		{
+			if (m_vecItem[i].iCount > 1)
+				pGameInstance->Get_Font()->DrawText(nullptr, szCount[i].c_str(), (int)szCount[i].length(), &m_rcCount[i], DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
+
+		}
 	}
+	pGameInstance->Get_Font()->DrawText(nullptr, szMoney.c_str(), (int)szMoney.length(), &m_rcMoneyBox, DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
 	Safe_Release(pGameInstance);
 
 	if (FAILED(Release_RenderState()))
@@ -296,7 +302,7 @@ void CInven::Set_Slot()
 			++k;
 		}
 	}
-	
+	m_rcMoneyBox = {820,522,920,580};
 }
 
 void CInven::Check_Slot()
