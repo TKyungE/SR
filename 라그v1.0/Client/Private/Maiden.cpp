@@ -511,6 +511,8 @@ void CMaiden::Check_Front()
 
 	if (m_tInfo.bDead && m_eCurState != DEAD)
 	{
+		DropItem();
+		m_tInfo.pTarget->Set_Exp(m_tInfo.iExp);
 		m_eCurState = DEAD;
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
@@ -904,4 +906,20 @@ void CMaiden::OnBillboard()
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
+void CMaiden::DropItem()
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	tInfo.iLv = 3;
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Item"), &tInfo);
+
+	Safe_Release(pGameInstance);
 }

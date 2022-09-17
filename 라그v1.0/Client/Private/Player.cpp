@@ -143,7 +143,10 @@ void CPlayer::Tick(_float fTimeDelta)
 	}
 
 	Safe_Release(pInstance);
-	
+	if (m_tInfo.iMp > 0)
+	{
+		Use_Skill();
+	}
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -153,10 +156,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	Motion_Change();
 	Check_Hit();
 	LevelUp();
-	if (m_tInfo.iMp > 0)
-	{
-		Use_Skill();
-	}
+	
 	OnBillboard();
 	CheckColl();
 
@@ -1163,6 +1163,8 @@ void CPlayer::Check_Stat()
 	m_tInfo.iDmg = 10 + m_StatDmg;
 	m_tInfo.iMaxHp = 30000 + m_StatHp;
 	m_tInfo.iMaxMp = 1000 + m_StatMp;
+	if (m_tInfo.iMp < 0)
+		m_tInfo.iMp = 0;
 }
 
 
