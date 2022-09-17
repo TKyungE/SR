@@ -451,6 +451,8 @@ void CLevel_Town2::LoadData()
 	_float3 vPos1, vPos2;
 	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize, iWallSize;
 	_tchar str1[MAX_PATH];
+	
+
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
 	_tchar str4[MAX_PATH];

@@ -38,7 +38,7 @@ private:
 	CTransform* m_pTransformCom = nullptr;
 	CVIBuffer_Cube* m_pVIBuffer = nullptr;
 	CTexture* m_pTextureCom = nullptr;
-	CTexture* m_pTextureCom2 = nullptr;
+
 
 private:
 	INDEXPOS	m_IndexPos;

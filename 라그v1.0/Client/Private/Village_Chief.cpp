@@ -108,8 +108,7 @@ HRESULT CVillage_Chief::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_NPC"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture1"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Chief"), (CComponent**)&m_pTextureCom2)))
-		return E_FAIL;
+	
 
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -241,6 +240,5 @@ void CVillage_Chief::Free(void)
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pTextureCom2);
 
 }

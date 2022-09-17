@@ -46,12 +46,23 @@ private:
 	CCollider* m_pQuestColliderCom = nullptr;
 	CTexture* m_pQuestTextureCom = nullptr;
 
+	CVIBuffer_Rect* m_pCharVIBufferCom = nullptr;
+	CTransform* m_pCharTransformCom = nullptr;
+	CTexture* m_pCharTextureCom = nullptr;
+
+
 private:
 	INDEXPOS	m_IndexPos;
 
 	_bool m_bTalk = false;
 	CQuest* m_pQuest = nullptr;
 
+
+	_float4x4	m_ProjMatrix;
+	_float		m_fSizeX = 0.f;
+	_float		m_fSizeY = 0.f;
+	_float		m_fX = 0.f;
+	_float		m_fY = 0.f;
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);

@@ -31,6 +31,17 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
+
+	m_fSizeX = 400.f;
+	m_fSizeY = 400.f;
+	m_fX = 250.f;
+	m_fY = 370.f;
+
+	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
+	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
+
+
 	m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 	m_pQuestTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
@@ -67,6 +78,9 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 void CVillage_Quest1::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	RECT	rcRect;
+	SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f);
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
 	m_pQuestColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 2.f);
@@ -142,14 +156,42 @@ HRESULT CVillage_Quest1::Render(void)
 
 	Off_SamplerState();
 
+	if (FAILED(SetUp_RenderState()))
+		return E_FAIL;
+
+	if (g_bCut && m_bTalk)
+	{
+		if (FAILED(m_pCharTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
+
+		_float4x4	ViewMatrix;
+		D3DXMatrixIdentity(&ViewMatrix);
+
+		_float4x4 SaveViewMatrix, SaveProjVatrix;
+
+		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &SaveViewMatrix);
+		m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
+
+		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
+
+		if (FAILED(m_pCharTextureCom->Bind_OnGraphicDev(0)))
+			return E_FAIL;
+
+		m_pCharVIBufferCom->Render();
+
+		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &SaveViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
+	}
+	
+
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
 		return E_FAIL;
 
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
+
 
 	m_pVIBuffer->Render();
 
@@ -198,6 +240,12 @@ HRESULT CVillage_Quest1::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_QuestCollider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pQuestColliderCom)))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Quest1"), (CComponent**)&m_pCharTextureCom)))
+		return E_FAIL;
+
+
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
@@ -208,6 +256,9 @@ HRESULT CVillage_Quest1::SetUp_Components(void)
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_QuestTransform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pQuestTransformCom, &TransformDesc)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTransform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pCharTransformCom, &TransformDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -323,4 +374,7 @@ void CVillage_Quest1::Free(void)
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pCharVIBufferCom);
+	Safe_Release(m_pCharTransformCom);
+	Safe_Release(m_pCharTextureCom);
 }

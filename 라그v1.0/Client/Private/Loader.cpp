@@ -838,8 +838,8 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 
 	//   NPC ´ëÈ­ ==========================================================================================
 
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Chief"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Chief/%d.png"), 3))))
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Quest1"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Quest1/%d.png"), 3))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
