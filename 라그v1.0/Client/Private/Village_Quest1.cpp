@@ -2,6 +2,7 @@
 #include "..\Public\Village_Quest1.h"
 #include "GameInstance.h"
 #include "HuntQuest1.h"
+#include "TextBox.h"
 
 CVillage_Quest1::CVillage_Quest1(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -59,6 +60,8 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 
 	Safe_Release(pGameInstance);
 
+	Ready_Script();
+
 	return S_OK;
 }
 
@@ -75,7 +78,7 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk)
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
 	{
 		g_bCut = true;
 
@@ -85,10 +88,50 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 		
 		Safe_AddRef(pGameInstance);
 
-		/*pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Quest"))->Get_Objects()*/
+		CTextBox::TINFO tTInfo;
+		tTInfo.iScriptSize = m_vQuestScript.size();
+		tTInfo.pScript = new wstring[m_vQuestScript.size()];
+		
+		for (_int i = 0; i < m_vQuestScript.size(); ++i)
+			tTInfo.pScript[i] = m_vQuestScript[i];
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &m_tInfo)))
+		tTInfo.iQuestIndex = 1;
+		tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 			return;
+
+		/*if (nullptr == m_pQuest)
+		{
+			CTextBox::TINFO tTInfo;
+			tTInfo.vScript = m_vQuestScript;
+			tTInfo.iQuestIndex = 1;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+				return;
+		}
+		else if (!m_pQuest->Get_Clear())
+		{
+			CTextBox::TINFO tTInfo;
+			tTInfo.vScript = m_vNotClearScript;
+			tTInfo.iQuestIndex = 1;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+				return;
+		}
+		else if (m_pQuest->Get_Clear())
+		{
+			CTextBox::TINFO tTInfo;
+			tTInfo.vScript = m_vNormalScript;
+			tTInfo.iQuestIndex = 1;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+				return;
+		}
+		else
+		{
+			CTextBox::TINFO tTInfo;
+			tTInfo.vScript = m_vNormalScript;
+			tTInfo.iQuestIndex = 1;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+				return;
+		}*/
 		
 		Safe_Release(pGameInstance);
 	}
@@ -279,6 +322,20 @@ void CVillage_Quest1::OnBillboard()
 	m_pQuestTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0] * vScale.z);
 }
 
+void CVillage_Quest1::Ready_Script(void)
+{
+	m_vQuestScript.push_back(TEXT("(1,2,3,4) Baby, got me looking so crazy 빠져버리는 daydream Got me feeling you 너도 말해줄래 누가 내게 뭐라든 남들과는 달라 "));
+	m_vQuestScript.push_back(TEXT("넌 Maybe you could be the one 날 믿어봐 한번 I'm not looking for just fun Maybe I could be the one Oh baby 예민하대 나 "));
+	m_vQuestScript.push_back(TEXT("lately 너 없이는 매일 매일이 yeah 재미없어 어쩌지 I just want you Call my phone right now I just wanna hear you're mine "));
+	m_vQuestScript.push_back(TEXT("'Cause I know what you like boy You're my chemical hype boy 내 지난날들은 눈 뜨면 잊는 꿈 Hype boy 너만 원해 Hype boy 내가 "));
+
+	m_vNotClearScript.push_back(TEXT(""));
+	
+	m_vNormalScript.push_back(TEXT(""));
+	m_vNormalScript.push_back(TEXT(""));
+	m_vNormalScript.push_back(TEXT(""));
+}
+
 CVillage_Quest1 * CVillage_Quest1::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
 {
 	CVillage_Quest1* pInstance = new CVillage_Quest1(_pGraphic_Device);
@@ -312,6 +369,21 @@ _float4x4 CVillage_Quest1::Get_World(void)
 
 void CVillage_Quest1::Free(void)
 {
+	for (auto iter = m_vNormalScript.begin(); iter != m_vNormalScript.end();)
+		iter = m_vNormalScript.erase(iter);
+	
+	m_vNormalScript.clear();
+
+	for (auto iter = m_vQuestScript.begin(); iter != m_vQuestScript.end();)
+		iter = m_vQuestScript.erase(iter);
+	
+	m_vQuestScript.clear();
+
+	for (auto iter = m_vNotClearScript.begin(); iter != m_vNotClearScript.end();)
+		iter = m_vNotClearScript.erase(iter);
+	
+	m_vNotClearScript.clear();
+
 	__super::Free();
 
 	Safe_Release(m_pQuestTextureCom);

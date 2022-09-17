@@ -12,13 +12,23 @@ private:
 	virtual ~CQuestManager() = default;
 
 public:
-	HRESULT Add_Quest(class CQuest* pQuest, _int* pOut);
+	HRESULT Add_Prototype(const _tchar* pPrototypeTag, class CQuest* pPrototype);
+	class CQuest* Add_Quest(const _tchar* pPrototypeTag, const _tchar* pQuestTag, void* pArg = nullptr);
 	void Tick(void);
-	HRESULT Release_Quest(_int iIndex);
+	_bool Find_Finish(const _tchar* pQuestTag);
+	_bool Find_Active(const _tchar* pQuestTag);
 
 private:
-	list<class CQuest*> m_Quest;
-	typedef list<class CQuest*> QUESTS;
+	map<const _tchar*, class CQuest*>			m_Prototypes;
+	typedef map<const _tchar*, class CQuest*>	PROTOTYPES;
+
+private:
+	map<const _tchar*, class CQuest*>			m_Actives;
+	map<const _tchar*, class CQuest*>			m_Finished;
+	typedef map<const _tchar*, class CQuest*>	QUESTS;
+
+private:
+	class CQuest* Find_Prototype(const _tchar* pPrototypeTag);
 
 public:
 	virtual void Free(void) override;

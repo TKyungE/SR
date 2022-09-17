@@ -66,8 +66,10 @@ public: /* For.Collision_Manager */
 	_float3 Get_Collision(void);
 
 public: /* For. Quest_Manager */
-	HRESULT Add_Quest(class CQuest* pQuest, _int* pOut);
-	HRESULT Release_Quest(_int iIndex);
+	HRESULT Add_Prototype(const _tchar* pPrototypeTag, class CQuest* pPrototype);
+	class CQuest* Add_Quest(const _tchar* pPrototypeTag, const _tchar* pQuestTag, void* pArg = nullptr);
+	_bool Find_Finish(const _tchar* pQuestTag);
+	_bool Find_Active(const _tchar* pQuestTag);
 
 public:
 	static void Release_Engine();

@@ -14,15 +14,13 @@ CQuest::CQuest(const CQuest & rhs)
 
 HRESULT CQuest::Initialize_Prototype(void)
 {
-	m_bActive = false;
-	m_bClear = false;
-	m_iIndex = 0;
-
 	return S_OK;
 }
 
 HRESULT CQuest::Initialize(void * pArg)
 {
+	m_bClear = false;
+
 	return S_OK;
 }
 

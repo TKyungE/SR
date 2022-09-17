@@ -50,7 +50,12 @@ private:
 	INDEXPOS	m_IndexPos;
 
 	_bool m_bTalk = false;
+	_bool m_bOnce = false;
 	CQuest* m_pQuest = nullptr;
+
+	vector<wstring> m_vNormalScript;
+	vector<wstring> m_vQuestScript;
+	vector<wstring> m_vNotClearScript;
 
 private:
 	HRESULT SetUp_Components(void);
@@ -59,6 +64,7 @@ private:
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 	void	OnBillboard();
+	void Ready_Script(void);
 
 public:
 	static CVillage_Quest1* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);

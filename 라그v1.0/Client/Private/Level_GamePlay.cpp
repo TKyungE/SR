@@ -878,10 +878,7 @@ void CLEVEL_GamePlay::Create_Rain(_float fTimeDelta)
 			tInfo.vPos.y = vPos.y;
 			tInfo.vPos.z = vPos.z + iTemp;
 
-			pGameInstance->Add_GameObject(
-				
-				
-				("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 				
 		}
 	}

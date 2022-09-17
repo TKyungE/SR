@@ -34,15 +34,37 @@ CQuest * CQuestManager::Add_Quest(const _tchar * pPrototypeTag, const _tchar* pQ
 
 void CQuestManager::Tick(void)
 {
-	for (auto& Pair : m_Actives)
+	for (auto iter = m_Actives.begin(); iter != m_Actives.end();)
 	{
-		Pair.second->Tick();
-		if (Pair.second->Get_Clear())
+		iter->second->Tick();
+		if (iter->second->Get_Clear())
 		{
-			m_Finished.emplace(Pair.first, Pair.second);
-			m_Actives.erase(Pair);
+			m_Finished.emplace(iter->first, iter->second);
+			iter = m_Actives.erase(iter);
 		}
+		else
+			++iter;
 	}
+}
+
+_bool CQuestManager::Find_Finish(const _tchar * pQuestTag)
+{
+	auto iter = find_if(m_Finished.begin(), m_Finished.end(), CTag_Finder(pQuestTag));
+
+	if (iter == m_Finished.end())
+		return false;
+
+	return true;
+}
+
+_bool CQuestManager::Find_Active(const _tchar * pQuestTag)
+{
+	auto iter = find_if(m_Actives.begin(), m_Actives.end(), CTag_Finder(pQuestTag));
+
+	if (iter == m_Actives.end())
+		return false;
+
+	return true;
 }
 
 CQuest * CQuestManager::Find_Prototype(const _tchar * pPrototypeTag)

@@ -16,7 +16,11 @@ class CTextBox final : public CGameObject
 public:
 	typedef struct tagTextInfo
 	{
+		wstring* pScript;
+		_int iScriptSize;
 
+		_int iQuestIndex;
+		_int iLevelIndex;
 	}TINFO;
 private:
 	CTextBox(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -46,10 +50,12 @@ private:
 	_int					m_iScriptIndex = 0;
 	_float					m_fTimeDelta = 0.f;
 	_bool					m_bFontRender = false;
-	vector<wstring>			m_vScript;
+	wstring*				m_pScript = nullptr;
 
 	vector<CMyButton*>	m_vButtonArray;
 	CMyButton*		m_pButton = nullptr;
+
+	TINFO m_tTInfo;
 
 private:
 	HRESULT SetUp_Components();

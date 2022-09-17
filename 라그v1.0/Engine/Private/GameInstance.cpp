@@ -268,20 +268,36 @@ _float3 CGameInstance::Get_Collision(void)
 	return m_pCollision_Manager->Get_Collision();
 }
 
-HRESULT CGameInstance::Add_Quest(CQuest * pQuest, _int * pOut)
+HRESULT CGameInstance::Add_Prototype(const _tchar * pPrototypeTag, CQuest * pPrototype)
 {
 	if (nullptr == m_pQuest_Manager)
 		return E_FAIL;
 	
-	return m_pQuest_Manager->Add_Quest(pQuest, pOut);
+	return m_pQuest_Manager->Add_Prototype(pPrototypeTag, pPrototype);
 }
 
-HRESULT CGameInstance::Release_Quest(_int iIndex)
+CQuest* CGameInstance::Add_Quest(const _tchar * pPrototypeTag, const _tchar * pQuestTag, void * pArg)
 {
 	if (nullptr == m_pQuest_Manager)
-		return E_FAIL;
-	
-	return m_pQuest_Manager->Release_Quest(iIndex);
+		return nullptr;
+
+	return m_pQuest_Manager->Add_Quest(pPrototypeTag, pQuestTag, pArg);
+}
+
+_bool CGameInstance::Find_Finish(const _tchar * pQuestTag)
+{
+	if (nullptr == m_pQuest_Manager)
+		return false;
+
+	return m_pQuest_Manager->Find_Finish(pQuestTag);
+}
+
+_bool CGameInstance::Find_Active(const _tchar * pQuestTag)
+{
+	if (nullptr == m_pQuest_Manager)
+		return false;
+
+	return m_pQuest_Manager->Find_Active(pQuestTag);
 }
 
 void CGameInstance::Release_Engine()
