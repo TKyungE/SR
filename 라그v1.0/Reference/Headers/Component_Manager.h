@@ -11,6 +11,7 @@
 #include "VIBuffer_WingRect.h"
 #include "VIBuffer_RectLeft.h"
 #include "Collider.h"
+#include "Shader.h"
 
 BEGIN(Engine)
 

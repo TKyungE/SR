@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CShader;
 class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
@@ -50,7 +51,7 @@ private:
 	CTransform* m_pCharTransformCom = nullptr;
 	CTexture* m_pCharTextureCom = nullptr;
 
-
+	CShader* m_pShaderCom = nullptr;
 private:
 	INDEXPOS	m_IndexPos;
 

@@ -164,7 +164,10 @@ HRESULT CVillage_Quest1::Render(void)
 		if (FAILED(m_pCharTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
 
-		_float4x4	ViewMatrix;
+		_float4x4	WorldMatrix, ViewMatrix;
+
+		WorldMatrix = *D3DXMatrixTranspose(&WorldMatrix, &m_pCharTransformCom->Get_WorldMatrix());
+
 		D3DXMatrixIdentity(&ViewMatrix);
 
 		_float4x4 SaveViewMatrix, SaveProjVatrix;
@@ -172,13 +175,24 @@ HRESULT CVillage_Quest1::Render(void)
 		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &SaveViewMatrix);
 		m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
 
-		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-		if (FAILED(m_pCharTextureCom->Bind_OnGraphicDev(0)))
-			return E_FAIL;
+	/*	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);*/
+
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", &WorldMatrix, sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix,&ViewMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&m_ProjMatrix, &m_ProjMatrix), sizeof(_float4x4));
+
+
+		m_pShaderCom->Set_Texture("g_Texture", m_pCharTextureCom->Get_Texture(0));
+
+		/*if (FAILED(m_pCharTextureCom->Bind_OnGraphicDev(0)))
+			return E_FAIL;*/
+		m_pShaderCom->Begin(1);
 
 		m_pCharVIBufferCom->Render();
+
+		m_pShaderCom->End();
 
 		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &SaveViewMatrix);
 		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
@@ -243,6 +257,10 @@ HRESULT CVillage_Quest1::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Quest1"), (CComponent**)&m_pCharTextureCom)))
+		return E_FAIL;
+
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 
@@ -377,4 +395,5 @@ void CVillage_Quest1::Free(void)
 	Safe_Release(m_pCharVIBufferCom);
 	Safe_Release(m_pCharTransformCom);
 	Safe_Release(m_pCharTextureCom);
+	Safe_Release(m_pShaderCom);
 }
