@@ -1,4 +1,6 @@
-﻿  ItemBox.cpp
-c:\users\태경\desktop\라그(sr)_1\라그v1.0\client\private\itembox.cpp(180): warning C4715: 'Client::CItemBox::Render': 모든 제어 경로에서 값을 반환하지는 않습니다.
+﻿  Village_Chief.cpp
+c:\users\태경\desktop\라그(sr)_1\라그v1.0\client\private\village_chief.cpp(33): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Loader.cpp
+  코드를 생성하고 있습니다...
   Client.vcxproj -> C:\Users\태경\Desktop\라그(SR)_1\라그v1.0\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)

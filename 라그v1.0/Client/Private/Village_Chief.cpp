@@ -30,7 +30,7 @@ HRESULT CVillage_Chief::Initialize(void * pArg)
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 
-	m_tInfo.vPos.y -= 0.5f;
+	m_tInfo.vPos.y += 0.5 * vScale.y;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.1f;
@@ -53,7 +53,7 @@ void CVillage_Chief::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	OnTerrain();
+	//OnTerrain();
 
 }
 
@@ -108,7 +108,8 @@ HRESULT CVillage_Chief::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_NPC"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture1"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Chief"), (CComponent**)&m_pTextureCom2)))
+		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -197,7 +198,7 @@ void CVillage_Chief::OnBillboard()
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 
@@ -240,5 +241,6 @@ void CVillage_Chief::Free(void)
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pTextureCom2);
 
 }

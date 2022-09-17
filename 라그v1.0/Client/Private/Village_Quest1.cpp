@@ -31,11 +31,13 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_tInfo.vPos.y += 0.3f;
-	_float3 vQuestPos = m_tInfo.vPos;
-	vQuestPos.y += 0.8f;
+	m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
+	m_pQuestTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
-	m_pQuestTransformCom->Set_Scaled(_float3(0.8f, 0.8f, 1.f));
+	m_tInfo.vPos.y += 0.5f;
+	_float3 vQuestPos = m_tInfo.vPos;
+	vQuestPos.y += 0.7f;
+
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_pQuestTransformCom->Set_State(CTransform::STATE_POSITION, vQuestPos);
@@ -268,7 +270,7 @@ void CVillage_Quest1::OnBillboard()
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
 	
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 	
 	_float3 vScale = m_pQuestTransformCom->Get_Scale();

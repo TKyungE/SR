@@ -835,6 +835,13 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/BackGround/Box/%d.dds"), 1))))
 		return E_FAIL;
 
+
+	//   NPC ´ëÈ­ ==========================================================================================
+
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Chief"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Chief/%d.png"), 3))))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
