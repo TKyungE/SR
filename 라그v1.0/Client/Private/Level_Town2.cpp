@@ -319,11 +319,7 @@ HRESULT CLevel_Town2::Ready_Layer_NPC(const _tchar * pLayerTag)
 	tInfo.iHp = 1;
 	for (auto& iter : m_vecNPC)
 	{
-		if (iter.iIndex == 0)
-		{
-
-		}
-		else if (iter.iIndex > 0 && iter.iIndex <= 3)
+		if (iter.iIndex <= 3)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;						// 인덱스 인데 인포구조체에 인덱스 없어서 MP로 대체 함
@@ -356,6 +352,13 @@ HRESULT CLevel_Town2::Ready_Layer_NPC(const _tchar * pLayerTag)
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
 			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+		else if (iter.iIndex > 7)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;						// 인덱스 인데 인포구조체에 인덱스 없어서 MP로 대체 함
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Default_NPC"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
 	}
@@ -451,6 +454,8 @@ void CLevel_Town2::LoadData()
 	_float3 vPos1, vPos2;
 	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize, iWallSize;
 	_tchar str1[MAX_PATH];
+	
+
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
 	_tchar str4[MAX_PATH];

@@ -30,7 +30,7 @@ HRESULT CEngineer::Initialize(void * pArg)
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 
-	m_tInfo.vPos.y -= 0.5f;
+	m_tInfo.vPos.y += 0.5f * vScale.y;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.1f;
@@ -52,9 +52,6 @@ HRESULT CEngineer::Initialize(void * pArg)
 void CEngineer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
-	OnTerrain();
-
 }
 
 void CEngineer::Late_Tick(_float fTimeDelta)
@@ -197,7 +194,7 @@ void CEngineer::OnBillboard()
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 
