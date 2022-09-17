@@ -83,19 +83,59 @@ void CPlayer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
+	if (CKeyMgr::Get_Instance()->Key_Down('C'))
+	{
+		switch (g_bFirst)
+		{
+		case true:
+			g_bFirst = false;
+			break;
+		case false:
+			m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			g_bFirst = true;
+			break;
+		}
+	}
+	if (GetKeyState('W') < 0)
+	{
+		m_pTransformCom->Go_Straight(fTimeDelta);
+	}
+
+	if (GetKeyState('S') < 0)
+	{
+		m_pTransformCom->Go_Backward(fTimeDelta);
+	}
+
+	if (GetKeyState('A') < 0)
+	{
+		m_pTransformCom->Go_Left(fTimeDelta);
+	}
+
+	if (GetKeyState('D') < 0)
+	{
+		m_pTransformCom->Go_Right(fTimeDelta);
+	}
+
+
+
 	Check_Stat();
 	OnTerrain();
 
 	if (!g_bCut)
 	{
-		if (!m_bUI)
+		
+		if (g_bFirst)
 		{
-			Key_Input(fTimeDelta);
+			if (!m_bUI)
+			{
+				Key_Input(fTimeDelta);
+			}
+
+			Player_Move(fTimeDelta);
+			Move_Frame(fTimeDelta);
+			Get_PickingPoint();
 		}
 
-		Player_Move(fTimeDelta);
-		Move_Frame(fTimeDelta);
-		Get_PickingPoint();
 	}
 	else
 	{
@@ -154,10 +194,13 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 
 	Motion_Change();
+	
 	Check_Hit();
+	
 	LevelUp();
 	
 	OnBillboard();
+
 	CheckColl();
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
@@ -438,10 +481,11 @@ void CPlayer::OnBillboard()
 		m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
 
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	
+		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
+		m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	
 }
 
 HRESULT CPlayer::On_SamplerState()

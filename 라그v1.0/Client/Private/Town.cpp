@@ -16,6 +16,7 @@
 bool g_bCollider = false;
 bool g_bTalk = false;
 bool g_bCut = false;
+bool g_bFirst = false;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
