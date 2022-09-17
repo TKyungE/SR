@@ -30,7 +30,7 @@ HRESULT CVillage_Quest2::Initialize(void * pArg)
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 
-	m_tInfo.vPos.y -= 0.5f;
+	m_tInfo.vPos.y += 0.5f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.1f;
