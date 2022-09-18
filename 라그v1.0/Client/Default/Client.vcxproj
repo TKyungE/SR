@@ -194,6 +194,7 @@
     <ClInclude Include="..\public\Drain.h" />
     <ClInclude Include="..\public\ElderWilow.h" />
     <ClInclude Include="..\public\Engineer.h" />
+    <ClInclude Include="..\public\Equip.h" />
     <ClInclude Include="..\public\FireBall.h" />
     <ClInclude Include="..\public\Help.h" />
     <ClInclude Include="..\public\House.h" />
@@ -242,6 +243,7 @@
     <ClInclude Include="..\Public\House2.h" />
     <ClInclude Include="..\public\Shadow.h" />
     <ClInclude Include="..\Public\Skeleton.h" />
+    <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
     <ClInclude Include="..\Public\Space.h" />
@@ -296,6 +298,7 @@
     <ClCompile Include="..\private\Drain.cpp" />
     <ClCompile Include="..\private\ElderWilow.cpp" />
     <ClCompile Include="..\private\Engineer.cpp" />
+    <ClCompile Include="..\private\Equip.cpp" />
     <ClCompile Include="..\private\FireBall.cpp" />
     <ClCompile Include="..\Private\Help.cpp" />
     <ClCompile Include="..\private\House.cpp" />
@@ -344,6 +347,7 @@
     <ClCompile Include="..\Private\House2.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
     <ClCompile Include="..\Private\Skeleton.cpp" />
+    <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\Space.cpp" />

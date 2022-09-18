@@ -123,7 +123,13 @@ LPD3DXFONT CGameInstance::Get_Font(void)
 
 	return m_pGraphic_Device->Get_Font();
 }
+LPD3DXFONT CGameInstance::Get_Font2(void)
+{
+	if (nullptr == m_pGraphic_Device)
+		return nullptr;
 
+	return m_pGraphic_Device->Get_Font2();
+}
 _char CGameInstance::Get_DIKState(_uchar eKeyID)
 {
 	if (nullptr == m_pInput_Device)
