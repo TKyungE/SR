@@ -125,7 +125,7 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 		m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 		m_bTest = false;
 	}
-	else if (!g_bFirst)
+	else if (!g_bFirst && !g_bCut)
 	{
 		if (!m_bTest)
 		{

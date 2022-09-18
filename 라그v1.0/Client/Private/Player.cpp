@@ -96,26 +96,28 @@ void CPlayer::Tick(_float fTimeDelta)
 			break;
 		}
 	}
-	if (GetKeyState('W') < 0)
+	if (!g_bFirst && !g_bCut)
 	{
-		m_pTransformCom->Go_Straight(fTimeDelta);
-	}
+		if (GetKeyState('W') < 0)
+		{
+			m_pTransformCom->Go_Straight(fTimeDelta);
+		}
 
-	if (GetKeyState('S') < 0)
-	{
-		m_pTransformCom->Go_Backward(fTimeDelta);
-	}
+		if (GetKeyState('S') < 0)
+		{
+			m_pTransformCom->Go_Backward(fTimeDelta);
+		}
 
-	if (GetKeyState('A') < 0)
-	{
-		m_pTransformCom->Go_Left(fTimeDelta);
-	}
+		if (GetKeyState('A') < 0)
+		{
+			m_pTransformCom->Go_Left(fTimeDelta);
+		}
 
-	if (GetKeyState('D') < 0)
-	{
-		m_pTransformCom->Go_Right(fTimeDelta);
+		if (GetKeyState('D') < 0)
+		{
+			m_pTransformCom->Go_Right(fTimeDelta);
+		}
 	}
-
 
 
 	Check_Stat();
