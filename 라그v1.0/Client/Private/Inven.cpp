@@ -64,10 +64,9 @@ HRESULT CInven::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 	Set_Slot();
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::HPPOTION, 0);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemCount(115, 0);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::MPPOTION, 1);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemCount(77, 1);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::HPPOTION ,0,10 }, 0);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::MPPOTION ,1,20 }, 1);
+
 	return S_OK;
 }
 
@@ -78,6 +77,7 @@ void CInven::Tick(_float fTimeDelta)
 	if (dynamic_cast<CUI*>(m_tInfo.pTerrain)->Get_Inven() == false)
 	{
 		dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(false);
+		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(false);
 		Set_Dead();
 		return;
 	}
@@ -85,9 +85,15 @@ void CInven::Tick(_float fTimeDelta)
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
 	_int iDest;
+	if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_InvenMouse() && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().eItemNum != CStatInfo::EITEM_END)
+	{
+		iDest = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iSlotNum;
+		m_pSlotTrans[iDest]->Set_State(CTransform::STATE_POSITION, _float3((float)(m_rcSlot[iDest].left + 23) - g_iWinSizeX * 0.5f, -(float)(m_rcSlot[iDest].top + 23) + g_iWinSizeY * 0.5f, 0.f));
+		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MouseItem({ CStatInfo::EITEM_END, 0, 0});
+	}
 	for (int i = 0; i < 24; ++i)
 	{
-		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick() && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_InvenMouse())
 		{
 			iDest = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iSlotNum;
 			m_pSlotTrans[iDest]->Set_State(CTransform::STATE_POSITION, _float3((float)ptMouse.x - g_iWinSizeX * 0.5f, -(float)ptMouse.y + g_iWinSizeY * 0.5f, 0.f));
@@ -104,6 +110,7 @@ void CInven::Tick(_float fTimeDelta)
 					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemSlot(i, i);
 					
 					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(false);
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenMouse(false);
 				}
 
 			}
@@ -118,7 +125,9 @@ void CInven::Tick(_float fTimeDelta)
 				if (m_vecItem[i].eItemNum != CStatInfo::EITEM_END && !dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
 				{
 					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(true);
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenMouse(true);
 					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MouseItem(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i));
+		
 				}
 			}
 		}
@@ -268,8 +277,8 @@ HRESULT CInven::Release_RenderState()
 
 void CInven::Set_Slot()
 {
-	_float fSizeX = 46.f;
-	_float fSizeY = 46.f;
+	_float fSizeX = 60.f;
+	_float fSizeY = 60.f;
 	_float fX;
 	_float fY;
 	_int k = 0;
@@ -322,10 +331,14 @@ void CInven::UseItem(CStatInfo::EITEM _eItem,_int Index)
 	case CStatInfo::HPPOTION:
 		m_tInfo.pTarget->Set_Hp(-1000);
 		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(-1, Index);
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index).iCount <= 0)
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::EITEM_END, Index);
 		break;
 	case CStatInfo::MPPOTION:
 		m_tInfo.pTarget->Set_Mp(100);
 		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(-1, Index);
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index).iCount <= 0)
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::EITEM_END, Index);
 		break;
 	default:
 		break;

@@ -59,7 +59,6 @@ private:
 	HRESULT Release_RenderState();
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
-	void Use_Skill();
 	void Key_Input(_float fTimeDelta);
 	HRESULT Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_Tornado(const _tchar * pLayerTag, _float3 _vPos);
@@ -104,6 +103,7 @@ public:
 	_bool Get_Fly() { return m_bFly; }
 	void Set_Fly(_bool _bFly) { m_bFly = _bFly; }
 	void Set_UI(_bool _UI) { m_bUI = _UI; }
+	void Use_Skill(_int iIndex);
 private:
 	void Player_Move(_float fTimeDelta);
 	void Motion_Change();

@@ -34,12 +34,16 @@ private: /* For.Components */
 public:
 	_bool	Get_Status() { return m_bStatus; }
 	_bool	Get_Inven() { return m_bInven; }
+	_bool	Get_Skill() { return m_bSkill; }
+	_bool	Get_Equip() { return m_bEquip; }
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 	RECT					m_rcLv;
 	_bool					m_bStatus = false;
 	_bool					m_bInven = false;
+	_bool					m_bSkill = false;
+	_bool					m_bEquip = false;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

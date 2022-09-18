@@ -114,6 +114,54 @@ void CUI::Tick(_float fTimeDelta)
 				break;
 			}
 		}
+		if (CKeyMgr::Get_Instance()->Key_Down('K'))
+		{
+			switch (m_bSkill)
+			{
+			case true:
+				m_bSkill = false;
+				break;
+			case false:
+				CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+				Safe_AddRef(pGameInstance);
+				CGameObject::INFO tInfo;
+
+				tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+				tInfo.bDead = false;
+				tInfo.pTarget = m_tInfo.pTarget;
+				tInfo.pTerrain = this;
+				if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillSlot"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+					return;
+				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(true);
+				Safe_Release(pGameInstance);
+				m_bSkill = true;
+				break;
+			}
+		}
+		if (CKeyMgr::Get_Instance()->Key_Down('E'))
+		{
+			switch (m_bEquip)
+			{
+			case true:
+				m_bEquip = false;
+				break;
+			case false:
+				CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+				Safe_AddRef(pGameInstance);
+				CGameObject::INFO tInfo;
+
+				tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+				tInfo.bDead = false;
+				tInfo.pTarget = m_tInfo.pTarget;
+				tInfo.pTerrain = this;
+				if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Equip"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tInfo)))
+					return;
+				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(true);
+				Safe_Release(pGameInstance);
+				m_bEquip = true;
+				break;
+			}
+		}
 }
 
 void CUI::Late_Tick(_float fTimeDelta)

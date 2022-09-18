@@ -1,0 +1,61 @@
+#pragma once
+#include "Client_Defines.h"
+#include "GameObject.h"
+#include "StatInfo.h"
+
+BEGIN(Engine)
+class CTexture;
+class CRenderer;
+class CTransform;
+class CVIBuffer_WingRect;
+class CVIBuffer_Rect;
+END
+
+BEGIN(Client)
+
+class CEquip final : public CGameObject
+{
+private:
+	CEquip(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CEquip(const CEquip& rhs);
+	virtual ~CEquip() = default;
+
+public:
+	virtual HRESULT Initialize_Prototype() override;
+	virtual HRESULT Initialize(void* pArg)override;
+	virtual void Tick(_float fTimeDelta)override;
+	virtual void Late_Tick(_float fTimeDelta)override;
+	virtual HRESULT Render() override;
+
+private: /* For.Components */
+	CTexture*				m_pTextureCom = nullptr;
+	CTexture*				m_pItemTexture = nullptr;
+	CRenderer*				m_pRendererCom = nullptr;
+	CTransform*				m_pTransformCom = nullptr;
+	CVIBuffer_WingRect*			m_pVIBufferCom = nullptr;
+	CTransform*				m_pSlotTrans[10];
+	CVIBuffer_Rect*			m_pSlotBuffer[10];
+private:
+	_float4x4				m_ProjMatrix;
+	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
+	RECT					m_rcSlot[10];
+	RECT					m_rcCount[10];
+	CGameObject*			m_StatInfo;
+	vector<CStatInfo::ITEM>			m_pvecItem;
+	_bool					m_bMousePick = false;
+
+private:
+	HRESULT SetUp_Components();
+	HRESULT SetUp_RenderState();
+	HRESULT Release_RenderState();
+	void	Set_Slot();
+	void	Check_Slot();
+	void	Use_Slot();
+public:
+	static CEquip* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	virtual CGameObject* Clone(void* pArg = nullptr) override;
+	virtual _float4x4 Get_World(void) override;
+	virtual void Free() override;
+};
+
+END

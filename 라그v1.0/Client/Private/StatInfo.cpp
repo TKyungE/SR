@@ -36,6 +36,17 @@ HRESULT CStatInfo::Initialize(void * pArg)
 		m_tItem[i].iSlotNum = i;
 		m_tItem[i].eItemNum = EITEM_END;
 	}
+	for (int i = 0; i < 10; ++i)
+	{
+		m_pQuickSlot[i] = { EITEM_END ,0,0};
+	}
+	for (int i = 0; i < 7; ++i)
+	{
+		m_SkillSlot[i] = { EITEM_END ,i,0 };
+	}
+	m_SkillSlot[0].eItemNum = SKILL_THUNDER;
+	m_SkillSlot[1].eItemNum = SKILL_TORNADO;
+	m_SkillSlot[2].eItemNum = SKILL_FIREBALL;
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	
 	return S_OK;
@@ -44,6 +55,8 @@ HRESULT CStatInfo::Initialize(void * pArg)
 void CStatInfo::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	
 	m_tInfo.bDead = false;
 }
 
