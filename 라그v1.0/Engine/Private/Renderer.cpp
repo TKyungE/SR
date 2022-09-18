@@ -92,6 +92,7 @@ HRESULT CRenderer::Render_AlphaBlend()
 		return pSour->Get_CamDistance() > pDest->Get_CamDistance();
 	});
 
+
 	for (auto& pGameObject : m_GameObjects[RENDER_ALPHABLEND])
 	{
 		if (nullptr != pGameObject)

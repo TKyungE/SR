@@ -194,6 +194,23 @@ void CPlayer::Tick(_float fTimeDelta)
 void CPlayer::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+	/*if (GetKeyState('Q') & 0x8000)
+	{
+		CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+		Safe_AddRef(pInstance);
+
+		CLayer* pLayer = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Camera"));
+
+		Safe_AddRef(pLayer);
+
+		list<class CGameObject*> pGameObject = pLayer->Get_Objects();
+		pGameObject.front()->Set_bHit(true);
+		m_tInfo.bHit = true;
+
+		Safe_Release(pLayer);
+		Safe_Release(pInstance);
+	}*/
 
 	Motion_Change();
 	
@@ -1222,13 +1239,24 @@ void CPlayer::Check_Hit()
 		Safe_AddRef(pGameInstance);
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
-		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
+		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), m_tInfo.iLevelIndex, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+
+		CLayer* pLayer = pGameInstance->Find_Layer(m_tInfo.iLevelIndex,TEXT("Layer_Camera"));
+
+		Safe_AddRef(pLayer);
+
+		list<class CGameObject*> pGameObject = pLayer->Get_Objects();
+		pGameObject.front()->Set_bHit(true);
+
 		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
 		m_tInfo.bHit = false;
+
+		Safe_Release(pLayer);
+
 		Safe_Release(pGameInstance);
 	}
 }

@@ -121,7 +121,15 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 				m_bTrue = false;
 			}
 		}
-		
+		if (m_tInfo.bHit)
+		{
+			_float3 vPos = (Camera * 5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+			vPos.x -= 0.5f;
+			m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+			m_tInfo.bHit = false;
+		}
+
+
 		m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 		m_bTest = false;
 	}
@@ -178,6 +186,8 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+
+
 
 }
 

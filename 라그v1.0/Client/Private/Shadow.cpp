@@ -63,8 +63,14 @@ void CShadow::Late_Tick(_float fTimeDelta)
 
 	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pInstance);
+	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	{
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+	}
+	Safe_Release(pInstance);
 }
 
 HRESULT CShadow::Render()
@@ -253,7 +259,7 @@ HRESULT CShadow::Release_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	
-	m_pGraphic_Device->SetTexture(0, nullptr);
+	//m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 
