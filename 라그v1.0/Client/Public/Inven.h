@@ -42,6 +42,7 @@ private:
 	RECT					m_rcMoneyBox;
 	vector<CStatInfo::ITEM>			m_vecItem;
 	CGameObject*			m_StatInfo;
+	_bool					m_bMousePick = false;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
