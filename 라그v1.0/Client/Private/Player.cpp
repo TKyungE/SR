@@ -217,7 +217,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	Check_Hit();
 	
 	LevelUp();
-	
+
 	OnBillboard();
 
 	CheckColl();
@@ -247,9 +247,10 @@ HRESULT CPlayer::Render(void)
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
-
-	m_pVIBuffer->Render();
-
+	if (g_bFirst)
+	{
+		m_pVIBuffer->Render();
+	}
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 	
