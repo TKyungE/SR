@@ -62,8 +62,10 @@ void CTextBox::Tick(_float fTimeDelta)
 			return;
 		}
 	}
-	else
-		Running_TextBox();
+	else if ((m_iScriptIndex == m_tTInfo.iQuestIndex) && (CMyButton::BUTTON_RECEIVE != m_vButtonArray[2]->Get_Type()))
+		Change_Button();
+
+	Running_TextBox();
 
 	Print_Text();
 
@@ -201,7 +203,6 @@ HRESULT CTextBox::Create_Buttons(void)
 	{
 		tBInfo.vPos = _float3(g_iWinSizeX * (0.75f + (0.05f * i)), g_iWinSizeY * 0.92f, 0.f);
 		tBInfo.iType = i;
-
 		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_MyButton"), m_tTInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
 		{
 			ERR_MSG(TEXT("Failed to Add GameObject : MyButton"));
@@ -264,14 +265,18 @@ void CTextBox::Running_TextBox(void)
 			}
 			case CMyButton::BUTTON_RECEIVE:
 			{
-				if (m_iScriptIndex < m_tTInfo.iScriptSize)
-				{
-					++m_iScriptIndex;
-					m_wstr = TEXT("");
-					m_iIndex = 0;
-				}
+				g_bQuest = true;
 
-				iter->TurnOff_Clicked();
+				for (auto& iterator : m_vButtonArray)
+					iterator->Set_Dead();
+
+				m_vButtonArray.clear();
+
+				Set_Dead();
+
+				if (g_bCut)
+					g_bCut = false;
+
 				break;
 			}
 			}
@@ -292,6 +297,34 @@ void CTextBox::Print_Text(void)
 		m_fTimeDelta = 0.f;
 		m_bFontRender = true;
 	}
+}
+
+void CTextBox::Change_Button(void)
+{
+	m_vButtonArray[2]->Set_Dead();
+	m_vButtonArray.erase(m_vButtonArray.begin() + 2);
+	
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	CMyButton::BINFO tBInfo;
+
+	tBInfo.vPos = _float3(g_iWinSizeX * 0.85f, g_iWinSizeY * 0.92f, 0.f);
+	tBInfo.iType = 3;
+
+	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_MyButton"), m_tTInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
+	{
+		ERR_MSG(TEXT("Failed to Add GameObject : MyButton"));
+		return;
+	}
+
+	m_pButton = tBInfo.pOut;
+	m_vButtonArray.push_back(m_pButton);
+	
+	Safe_Release(pInstance);
 }
 
 CTextBox * CTextBox::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

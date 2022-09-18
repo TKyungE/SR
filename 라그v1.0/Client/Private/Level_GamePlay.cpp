@@ -264,8 +264,8 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 		Info.iMonsterType = (_int)MON_ELDERWILOW;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-			return E_FAIL;
+		/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;*/
 
 		++iCount;
 		
@@ -298,8 +298,8 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 		Info.iMonsterType = (_int)MON_ELDERWILOW;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-			return E_FAIL;
+		/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;*/
 
 		++iCount;
 		
@@ -315,8 +315,8 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 		Info.iMonsterType = (_int)MON_BIGFOOT;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-			return E_FAIL;
+		/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;*/
 
 		++iCount;
 		
@@ -349,8 +349,8 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 		Info.iMonsterType = (_int)MON_ELDERWILOW;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-			return E_FAIL;
+		/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;*/
 
 		++iCount;
 		
@@ -366,8 +366,8 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 		Info.iMonsterType = (_int)MON_BIGFOOT;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-			return E_FAIL;
+		/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;*/
 
 		++iCount;
 	}
@@ -399,8 +399,8 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 		Info.iMonsterType = (_int)MON_ELDERWILOW;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-			return E_FAIL;
+		/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;*/
 
 		++iCount;
 		
@@ -435,13 +435,13 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 		Info.iMonsterType = (_int)MON_ELDERWILOW;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-			return E_FAIL;
+		/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;*/
 
 		++iCount;
 	}
 	
-	Info.vPos = { 15.f,1.f,5.f };
+	/*Info.vPos = { 15.f,1.f,5.f };
 	Info.iMonsterType = (_int)MON_ALLIGATOR;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Atros"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
@@ -464,7 +464,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 	Info.vPos = { 35.f,1.f,10.f };
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	Safe_Release(pGameInstance);
 

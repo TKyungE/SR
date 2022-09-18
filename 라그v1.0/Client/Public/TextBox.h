@@ -66,6 +66,7 @@ private:
 	HRESULT Create_Buttons(void);
 	void Running_TextBox(void);
 	void Print_Text(void);
+	void Change_Button(void);
 
 public:
 	static CTextBox* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "ClientQuest.h"
 
 BEGIN(Engine)
 class CShader;
@@ -10,7 +11,6 @@ class CTransform;
 class CVIBuffer_Rect;
 class CTexture;
 class CCollider;
-class CQuest;
 END
 
 BEGIN(Client)
@@ -52,22 +52,28 @@ private:
 	CTexture* m_pCharTextureCom = nullptr;
 
 	CShader* m_pShaderCom = nullptr;
+
+	CClientQuest* m_pQuest = nullptr;
+	
 private:
 	INDEXPOS	m_IndexPos;
 
 	_bool m_bTalk = false;
 	_bool m_bOnce = false;
-	CQuest* m_pQuest = nullptr;
-
+	
 	vector<wstring> m_vNormalScript;
 	vector<wstring> m_vQuestScript;
 	vector<wstring> m_vNotClearScript;
+	vector<wstring> m_vClearScript;
 
 	_float4x4	m_ProjMatrix;
 	_float		m_fSizeX = 0.f;
 	_float		m_fSizeY = 0.f;
 	_float		m_fX = 0.f;
 	_float		m_fY = 0.f;
+
+	_float		m_fAlpha = 0.f;
+	_int m_iQuestTex = 0;
 
 private:
 	HRESULT SetUp_Components(void);

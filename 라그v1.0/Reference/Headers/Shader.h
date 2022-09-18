@@ -2,7 +2,6 @@
 
 #include "Component.h"
 
-
 BEGIN(Engine)
 
 class ENGINE_DLL CShader final : public CComponent

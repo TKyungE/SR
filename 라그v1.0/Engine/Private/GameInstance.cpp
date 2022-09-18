@@ -13,9 +13,7 @@ CGameInstance::CGameInstance()
 	, m_pKeyMgr(CKeyMgr::Get_Instance())
 	, m_pFrustum(CFrustum::Get_Instance())
 	, m_pCollision_Manager(CCollisionMgr::Get_Instance())
-	, m_pQuest_Manager(CQuestManager::Get_Instance())
 {
-	Safe_AddRef(m_pQuest_Manager);
 	Safe_AddRef(m_pFrustum);
 	Safe_AddRef(m_pCollision_Manager);
 	Safe_AddRef(m_pKeyMgr);
@@ -75,7 +73,6 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 
 	m_pFrustum->Tick();
 	m_pPicking->Tick();
-	m_pQuest_Manager->Tick();
 
 	m_pLevel_Manager->Late_Tick(fTimeDelta);
 	m_pObject_Manager->Late_Tick(fTimeDelta);
@@ -268,37 +265,6 @@ _float3 CGameInstance::Get_Collision(void)
 	return m_pCollision_Manager->Get_Collision();
 }
 
-HRESULT CGameInstance::Add_Prototype(const _tchar * pPrototypeTag, CQuest * pPrototype)
-{
-	if (nullptr == m_pQuest_Manager)
-		return E_FAIL;
-	
-	return m_pQuest_Manager->Add_Prototype(pPrototypeTag, pPrototype);
-}
-
-CQuest* CGameInstance::Add_Quest(const _tchar * pPrototypeTag, const _tchar * pQuestTag, void * pArg)
-{
-	if (nullptr == m_pQuest_Manager)
-		return nullptr;
-
-	return m_pQuest_Manager->Add_Quest(pPrototypeTag, pQuestTag, pArg);
-}
-
-_bool CGameInstance::Find_Finish(const _tchar * pQuestTag)
-{
-	if (nullptr == m_pQuest_Manager)
-		return false;
-
-	return m_pQuest_Manager->Find_Finish(pQuestTag);
-}
-
-_bool CGameInstance::Find_Active(const _tchar * pQuestTag)
-{
-	if (nullptr == m_pQuest_Manager)
-		return false;
-
-	return m_pQuest_Manager->Find_Active(pQuestTag);
-}
 
 void CGameInstance::Release_Engine()
 {
@@ -311,8 +277,6 @@ void CGameInstance::Release_Engine()
 	CComponent_Manager::Get_Instance()->Destroy_Instance();
 
 	CCollisionMgr::Get_Instance()->Destroy_Instance();
-
-	CQuestManager::Get_Instance()->Destroy_Instance();
 
 	CTimer_Manager::Get_Instance()->Destroy_Instance();
 
@@ -329,7 +293,6 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {
-	Safe_Release(m_pQuest_Manager);
 	Safe_Release(m_pFrustum);
 	Safe_Release(m_pCollision_Manager);
 	Safe_Release(m_pKeyMgr);

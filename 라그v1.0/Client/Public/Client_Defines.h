@@ -26,6 +26,7 @@ extern HINSTANCE	g_hInst;
 extern bool g_bCollider;
 extern bool g_bTalk;
 extern bool g_bCut;
+extern bool g_bQuest;
 //extern int g_iFrame;
 
 #define     fSOUND  0.1f

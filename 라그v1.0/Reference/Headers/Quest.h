@@ -13,6 +13,7 @@ protected:
 
 public:
 	_bool Get_Clear(void) { return m_bClear; }
+	void Set_LevelIndex(_int iLevelIndex) { m_iLevelIndex = iLevelIndex; }
 
 public:
 	virtual HRESULT Initialize_Prototype(void);
@@ -22,6 +23,7 @@ public:
 protected:
 	LPDIRECT3DDEVICE9 m_pGraphic_Device = nullptr;
 	_bool m_bClear;
+	_int m_iLevelIndex = 0;
 
 public:
 	virtual CQuest* Clone(void* pArg = nullptr) = 0;

@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "HuntQuest1.h"
 #include "TextBox.h"
+#include "QuestManager.h"
 
 CVillage_Quest1::CVillage_Quest1(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -32,7 +33,7 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = 400.f;
 	m_fSizeY = 400.f;
@@ -83,7 +84,7 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	RECT	rcRect;
-	SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f);
+	SetRect(&rcRect, _int(m_fX - m_fSizeX * 0.5f), _int(m_fY - m_fSizeY * 0.5f), _int(m_fX + m_fSizeX * 0.5f), _int(m_fY + m_fSizeY * 0.5f));
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
 	m_pQuestColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 2.f);
@@ -97,59 +98,86 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
 	{
 		g_bCut = true;
-
-		CGameInstance* pGameInstance = CGameInstance::Get_Instance();
-		if (nullptr == pGameInstance)
-			return;
-		
-		Safe_AddRef(pGameInstance);
-
-		CTextBox::TINFO tTInfo;
-		tTInfo.iScriptSize = m_vQuestScript.size();
-		tTInfo.pScript = new wstring[m_vQuestScript.size()];
-		
-		for (_int i = 0; i < m_vQuestScript.size(); ++i)
-			tTInfo.pScript[i] = m_vQuestScript[i];
-
-		tTInfo.iQuestIndex = 1;
-		tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
-			return;
-
-		/*if (nullptr == m_pQuest)
+	
+		if (nullptr == m_pQuest)
 		{
 			CTextBox::TINFO tTInfo;
-			tTInfo.vScript = m_vQuestScript;
-			tTInfo.iQuestIndex = 1;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+			tTInfo.iScriptSize = (_int)m_vQuestScript.size();
+			tTInfo.pScript = new wstring[m_vQuestScript.size()];
+
+			for (_int i = 0; i < m_vQuestScript.size(); ++i)
+				tTInfo.pScript[i] = m_vQuestScript[i];
+
+			tTInfo.iQuestIndex = 3;
+			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
 		}
 		else if (!m_pQuest->Get_Clear())
 		{
 			CTextBox::TINFO tTInfo;
-			tTInfo.vScript = m_vNotClearScript;
-			tTInfo.iQuestIndex = 1;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+			tTInfo.iScriptSize = (_int)m_vNotClearScript.size();
+			tTInfo.pScript = new wstring[m_vNotClearScript.size()];
+
+			for (_int i = 0; i < m_vNotClearScript.size(); ++i)
+				tTInfo.pScript[i] = m_vNotClearScript[i];
+
+			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
 		}
 		else if (m_pQuest->Get_Clear())
 		{
 			CTextBox::TINFO tTInfo;
-			tTInfo.vScript = m_vNormalScript;
-			tTInfo.iQuestIndex = 1;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+			tTInfo.iScriptSize = (_int)m_vClearScript.size();
+			tTInfo.pScript = new wstring[m_vClearScript.size()];
+
+			for (_int i = 0; i < m_vClearScript.size(); ++i)
+				tTInfo.pScript[i] = m_vClearScript[i];
+
+			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
 		}
 		else
 		{
 			CTextBox::TINFO tTInfo;
-			tTInfo.vScript = m_vNormalScript;
-			tTInfo.iQuestIndex = 1;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+			tTInfo.iScriptSize = (_int)m_vNormalScript.size();
+			tTInfo.pScript = new wstring[m_vNormalScript.size()];
+
+			for (_int i = 0; i < m_vNormalScript.size(); ++i)
+				tTInfo.pScript[i] = m_vNormalScript[i];
+
+			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
-		}*/
-		
-		Safe_Release(pGameInstance);
+		}
+	}
+
+	if (g_bQuest)
+	{
+		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+		if (nullptr == pQuestManager)
+			return;
+
+		Safe_AddRef(pQuestManager);
+
+		CHuntQuest1::QINFO tQInfo;
+		tQInfo.iHuntGoal = 5;
+		tQInfo.eMonType = MON_ALLIGATOR;
+
+		m_pQuest = pQuestManager->Add_Quest(TEXT("Prototype_Quest_HuntQuest1"), TEXT("Quest_HuntQuest1"), &tQInfo);
+		if (nullptr == m_pQuest)
+		{
+			ERR_MSG(TEXT("Failed to Add Quest : HuntQuest1"));
+			return;
+		}
+
+		m_iQuestTex = 2;
+
+		Safe_Release(pQuestManager);
+
+		g_bQuest = false;
 	}
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
@@ -157,6 +185,8 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 		ERR_MSG(TEXT("Failed to Add CollisionGroup : CVillage_Quest1"));
 		return;
 	}
+
+	m_fAlpha += 0.006f;
 
 	Safe_Release(pInstance);
 }
@@ -227,7 +257,7 @@ HRESULT CVillage_Quest1::Render(void)
 		m_pShaderCom->Set_RawValue("g_WorldMatrix", &WorldMatrix, sizeof(_float4x4));
 		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix,&ViewMatrix), sizeof(_float4x4));
 		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&m_ProjMatrix, &m_ProjMatrix), sizeof(_float4x4));
-
+		m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float));
 
 		m_pShaderCom->Set_Texture("g_Texture", m_pCharTextureCom->Get_Texture(0));
 
@@ -257,7 +287,7 @@ HRESULT CVillage_Quest1::Render(void)
 	if (FAILED(m_pQuestTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pQuestTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pQuestTextureCom->Bind_OnGraphicDev(m_iQuestTex)))
 		return E_FAIL;
 	
 	m_pQuestVIBufferCom->Render();
@@ -395,16 +425,17 @@ void CVillage_Quest1::OnBillboard()
 
 void CVillage_Quest1::Ready_Script(void)
 {
-	m_vQuestScript.push_back(TEXT("(1,2,3,4) Baby, got me looking so crazy 빠져버리는 daydream Got me feeling you 너도 말해줄래 누가 내게 뭐라든 남들과는 달라 "));
-	m_vQuestScript.push_back(TEXT("넌 Maybe you could be the one 날 믿어봐 한번 I'm not looking for just fun Maybe I could be the one Oh baby 예민하대 나 "));
-	m_vQuestScript.push_back(TEXT("lately 너 없이는 매일 매일이 yeah 재미없어 어쩌지 I just want you Call my phone right now I just wanna hear you're mine "));
-	m_vQuestScript.push_back(TEXT("'Cause I know what you like boy You're my chemical hype boy 내 지난날들은 눈 뜨면 잊는 꿈 Hype boy 너만 원해 Hype boy 내가 "));
+	m_vQuestScript.push_back(TEXT("우리 마을에 온 것을 환영하네. 나는 이 마을의 촌장일세."));
+	m_vQuestScript.push_back(TEXT("음? 성으로 가고싶다고? 안타깝지만 자네의 레벨이 너무 낮네. 이 마을을 벗어나는 것도 위험할걸세."));
+	m_vQuestScript.push_back(TEXT("레벨을 올리기 위해 퀘스트를 주겠네. 경험이 오를게야."));
+	m_vQuestScript.push_back(TEXT("저쪽의 포탈을 타고 나가 악어 5마리만 잡아오게."));
 
-	m_vNotClearScript.push_back(TEXT(""));
+	m_vNotClearScript.push_back(TEXT("이렇게 시간을 버리다간 성은 커녕 이 마을에서 나가지도 못할걸세. 빨리 가서 잡아오게!"));
 	
-	m_vNormalScript.push_back(TEXT(""));
-	m_vNormalScript.push_back(TEXT(""));
-	m_vNormalScript.push_back(TEXT(""));
+	m_vNormalScript.push_back(TEXT("안녕하신가. 나는 이 마을의 촌장이라네. 새로운 모험가는 언제나 환영일세."));
+
+	m_vClearScript.push_back(TEXT("오오! 정말로 잡아온 것인가? 마을의 골칫덩이들을 잡아줘서 고맙네."));
+	m_vClearScript.push_back(TEXT("이건 약소하지만 우리 마을을 도와준 보상일세."));
 }
 
 CVillage_Quest1 * CVillage_Quest1::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)

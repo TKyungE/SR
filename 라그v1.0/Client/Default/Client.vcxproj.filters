@@ -337,6 +337,9 @@
     <Filter Include="06. ShaderFiles">
       <UniqueIdentifier>{7b3e7fbb-e10f-45f8-97af-4d056f0fc69b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Quest\Manager">
+      <UniqueIdentifier>{85504d99-c431-4d4f-835f-24f48fe5f9fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -645,6 +648,12 @@
     <ClInclude Include="..\Public\UI.h">
       <Filter>04.UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\ClientQuest.h">
+      <Filter>02.GameObject\Quest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\QuestManager.h">
+      <Filter>02.GameObject\Quest\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -940,6 +949,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\UI.cpp">
       <Filter>04.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ClientQuest.cpp">
+      <Filter>02.GameObject\Quest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\QuestManager.cpp">
+      <Filter>02.GameObject\Quest\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

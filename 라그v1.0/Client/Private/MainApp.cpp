@@ -5,11 +5,13 @@
 #include "Level_Loading.h"
 #include "SoundMgr.h"
 #include "Loading.h"
-
+#include "QuestManager.h"
+#include "HuntQuest1.h"
 
 //test
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
+	, m_pQuestManager(CQuestManager::Get_Instance())
 {
 	Safe_AddRef(m_pGameInstance);
 }
@@ -25,6 +27,9 @@ HRESULT CMainApp::Initialize()
 	Graphic_Desc.eWinMode = GRAPHIC_DESC::MODE_WIN;
 
 	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, LEVEL_END, COLLISION_END, Graphic_Desc, &m_pGraphic_Device)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Quest()))
 		return E_FAIL;
 
 	if (FAILED(SetUp_SamplerState()))
@@ -50,6 +55,7 @@ void CMainApp::Tick(_float fTimeDelta)
 
 	m_pGameInstance->Tick_Engine(fTimeDelta);
 
+	m_pQuestManager->Tick();
 #ifdef _DEBUG
 	m_fTimeAcc += fTimeDelta;
 #endif // _DEBUG
@@ -162,6 +168,19 @@ HRESULT CMainApp::SetUp_SamplerState()
 	return S_OK;
 }
 
+HRESULT CMainApp::Ready_Quest(void)
+{
+	if (nullptr == m_pQuestManager)
+		return E_FAIL;
+	
+	//Quest
+	if (FAILED(m_pQuestManager->Add_Prototype(TEXT("Prototype_Quest_HuntQuest1"), 
+		CHuntQuest1::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 CMainApp * CMainApp::Create()
 {
 	CMainApp*	pInstance = new CMainApp();
@@ -179,6 +198,8 @@ void CMainApp::Free()
 {
 	CSoundMgr::Get_Instance()->Free();
 	CSoundMgr::Get_Instance()->Destroy_Instance();
+
+	Safe_Release(m_pQuestManager);
 
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pGraphic_Device);

@@ -212,7 +212,6 @@ HRESULT CMyButton::Off_SamplerState()
 	return S_OK;
 }
 
-
 CMyButton * CMyButton::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CMyButton*	pInstance = new CMyButton(pGraphic_Device);
