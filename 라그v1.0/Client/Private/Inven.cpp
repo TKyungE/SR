@@ -66,7 +66,16 @@ HRESULT CInven::Initialize(void* pArg)
 	Set_Slot();
 	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::HPPOTION ,0,10 }, 0);
 	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::MPPOTION ,1,20 }, 1);
-
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EARRING ,2,1 }, 2);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::TIARA ,3,1 }, 3);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::PANDANT ,4,1 }, 4);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BOBY ,5,1}, 5);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::STAFF ,6,1 }, 6);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ORB ,7,1 }, 7);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ROBE ,8,1 }, 8);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::SHOES ,9,1 }, 9);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BRACELET ,10,1}, 10);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::RING ,11,1}, 11);
 	return S_OK;
 }
 
@@ -339,6 +348,86 @@ void CInven::UseItem(CStatInfo::EITEM _eItem,_int Index)
 		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(-1, Index);
 		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index).iCount <= 0)
 			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::EITEM_END, Index);
+		break;
+	case CStatInfo::EARRING:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(0).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::EARRING,0,1 }, 0);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
+		break;
+	case CStatInfo::TIARA:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(1).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::TIARA,1,1 }, 1);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
+		break;
+	case CStatInfo::PANDANT:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(2).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::PANDANT,2,1 }, 2);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
+		break;
+	case CStatInfo::BOBY:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(3).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::BOBY,3,1 }, 3);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
+		break;
+	case CStatInfo::STAFF:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(4).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::STAFF,4,1 }, 4);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
+		break;
+	case CStatInfo::ORB:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(5).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::ORB,5,1 }, 5);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
+		break;
+	case CStatInfo::ROBE:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(6).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::ROBE,6,1 }, 6);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
+		break;
+	case CStatInfo::SHOES:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(7).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::SHOES,7,1 }, 7);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
+		break;
+	case CStatInfo::BRACELET:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(8).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::BRACELET,8,1 }, 8);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
+		break;
+	case CStatInfo::RING:
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(9).eItemNum == CStatInfo::EITEM_END)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::RING,9,1 }, 9);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END,Index,0 }, Index);
+			m_vecItem[Index] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index);
+		}
 		break;
 	default:
 		break;

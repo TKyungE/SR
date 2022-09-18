@@ -53,7 +53,9 @@ void CUseSkill::Tick(_float fTimeDelta)
 	LockPos();
 	Move_Frame(fTimeDelta);
 	
-	
+	m_fDeadTime += fTimeDelta;
+	if (m_fDeadTime > 2.f)
+		Set_Dead();
 }
 
 void CUseSkill::Late_Tick(_float fTimeDelta)

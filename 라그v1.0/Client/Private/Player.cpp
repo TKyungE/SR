@@ -524,6 +524,7 @@ void CPlayer::Use_Skill(_int iIndex)
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bThunder)
 	{
+		
 		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 		Skill_Thunder(TEXT("Layer_Skill"), m_fPickPoint);
 		m_bUseSkill = false;
@@ -535,6 +536,7 @@ void CPlayer::Use_Skill(_int iIndex)
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
+		
 		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 		Skill_Tornado(TEXT("Layer_Skill"), m_fPickPoint);
 		m_bUseSkill = false;
@@ -546,6 +548,7 @@ void CPlayer::Use_Skill(_int iIndex)
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireBall)
 	{
+		
 		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 		Skill_FireBall(TEXT("Layer_Skill"), m_fPickPoint);
 		m_bUseSkill = false;
@@ -639,14 +642,14 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		}
 	}
 
-	if (CKeyMgr::Get_Instance()->Key_Pressing('W') && m_bFly)
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP) && m_bFly)
 	{
 		m_fFly_fY -= 0.1f;
 		if (m_fFly_fY < -2.f)
 			m_fFly_fY = -2.f;
 	}
 
-	if (CKeyMgr::Get_Instance()->Key_Pressing('S') && m_bFly)
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN) && m_bFly)
 	{
 		m_fFly_fY += 0.1f;
 		if (m_fFly_fY > 0.f)

@@ -44,10 +44,10 @@ HRESULT CEquip::Initialize(void* pArg)
 	Safe_AddRef(pGameInstance);
 	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
-	m_fSizeX = 465.f;
-	m_fSizeY = 55.f;
-	m_fX = 400.f;
-	m_fY = 684.f;
+	m_fSizeX = 350.f;
+	m_fSizeY = 225.f;
+	m_fX = 300.f;
+	m_fY = 200.f;
 	m_pvecItem.reserve(10);
 	for (int i = 0; i < 10; ++i)
 	{
@@ -67,7 +67,7 @@ void CEquip::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	if (dynamic_cast<CUI*>(m_tInfo.pTerrain)->Get_Skill() == false)
+	if (dynamic_cast<CUI*>(m_tInfo.pTerrain)->Get_Equip() == false)
 	{
 		dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(false);
 		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(false);
@@ -75,116 +75,37 @@ void CEquip::Tick(_float fTimeDelta)
 		return;
 	}
 
-
 	Check_Slot();
-	Use_Slot();
+	
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
-
-	_int iDest;
-	for (int i = 0; i < 10; ++i)
-	{
-		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick() && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_InvenMouse())
-		{
-			if (PtInRect(&m_rcSlot[i], ptMouse))
-			{
-				if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-				{
-					if (m_pvecItem[i].eItemNum == CStatInfo::EITEM_END)
-					{
-						switch (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().eItemNum)
-						{
-						case CStatInfo::HPPOTION:
-						case CStatInfo::MPPOTION:
-							iDest = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iSlotNum;
-
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickSlot(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(iDest), i);
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemSlot(i, i);
-							m_pvecItem[i] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i);
-
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END ,iDest,0 }, iDest);
-
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(false);
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenMouse(false);
-							m_bMousePick = false;
-							break;
-						case CStatInfo::SKILL_THUNDER:
-						case CStatInfo::SKILL_TORNADO:
-						case CStatInfo::SKILL_FIREBALL:
-							iDest = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iSlotNum;
-
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickSlot(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_SkillSlot(iDest), i);
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemSlot(i, i);
-							m_pvecItem[i] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i);
-
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EITEM_END ,iDest,0 }, iDest);
-
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(false);
-							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenMouse(false);
-							m_bMousePick = false;
-							break;
-						default:
-							break;
-						}
-					}
-				}
-
-			}
-		}
-	}
-
-	for (int i = 0; i < 10; ++i)
-	{
-		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick() && !dynamic_cast<CStatInfo*>(m_StatInfo)->Get_InvenMouse())
-		{
-			if (PtInRect(&m_rcSlot[i], ptMouse))
-			{
-				iDest = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iSlotNum;
-				m_pSlotTrans[iDest]->Set_State(CTransform::STATE_POSITION, _float3((float)ptMouse.x - g_iWinSizeX * 0.5f, -(float)ptMouse.y + g_iWinSizeY * 0.5f, 0.f));
-
-				if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-				{
-					m_pSlotTrans[iDest]->Set_State(CTransform::STATE_POSITION, _float3((float)(m_rcSlot[iDest].left + 20) - g_iWinSizeX * 0.5f, -(float)(m_rcSlot[iDest].top + 20) + g_iWinSizeY * 0.5f, 0.f));
-
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount, iDest);
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemNum(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).eItemNum, iDest);
-
-
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iCount, i);
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemNum(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().eItemNum, i);
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemSlot(i, i);
-					m_pvecItem[iDest] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iDest);
-					m_pvecItem[i] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i);
-
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(false);
-					m_bMousePick = false;
-
-					break;
-
-				}
-
-			}
-		}
-	}
-
 
 	for (int i = 0; i < 10; ++i)
 	{
 		if (PtInRect(&m_rcSlot[i], ptMouse))
 		{
-			if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+			if (CKeyMgr::Get_Instance()->Key_Down(VK_RBUTTON))
 			{
 				if (m_pvecItem[i].eItemNum != CStatInfo::EITEM_END && !dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
 				{
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MousePick(true);
-					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_MouseItem(m_pvecItem[i]);
-					m_bMousePick = true;
-
+					
+					for (int j = 0; j < 24; ++j)
+					{
+						if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(j).eItemNum == CStatInfo::EITEM_END)
+						{
+							m_pvecItem[i].iSlotNum = j;
+							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem(m_pvecItem[i], j);
+							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_EquipSlot({ CStatInfo::EITEM_END,i,0 }, i);
+							m_pvecItem[i] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(i);
+							return;
+						}
+					}
 				}
 			}
 		}
 	}
+
 }
 
 void CEquip::Late_Tick(_float fTimeDelta)
@@ -220,26 +141,6 @@ HRESULT CEquip::Render()
 		m_pSlotTrans[i]->Bind_OnGraphicDev();
 		m_pSlotBuffer[i]->Render();
 	}
-	wstring szCount[10];
-	for (int i = 0; i < 10; ++i)
-	{
-		szCount[i] = TEXT("");
-		szCount[i] += to_wstring(m_pvecItem[i].iCount);
-	}
-
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
-	for (int i = 0; i < 10; ++i)
-	{
-		if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
-		{
-			if (m_pvecItem[i].iCount > 1)
-				pGameInstance->Get_Font()->DrawText(nullptr, szCount[i].c_str(), (int)szCount[i].length(), &m_rcCount[i], DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
-
-		}
-	}
-
-	Safe_Release(pGameInstance);
 
 
 	if (FAILED(Release_RenderState()))
@@ -257,7 +158,7 @@ HRESULT CEquip::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_QuickSlot"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Equip"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture2"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Item"), (CComponent**)&m_pItemTexture)))
 		return E_FAIL;
@@ -360,95 +261,37 @@ void CEquip::Free()
 }
 void CEquip::Set_Slot()
 {
-	_float fSizeX = 45.f;
-	_float fSizeY = 45.f;
+	_float fSizeX = 40.f;
+	_float fSizeY = 40.f;
 	_float fX;
 	_float fY;
-	for (int i = 0; i < 10; ++i)
+	_int k = 0;
+	for (int i = 0; i < 5; ++i)
 	{
-		fX = 430.f + 45.f * i;
-		fY = 683.f;
-		m_pSlotTrans[i]->Set_Scaled(_float3(fSizeX, fSizeY, 1.f));
-		m_pSlotTrans[i]->Set_State(CTransform::STATE_POSITION, _float3(fX - g_iWinSizeX * 0.5f, -fY + g_iWinSizeY * 0.5f, 0.f));
+		for (int j = 0; j < 2; ++j)
+		{
+			fX = 322.f + 305.f * j;
+			fY = 132.f + 40.f * i;
+			m_pSlotTrans[k]->Set_Scaled(_float3(fSizeX, fSizeY, 1.f));
+			m_pSlotTrans[k]->Set_State(CTransform::STATE_POSITION, _float3(fX - g_iWinSizeX * 0.5f, -fY + g_iWinSizeY * 0.5f, 0.f));
+			++k;
+		}
 	}
-	for (int i = 0; i < 10; ++i)
+	k = 0;
+	for (int i = 0; i < 5; ++i)
 	{
-		m_rcSlot[i] = { 410 + 45 * i,663,450 + 45 * i,703 };
-	}
-
-	for (int i = 0; i < 10; ++i)
-	{
-		m_rcCount[i] = { 410 + 45 * i,685,450 + 45 * i,723 };
+		for (int j = 0; j < 2; ++j)
+		{
+			m_rcSlot[k] = { int(302.f + 305.f * j),int(112.f + 40.f * i),int(342.f + 305.f * j),int(152.f + 40.f * i) };
+			++k;
+		}
 	}
 }
 void CEquip::Check_Slot()
 {
 	for (int i = 0; i < 10; ++i)
 	{
-		m_pvecItem[i] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i);
+		m_pvecItem[i] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(i);
 	}
 }
 
-void CEquip::Use_Slot()
-{
-	_int iIndex = 99;
-	if (CKeyMgr::Get_Instance()->Key_Down('1'))
-		iIndex = 0;
-	if (CKeyMgr::Get_Instance()->Key_Down('2'))
-		iIndex = 1;
-	if (CKeyMgr::Get_Instance()->Key_Down('3'))
-		iIndex = 2;
-	if (CKeyMgr::Get_Instance()->Key_Down('4'))
-		iIndex = 3;
-	if (CKeyMgr::Get_Instance()->Key_Down('5'))
-		iIndex = 4;
-	if (CKeyMgr::Get_Instance()->Key_Down('6'))
-		iIndex = 5;
-	if (CKeyMgr::Get_Instance()->Key_Down('7'))
-		iIndex = 6;
-	if (CKeyMgr::Get_Instance()->Key_Down('8'))
-		iIndex = 7;
-	if (CKeyMgr::Get_Instance()->Key_Down('9'))
-		iIndex = 8;
-	if (CKeyMgr::Get_Instance()->Key_Down('0'))
-		iIndex = 9;
-
-	if (iIndex != 99)
-	{
-		switch (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).eItemNum)
-		{
-		case CStatInfo::HPPOTION:
-			m_tInfo.pTarget->Set_Hp(-1000);
-			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, iIndex);
-			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount <= 0)
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemNum(CStatInfo::EITEM_END, iIndex);
-			break;
-		case CStatInfo::MPPOTION:
-			m_tInfo.pTarget->Set_Mp(100);
-			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, iIndex);
-			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount <= 0)
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemNum(CStatInfo::EITEM_END, iIndex);
-			break;
-		case CStatInfo::SKILL_THUNDER:
-			if (m_tInfo.pTarget->Get_Info().iMp >= 5)
-			{
-				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(1);
-			}
-			break;
-		case CStatInfo::SKILL_TORNADO:
-			if (m_tInfo.pTarget->Get_Info().iMp >= 5)
-			{
-				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(2);
-			}
-			break;
-		case CStatInfo::SKILL_FIREBALL:
-			if (m_tInfo.pTarget->Get_Info().iMp >= 5)
-			{
-				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(3);
-			}
-			break;
-		default:
-			break;
-		}
-	}
-}

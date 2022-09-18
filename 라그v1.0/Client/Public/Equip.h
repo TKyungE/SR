@@ -50,7 +50,7 @@ private:
 	HRESULT Release_RenderState();
 	void	Set_Slot();
 	void	Check_Slot();
-	void	Use_Slot();
+
 public:
 	static CEquip* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

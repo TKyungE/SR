@@ -45,21 +45,28 @@ public:
 	}ITEM;
 private:
 	STAT m_tStat;
+	STAT m_tMaxStat;
 	ITEM m_tItem[24];
 	ITEM m_pQuickSlot[10];
 	ITEM m_SkillSlot[7];
+	ITEM m_EquipSlot[10];
 	_bool	m_bMousePick = false;
 	_bool	m_bInven = false;
 	ITEM m_MouseItem;
-
+	_int m_iEquipStr = 0;
+	_int m_iEquipDex = 0;
+	_int m_iEquipInt = 0;
+	_int m_iEquipLuk = 0;
 public:
+	ITEM Get_EquipSlot(_int iNum) { return m_EquipSlot[iNum]; }
 	ITEM Get_SkillSlot(_int iNum) { return m_SkillSlot[iNum]; }
 	ITEM Get_QuickSlot(_int iNum) { return m_pQuickSlot[iNum]; }
 	ITEM Get_Item(_int iNum) { return m_tItem[iNum]; }
-	STAT Get_Stat() { return m_tStat; }
+	STAT Get_Stat() { return m_tMaxStat; }
 	_bool Get_MousePick() { return m_bMousePick; }
 	_bool Get_InvenMouse() { return m_bInven; }
 	ITEM Get_MouseItem() { return m_MouseItem; }
+	void Set_EquipSlot(ITEM _Item, _int iNum) { m_EquipSlot[iNum] = _Item; }
 	void Set_QuickSlot(ITEM _Item, _int iNum) { m_pQuickSlot[iNum] = _Item; }
 	void Set_InvenItem(ITEM _Item, _int iNum) { m_tItem[iNum] = _Item; }
 	void Set_MouseItem(ITEM _MouseItem) { m_MouseItem = _MouseItem; }
@@ -81,6 +88,8 @@ public:
 	void Set_INT(_int _iINT) { m_tStat.iINT += _iINT; }
 	void Set_LUK(_int _iLUK) { m_tStat.iLUK += _iLUK; }
 	void Set_StatsPoint(_int _Point) { m_tStat.iStatsPoint += _Point; }
+private:
+	void Check_Equip();
 };
 
 END
