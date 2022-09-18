@@ -19,7 +19,7 @@ public:
 	LPDIRECT3DDEVICE9			Get_Device(void) { return m_pDevice; }
 	LPD3DXSPRITE				Get_Sprite(void) { return m_pSprite; }
 	LPD3DXFONT					Get_Font(void) { return m_pFont; }
-
+	LPD3DXFONT					Get_Font2(void) { return m_pFont2; }
 public:
 	HRESULT		InitDevice(const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DDEVICE9* ppOut);
 	void		SetParameters(D3DPRESENT_PARAMETERS& d3dpp);
@@ -34,7 +34,7 @@ private:
 	// dx 상에서 2d 이미지를 출력해주는 com객체
 	LPD3DXSPRITE			m_pSprite;
 	LPD3DXFONT				m_pFont;
-
+	LPD3DXFONT				m_pFont2;
 public:
 	virtual void Free() override;
 };
