@@ -29,17 +29,21 @@ public:
 private: /* For.Components */
 	CTexture*				m_pTextureCom = nullptr;
 	CTexture*				m_pItemTexture = nullptr;
+	CTexture*				m_pTextTexture = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 	CTransform*				m_pSlotTrans[24];
 	CVIBuffer_Rect*			m_pSlotBuffer[24];
+	CTransform*				m_pTextTrans = nullptr;
+	CVIBuffer_Rect*			m_pTextBuffer = nullptr;
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 	RECT					m_rcSlot[24];
 	RECT					m_rcCount[24];
 	RECT					m_rcMoneyBox;
+	RECT					m_rcTextBox;
 	vector<CStatInfo::ITEM>			m_vecItem;
 	CGameObject*			m_StatInfo;
 	_bool					m_bMousePick = false;

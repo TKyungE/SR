@@ -32,7 +32,7 @@ public: /* For.Graphic_Device */
 	void		Render_End(HWND hWnd = 0);
 	LPD3DXSPRITE	Get_Sprite(void);
 	LPD3DXFONT		Get_Font(void);
-
+	LPD3DXFONT		Get_Font2(void);
 public: /* For.Input_Device */
 	_char Get_DIKState(_uchar eKeyID);
 	_char Get_DIMKeyState(DIMK eMouseKeyID);

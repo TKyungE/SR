@@ -75,7 +75,20 @@ HRESULT CGraphic_Device::InitDevice(const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DD
 		ERR_MSG(L"m_pFont Failed");
 		return E_FAIL;
 	}
+	D3DXFONT_DESCW	tFontInfo2;
+	ZeroMemory(&tFontInfo, sizeof(D3DXFONT_DESCW));
 
+	tFontInfo.Height = 15;
+	tFontInfo.Width = 8;
+	tFontInfo.Weight = FW_HEAVY;
+	tFontInfo.CharSet = HANGEUL_CHARSET;
+	lstrcpy(tFontInfo.FaceName, L"µ¸¿ò");
+
+	if (FAILED(D3DXCreateFontIndirect(m_pDevice, &tFontInfo, &m_pFont2)))
+	{
+		ERR_MSG(L"m_pFont2 Failed");
+		return E_FAIL;
+	}
 	*ppOut = m_pDevice;
 
 	Safe_AddRef(m_pDevice);
@@ -162,6 +175,7 @@ void CGraphic_Device::Render_End(HWND hWnd)
 void CGraphic_Device::Free()
 {
 	Safe_Release(m_pFont);
+	Safe_Release(m_pFont2);
 	Safe_Release(m_pSprite);
 
 	unsigned long		RefCnt = 0;
