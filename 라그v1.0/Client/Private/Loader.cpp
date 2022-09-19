@@ -222,7 +222,7 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	Safe_AddRef(pGameInstance);
 	//NPC
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_NPC"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/NPC%d.png"),8))))
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/NPC%d.png"),14))))
 		return E_FAIL;
 	//Pet 텍스쳐
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Poring_IDLE_Back"),
@@ -843,6 +843,13 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_ItemBox_Cube"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/BackGround/Box/%d.dds"), 1))))
+		return E_FAIL;
+
+
+	//   NPC 대화 ==========================================================================================
+
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Quest1"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Quest1/%d.png"), 3))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

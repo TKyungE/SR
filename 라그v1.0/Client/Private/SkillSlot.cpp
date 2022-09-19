@@ -172,10 +172,13 @@ HRESULT CSkillSlot::SetUp_Components()
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture2"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Item"), (CComponent**)&m_pItemTexture)))
 		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture3"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_TextBox2"), (CComponent**)&m_pTextTexture)))
+		return E_FAIL;
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer99"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pTextBuffer)))
+		return E_FAIL;
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -184,6 +187,8 @@ HRESULT CSkillSlot::SetUp_Components()
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform99"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTextTrans, &TransformDesc)))
 		return E_FAIL;
 	wstring szBuffer[7];
 	wstring szTrans[7];
@@ -267,7 +272,10 @@ void CSkillSlot::Free()
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pTextBuffer);
 	Safe_Release(m_pItemTexture);
+	Safe_Release(m_pTextTexture);
+	Safe_Release(m_pTextTrans);
 }
 void CSkillSlot::Set_Slot()
 {

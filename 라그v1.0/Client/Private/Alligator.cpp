@@ -83,7 +83,9 @@ void CAlligator::Tick(_float fTimeDelta)
 			Safe_Release(pGameInstance);
 			m_bAngry = true;
 		}
+
 		OnTerrain();
+
 		if (!m_bDead)
 			Check_Front();
 		if (m_eCurState == DEAD)

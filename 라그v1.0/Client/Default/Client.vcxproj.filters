@@ -334,6 +334,9 @@
     <Filter Include="05.Item\00.HpPotion">
       <UniqueIdentifier>{c0e212bc-1652-40f0-bebb-2e53e0926ae4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. ShaderFiles">
+      <UniqueIdentifier>{7b3e7fbb-e10f-45f8-97af-4d056f0fc69b}</UniqueIdentifier>
+</Filter>
     <Filter Include="04.UI\04.SkillSlot">
       <UniqueIdentifier>{a13dd497-110b-4d0c-b87d-4aff7ba54a51}</UniqueIdentifier>
     </Filter>
@@ -969,5 +972,10 @@
     <ResourceCompile Include="Client.rc">
       <Filter>98.Default</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl">
+      <Filter>06. ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

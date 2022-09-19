@@ -83,19 +83,61 @@ void CPlayer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
+	if (CKeyMgr::Get_Instance()->Key_Down('C'))
+	{
+		switch (g_bFirst)
+		{
+		case true:
+			g_bFirst = false;
+			break;
+		case false:
+			m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			g_bFirst = true;
+			break;
+		}
+	}
+	if (!g_bFirst && !g_bCut)
+	{
+		if (GetKeyState('W') < 0)
+		{
+			m_pTransformCom->Go_Straight(fTimeDelta);
+		}
+
+		if (GetKeyState('S') < 0)
+		{
+			m_pTransformCom->Go_Backward(fTimeDelta);
+		}
+
+		if (GetKeyState('A') < 0)
+		{
+			m_pTransformCom->Go_Left(fTimeDelta);
+		}
+
+		if (GetKeyState('D') < 0)
+		{
+			m_pTransformCom->Go_Right(fTimeDelta);
+		}
+	}
+
+
 	Check_Stat();
 	OnTerrain();
 
 	if (!g_bCut)
 	{
-		if (!m_bUI)
+		
+		if (g_bFirst)
 		{
-			Key_Input(fTimeDelta);
+			if (!m_bUI)
+			{
+				Key_Input(fTimeDelta);
+			}
+
+			Player_Move(fTimeDelta);
+			Move_Frame(fTimeDelta);
+			Get_PickingPoint();
 		}
 
-		Player_Move(fTimeDelta);
-		Move_Frame(fTimeDelta);
-		Get_PickingPoint();
 	}
 	else
 	{
@@ -152,12 +194,32 @@ void CPlayer::Tick(_float fTimeDelta)
 void CPlayer::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+	/*if (GetKeyState('Q') & 0x8000)
+	{
+		CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+		Safe_AddRef(pInstance);
+
+		CLayer* pLayer = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Camera"));
+
+		Safe_AddRef(pLayer);
+
+		list<class CGameObject*> pGameObject = pLayer->Get_Objects();
+		pGameObject.front()->Set_bHit(true);
+		m_tInfo.bHit = true;
+
+		Safe_Release(pLayer);
+		Safe_Release(pInstance);
+	}*/
 
 	Motion_Change();
-	Check_Hit();
-	LevelUp();
 	
+	Check_Hit();
+	
+	LevelUp();
+
 	OnBillboard();
+
 	CheckColl();
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
@@ -185,9 +247,10 @@ HRESULT CPlayer::Render(void)
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
-
-	m_pVIBuffer->Render();
-
+	if (g_bFirst)
+	{
+		m_pVIBuffer->Render();
+	}
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 	
@@ -438,10 +501,11 @@ void CPlayer::OnBillboard()
 		m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
 
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	
+		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
+		m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	
 }
 
 HRESULT CPlayer::On_SamplerState()
@@ -1137,13 +1201,24 @@ void CPlayer::Check_Hit()
 		Safe_AddRef(pGameInstance);
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
-		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
+		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), m_tInfo.iLevelIndex, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+
+		CLayer* pLayer = pGameInstance->Find_Layer(m_tInfo.iLevelIndex,TEXT("Layer_Camera"));
+
+		Safe_AddRef(pLayer);
+
+		list<class CGameObject*> pGameObject = pLayer->Get_Objects();
+		pGameObject.front()->Set_bHit(true);
+
 		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
 		m_tInfo.bHit = false;
+
+		Safe_Release(pLayer);
+
 		Safe_Release(pGameInstance);
 	}
 }

@@ -106,6 +106,9 @@
     <Filter Include="01.Utility\05. Quest\Manager">
       <UniqueIdentifier>{0b9e48a7-3a2e-49d1-9e43-b164de9bb562}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Shader">
+      <UniqueIdentifier>{215675b3-31e0-434b-b115-492650cd50a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -200,6 +203,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\QuestManager.cpp">
       <Filter>01.Utility\05. Quest\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Shader.cpp">
+      <Filter>01.Utility\03.Components\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -310,6 +316,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\QuestManager.h">
       <Filter>01.Utility\05. Quest\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Shader.h">
+      <Filter>01.Utility\03.Components\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

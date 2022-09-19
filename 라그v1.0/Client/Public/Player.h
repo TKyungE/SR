@@ -114,6 +114,7 @@ private:
 	void Get_PickingPoint(void);
 	void LevelUp();
 	void Check_Stat();
+
 private:
 	_float3 m_fPickPoint = { 0.f, 0.f, 0.f };
 };

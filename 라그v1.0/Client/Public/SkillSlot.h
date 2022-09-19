@@ -34,6 +34,9 @@ private: /* For.Components */
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 	CTransform*				m_pSlotTrans[7];
 	CVIBuffer_Rect*			m_pSlotBuffer[7];
+	CTexture*				m_pTextTexture = nullptr;
+	CTransform*				m_pTextTrans = nullptr;
+	CVIBuffer_Rect*			m_pTextBuffer = nullptr;
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
@@ -41,7 +44,7 @@ private:
 	CGameObject*			m_StatInfo;
 	vector<CStatInfo::ITEM>			m_pvecItem;
 	_bool					m_bMousePick = false;
-
+	RECT					m_rcTextBox;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
