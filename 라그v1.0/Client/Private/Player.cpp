@@ -596,7 +596,7 @@ void CPlayer::Use_Skill(_int iIndex)
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_tInfo.iMp -= 5;
+		m_tInfo.iMp -= 20;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
@@ -608,7 +608,7 @@ void CPlayer::Use_Skill(_int iIndex)
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_tInfo.iMp -= 5;
+		m_tInfo.iMp -= 10;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireBall)
 	{

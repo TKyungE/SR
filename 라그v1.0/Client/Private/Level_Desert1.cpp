@@ -595,6 +595,9 @@ HRESULT CLevel_Desert1::Ready_Layer_UI(const _tchar * pLayerTag)
 	tInfo.bDead = false;
 	tInfo.pTarget = Info.pTarget;
 
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;

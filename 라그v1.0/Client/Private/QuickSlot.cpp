@@ -66,7 +66,7 @@ HRESULT CQuickSlot::Initialize(void* pArg)
 void CQuickSlot::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	Check_Slot();
+	Check_Slot(fTimeDelta);
 	Use_Slot();
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
@@ -223,7 +223,7 @@ HRESULT CQuickSlot::Render()
 	{
 		if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
 		{
-			if (m_pvecItem[i].iCount > 1)
+			if (m_pvecItem[i].iCount > 0)
 				pGameInstance->Get_Font()->DrawText(nullptr, szCount[i].c_str(), (int)szCount[i].length(), &m_rcCount[i], DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
 
 		}
@@ -371,10 +371,39 @@ void CQuickSlot::Set_Slot()
 		m_rcCount[i] = { 410 + 45 * i,685,450 + 45 * i,723 };
 	}
 }
-void CQuickSlot::Check_Slot()
+void CQuickSlot::Check_Slot(_float fTimeDelta)
 {
+	m_ThunderCool += fTimeDelta;
+	m_TornadoCool += fTimeDelta;
+	m_FireBall += fTimeDelta;
 	for (int i = 0; i < 10; ++i)
 	{
+		switch (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).eItemNum)
+		{
+		case CStatInfo::SKILL_THUNDER:
+			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount > 0 && m_ThunderCool > 1.f)
+			{
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1,i);
+				m_ThunderCool = 0.f;
+			}
+			break;
+		case CStatInfo::SKILL_TORNADO:
+			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount > 0 && m_TornadoCool > 1.f)
+			{
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, i);
+				m_TornadoCool = 0.f;
+			}
+			break;
+		case CStatInfo::SKILL_FIREBALL:
+			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount > 0 && m_FireBall > 1.f)
+			{
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, i);
+				m_FireBall = 0.f;
+			}
+			break;
+		default:
+			break;
+		}
 		m_pvecItem[i] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i);
 	}
 }
@@ -420,21 +449,27 @@ void CQuickSlot::Use_Slot()
 				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemNum(CStatInfo::EITEM_END, iIndex);
 			break;
 		case CStatInfo::SKILL_THUNDER:
-			if (m_tInfo.pTarget->Get_Info().iMp >= 5)
+			if (m_tInfo.pTarget->Get_Info().iMp >= 20 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
 			{
 				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(1);
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(10, iIndex);
+				m_ThunderCool = 0.f;
 			}
 			break;
 		case CStatInfo::SKILL_TORNADO:
-			if (m_tInfo.pTarget->Get_Info().iMp >= 5)
+			if (m_tInfo.pTarget->Get_Info().iMp >= 10 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
 			{
 				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(2);
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(5, iIndex);
+				m_TornadoCool = 0.f;
 			}
 			break;
 		case CStatInfo::SKILL_FIREBALL:
-			if (m_tInfo.pTarget->Get_Info().iMp >= 5)
+			if (m_tInfo.pTarget->Get_Info().iMp >= 5 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
 			{
 				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(3);
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(2, iIndex);
+				m_FireBall = 0.f;
 			}
 			break;
 		default:

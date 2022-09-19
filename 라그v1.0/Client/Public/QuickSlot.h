@@ -43,13 +43,15 @@ private:
 	CGameObject*			m_StatInfo;
 	vector<CStatInfo::ITEM>			m_pvecItem;
 	_bool					m_bMousePick = false;
-
+	_float					m_ThunderCool = 0.f;
+	_float					m_TornadoCool = 0.f;
+	_float					m_FireBall = 0.f;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
 	void	Set_Slot();
-	void	Check_Slot();
+	void	Check_Slot(_float fTimeDelta);
 	void	Use_Slot();
 public:
 	static CQuickSlot* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

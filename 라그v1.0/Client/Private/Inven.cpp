@@ -64,18 +64,19 @@ HRESULT CInven::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 	Set_Slot();
+	
 	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::HPPOTION ,0,10 }, 0);
 	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::MPPOTION ,1,20 }, 1);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EARRING ,2,1 }, 2);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::TIARA ,3,1 }, 3);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::PANDANT ,4,1 }, 4);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BOBY ,5,1}, 5);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::STAFF ,6,1 }, 6);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ORB ,7,1 }, 7);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ROBE ,8,1 }, 8);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::SHOES ,9,1 }, 9);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BRACELET ,10,1}, 10);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::RING ,11,1}, 11);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::TIARA ,2,1 }, 2);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BOBY ,3,1 }, 3);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::SHOES ,4,1 }, 4);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ROBE ,5,1}, 5);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::PANDANT ,6,1 }, 6);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EARRING ,7,1 }, 7);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BRACELET ,8,1 }, 8);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::RING ,9,1 }, 9);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::STAFF ,10,1}, 10);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ORB ,11,1}, 11);
 	return S_OK;
 }
 
@@ -291,37 +292,37 @@ HRESULT CInven::Render()
 					szText += TEXT("엘리게이터의독: \n 독니에서 추출한 독");
 					break;
 				case CStatInfo::MON2:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("윌로우의몸통: 윌로우는\n 튼튼한 목재로 사용 된다.");
 					break;
 				case CStatInfo::MON3:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("빅풋의발다박: 미식가들\n 사이에서 유명한 식재료.");
 					break;
 				case CStatInfo::MON4:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("도적의두건: 도적단을\n토벌했다는 증표로 쓰인다.");
 					break;
 				case CStatInfo::MON5:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("멀더러의식칼: 토막내기\n 좋은 식칼이다.");
 					break;
 				case CStatInfo::MON6:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("썩은붕대: 멀쩡한 붕대\n였지만 단델리온이\n사용하면서 썩었다.");
 					break;
 				case CStatInfo::MON7:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("아트로스의발톱: \n 매우 견고하여 좋은 무기\n 소재로 쓰이고 있다.");
 					break;
 				case CStatInfo::MON8:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("바포매트의뚜껑: 귀족들 \n 사이에서 장식품으로 \n 인기가 많다.");
 					break;
 				case CStatInfo::MON9:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("미노로스의우유: 칼슘이 \n풍부해 성장기 어린이한테 \n 좋은 음료다.");
 					break;
 				case CStatInfo::MON10:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("해골바가지: 물을 받아 \n 마시면 장수한다는데...");
 					break;
 				case CStatInfo::MON11:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("레이스의틀니: 노인들이 \n 갖고 싶어하는 템 \n 1순위 등극!");
 					break;
 				case CStatInfo::MON12:
-					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					szText += TEXT("좀비고기: 한번만 먹은\n사람이 없다는\n 전설의 식재료.");
 					break;
 
 				default:

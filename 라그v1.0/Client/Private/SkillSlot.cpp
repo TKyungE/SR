@@ -125,6 +125,10 @@ void CSkillSlot::Late_Tick(_float fTimeDelta)
 
 HRESULT CSkillSlot::Render()
 {
+	POINT		ptMouse;
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
+
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
@@ -148,10 +152,52 @@ HRESULT CSkillSlot::Render()
 		m_pSlotTrans[i]->Bind_OnGraphicDev();
 		m_pSlotBuffer[i]->Render();
 	}
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	_float3 vPos;
+	wstring szText = TEXT("");
+	if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+	{
+		for (int i = 0; i < 7; ++i)
+		{
+			if (PtInRect(&m_rcSlot[i], ptMouse))
+			{
+				if (m_pvecItem[i].eItemNum == CStatInfo::EITEM_END)
+					continue;
+				vPos = m_pSlotTrans[i]->Get_State(CTransform::STATE_POSITION);
+				vPos.x += 120;
+				vPos.y -= 20;
+				m_pTextTrans->Set_State(CTransform::STATE_POSITION, vPos);
+				m_rcTextBox = { m_rcSlot[i].left + 35,m_rcSlot[i].top,m_rcSlot[i].right + 250,m_rcSlot[i].bottom + 80 };
+				m_pTextTrans->Bind_OnGraphicDev();
+				m_pTextTexture->Bind_OnGraphicDev(0);
+				m_pTextBuffer->Render();
+
+				switch (m_pvecItem[i].eItemNum)
+				{
+				case CStatInfo::SKILL_THUNDER:
+					szText += TEXT("백만볼트: Mp 20 소모 \n 번개가 무수히 떨어진다.");
+					break;
+				case CStatInfo::SKILL_TORNADO:
+ 					szText += TEXT("토네이도: Mp 10 소모 \n 토네이도를 일으켜 \n 지속 피해를 준다.");
+					break;
+				case CStatInfo::SKILL_FIREBALL:
+					szText += TEXT("파이어볼: Mp 5 소모 \n 화염구를 발사 한다.");
+					break;
+			
+				default:
+					break;
+				}
 
 
+				pGameInstance->Get_Font2()->DrawText(nullptr, szText.c_str(), (int)szText.length(), &m_rcTextBox, DT_LEFT, D3DCOLOR_ARGB(255, 0, 0, 0));
+				break;
+			}
+		}
+
+	}
 	
-
+	Safe_Release(pGameInstance);
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
@@ -283,6 +329,7 @@ void CSkillSlot::Set_Slot()
 	_float fSizeY = 20.f;
 	_float fX;
 	_float fY;
+	m_pTextTrans->Set_Scaled(_float3(200, 80, 1.f));
 	for (int i = 0; i < 7; ++i)
 	{
 		fX = 432.f + 71.f * i;
