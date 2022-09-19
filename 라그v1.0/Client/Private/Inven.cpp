@@ -219,120 +219,122 @@ HRESULT CInven::Render()
 		}
 	}
 	pGameInstance->Get_Font()->DrawText(nullptr, szMoney.c_str(), (int)szMoney.length(), &m_rcMoneyBox, DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
-	
-
 	_float3 vPos;
 	wstring szText = TEXT("");
-	for (int i = 0; i < 24; ++i)
+	if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
 	{
-		if (PtInRect(&m_rcSlot[i], ptMouse))
+		for (int i = 0; i < 24; ++i)
 		{
-			vPos = m_pSlotTrans[i]->Get_State(CTransform::STATE_POSITION);
-			vPos.x += 130;
-			m_pTextTrans->Set_State(CTransform::STATE_POSITION, vPos);
-			m_rcTextBox = { (int)vPos.x + 550,(int)vPos.y - 30,(int)vPos.x + 720,(int)vPos.y + 50 };
-			m_pTextTrans->Bind_OnGraphicDev();
-			m_pTextTexture->Bind_OnGraphicDev(0);
-			m_pTextBuffer->Render();
-			//{ HPPOTION,MPPOTION,GOLD,ENGINE,TIARA,BOBY,SHOES,ROBE,PANDANT,EARRING,BRACELET,RING,STAFF,ORB,RIDEEGG,PETEGG,WING,
-			//	MON1,MON2, MON3, MON4, MON5, MON6, MON7, MON8, MON9, MON10, MON11, MON12,SKILL_THUNDER,SKILL_TORNADO,SKILL_FIREBALL,EITEM_END };
-			switch (m_vecItem[i].eItemNum)
+			if (PtInRect(&m_rcSlot[i], ptMouse))
 			{
-			case CStatInfo::HPPOTION:
-				szText += TEXT("빨강포션: HP를 1000\n 회복 시켜준다.");
-				break;
-			case CStatInfo::MPPOTION:
-				szText += TEXT("파랑포션: MP를 100\n 회복 시켜준다.");
-				break;
-			case CStatInfo::ENGINE:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::TIARA:
-				szText += TEXT("쥬신티아라: DEX + 5 \n     INT + 5");
-				break;
-			case CStatInfo::BOBY:
-				szText += TEXT("쥬신타이즈:DEX + 10");
-				break;
-			case CStatInfo::SHOES:
-				szText += TEXT("쥬신슈즈: DEX + 5 \n     LUK + 5");
-				break;
-			case CStatInfo::ROBE:
-				szText += TEXT("쥬신로브: LUK + 5 \n     INT + 5");
-				break;
-			case CStatInfo::PANDANT:
-				szText += TEXT("쥬신팬던트: INT + 5");
-				break;
-			case CStatInfo::EARRING:
-				szText += TEXT("쥬신귀걸이:LUK + 10");
-				break;
-			case CStatInfo::BRACELET:
-				szText += TEXT("쥬신팔찌: STR + 5 \n     DEX + 5");
-				break;
-			case CStatInfo::RING:
-				szText += TEXT("쥬신반지: STR + 5 \n     LUK + 5");
-				break;
-			case CStatInfo::STAFF:
-				szText += TEXT("쥬신스태프:STR + 10");
-				break;
-			case CStatInfo::ORB:
-				szText += TEXT("쥬신오브: STR + 5 \n     INT + 5");
-				break;
-			case CStatInfo::RIDEEGG:
-				szText += TEXT("알파카알: 대박당첨\n 얼마에 뽑으심?");
-				break;
-			case CStatInfo::PETEGG:
-				szText += TEXT("포링알: 포링의알\n 아이템을 주워준다.");
-				break;
-			case CStatInfo::WING:
-				szText += TEXT("요정날개: 하늘을 \n 날개 해준다는 그!아이템");
-				break;
-			case CStatInfo::MON1:
-				szText += TEXT("엘리게이터의독: \n 독니에서 추출한 독");
-				break;
-			case CStatInfo::MON2:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON3:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON4:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON5:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON6:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON7:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON8:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON9:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON10:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON11:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-			case CStatInfo::MON12:
-				szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
-				break;
-		
-			default:
+				if(m_vecItem[i].eItemNum == CStatInfo::EITEM_END)
+					continue;
+				vPos = m_pSlotTrans[i]->Get_State(CTransform::STATE_POSITION);
+				vPos.x += 130;
+				m_pTextTrans->Set_State(CTransform::STATE_POSITION, vPos);
+				m_rcTextBox = { m_rcSlot[i].left + 60,m_rcSlot[i].top,m_rcSlot[i].right + 250,m_rcSlot[i].bottom + 80 };
+				m_pTextTrans->Bind_OnGraphicDev();
+				m_pTextTexture->Bind_OnGraphicDev(0);
+				m_pTextBuffer->Render();
+
+				switch (m_vecItem[i].eItemNum)
+				{
+				case CStatInfo::HPPOTION:
+					szText += TEXT("빨강포션: HP를 1000\n 회복 시켜준다.");
+					break;
+				case CStatInfo::MPPOTION:
+					szText += TEXT("파랑포션: MP를 100\n 회복 시켜준다.");
+					break;
+				case CStatInfo::ENGINE:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::TIARA:
+					szText += TEXT("쥬신티아라: DEX + 5 \n     INT + 5");
+					break;
+				case CStatInfo::BOBY:
+					szText += TEXT("쥬신타이즈:DEX + 10");
+					break;
+				case CStatInfo::SHOES:
+					szText += TEXT("쥬신슈즈: DEX + 5 \n     LUK + 5");
+					break;
+				case CStatInfo::ROBE:
+					szText += TEXT("쥬신로브: LUK + 5 \n     INT + 5");
+					break;
+				case CStatInfo::PANDANT:
+					szText += TEXT("쥬신팬던트: INT + 5");
+					break;
+				case CStatInfo::EARRING:
+					szText += TEXT("쥬신귀걸이:LUK + 10");
+					break;
+				case CStatInfo::BRACELET:
+					szText += TEXT("쥬신팔찌: STR + 5 \n     DEX + 5");
+					break;
+				case CStatInfo::RING:
+					szText += TEXT("쥬신반지: STR + 5 \n     LUK + 5");
+					break;
+				case CStatInfo::STAFF:
+					szText += TEXT("쥬신스태프:STR + 10");
+					break;
+				case CStatInfo::ORB:
+					szText += TEXT("쥬신오브: STR + 5 \n     INT + 5");
+					break;
+				case CStatInfo::RIDEEGG:
+					szText += TEXT("알파카알: 대박당첨\n 얼마에 뽑으심?");
+					break;
+				case CStatInfo::PETEGG:
+					szText += TEXT("포링알: 포링의알\n 아이템을 주워준다.");
+					break;
+				case CStatInfo::WING:
+					szText += TEXT("요정날개: 하늘을 \n 날개 해준다는 그!아이템");
+					break;
+				case CStatInfo::MON1:
+					szText += TEXT("엘리게이터의독: \n 독니에서 추출한 독");
+					break;
+				case CStatInfo::MON2:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON3:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON4:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON5:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON6:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON7:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON8:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON9:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON10:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON11:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+				case CStatInfo::MON12:
+					szText += TEXT("비행정엔진: 비행정의\n핵심 부품이다.");
+					break;
+
+				default:
+					break;
+				}
+
+				
+				pGameInstance->Get_Font2()->DrawText(nullptr, szText.c_str(), (int)szText.length(), &m_rcTextBox, DT_LEFT, D3DCOLOR_ARGB(255, 0, 0, 0));
 				break;
 			}
-
-
-
-			break;
 		}
+		
 	}
-	pGameInstance->Get_Font2()->DrawText(nullptr, szText.c_str(), (int)szText.length(), &m_rcTextBox, DT_LEFT, D3DCOLOR_ARGB(255, 0, 0, 0));
 	Safe_Release(pGameInstance);
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;

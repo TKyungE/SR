@@ -29,12 +29,12 @@ public:
 private: /* For.Components */
 	CTexture*				m_pTextureCom = nullptr;
 	CTexture*				m_pItemTexture = nullptr;
-	CTexture*				m_pTextTexture = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 	CTransform*				m_pSlotTrans[24];
 	CVIBuffer_Rect*			m_pSlotBuffer[24];
+	CTexture*				m_pTextTexture = nullptr;
 	CTransform*				m_pTextTrans = nullptr;
 	CVIBuffer_Rect*			m_pTextBuffer = nullptr;
 private:
