@@ -49,10 +49,13 @@ HRESULT CAlligator::Initialize(void * pArg)
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_tInfo.iExp = 20;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
+	
 	Safe_AddRef(pGameInstance);
+	
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.5f,1.f };
@@ -77,11 +80,18 @@ void CAlligator::Tick(_float fTimeDelta)
 		if (m_tInfo.iMp == 2 && !m_bAngry)
 		{
 			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+			if (nullptr == pGameInstance)
+				return;
+
 			Safe_AddRef(pGameInstance);
+			
 			CGameObject::INFO tInfo;
 			tInfo.pTarget = this;
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			
 			Safe_Release(pGameInstance);
+			
 			m_bAngry = true;
 		}
 
@@ -89,6 +99,7 @@ void CAlligator::Tick(_float fTimeDelta)
 
 		if (!m_bDead)
 			Check_Front();
+
 		if (m_eCurState == DEAD)
 		{
 			if (m_tFrame.iFrameStart == 3)
@@ -173,6 +184,8 @@ void CAlligator::Late_Tick(_float fTimeDelta)
 		OnBillboard();
 
 		CGameInstance* pInstance = CGameInstance::Get_Instance();
+		if (nullptr == pInstance)
+			return;
 
 		Safe_AddRef(pInstance);
 
@@ -181,6 +194,7 @@ void CAlligator::Late_Tick(_float fTimeDelta)
 			if (nullptr != m_pRendererCom)
 				m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 		}
+
 		Safe_Release(pInstance);
 	}
 }
@@ -191,10 +205,12 @@ HRESULT CAlligator::Render(void)
 	{
 		if (FAILED(__super::Render()))
 			return E_FAIL;
+
 		Off_SamplerState();
 
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
+
 		TextureRender();
 
 		if (FAILED(SetUp_RenderState()))
@@ -204,7 +220,9 @@ HRESULT CAlligator::Render(void)
 
 		if (FAILED(Release_RenderState()))
 			return E_FAIL;
+
 		On_SamplerState();
+		
 		if (g_bCollider)
 			m_pColliderCom->Render();
 	}
@@ -262,8 +280,12 @@ HRESULT CAlligator::SetUp_RenderState(void)
 
 HRESULT CAlligator::Release_RenderState(void)
 {
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
+
 	return S_OK;
 }
 
@@ -272,16 +294,27 @@ void CAlligator::Check_Hit()
 	if (m_tInfo.bHit)
 	{
 		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		if (nullptr == pGameInstance)
+			return;
+		
 		Safe_AddRef(pGameInstance);
+		
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo)))
+			return;
+		
 		tInfo.vPos = m_tInfo.vTargetPos;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo)))
+			return;
+		
 		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
 		m_tInfo.bHit = false;
+		
 		Safe_Release(pGameInstance);
 	}
 }
@@ -341,7 +374,11 @@ void CAlligator::Chase2(_float fTimeDelta)
 	_float3 MinTarget;
 	_float HelpDistance = 0.f;
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	
 	Safe_AddRef(pGameInstance);
 
 	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster")) != nullptr)
@@ -420,6 +457,7 @@ void CAlligator::Chase2(_float fTimeDelta)
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 		}
 	}
+
 	Safe_Release(pGameInstance);
 }
 void CAlligator::Chase3(_float fTimeDelta)
@@ -472,7 +510,9 @@ void CAlligator::OnTerrain()
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return;
+
 	Safe_AddRef(pGameInstance);
+	
 	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
@@ -486,6 +526,7 @@ void CAlligator::OnTerrain()
 	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
 	Safe_Release(pGameInstance);
 }
 
@@ -566,12 +607,16 @@ HRESULT CAlligator::Off_SamplerState()
 HRESULT CAlligator::Skill_PoisonArrow(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+	
 	Safe_AddRef(pGameInstance);
 
 	CGameObject::INFO tInfo;
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 	tInfo.vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PoisonArrow"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;
 	
@@ -667,7 +712,7 @@ void CAlligator::Check_Front()
 		m_bDead = true;
 		Motion_Change();
 
-		/*CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
 		if (nullptr == pQuestManager)
 			return;
 		
@@ -675,16 +720,24 @@ void CAlligator::Check_Front()
 
 		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
 
-		Safe_Release(pQuestManager);*/
+		Safe_Release(pQuestManager);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
 	{
 		m_bRun = true;
+
 		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		if (nullptr == pGameInstance)
+			return;
+		
 		Safe_AddRef(pGameInstance);
+
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo)))
+			return;
+
 		Safe_Release(pGameInstance);
 	}
 }
@@ -846,16 +899,25 @@ HRESULT CAlligator::RespawnMonster()
 	m_bIDLE = false;
 	m_bRespawn = false;
 	m_bAngry = false;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
+	
 	Safe_AddRef(pGameInstance);
+	
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.5f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
+	
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo)))
+		return E_FAIL;
+	
 	tInfo.vPos = { 0.8f,0.8f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo)))
+		return E_FAIL;
+	
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
@@ -892,6 +954,7 @@ void CAlligator::CheckColl()
 		return;
 
 	Safe_AddRef(pInstance);
+
 	CGameObject* pTarget;
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
 	{
@@ -955,18 +1018,24 @@ void CAlligator::CheckColl()
 void CAlligator::DropItem()
 {
 	_int iDest = rand() % 2;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return;
+
 	Safe_AddRef(pGameInstance);
+
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
 	if (iDest == 0)
 		tInfo.iLv = 2;
 	else
 		tInfo.iLv = 17;
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Item"), &tInfo);
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Item"), &tInfo)))
+		return;
 
 	Safe_Release(pGameInstance);
 }

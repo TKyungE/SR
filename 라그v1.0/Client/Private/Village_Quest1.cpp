@@ -4,6 +4,7 @@
 #include "HuntQuest1.h"
 #include "TextBox.h"
 #include "QuestManager.h"
+#include "Player.h"
 
 CVillage_Quest1::CVillage_Quest1(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -95,12 +96,18 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
+	CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+	if (nullptr == pQuestManager)
+		return;
+
+	Safe_AddRef(pQuestManager);
+
+	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")))
 	{
-		g_bCut = true;
-	
-		if (nullptr == m_pQuest)
+		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
 		{
+			g_bCut = true;
+
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vQuestScript.size();
 			tTInfo.pScript = new wstring[m_vQuestScript.size()];
@@ -113,8 +120,15 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
 		}
-		else if (!m_pQuest->Get_Clear())
+		else
+			m_iQuestTex = 0;
+	}
+	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")) && !pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
+	{
+		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
 		{
+			g_bCut = true;
+
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vNotClearScript.size();
 			tTInfo.pScript = new wstring[m_vNotClearScript.size()];
@@ -126,8 +140,15 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
 		}
-		else if (m_pQuest->Get_Clear())
+		else
+			m_iQuestTex = 2;
+	}
+	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")) && pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
+	{
+		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
 		{
+			g_bCut = true;
+
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vClearScript.size();
 			tTInfo.pScript = new wstring[m_vClearScript.size()];
@@ -135,12 +156,20 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 			for (_int i = 0; i < m_vClearScript.size(); ++i)
 				tTInfo.pScript[i] = m_vClearScript[i];
 
+			tTInfo.iQuestIndex = 1;
 			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
 		}
 		else
+			m_iQuestTex = 1;
+	}
+	else
+	{
+		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
 		{
+			g_bCut = true;
+
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vNormalScript.size();
 			tTInfo.pScript = new wstring[m_vNormalScript.size()];
@@ -152,32 +181,35 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
 		}
+		else
+			m_bQuestRender = false;
 	}
 
-	if (g_bQuest)
+	if (g_bQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")))
 	{
-		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
-		if (nullptr == pQuestManager)
-			return;
-
-		Safe_AddRef(pQuestManager);
-
 		CHuntQuest1::QINFO tQInfo;
 		tQInfo.iHuntGoal = 5;
 		tQInfo.eMonType = MON_ALLIGATOR;
 
-		m_pQuest = pQuestManager->Add_Quest(TEXT("Prototype_Quest_HuntQuest1"), TEXT("Quest_HuntQuest1"), &tQInfo);
-		if (nullptr == m_pQuest)
+		if (FAILED(pQuestManager->Add_Quest(TEXT("Prototype_Quest_HuntQuest1"), TEXT("Quest_HuntQuest1"), &tQInfo)))
 		{
 			ERR_MSG(TEXT("Failed to Add Quest : HuntQuest1"));
 			return;
 		}
 
-		m_iQuestTex = 2;
+		g_bQuest = false;
+		g_bReward = false;
+	}
 
-		Safe_Release(pQuestManager);
+	if (g_bReward && pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
+	{
+		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_HuntQuest1"))))
+			return;
+	
+		m_tInfo.pTarget->Set_Exp(500);
 
 		g_bQuest = false;
+		g_bReward = false;
 	}
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
@@ -187,6 +219,8 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	}
 
 	m_fAlpha += 0.006f;
+
+	Safe_Release(pQuestManager);
 
 	Safe_Release(pInstance);
 }
@@ -250,7 +284,6 @@ HRESULT CVillage_Quest1::Render(void)
 		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &SaveViewMatrix);
 		m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
 
-
 	/*	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);*/
 
@@ -263,6 +296,7 @@ HRESULT CVillage_Quest1::Render(void)
 
 		/*if (FAILED(m_pCharTextureCom->Bind_OnGraphicDev(0)))
 			return E_FAIL;*/
+
 		m_pShaderCom->Begin(1);
 
 		m_pCharVIBufferCom->Render();
@@ -280,8 +314,6 @@ HRESULT CVillage_Quest1::Render(void)
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
 		return E_FAIL;
 
-
-
 	m_pVIBuffer->Render();
 
 	if (FAILED(m_pQuestTransformCom->Bind_OnGraphicDev()))
@@ -290,7 +322,8 @@ HRESULT CVillage_Quest1::Render(void)
 	if (FAILED(m_pQuestTextureCom->Bind_OnGraphicDev(m_iQuestTex)))
 		return E_FAIL;
 	
-	m_pQuestVIBufferCom->Render();
+	if (m_bQuestRender)
+		m_pQuestVIBufferCom->Render();
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
@@ -435,7 +468,7 @@ void CVillage_Quest1::Ready_Script(void)
 	m_vNormalScript.push_back(TEXT("안녕하신가. 나는 이 마을의 촌장이라네. 새로운 모험가는 언제나 환영일세."));
 
 	m_vClearScript.push_back(TEXT("오오! 정말로 잡아온 것인가? 마을의 골칫덩이들을 잡아줘서 고맙네."));
-	m_vClearScript.push_back(TEXT("이건 약소하지만 우리 마을을 도와준 보상일세."));
+	m_vClearScript.push_back(TEXT("이건 약소하지만 우리 마을을 도와준 보상일세. \n\n보상 : 경험치 500"));
 }
 
 CVillage_Quest1 * CVillage_Quest1::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)

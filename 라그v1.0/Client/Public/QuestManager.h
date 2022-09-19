@@ -15,11 +15,12 @@ private:
 
 public:
 	HRESULT Add_Prototype(const _tchar* pPrototypeTag, class CClientQuest* pPrototype);
-	class CClientQuest* Add_Quest(const _tchar* pPrototypeTag, const _tchar* pQuestTag, void* pArg = nullptr);
+	HRESULT Add_Quest(const _tchar* pPrototypeTag, const _tchar* pQuestTag, void* pArg = nullptr);
 	void Tick(void);
-	_bool Find_Finish(const _tchar* pQuestTag);
-	_bool Find_Active(const _tchar* pQuestTag);
+	class CClientQuest* Find_Finish(const _tchar* pQuestTag);
+	class CClientQuest* Find_Active(const _tchar* pQuestTag);
 	void Increase_Count(MONSTERTYPE eType);
+	HRESULT Clear_Quest(const _tchar* pQuestTag);
 	
 private:
 	map<const _tchar*, class CClientQuest*>			m_Prototypes;

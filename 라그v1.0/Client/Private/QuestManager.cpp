@@ -18,54 +18,47 @@ HRESULT CQuestManager::Add_Prototype(const _tchar * pPrototypeTag, CClientQuest 
 	return S_OK;
 }
 
-CClientQuest * CQuestManager::Add_Quest(const _tchar * pPrototypeTag, const _tchar* pQuestTag, void * pArg)
+HRESULT CQuestManager::Add_Quest(const _tchar * pPrototypeTag, const _tchar* pQuestTag, void * pArg)
 {
 	CClientQuest* pPrototype = Find_Prototype(pPrototypeTag);
 	if (nullptr == pPrototype)
-		return nullptr;
+		return E_FAIL;
 
 	CClientQuest* pQuest = pPrototype->Clone(pArg);
 	if (nullptr == pQuest)
-		return nullptr;
+		return E_FAIL;
 	
 	m_Actives.emplace(pQuestTag, pQuest);
 
-	return pQuest;
+	return S_OK;
 }
 
 void CQuestManager::Tick(void)
 {
-	for (auto iter = m_Actives.begin(); iter != m_Actives.end();)
+	for (auto iter = m_Actives.begin(); iter != m_Actives.end(); ++iter)
 	{
 		iter->second->Tick();
-		if (iter->second->Get_Clear())
-		{
-			m_Finished.emplace(iter->first, iter->second);
-			iter = m_Actives.erase(iter);
-		}
-		else
-			++iter;
 	}
 }
 
-_bool CQuestManager::Find_Finish(const _tchar * pQuestTag)
+CClientQuest * CQuestManager::Find_Finish(const _tchar * pQuestTag)
 {
 	auto iter = find_if(m_Finished.begin(), m_Finished.end(), CTag_Finder(pQuestTag));
 
 	if (iter == m_Finished.end())
-		return false;
+		return nullptr;
 
-	return true;
+	return iter->second;
 }
 
-_bool CQuestManager::Find_Active(const _tchar * pQuestTag)
+CClientQuest * CQuestManager::Find_Active(const _tchar * pQuestTag)
 {
 	auto iter = find_if(m_Actives.begin(), m_Actives.end(), CTag_Finder(pQuestTag));
 
 	if (iter == m_Actives.end())
-		return false;
+		return nullptr;
 
-	return true;
+	return iter->second;
 }
 
 void CQuestManager::Increase_Count(MONSTERTYPE eType)
@@ -73,10 +66,29 @@ void CQuestManager::Increase_Count(MONSTERTYPE eType)
 	for (auto& iter : m_Actives)
 	{
 		if (eType == dynamic_cast<CHuntQuest1*>((&iter)->second)->Get_QInfo().eMonType)
-		{
 			dynamic_cast<CHuntQuest1*>((&iter)->second)->Increase_Count();
+	}
+}
+
+HRESULT CQuestManager::Clear_Quest(const _tchar * pQuestTag)
+{
+	CClientQuest* pQuest = Find_Active(pQuestTag);
+	if (nullptr == pQuest)
+		return E_FAIL;
+	
+	if (pQuest->Get_Clear())
+	{
+		m_Finished.emplace(pQuestTag, pQuest);
+		for (auto iter = m_Actives.begin(); iter != m_Actives.end();)
+		{
+			if (!lstrcmp(iter->first, pQuestTag))
+				iter = m_Actives.erase(iter);
+			else
+				++iter;
 		}
 	}
+
+	return S_OK;
 }
 
 CClientQuest * CQuestManager::Find_Prototype(const _tchar * pPrototypeTag)
