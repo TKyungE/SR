@@ -164,7 +164,7 @@ HRESULT CHpPotion::Initialize(void * pArg)
 void CHpPotion::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	
 	OnTerrain();
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
@@ -182,7 +182,7 @@ void CHpPotion::Tick(_float fTimeDelta)
 	}
 
 	Safe_Release(pInstance);
-
+	
 }
 
 void CHpPotion::Late_Tick(_float fTimeDelta)
@@ -203,6 +203,7 @@ void CHpPotion::Late_Tick(_float fTimeDelta)
 			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 	}
 	Safe_Release(pInstance);
+	
 }
 
 HRESULT CHpPotion::Render(void)
@@ -283,6 +284,7 @@ void CHpPotion::CheckColl()
 		{
 			pTarget->Set_Money(iMoney);
 			Set_Dead();
+			Safe_Release(pInstance);
 			return;
 		}
 		for (int i = 0; i < 24; ++i)
@@ -291,6 +293,7 @@ void CHpPotion::CheckColl()
 			{
 				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(1, i);
 				Set_Dead();
+				Safe_Release(pInstance);
 				return;
 			}
 		}
@@ -301,6 +304,7 @@ void CHpPotion::CheckColl()
 				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum((CStatInfo::EITEM)m_tInfo.iLv, i);
 				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(1, i);
 				Set_Dead();
+				Safe_Release(pInstance);
 				return;
 			}
 		}
