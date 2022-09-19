@@ -309,6 +309,37 @@ void CHpPotion::CheckColl()
 			}
 		}
 	}
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PET, TEXT("Com_Collider"), &pTarget))
+	{
 
+		if (m_tInfo.iLv == 2)
+		{
+			m_tInfo.pTerrain->Set_Money(iMoney);
+			Set_Dead();
+			Safe_Release(pInstance);
+			return;
+		}
+		for (int i = 0; i < 24; ++i)
+		{
+			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i).eItemNum == m_tInfo.iLv)
+			{
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(1, i);
+				Set_Dead();
+				Safe_Release(pInstance);
+				return;
+			}
+		}
+		for (int i = 0; i < 24; ++i)
+		{
+			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(i).eItemNum == CStatInfo::EITEM_END)
+			{
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum((CStatInfo::EITEM)m_tInfo.iLv, i);
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(1, i);
+				Set_Dead();
+				Safe_Release(pInstance);
+				return;
+			}
+		}
+	}
 	Safe_Release(pInstance);
 }

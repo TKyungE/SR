@@ -1027,6 +1027,7 @@ void CBigfoot::DropItem()
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
+	tInfo.pTerrain = m_tInfo.pTarget;
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	if (iDest == 0)
 		tInfo.iLv = 2;
