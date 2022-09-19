@@ -33,6 +33,7 @@ public:
 	_bool Get_Clicked(void) { return m_bClicked; }
 	BUTTONTYPE Get_Type(void) { return m_eType; }
 	void TurnOff_Clicked(void) { m_bClicked = false; }
+	void Set_Type(_int iType) { m_eType = (BUTTONTYPE)iType; }
 
 public:
 	virtual HRESULT Initialize_Prototype(void) override;

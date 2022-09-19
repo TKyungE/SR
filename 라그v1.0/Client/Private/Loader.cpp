@@ -54,7 +54,6 @@
 #include "SwordSlice.h"
 #include "DandelionAttack.h"
 #include "Maiden.h"
-#include "HuntQuest1.h"
 #include "Drain.h"
 #include "PowerTotem.h"
 #include "BossSkillTarget.h"
@@ -1146,9 +1145,6 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Maiden"),
 		CMaiden::Create(m_pGraphic_Device))))
 		return E_FAIL;
-
-	
-
 
 	Safe_Release(pGameInstance);
 

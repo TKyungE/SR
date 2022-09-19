@@ -56,6 +56,9 @@ HRESULT CHpPotion::SetUp_RenderState(void)
 
 HRESULT CHpPotion::Release_RenderState(void)
 {
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+	
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
@@ -117,6 +120,8 @@ _float4x4 CHpPotion::Get_World(void)
 void CHpPotion::Free(void)
 {
 	__super::Free();
+
+	//Safe_Release(m_StatInfo);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
@@ -137,14 +142,17 @@ HRESULT CHpPotion::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
-	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
-	Safe_Release(pGameInstance);
 
+	CLayer* pLayer = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"));
+
+	m_StatInfo =pLayer->Get_Objects().front();
+
+	Safe_Release(pGameInstance);
+	
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
@@ -155,8 +163,6 @@ HRESULT CHpPotion::Initialize(void * pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.iHp = 9;
 	m_tInfo.iLevelIndex = m_tInfo.pTarget->Get_Info().iLevelIndex;
-
-
 
 	return S_OK;
 }
@@ -274,12 +280,14 @@ void CHpPotion::CheckColl()
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
 		return;
-	_int iMoney = rand() % 100 + 50;
+
 	Safe_AddRef(pInstance);
+
+	_int iMoney = rand() % 100 + 50;
+	
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, TEXT("Com_Collider"),COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 	{
-		
 		if (m_tInfo.iLv == 2)
 		{
 			pTarget->Set_Money(iMoney);

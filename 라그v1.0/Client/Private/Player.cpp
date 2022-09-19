@@ -125,7 +125,6 @@ void CPlayer::Tick(_float fTimeDelta)
 
 	if (!g_bCut)
 	{
-		
 		if (g_bFirst)
 		{
 			if (!m_bUI)
@@ -137,7 +136,6 @@ void CPlayer::Tick(_float fTimeDelta)
 			Move_Frame(fTimeDelta);
 			Get_PickingPoint();
 		}
-
 	}
 	else
 	{
@@ -146,27 +144,21 @@ void CPlayer::Tick(_float fTimeDelta)
 	}
 
 	if (m_tInfo.iHp >= m_tInfo.iMaxHp)
-	{
 		m_tInfo.iHp = m_tInfo.iMaxHp;
-	}
+	
 	if (GetKeyState('N') & 0x8000)
 	{
 		if (m_tInfo.iHp > 0)
-		{
 			m_tInfo.iHp -= 10;
-		}
-
 	}
 	if (GetKeyState('M') & 0x8000)
 	{
 		if (m_tInfo.iHp<m_tInfo.iMaxHp)
-		{
 			m_tInfo.iHp += 10;
-		}
+		
 		if (m_tInfo.iMp<m_tInfo.iMaxMp)
-		{
 			m_tInfo.iMp += 10;
-		}
+
 		m_tInfo.iExp += 10;
 	}
 
@@ -185,6 +177,7 @@ void CPlayer::Tick(_float fTimeDelta)
 	}
 
 	Safe_Release(pInstance);
+
 	if (m_tInfo.iMp > 0)
 	{
 		Use_Skill(99);

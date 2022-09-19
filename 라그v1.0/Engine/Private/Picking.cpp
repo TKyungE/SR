@@ -62,7 +62,7 @@ _bool CPicking::Intersect_InWorldSpace(_float3 vPointA, _float3 vPointB, _float3
 {
 	_float fDist;
 
-	if (true == D3DXIntersectTri(&vPointA, &vPointB, &vPointC, &m_MouseRayPos, &m_MouseRayDir, nullptr, nullptr, &fDist))
+	if (D3DXIntersectTri(&vPointA, &vPointB, &vPointC, &m_MouseRayPos, &m_MouseRayDir, nullptr, nullptr, &fDist))
 	{
 		*pOut = m_MouseRayPos + m_MouseRayDir * fDist;
 
@@ -76,7 +76,7 @@ _bool CPicking::Intersect_InLocalSpace(_float3 vPointA, _float3 vPointB, _float3
 {
 	_float fDist;
 
-	if (true == D3DXIntersectTri(&vPointA, &vPointB, &vPointC, &m_MouseRayPos_Local, &m_MouseRayDir_Local, nullptr, nullptr, &fDist))
+	if (D3DXIntersectTri(&vPointA, &vPointB, &vPointC, &m_MouseRayPos_Local, &m_MouseRayDir_Local, nullptr, nullptr, &fDist))
 	{
 		*pOut = m_MouseRayPos_Local + m_MouseRayDir_Local * fDist;
 

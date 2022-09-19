@@ -1,16 +1,14 @@
 #include "stdafx.h"
 #include "..\Public\HuntQuest1.h"
-#include "GameInstance.h"
-#include "Layer.h"
 
 CHuntQuest1::CHuntQuest1(LPDIRECT3DDEVICE9 pGraphic_Device)
-	: CQuest(pGraphic_Device)
+	: CClientQuest(pGraphic_Device)
 {
 	ZeroMemory(&m_tQInfo, sizeof(QINFO));
 }
 
 CHuntQuest1::CHuntQuest1(const CHuntQuest1 & rhs)
-	: CQuest(rhs)
+	: CClientQuest(rhs)
 {
 }
 
@@ -27,8 +25,6 @@ HRESULT CHuntQuest1::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	//m_bActive = true;
-
 	memcpy(&m_tQInfo, pArg, sizeof(QINFO));
 
 	iCount = 0;
@@ -40,25 +36,7 @@ void CHuntQuest1::Tick(void)
 {
 	__super::Tick();
 
-	if (iCount != m_tQInfo.iHuntGoal)
-	{
-		CGameInstance* pInstance = CGameInstance::Get_Instance();
-		if (nullptr == pInstance)
-			return;
-
-		Safe_AddRef(pInstance);
-
-		CLayer* pMonsterLayer = pInstance->Find_Layer(m_tQInfo.eLevelIndex, TEXT("Layer_Monster"));
-
-		for (auto& iter : pMonsterLayer->Get_Objects())
-		{
-			if ((m_tQInfo.eMonType == (MONSTERTYPE)iter->Get_Info().iMonsterType) && true == iter->Get_Info().bDead)
-				++iCount;
-		}
-
-		Safe_Release(pInstance);
-	}
-	else
+	if (iCount >= m_tQInfo.iHuntGoal)
 		m_bClear = true;
 }
 

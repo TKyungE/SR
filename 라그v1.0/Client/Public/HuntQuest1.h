@@ -1,25 +1,27 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Quest.h"
+#include "ClientQuest.h"
 
 BEGIN(Client)
 
-class CHuntQuest1 final : public CQuest
+class CHuntQuest1 final : public CClientQuest
 {
 public:
 	typedef struct tagQuestInfo
 	{
 		_uint iHuntGoal;
-		LEVEL eLevelIndex;
 		MONSTERTYPE eMonType;
-		CQuest* pQuest;
 	}QINFO;
 
 private:
 	CHuntQuest1(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CHuntQuest1(const CHuntQuest1& rhs);
 	virtual ~CHuntQuest1() = default;
+
+public:
+	QINFO Get_QInfo(void) { return m_tQInfo; }
+	void Increase_Count(void) { ++iCount; }
 
 public:
 	virtual HRESULT Initialize_Prototype(void) override;

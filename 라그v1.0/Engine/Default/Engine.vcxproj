@@ -178,8 +178,6 @@
     <ClInclude Include="..\public\Level_Manager.h" />
     <ClInclude Include="..\public\Object_Manager.h" />
     <ClInclude Include="..\Public\Picking.h" />
-    <ClInclude Include="..\Public\Quest.h" />
-    <ClInclude Include="..\Public\QuestManager.h" />
     <ClInclude Include="..\public\Renderer.h" />
     <ClInclude Include="..\Public\Shader.h" />
     <ClInclude Include="..\public\Texture.h" />
@@ -212,8 +210,6 @@
     <ClCompile Include="..\private\Level_Manager.cpp" />
     <ClCompile Include="..\private\Object_Manager.cpp" />
     <ClCompile Include="..\Private\Picking.cpp" />
-    <ClCompile Include="..\Private\Quest.cpp" />
-    <ClCompile Include="..\Private\QuestManager.cpp" />
     <ClCompile Include="..\private\Renderer.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
     <ClCompile Include="..\private\Texture.cpp" />

@@ -10,9 +10,6 @@
     <Filter Include="01.Utility\99.SuperClass">
       <UniqueIdentifier>{6065ef34-10b9-4992-92f3-2af525f0b68a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines">
-      <UniqueIdentifier>{a8ef49c9-cb0f-4272-abff-30e3db2d950e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\00.GameInstance">
       <UniqueIdentifier>{7214b60c-8b59-454f-bc4e-93aa7b30d19e}</UniqueIdentifier>
     </Filter>
@@ -100,14 +97,11 @@
     <Filter Include="01.Utility\04. Frustum">
       <UniqueIdentifier>{65a50a28-abc1-4879-8fa6-ab5888511e22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\05. Quest">
-      <UniqueIdentifier>{c33a312d-7634-45e6-bc6a-739aeaa3ad25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\05. Quest\Manager">
-      <UniqueIdentifier>{0b9e48a7-3a2e-49d1-9e43-b164de9bb562}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Shader">
       <UniqueIdentifier>{215675b3-31e0-434b-b115-492650cd50a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{a8ef49c9-cb0f-4272-abff-30e3db2d950e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -197,12 +191,6 @@
     </ClCompile>
     <ClCompile Include="..\private\GameObject.cpp">
       <Filter>01.Utility\02.GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Quest.cpp">
-      <Filter>01.Utility\05. Quest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\QuestManager.cpp">
-      <Filter>01.Utility\05. Quest\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Shader.cpp">
       <Filter>01.Utility\03.Components\Shader</Filter>
@@ -310,12 +298,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Frustum.h">
       <Filter>01.Utility\04. Frustum</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Quest.h">
-      <Filter>01.Utility\05. Quest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\QuestManager.h">
-      <Filter>01.Utility\05. Quest\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Shader.h">
       <Filter>01.Utility\03.Components\Shader</Filter>

@@ -17,6 +17,8 @@ bool g_bCollider = false;
 bool g_bTalk = false;
 bool g_bCut = false;
 bool g_bFirst = true;
+bool g_bQuest = false;
+bool g_bReward = false;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -289,6 +291,7 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo;
 	tInfo.iLevelIndex = LEVEL_TOWN;
 	tInfo.iHp = 1;
+	tInfo.pTarget = Info.pTarget;
 	for (auto& iter : m_vecNPC)
 	{
 		if (iter.iIndex == 0)

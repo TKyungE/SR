@@ -5,6 +5,8 @@
 float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture g_Texture;
 
+float g_fAlpha;
+
 sampler TextureSampler = sampler_state {
 	texture = g_Texture;
 	MINFILTER = linear;
@@ -76,6 +78,7 @@ PS_OUT PS_NPC(PS_IN In)
 	PS_OUT Out = (PS_OUT)0;
 
 	Out.vColor = tex2D(CharNpcSampler, In.vTexUV);
+	Out.vColor.a = Out.vColor.a * g_fAlpha;
 
 	return Out;
 }
@@ -99,9 +102,14 @@ technique DefaultTechnique
 	}
 	pass NpcCharPass
 	{
-		AlphaTestEnable = true;
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
+
+		/*AlphaTestEnable = true;
 		AlphaFunc = GREATER;
-		AlphaRef = 100;
+		AlphaRef = 100;*/
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_NPC();
