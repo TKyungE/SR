@@ -66,7 +66,7 @@ void CUI::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	if (CKeyMgr::Get_Instance()->Key_Down('S'))
+	if (CKeyMgr::Get_Instance()->Key_Down('L'))
 	{
 		switch (m_bStatus)
 		{

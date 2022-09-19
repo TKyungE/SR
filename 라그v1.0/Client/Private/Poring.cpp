@@ -3,6 +3,8 @@
 #include "..\Public\Player.h"
 #include "GameInstance.h"
 #include "SoundMgr.h"
+#include "Layer.h"
+
 
 CPoring::CPoring(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -33,10 +35,12 @@ HRESULT CPoring::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Poring_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
 		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
-	TransformDesc.fSpeedPerSec = 5.f;
+	TransformDesc.fSpeedPerSec = 3.f;
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.f);
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
@@ -71,23 +75,69 @@ HRESULT CPoring::Release_RenderState(void)
 void CPoring::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-
-	if (0.55f < Distance )
-	{
-		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-
-		vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-	//	vPosition.y += 2.f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-
-		m_eCurState = MOVE;
+	_float ItemDist = 100.f;
+	_float ItemDist2 = 0.f;
+	_float3 ItemTarget;
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
 	
+	if (pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Item")) != nullptr)
+	{
+		for(auto& iter :pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Item"))->Get_Objects())
+		{ 
+			if (ItemDist > D3DXVec3Length(&(*(_float3*)&iter->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION))))
+			{
+				ItemDist2 = D3DXVec3Length(&(*(_float3*)&iter->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+				ItemTarget = *(_float3*)&iter->Get_World().m[3][0];
+			}
+		}
+		if (0.05f < ItemDist2)
+		{
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			
+			vPosition += *D3DXVec3Normalize(&ItemTarget, &(ItemTarget - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+			
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+			m_eCurState = MOVE;
+		}
+		else if (0.55f < Distance)
+		{
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+
+			vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+			//	vPosition.y += 2.f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+			m_eCurState = MOVE;
+		}
+		else
+		{
+			m_eCurState = IDLE;
+		}
 	}
 	else
 	{
-		m_eCurState = IDLE;
+		if (0.55f < Distance)
+		{
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+
+			vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+			//	vPosition.y += 2.f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+			m_eCurState = MOVE;
+		}
+		else
+		{
+			m_eCurState = IDLE;
+		}
 	}
+	Safe_Release(pGameInstance);
 }
 void CPoring::OnTerrain()
 {
@@ -145,7 +195,7 @@ _float4x4 CPoring::Get_World(void)
 void CPoring::Free(void)
 {
 	__super::Free();
-
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
@@ -212,17 +262,32 @@ void CPoring::Tick(_float fTimeDelta)
 	Check_Front();
 	Move_Frame(fTimeDelta);
 
-	
 	if (nullptr != m_tInfo.pTarget)
 		Chase(fTimeDelta);
 
+
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_PET, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CPoring"));
+		return;
+	}
+
+	Safe_Release(pInstance);
 }
 
 void CPoring::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-		
+	CheckColl();
 	Motion_Change();
 	
 	OnBillboard();
@@ -248,6 +313,8 @@ HRESULT CPoring::Render(void)
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 	On_SamplerState();
+	if (g_bCollider)
+		m_pColliderCom->Render();
 	return S_OK;
 }
 
@@ -378,4 +445,50 @@ void CPoring::OnBillboard()
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
 	//	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
+void CPoring::CheckColl()
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+	CGameObject* pTarget;
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
+	{
+	
+		_float3 vBackPos;
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
+	{
+		_float3 vBackPos;
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+	Safe_Release(pInstance);
 }
