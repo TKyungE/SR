@@ -7,6 +7,14 @@ BEGIN(Client)
 
 class CClientQuest abstract : public CBase
 {
+public:
+	enum QUESTTYPE { QUEST_HUNT, QUEST_COLLECT, QUEST_END };
+
+	typedef struct tagQuestInfo
+	{
+		QUESTTYPE eType;
+	}QINFO;
+
 protected:
 	CClientQuest(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CClientQuest(const CClientQuest& rhs);
@@ -19,6 +27,7 @@ public:
 	virtual HRESULT Initialize_Prototype(void);
 	virtual HRESULT Initialize(void* pArg);
 	virtual void Tick(void);
+	virtual QINFO Get_QInfo(void) = 0;
 
 protected:
 	LPDIRECT3DDEVICE9 m_pGraphic_Device = nullptr;

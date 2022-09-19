@@ -39,14 +39,14 @@ public:
 	}STAT;
 	typedef struct tagItem
 	{
-		EITEM eItemNum;
+		EITEM eItemNum;		//아이템 종류 확인 가능
 		_int iSlotNum;
-		_int iCount;
+		_int iCount;		//아이템 갯수 확인 가능
 	}ITEM;
 private:
 	STAT m_tStat;
 	STAT m_tMaxStat;
-	ITEM m_tItem[24];
+	ITEM m_tItem[24];		//인벤토리 내의 아이템
 	ITEM m_pQuickSlot[10];
 	ITEM m_SkillSlot[7];
 	ITEM m_EquipSlot[10];
@@ -61,7 +61,7 @@ public:
 	ITEM Get_EquipSlot(_int iNum) { return m_EquipSlot[iNum]; }
 	ITEM Get_SkillSlot(_int iNum) { return m_SkillSlot[iNum]; }
 	ITEM Get_QuickSlot(_int iNum) { return m_pQuickSlot[iNum]; }
-	ITEM Get_Item(_int iNum) { return m_tItem[iNum]; }
+	ITEM Get_Item(_int iNum) { return m_tItem[iNum]; }		//이걸로 인벤토리 내부 아이템을 확인해야 한다.
 	STAT Get_Stat() { return m_tMaxStat; }
 	_bool Get_MousePick() { return m_bMousePick; }
 	_bool Get_InvenMouse() { return m_bInven; }

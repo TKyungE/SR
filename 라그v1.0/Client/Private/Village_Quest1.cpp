@@ -187,9 +187,19 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 
 	if (g_bQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")))
 	{
-		CHuntQuest1::QINFO tQInfo;
-		tQInfo.iHuntGoal = 5;
-		tQInfo.eMonType = MON_ALLIGATOR;
+		CHuntQuest::QINFO_DERIVED tQInfo;
+		tQInfo.iCount = 3;
+		tQInfo.pHuntGoal = new _uint[tQInfo.iCount];
+
+		for (_int i = 0; i < tQInfo.iCount; ++i)
+			tQInfo.pHuntGoal[i] = 3;
+		
+		tQInfo.pMonType = new MONSTERTYPE[tQInfo.iCount];
+		tQInfo.pMonType[0] = MON_ALLIGATOR;
+		tQInfo.pMonType[1] = MON_ELDERWILOW;
+		tQInfo.pMonType[2] = MON_BIGFOOT;
+
+		tQInfo.tQInfo.eType = CClientQuest::QUEST_HUNT;
 
 		if (FAILED(pQuestManager->Add_Quest(TEXT("Prototype_Quest_HuntQuest1"), TEXT("Quest_HuntQuest1"), &tQInfo)))
 		{
@@ -252,7 +262,6 @@ void CVillage_Quest1::Late_Tick(_float fTimeDelta)
 	{
 		m_bTalk = false;
 		g_bTalk = false;
-		g_bCut = false;
 	}
 
 	Safe_Release(pInstance);
@@ -461,7 +470,7 @@ void CVillage_Quest1::Ready_Script(void)
 	m_vQuestScript.push_back(TEXT("우리 마을에 온 것을 환영하네. 나는 이 마을의 촌장일세."));
 	m_vQuestScript.push_back(TEXT("음? 성으로 가고싶다고? 안타깝지만 자네의 레벨이 너무 낮네. 이 마을을 벗어나는 것도 위험할걸세."));
 	m_vQuestScript.push_back(TEXT("레벨을 올리기 위해 퀘스트를 주겠네. 경험이 오를게야."));
-	m_vQuestScript.push_back(TEXT("저쪽의 포탈을 타고 나가 악어 5마리만 잡아오게."));
+	m_vQuestScript.push_back(TEXT("저쪽의 포탈을 타고 나가 몬스터들을 각각 3마리씩 잡아오게."));
 
 	m_vNotClearScript.push_back(TEXT("이렇게 시간을 버리다간 성은 커녕 이 마을에서 나가지도 못할걸세. 빨리 가서 잡아오게!"));
 	

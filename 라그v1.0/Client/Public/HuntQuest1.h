@@ -5,36 +5,39 @@
 
 BEGIN(Client)
 
-class CHuntQuest1 final : public CClientQuest
+class CHuntQuest final : public CClientQuest
 {
 public:
-	typedef struct tagQuestInfo
+	typedef struct tagQuestInfo_Derived
 	{
-		_uint iHuntGoal;
-		MONSTERTYPE eMonType;
-	}QINFO;
+		_uint iCount;
+		_uint* pHuntGoal;
+		MONSTERTYPE* pMonType;
+		QINFO tQInfo;
+	}QINFO_DERIVED;
 
 private:
-	CHuntQuest1(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CHuntQuest1(const CHuntQuest1& rhs);
-	virtual ~CHuntQuest1() = default;
+	CHuntQuest(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CHuntQuest(const CHuntQuest& rhs);
+	virtual ~CHuntQuest() = default;
 
 public:
-	QINFO Get_QInfo(void) { return m_tQInfo; }
-	void Increase_Count(void) { ++iCount; }
+	QINFO_DERIVED Get_QInfoDerived(void) { return m_tQInfo; }
+	void Increase_Count(MONSTERTYPE eType);
 
 public:
 	virtual HRESULT Initialize_Prototype(void) override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Tick(void) override;
+	virtual QINFO Get_QInfo(void) override { return m_tQInfo.tQInfo; }
 
 private:
-	QINFO m_tQInfo;
-	_uint iCount;
+	QINFO_DERIVED m_tQInfo;
+	_uint* m_pCount = nullptr;
 
 public:
-	static CHuntQuest1* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
-	virtual CHuntQuest1* Clone(void* pArg = nullptr) override;
+	static CHuntQuest* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	virtual CHuntQuest* Clone(void* pArg = nullptr) override;
 	virtual void Free(void) override;
 };
 

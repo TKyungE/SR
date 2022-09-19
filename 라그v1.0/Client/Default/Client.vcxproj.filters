@@ -346,6 +346,12 @@
     <Filter Include="04.UI\05. Equip">
       <UniqueIdentifier>{e5cf10bb-83ae-41b2-9282-7f84486ed484}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\QuestUI">
+      <UniqueIdentifier>{be3f6a86-88ee-4e52-a7ff-4fbff6056a26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Quest\CollectQuest">
+      <UniqueIdentifier>{19d3bec9-7d13-4750-baed-9f937d3938c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -666,6 +672,9 @@
     <ClInclude Include="..\public\Equip.h">
       <Filter>04.UI\05. Equip</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\QuestUI.h">
+      <Filter>04.UI\QuestUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -973,6 +982,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Equip.cpp">
       <Filter>04.UI\05. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\QuestUI.cpp">
+      <Filter>04.UI\QuestUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

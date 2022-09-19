@@ -1,72 +1,105 @@
 #include "stdafx.h"
 #include "..\Public\HuntQuest1.h"
 
-CHuntQuest1::CHuntQuest1(LPDIRECT3DDEVICE9 pGraphic_Device)
+CHuntQuest::CHuntQuest(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CClientQuest(pGraphic_Device)
 {
 	ZeroMemory(&m_tQInfo, sizeof(QINFO));
 }
 
-CHuntQuest1::CHuntQuest1(const CHuntQuest1 & rhs)
+CHuntQuest::CHuntQuest(const CHuntQuest & rhs)
 	: CClientQuest(rhs)
+	, m_tQInfo(rhs.m_tQInfo)
 {
 }
 
-HRESULT CHuntQuest1::Initialize_Prototype(void)
+void CHuntQuest::Increase_Count(MONSTERTYPE eType)
+{
+	for (_uint i = 0; i < m_tQInfo.iCount; ++i)
+	{
+		if (eType == m_tQInfo.pMonType[i])
+			++m_pCount[i];
+	}
+}
+
+HRESULT CHuntQuest::Initialize_Prototype(void)
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
 
+	m_tQInfo.pHuntGoal = nullptr;
+	m_tQInfo.pMonType = nullptr;
+
 	return S_OK;
 }
 
-HRESULT CHuntQuest1::Initialize(void * pArg)
+HRESULT CHuntQuest::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	memcpy(&m_tQInfo, pArg, sizeof(QINFO));
+	memcpy(&m_tQInfo, pArg, sizeof(QINFO_DERIVED));
 
-	iCount = 0;
+	m_pCount = new _uint[m_tQInfo.iCount];
+
+	for (_int i = 0; i < m_tQInfo.iCount; ++i)
+		m_pCount[i] = 0;
 
 	return S_OK;
 }
 
-void CHuntQuest1::Tick(void)
+void CHuntQuest::Tick(void)
 {
 	__super::Tick();
 
-	if (iCount >= m_tQInfo.iHuntGoal)
-		m_bClear = true;
+	for (_uint i = 0; i < m_tQInfo.iCount; ++i)
+	{
+		if (m_pCount[i] < m_tQInfo.pHuntGoal[i])
+		{
+			m_bClear = false;
+			return;
+		}
+	}
+
+	m_bClear = true;
 }
 
-CHuntQuest1 * CHuntQuest1::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+CHuntQuest * CHuntQuest::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	CHuntQuest1* pInstance = new CHuntQuest1(pGraphic_Device);
+	CHuntQuest* pInstance = new CHuntQuest(pGraphic_Device);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		ERR_MSG(TEXT("Failed to Created : CHuntQuest1"));
+		ERR_MSG(TEXT("Failed to Created : CHuntQuest"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CHuntQuest1 * CHuntQuest1::Clone(void * pArg)
+CHuntQuest * CHuntQuest::Clone(void * pArg)
 {
-	CHuntQuest1* pInstance = new CHuntQuest1(*this);
+	CHuntQuest* pInstance = new CHuntQuest(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		ERR_MSG(TEXT("Failed to Cloned : CHuntQuest1"));
+		ERR_MSG(TEXT("Failed to Cloned : CHuntQuest"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CHuntQuest1::Free(void)
+void CHuntQuest::Free(void)
 {
 	__super::Free();
+
+	if (nullptr != m_tQInfo.pHuntGoal)
+		Safe_Delete_Array(m_tQInfo.pHuntGoal);
+
+	if (nullptr != m_tQInfo.pMonType)
+		Safe_Delete_Array(m_tQInfo.pMonType);
+
+	if (nullptr != m_pCount)
+		Safe_Delete_Array(m_pCount);
 }
