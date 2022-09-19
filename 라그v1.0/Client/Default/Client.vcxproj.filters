@@ -340,6 +340,12 @@
     <Filter Include="02.GameObject\Quest\Manager">
       <UniqueIdentifier>{85504d99-c431-4d4f-835f-24f48fe5f9fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\04. SkillSlot">
+      <UniqueIdentifier>{a0c5e6f2-90ab-40b0-bb9f-932183f4fe7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\05. Equip">
+      <UniqueIdentifier>{e5cf10bb-83ae-41b2-9282-7f84486ed484}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -654,6 +660,12 @@
     <ClInclude Include="..\Public\QuestManager.h">
       <Filter>02.GameObject\Quest\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\SkillSlot.h">
+      <Filter>04.UI\04. SkillSlot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Equip.h">
+      <Filter>04.UI\05. Equip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -955,6 +967,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\QuestManager.cpp">
       <Filter>02.GameObject\Quest\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkillSlot.cpp">
+      <Filter>04.UI\04. SkillSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Equip.cpp">
+      <Filter>04.UI\05. Equip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
