@@ -346,6 +346,12 @@
     <Filter Include="04.UI\05. Equip">
       <UniqueIdentifier>{e5cf10bb-83ae-41b2-9282-7f84486ed484}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\Gacha">
+      <UniqueIdentifier>{0c3c1956-c457-44c7-bfd3-805c9ae38718}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\05.SlotGacha">
+      <UniqueIdentifier>{e51ea163-fc9d-48e2-812c-10047e5ee2cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -666,6 +672,12 @@
     <ClInclude Include="..\public\Equip.h">
       <Filter>04.UI\05. Equip</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Gacha.h">
+      <Filter>04.UI\Gacha</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SlotGacha.h">
+      <Filter>02.GameObject\NPC\05.SlotGacha</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -973,6 +985,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Equip.cpp">
       <Filter>04.UI\05. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Gacha.cpp">
+      <Filter>04.UI\Gacha</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SlotGacha.cpp">
+      <Filter>02.GameObject\NPC\05.SlotGacha</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

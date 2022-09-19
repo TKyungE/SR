@@ -65,18 +65,18 @@ HRESULT CInven::Initialize(void* pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 	Set_Slot();
 	
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::HPPOTION ,0,10 }, 0);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::MPPOTION ,1,20 }, 1);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::TIARA ,2,1 }, 2);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BOBY ,3,1 }, 3);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::SHOES ,4,1 }, 4);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ROBE ,5,1}, 5);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::PANDANT ,6,1 }, 6);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EARRING ,7,1 }, 7);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BRACELET ,8,1 }, 8);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::RING ,9,1 }, 9);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::STAFF ,10,1}, 10);
-	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ORB ,11,1}, 11);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::HPPOTION ,0,10 }, 0);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::MPPOTION ,1,20 }, 1);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::TIARA ,2,1 }, 2);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BOBY ,3,1 }, 3);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::SHOES ,4,1 }, 4);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ROBE ,5,1}, 5);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::PANDANT ,6,1 }, 6);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::EARRING ,7,1 }, 7);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BRACELET ,8,1 }, 8);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::RING ,9,1 }, 9);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::STAFF ,10,1}, 10);
+	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::ORB ,11,1}, 11);
 	return S_OK;
 }
 
