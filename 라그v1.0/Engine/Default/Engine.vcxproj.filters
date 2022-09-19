@@ -10,9 +10,6 @@
     <Filter Include="01.Utility\99.SuperClass">
       <UniqueIdentifier>{6065ef34-10b9-4992-92f3-2af525f0b68a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines">
-      <UniqueIdentifier>{a8ef49c9-cb0f-4272-abff-30e3db2d950e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\00.GameInstance">
       <UniqueIdentifier>{7214b60c-8b59-454f-bc4e-93aa7b30d19e}</UniqueIdentifier>
     </Filter>
@@ -102,6 +99,9 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Shader">
       <UniqueIdentifier>{215675b3-31e0-434b-b115-492650cd50a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{a8ef49c9-cb0f-4272-abff-30e3db2d950e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

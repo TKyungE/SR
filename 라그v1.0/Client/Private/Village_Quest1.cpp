@@ -206,8 +206,9 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_HuntQuest1"))))
 			return;
 	
-		m_tInfo.pTarget->Set_Exp(500);
-
+		for (_int i = 0; i < 50; ++i)
+			m_tInfo.pTarget->Set_Exp(10);
+	
 		g_bQuest = false;
 		g_bReward = false;
 	}

@@ -87,7 +87,7 @@ public:
 	void Set_DEX(_int _iDEX) { m_tStat.iDEX += _iDEX; }
 	void Set_INT(_int _iINT) { m_tStat.iINT += _iINT; }
 	void Set_LUK(_int _iLUK) { m_tStat.iLUK += _iLUK; }
-	void Set_StatsPoint(_int _Point) { m_tStat.iStatsPoint += _Point; }
+	void Set_StatsPoint(_int _Point) { m_tMaxStat.iStatsPoint += _Point; }
 private:
 	void Check_Equip();
 };
