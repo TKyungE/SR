@@ -185,6 +185,7 @@
     <ClInclude Include="..\public\BossSkillTarget.h" />
     <ClInclude Include="..\public\Byorgue.h" />
     <ClInclude Include="..\Public\Camera_Dynamic.h" />
+    <ClInclude Include="..\Public\ClientQuest.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\Dandelion.h" />
     <ClInclude Include="..\public\DandelionAttack.h" />
@@ -238,6 +239,7 @@
     <ClInclude Include="..\public\Poring.h" />
     <ClInclude Include="..\public\Portal.h" />
     <ClInclude Include="..\public\PowerTotem.h" />
+    <ClInclude Include="..\Public\QuestManager.h" />
     <ClInclude Include="..\Public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
@@ -290,6 +292,7 @@
     <ClCompile Include="..\private\BossSkillTarget.cpp" />
     <ClCompile Include="..\private\Byorgue.cpp" />
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
+    <ClCompile Include="..\Private\ClientQuest.cpp" />
     <ClCompile Include="..\private\Dandelion.cpp" />
     <ClCompile Include="..\private\DandelionAttack.cpp" />
     <ClCompile Include="..\private\DefaultAttack.cpp" />
@@ -342,6 +345,7 @@
     <ClCompile Include="..\private\Poring.cpp" />
     <ClCompile Include="..\private\Portal.cpp" />
     <ClCompile Include="..\private\PowerTotem.cpp" />
+    <ClCompile Include="..\Private\QuestManager.cpp" />
     <ClCompile Include="..\Private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />

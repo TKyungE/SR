@@ -6,10 +6,12 @@
 CTextBox::CTextBox(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
 {
+	ZeroMemory(&m_tTInfo, sizeof(TINFO));
 }
 
 CTextBox::CTextBox(const CTextBox & rhs)
 	: CGameObject(rhs)
+	, m_tTInfo(rhs.m_tTInfo)
 {
 }
 
@@ -26,7 +28,7 @@ HRESULT CTextBox::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	memcpy(&m_tTInfo, pArg, sizeof(TINFO));
 
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
 
@@ -43,10 +45,7 @@ HRESULT CTextBox::Initialize(void * pArg)
 
 	m_rcBox = { 180, 500, 1120, 650 };
 
-	m_vScript.push_back(TEXT("(1,2,3,4) Baby, got me looking so crazy 빠져버리는 daydream Got me feeling you 너도 말해줄래 누가 내게 뭐라든 남들과는 달라 "));
-	m_vScript.push_back(TEXT("넌 Maybe you could be the one 날 믿어봐 한번 I'm not looking for just fun Maybe I could be the one Oh baby 예민하대 나 "));
-	m_vScript.push_back(TEXT("lately 너 없이는 매일 매일이 yeah 재미없어 어쩌지 I just want you Call my phone right now I just wanna hear you're mine "));
-	m_vScript.push_back(TEXT("'Cause I know what you like boy You're my chemical hype boy 내 지난날들은 눈 뜨면 잊는 꿈 Hype boy 너만 원해 Hype boy 내가 "));
+	m_pScript = m_tTInfo.pScript;
 
 	return S_OK;
 }
@@ -63,8 +62,10 @@ void CTextBox::Tick(_float fTimeDelta)
 			return;
 		}
 	}
-	else
-		Running_TextBox();
+	else if ((m_iScriptIndex == m_tTInfo.iQuestIndex) && (CMyButton::BUTTON_RECEIVE != m_vButtonArray[2]->Get_Type()))
+		Change_Button();
+
+	Running_TextBox();
 
 	Print_Text();
 
@@ -202,8 +203,7 @@ HRESULT CTextBox::Create_Buttons(void)
 	{
 		tBInfo.vPos = _float3(g_iWinSizeX * (0.75f + (0.05f * i)), g_iWinSizeY * 0.92f, 0.f);
 		tBInfo.iType = i;
-
-		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_MyButton"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_MyButton"), m_tTInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
 		{
 			ERR_MSG(TEXT("Failed to Add GameObject : MyButton"));
 			return E_FAIL;
@@ -253,7 +253,7 @@ void CTextBox::Running_TextBox(void)
 			}
 			case CMyButton::BUTTON_NEXT:
 			{
-				if (m_iScriptIndex < m_vScript.size() - 1)
+				if (m_iScriptIndex < m_tTInfo.iScriptSize - 1)
 				{
 					++m_iScriptIndex;
 					m_wstr = TEXT("");
@@ -265,14 +265,19 @@ void CTextBox::Running_TextBox(void)
 			}
 			case CMyButton::BUTTON_RECEIVE:
 			{
-				if (m_iScriptIndex < m_vScript.size())
-				{
-					++m_iScriptIndex;
-					m_wstr = TEXT("");
-					m_iIndex = 0;
-				}
+				g_bQuest = true;
+				g_bReward = true;
 
-				iter->TurnOff_Clicked();
+				for (auto& iterator : m_vButtonArray)
+					iterator->Set_Dead();
+
+				m_vButtonArray.clear();
+
+				Set_Dead();
+
+				if (g_bCut)
+					g_bCut = false;
+
 				break;
 			}
 			}
@@ -284,7 +289,7 @@ void CTextBox::Running_TextBox(void)
 
 void CTextBox::Print_Text(void)
 {
-	wstring wstr = m_vScript[m_iScriptIndex];
+	wstring wstr = m_pScript[m_iScriptIndex];
 
 	if (m_iIndex < wstr.length() && m_fTimeDelta > 0.03f)
 	{
@@ -293,6 +298,34 @@ void CTextBox::Print_Text(void)
 		m_fTimeDelta = 0.f;
 		m_bFontRender = true;
 	}
+}
+
+void CTextBox::Change_Button(void)
+{
+	m_vButtonArray[2]->Set_Dead();
+	m_vButtonArray.erase(m_vButtonArray.begin() + 2);
+	
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	CMyButton::BINFO tBInfo;
+
+	tBInfo.vPos = _float3(g_iWinSizeX * 0.85f, g_iWinSizeY * 0.92f, 0.f);
+	tBInfo.iType = 3;
+
+	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_MyButton"), m_tTInfo.iLevelIndex, TEXT("Layer_UI"), &tBInfo)))
+	{
+		ERR_MSG(TEXT("Failed to Add GameObject : MyButton"));
+		return;
+	}
+
+	m_pButton = tBInfo.pOut;
+	m_vButtonArray.push_back(m_pButton);
+	
+	Safe_Release(pInstance);
 }
 
 CTextBox * CTextBox::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -328,6 +361,13 @@ _float4x4 CTextBox::Get_World(void)
 
 void CTextBox::Free()
 {
+	if (nullptr != m_pScript)
+	{
+		for (_int i = 0; i < m_tTInfo.iScriptSize; ++i)
+			m_pScript[i].clear();
+		Safe_Delete_Array(m_pScript);
+	}
+
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);

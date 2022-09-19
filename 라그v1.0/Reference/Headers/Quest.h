@@ -12,10 +12,8 @@ protected:
 	virtual ~CQuest() = default;
 
 public:
-	_int Get_Index(void) { return m_iIndex; }
-	void Set_Index(_int iIndex) { m_iIndex = iIndex; }
-	_bool Get_Active(void) { return m_bActive; }
 	_bool Get_Clear(void) { return m_bClear; }
+	void Set_LevelIndex(_int iLevelIndex) { m_iLevelIndex = iLevelIndex; }
 
 public:
 	virtual HRESULT Initialize_Prototype(void);
@@ -24,9 +22,8 @@ public:
 
 protected:
 	LPDIRECT3DDEVICE9 m_pGraphic_Device = nullptr;
-	_bool m_bActive;
 	_bool m_bClear;
-	_int m_iIndex;
+	_int m_iLevelIndex = 0;
 
 public:
 	virtual CQuest* Clone(void* pArg = nullptr) = 0;

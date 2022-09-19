@@ -42,7 +42,7 @@ private:
 	HRESULT Off_SamplerState();
 	void CheckColl();
 private:
-	CGameObject*			m_StatInfo;
+	CGameObject*			m_StatInfo = nullptr;
 
 public:
 	static CHpPotion* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);

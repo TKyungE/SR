@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Base.h"
+#include "QuestManager.h"
 
 BEGIN(Engine)
 class CRenderer;
@@ -23,6 +24,7 @@ public:
 
 private:
 	CGameInstance*			m_pGameInstance = nullptr;
+	CQuestManager*			m_pQuestManager = nullptr;
 
 private:
 	LPDIRECT3DDEVICE9		m_pGraphic_Device = nullptr;
@@ -41,6 +43,8 @@ private:
 
 	HRESULT SetUp_RenderState();
 	HRESULT SetUp_SamplerState();
+
+	HRESULT Ready_Quest(void);
 
 public:
 	static CMainApp* Create();
