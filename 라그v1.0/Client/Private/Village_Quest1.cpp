@@ -206,8 +206,7 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_HuntQuest1"))))
 			return;
 	
-		for (_int i = 0; i < 50; ++i)
-			m_tInfo.pTarget->Set_Exp(10);
+		m_tInfo.pTarget->Set_Exp(50);
 	
 		g_bQuest = false;
 		g_bReward = false;
@@ -469,7 +468,7 @@ void CVillage_Quest1::Ready_Script(void)
 	m_vNormalScript.push_back(TEXT("안녕하신가. 나는 이 마을의 촌장이라네. 새로운 모험가는 언제나 환영일세."));
 
 	m_vClearScript.push_back(TEXT("오오! 정말로 잡아온 것인가? 마을의 골칫덩이들을 잡아줘서 고맙네."));
-	m_vClearScript.push_back(TEXT("이건 약소하지만 우리 마을을 도와준 보상일세. \n\n보상 : 경험치 500"));
+	m_vClearScript.push_back(TEXT("이건 약소하지만 우리 마을을 도와준 보상일세. \n\n보상 : 경험치 50"));
 }
 
 CVillage_Quest1 * CVillage_Quest1::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
