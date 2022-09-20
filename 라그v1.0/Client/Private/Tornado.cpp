@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Tornado.h"
 #include "GameInstance.h"
+#include "Layer.h"
 
 CTornado::CTornado(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -43,6 +44,11 @@ HRESULT CTornado::Initialize(void* pArg)
 	m_tInfo.fX = 1.f;
 	m_tInfo.iDmg = 123 + m_tInfo.pTarget->Get_Info().iDmg;
 	m_tInfo.iMoney = 33;
+
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 
@@ -313,6 +319,14 @@ void CTornado::CheckColl()
 	{
 		pTarget->Set_Hp(m_tInfo.iDmg);
 		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+		
+		CGameObject::INFO tInfo;
+		tInfo.pTarget = pTarget;
+		tInfo.vPos = *(_float3*)&pTarget->Get_World().m[3][0];
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo)))
+			return;
+
 		if (pTarget->Get_Info().iHp <= 0)
 			pTarget->Set_Dead();
 		Set_Dead();
