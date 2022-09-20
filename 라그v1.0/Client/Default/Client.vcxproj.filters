@@ -367,6 +367,12 @@
     <Filter Include="03.Effect\Default\13.CriHit2">
       <UniqueIdentifier>{308b7985-fc50-4bce-b0cd-2ac04ce36fec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\06.Shop">
+      <UniqueIdentifier>{8cbf5c7d-d1d3-40e2-aed8-118e9e8c6633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\06.ShopNPC">
+      <UniqueIdentifier>{82d4b7d7-7916-40f9-8784-dc6fc6619595}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -705,6 +711,12 @@
     <ClInclude Include="..\public\CriHitUI.h">
       <Filter>03.Effect\Default\13.CriHit2</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Shop.h">
+      <Filter>04.UI\06.Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ShopNPC.h">
+      <Filter>02.GameObject\NPC\06.ShopNPC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1030,6 +1042,12 @@
     </ClCompile>
     <ClCompile Include="..\private\CriHitUI.cpp">
       <Filter>03.Effect\Default\13.CriHit2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Shop.cpp">
+      <Filter>04.UI\06.Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ShopNPC.cpp">
+      <Filter>02.GameObject\NPC\06.ShopNPC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

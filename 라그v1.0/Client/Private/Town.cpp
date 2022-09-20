@@ -342,6 +342,10 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 	tInfo.vPos = { 16.1f,1.f,21.8f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SlotGacha"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
+	tInfo.vPos = { 11.5f,1.f,15.f };
+	tInfo.pTarget = Info.pTarget;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ShopNPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
 	Safe_Release(pGameInstance);
 	return S_OK;
 }

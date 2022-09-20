@@ -249,6 +249,8 @@
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
     <ClInclude Include="..\public\Shadow.h" />
+    <ClInclude Include="..\public\Shop.h" />
+    <ClInclude Include="..\public\ShopNPC.h" />
     <ClInclude Include="..\Public\Skeleton.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\Public\Sky.h" />
@@ -361,6 +363,8 @@
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
+    <ClCompile Include="..\private\Shop.cpp" />
+    <ClCompile Include="..\private\ShopNPC.cpp" />
     <ClCompile Include="..\Private\Skeleton.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
