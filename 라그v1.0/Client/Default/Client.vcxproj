@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Alligator.h" />
+    <ClInclude Include="..\Public\AlphaUI.h" />
     <ClInclude Include="..\public\Angry.h" />
     <ClInclude Include="..\Public\Atros.h" />
     <ClInclude Include="..\public\AuraBlue.h" />
@@ -283,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Alligator.cpp" />
+    <ClCompile Include="..\Private\AlphaUI.cpp" />
     <ClCompile Include="..\private\Angry.cpp" />
     <ClCompile Include="..\Private\Atros.cpp" />
     <ClCompile Include="..\private\AuraBlue.cpp" />

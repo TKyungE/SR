@@ -361,6 +361,9 @@
     <Filter Include="01.Levels\Maze">
       <UniqueIdentifier>{1959e95b-89b4-4493-8f00-340fb4a1ac2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\00.PlayerUI\03. AlphaUI">
+      <UniqueIdentifier>{6fec92cc-d8ba-4659-8e3a-19893bea48d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -693,6 +696,9 @@
     <ClInclude Include="..\Public\Level_Maze.h">
       <Filter>01.Levels\Maze</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\AlphaUI.h">
+      <Filter>04.UI\00.PlayerUI\03. AlphaUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1013,6 +1019,9 @@
     <ClCompile Include="..\Private\Level_Maze.cpp">
       <Filter>01.Levels\Maze</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\AlphaUI.cpp">
+      <Filter>04.UI\00.PlayerUI\03. AlphaUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1031,6 +1040,8 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl">
       <Filter>06. ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl">
+      <Filter>06. ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

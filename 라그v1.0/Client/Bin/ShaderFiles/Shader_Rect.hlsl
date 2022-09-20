@@ -137,6 +137,18 @@ PS_OUT PS_MAIN_MONSTER(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_UI(PS_IN In)
+{
+	PS_OUT			Out = (PS_OUT)0;
+
+	Out.vColor = tex2D(MonsterSampler, In.vTexUV);
+
+
+	Out.vColor.g = 1.f;
+
+	return Out;
+}
+
 technique DefaultTechnique
 {
 	pass DefaultPass
@@ -190,5 +202,16 @@ technique DefaultTechnique
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_MONSTER();
+	}
+
+	pass UI
+	{
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_UI();
 	}
 }
