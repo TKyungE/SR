@@ -104,11 +104,116 @@ void CQuestUI::Tick(_float fTimeDelta)
 			}
 			break;
 		}
-		/*case CClientQuest::QUEST_COLLECT:
+		case CClientQuest::QUEST_COLLECT:
 		{
+			m_iCount = dynamic_cast<CCollectQuest*>(Pair.second)->Get_QInfoDerived().iCount;
+			if (Pair.second->Get_Clear())
+			{
+				m_wProcessing = TEXT("[완료]");
+				m_wString = TEXT("         아이템 수집\n");
+			}
+			else
+			{
+				m_wProcessing = TEXT("[진행중]");
+				m_wString = TEXT("            아이템 수집\n");
+				for (_int i = 0; i < m_iCount; ++i)
+				{
+					switch (dynamic_cast<CCollectQuest*>(Pair.second)->Get_QInfoDerived().pItemType[i])
+					{
+					case CStatInfo::HPPOTION:
+						m_wString += TEXT("빨강포션 : ");
+						break;
+					case CStatInfo::MPPOTION:
+						m_wString += TEXT("파랑포션 : ");
+						break;
+					case CStatInfo::ENGINE:
+						m_wString += TEXT("비행정엔진 : ");
+						break;
+					case CStatInfo::TIARA:
+						m_wString += TEXT("쥬신티아라 : ");
+						break;
+					case CStatInfo::BOBY:
+						m_wString += TEXT("쥬신타이즈 : ");
+						break;
+					case CStatInfo::SHOES:
+						m_wString += TEXT("쥬신슈즈 : ");
+						break;
+					case CStatInfo::ROBE:
+						m_wString += TEXT("쥬신로브 : ");
+						break;
+					case CStatInfo::PANDANT:
+						m_wString += TEXT("쥬신팬던트 : ");
+						break;
+					case CStatInfo::EARRING:
+						m_wString += TEXT("쥬신귀걸이 : ");
+						break;
+					case CStatInfo::BRACELET:
+						m_wString += TEXT("쥬신팔찌 : ");
+						break;
+					case CStatInfo::RING:
+						m_wString += TEXT("쥬신반지 : ");
+						break;
+					case CStatInfo::STAFF:
+						m_wString += TEXT("쥬신스태프 : ");
+						break;
+					case CStatInfo::ORB:
+						m_wString += TEXT("쥬신오브 : ");
+						break;
+					case CStatInfo::RIDEEGG:
+						m_wString += TEXT("알파카알 : ");
+						break;
+					case CStatInfo::PETEGG:
+						m_wString += TEXT("포링알 : ");
+						break;
+					case CStatInfo::WING:
+						m_wString += TEXT("요정날개 : ");
+						break;
+					case CStatInfo::MON1:
+						m_wString += TEXT("엘리게이터의 독 : ");
+						break;
+					case CStatInfo::MON2:
+						m_wString += TEXT("윌로우의 몸통 : ");
+						break;
+					case CStatInfo::MON3:
+						m_wString += TEXT("빅풋의 발바닥 : ");
+						break;
+					case CStatInfo::MON4:
+						m_wString += TEXT("도적의 두건 : ");
+						break;
+					case CStatInfo::MON5:
+						m_wString += TEXT("살인자의 식칼 : ");
+						break;
+					case CStatInfo::MON6:
+						m_wString += TEXT("썩은 붕대 : ");
+						break;
+					case CStatInfo::MON7:
+						m_wString += TEXT("아트로스의 발톱 : ");
+						break;
+					case CStatInfo::MON8:
+						m_wString += TEXT("바포메트의 뚜껑: ");
+						break;
+					case CStatInfo::MON9:
+						m_wString += TEXT("미노로스의 우유 : ");
+						break;
+					case CStatInfo::MON10:
+						m_wString += TEXT("해골바가지 : ");
+						break;
+					case CStatInfo::MON11:
+						m_wString += TEXT("레이스의 틀니 : ");
+						break;
+					case CStatInfo::MON12:
+						m_wString += TEXT("좀비 고기 : ");
+						break;
+					}
 
+					m_wString += to_wstring(dynamic_cast<CCollectQuest*>(Pair.second)->Get_Count()[i]);
+					m_wString += TEXT(" / ");
+					m_wString += to_wstring(dynamic_cast<CCollectQuest*>(Pair.second)->Get_QInfoDerived().pCollectGoal[i]);
+					m_wString += TEXT("\n");
+				}
+			}
 			break;
-		}*/
+		}
 		}
 	}
 

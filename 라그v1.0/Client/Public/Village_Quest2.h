@@ -1,13 +1,16 @@
 #pragma once
+
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "ClientQuest.h"
 
 BEGIN(Engine)
+class CShader;
 class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
-class CVIBuffer_Cube;
 class CTexture;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -36,11 +39,40 @@ public:
 private:
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
-	CVIBuffer_Cube* m_pVIBuffer = nullptr;
+	CVIBuffer_Rect* m_pVIBuffer = nullptr;
 	CTexture* m_pTextureCom = nullptr;
+	CCollider* m_pColliderCom = nullptr;
+	CTransform* m_pQuestTransformCom = nullptr;
+	CVIBuffer_Rect* m_pQuestVIBufferCom = nullptr;
+	CCollider* m_pQuestColliderCom = nullptr;
+	CTexture* m_pQuestTextureCom = nullptr;
+
+	CVIBuffer_Rect* m_pCharVIBufferCom = nullptr;
+	CTransform* m_pCharTransformCom = nullptr;
+	CTexture* m_pCharTextureCom = nullptr;
+
+	CShader* m_pShaderCom = nullptr;
 
 private:
 	INDEXPOS	m_IndexPos;
+
+	_bool m_bTalk = false;
+	_bool m_bOnce = false;
+	_bool m_bQuestRender = true;
+
+	vector<wstring> m_vNormalScript;
+	vector<wstring> m_vQuestScript;
+	vector<wstring> m_vNotClearScript;
+	vector<wstring> m_vClearScript;
+
+	_float4x4	m_ProjMatrix;
+	_float		m_fSizeX = 0.f;
+	_float		m_fSizeY = 0.f;
+	_float		m_fX = 0.f;
+	_float		m_fY = 0.f;
+
+	_float		m_fAlpha = 0.f;
+	_int m_iQuestTex = 0;
 
 private:
 	HRESULT SetUp_Components(void);
@@ -48,8 +80,9 @@ private:
 	HRESULT Release_RenderState(void);
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
-	void OnTerrain(void);
 	void	OnBillboard();
+	void Ready_Script(void);
+
 public:
 	static CVillage_Quest2* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

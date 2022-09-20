@@ -274,8 +274,8 @@ void CTextBox::Running_TextBox(void)
 			}
 			case CMyButton::BUTTON_RECEIVE:
 			{
-				g_bQuest = true;
-				g_bReward = true;
+				g_iQuest = m_tTInfo.iNumQuest;
+				g_iReward = m_tTInfo.iNumQuest;
 
 				for (auto& iterator : m_vButtonArray)
 					iterator->Set_Dead();

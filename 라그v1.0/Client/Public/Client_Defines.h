@@ -29,8 +29,8 @@ extern bool g_bCollider;
 extern int g_iTalk;
 extern int g_iCut;
 extern bool g_bFirst;
-extern bool g_bQuest;
-extern bool g_bReward;
+extern int g_iQuest;
+extern int g_iReward;
 
 
 //extern int g_iFrame;

@@ -75,7 +75,7 @@ HRESULT CGraphic_Device::InitDevice(const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DD
 		ERR_MSG(L"m_pFont Failed");
 		return E_FAIL;
 	}
-	D3DXFONT_DESCW	tFontInfo2;
+	
 	ZeroMemory(&tFontInfo, sizeof(D3DXFONT_DESCW));
 
 	tFontInfo.Height = 15;

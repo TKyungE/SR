@@ -3,6 +3,7 @@
 #include "Client_Defines.h"
 #include "Base.h"
 #include "HuntQuest1.h"
+#include "CollectQuest.h"
 
 BEGIN(Client)
 

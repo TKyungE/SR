@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "ClientQuest.h"
+#include "StatInfo.h"
 
 BEGIN(Client)
 
@@ -10,8 +11,12 @@ class CCollectQuest final : public CClientQuest
 public:
 	typedef struct tagQuestInfo_Derived
 	{
+		_uint iCount;
+		_uint* pCollectGoal;
+		CStatInfo::EITEM* pItemType;
 		QINFO tQInfo;
 	}QINFO_DERIVED;
+
 private:
 	CCollectQuest(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CCollectQuest(const CCollectQuest& rhs);
@@ -19,6 +24,7 @@ private:
 
 public:
 	QINFO_DERIVED Get_QInfoDerived(void) { return m_tQInfo; }
+	_uint* Get_Count(void) { return m_pCount; }
 
 public:
 	virtual HRESULT Initialize_Prototype(void) override;
@@ -28,6 +34,9 @@ public:
 
 private:
 	QINFO_DERIVED m_tQInfo;
+	CStatInfo* m_pStatInfo = nullptr;
+	_uint* m_pCount = nullptr;
+	_bool* m_pClear = nullptr;
 
 public:
 	static CCollectQuest* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

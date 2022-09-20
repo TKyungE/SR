@@ -7,6 +7,7 @@
 #include "Loading.h"
 #include "QuestManager.h"
 #include "HuntQuest1.h"
+#include "CollectQuest.h"
 
 //test
 CMainApp::CMainApp()
@@ -177,6 +178,10 @@ HRESULT CMainApp::Ready_Quest(void)
 	//Quest
 	if (FAILED(m_pQuestManager->Add_Prototype(TEXT("Prototype_Quest_HuntQuest1"), 
 		CHuntQuest::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pQuestManager->Add_Prototype(TEXT("Prototype_Quest_CollectQuest1"),
+		CCollectQuest::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	return S_OK;
