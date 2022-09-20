@@ -936,40 +936,25 @@ void CElderWilow::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	/*if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
-	{
-		_float3 vBackPos;
-		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-		}
-		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-		}
-		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}*/
-	/*if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
-	{
-		_float3 vBackPos;
-		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-		}
-		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-		}
-		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+	//if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
+	//{
+	//	_float3 vBackPos;
+	//	if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+	//	{
+	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+	//	}
+	//	else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+	//	{
+	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+	//	}
+	//	vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}*/
+	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	//}
+
 	Safe_Release(pInstance);
 }
 
