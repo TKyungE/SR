@@ -28,7 +28,7 @@ public:
 	virtual void Free(void) override;
 public:
 	enum EITEM{HPPOTION,MPPOTION,GOLD,ENGINE,TIARA,BOBY,SHOES,ROBE,PANDANT,EARRING,BRACELET,RING,STAFF,ORB,RIDEEGG,PETEGG,WING,
-		MON1,MON2, MON3, MON4, MON5, MON6, MON7, MON8, MON9, MON10, MON11, MON12,SKILL_THUNDER,SKILL_TORNADO,SKILL_FIREBALL,EITEM_END};
+		MON1,MON2, MON3, MON4, MON5, MON6, MON7, MON8, MON9, MON10, MON11, MON12,SKILL_THUNDER,SKILL_TORNADO,SKILL_FIREBALL,RIDE_ALPACA,EITEM_END};
 	typedef struct tagStat
 	{
 		_int iSTR;
@@ -52,6 +52,9 @@ private:
 	ITEM m_EquipSlot[10];
 	_bool	m_bMousePick = false;
 	_bool	m_bInven = false;
+	_bool	m_bPoring = false;
+	_bool	m_bRide = false;
+	_bool	m_bShop = false;
 	ITEM m_MouseItem;
 	_int m_iEquipStr = 0;
 	_int m_iEquipDex = 0;
@@ -81,13 +84,21 @@ public:
 	void Set_QuickItemCount(_int _ItemCount, _int iNum) { m_pQuickSlot[iNum].iCount = _ItemCount; }
 	void Set_QuickUseItemCount(_int _ItemCount, _int iNum) { m_pQuickSlot[iNum].iCount += _ItemCount; }
 	void Set_QuickItemSlot(_int _ItemSlot, _int iNum) { m_pQuickSlot[iNum].iSlotNum = _ItemSlot; }
-
+	void Set_SkillSlot(ITEM _Item, _int iNum){ m_SkillSlot[iNum] = _Item; }
 
 	void Set_STR(_int _iSTR) { m_tStat.iSTR += _iSTR; }
 	void Set_DEX(_int _iDEX) { m_tStat.iDEX += _iDEX; }
 	void Set_INT(_int _iINT) { m_tStat.iINT += _iINT; }
 	void Set_LUK(_int _iLUK) { m_tStat.iLUK += _iLUK; }
 	void Set_StatsPoint(_int _Point) { m_tMaxStat.iStatsPoint += _Point; }
+
+	_bool Get_Poring() { return m_bPoring; }
+	_bool Get_Ride() { return m_bRide; }
+	void Set_Poring() { m_bPoring = true; }
+	void Set_Ride() { m_bRide = true; }
+
+	_bool Get_Shop() { return m_bShop; }
+	void Set_Shop(_bool _Shop) { m_bShop = _Shop; }
 private:
 	void Check_Equip();
 };

@@ -69,7 +69,7 @@ HRESULT CSkillSlot::Initialize(void* pArg)
 void CSkillSlot::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	Check_Slot();
 	if (dynamic_cast<CUI*>(m_tInfo.pTerrain)->Get_Skill() == false)
 	{
 		dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Set_UI(false);
@@ -176,15 +176,17 @@ HRESULT CSkillSlot::Render()
 				switch (m_pvecItem[i].eItemNum)
 				{
 				case CStatInfo::SKILL_THUNDER:
-					szText += TEXT("백만볼트: Mp 20 소모 \n 번개가 무수히 떨어진다.");
+					szText += TEXT("백만볼트: Mp 20 소모 \n 번개가 무수히 떨어진다.\n쿨타임 5초");
 					break;
 				case CStatInfo::SKILL_TORNADO:
- 					szText += TEXT("토네이도: Mp 10 소모 \n 토네이도를 일으켜 \n 지속 피해를 준다.");
+ 					szText += TEXT("토네이도: Mp 10 소모 \n 토네이도를 일으켜 \n 지속 피해를 준다.\n쿨타임 3초");
 					break;
 				case CStatInfo::SKILL_FIREBALL:
-					szText += TEXT("파이어볼: Mp 5 소모 \n 화염구를 발사 한다.");
+					szText += TEXT("파이어볼: Mp 5 소모 \n 화염구를 발사 한다.\n쿨타임 1초");
 					break;
-			
+				case CStatInfo::RIDE_ALPACA:
+					szText += TEXT("알파카탑승: 이동속도가 \n 알파카만큼 빨라 집니다?.");
+					break;
 				default:
 					break;
 				}
