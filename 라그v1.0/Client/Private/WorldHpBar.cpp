@@ -257,7 +257,7 @@ CGameObject * CWorldHpBar::Clone(void * pArg)
 
 _float4x4 CWorldHpBar::Get_World(void)
 {
-	return _float4x4();
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CWorldHpBar::Free()
