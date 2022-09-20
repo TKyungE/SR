@@ -133,7 +133,7 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 		m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 		m_bTest = false;
 	}
-	else if (!g_bFirst && !g_bCut)
+	else if (!g_bFirst && 0 == g_iCut)
 	{
 		if (!m_bTest)
 		{
@@ -170,10 +170,10 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 
 	
 
-	if (g_bCut && m_CameraDesc.fFovy > D3DXToRadian(40.f))
+	if (0 != g_iCut && m_CameraDesc.fFovy > D3DXToRadian(40.f))
 		m_CameraDesc.fFovy -= D3DXToRadian(0.25f);
 
-	else if (!g_bCut && !m_bWheelMove && m_CameraDesc.fFovy < D3DXToRadian(60.f))
+	else if (0 == g_iCut && !m_bWheelMove && m_CameraDesc.fFovy < D3DXToRadian(60.f))
 		m_CameraDesc.fFovy += D3DXToRadian(0.25f);
 
 

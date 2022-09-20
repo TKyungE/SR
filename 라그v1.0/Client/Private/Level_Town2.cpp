@@ -302,7 +302,10 @@ HRESULT CLevel_Town2::Ready_Layer_UI(const _tchar * pLayerTag)
 	tInfo.bDead = false;
 	tInfo.pTarget = Info.pTarget;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuestUI"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

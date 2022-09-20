@@ -118,6 +118,15 @@ HRESULT CTextBox::Render()
 	return S_OK;
 }
 
+void CTextBox::TextBoxDead()
+{
+	Set_Dead();
+
+	if (g_iCut != 0)
+		g_iCut = 0;
+
+}
+
 HRESULT CTextBox::SetUp_Components()
 {
 	/* For.Com_Renderer */
@@ -235,8 +244,8 @@ void CTextBox::Running_TextBox(void)
 				
 				Set_Dead();
 				
-				if (g_bCut)
-					g_bCut = false;
+				if (0 != g_iCut)
+					g_iCut = 0;
 				
 				break;
 			}
@@ -275,8 +284,8 @@ void CTextBox::Running_TextBox(void)
 
 				Set_Dead();
 
-				if (g_bCut)
-					g_bCut = false;
+				if (0 != g_iCut)
+					g_iCut = 0;
 
 				break;
 			}
@@ -361,6 +370,12 @@ _float4x4 CTextBox::Get_World(void)
 
 void CTextBox::Free()
 {
+	for (auto& iterator : m_vButtonArray)
+		iterator->Set_Dead();
+
+	m_vButtonArray.clear();
+
+
 	if (nullptr != m_pScript)
 	{
 		for (_int i = 0; i < m_tTInfo.iScriptSize; ++i)

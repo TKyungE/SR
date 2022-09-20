@@ -49,7 +49,8 @@ HRESULT CRenderer::Render_GameObjects()
 		return E_FAIL;
 	if (FAILED(Render_UI()))
 		return E_FAIL;
-
+	if (FAILED(Render_Mouse()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -122,7 +123,20 @@ HRESULT CRenderer::Render_UI()
 	m_GameObjects[RENDER_UI].clear();
 	return S_OK;
 }
+HRESULT CRenderer::Render_Mouse()
+{
+	for (auto& pGameObject : m_GameObjects[RENDER_MOUSE])
+	{
+		if (nullptr != pGameObject)
+		{
+			pGameObject->Render();
+			Safe_Release(pGameObject);
+		}
+	}
 
+	m_GameObjects[RENDER_MOUSE].clear();
+	return S_OK;
+}
 CRenderer * CRenderer::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CRenderer*	pInstance = new CRenderer(pGraphic_Device);

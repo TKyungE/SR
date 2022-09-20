@@ -437,40 +437,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		++iCount;
 	}
-	
-	Info.vPos = { 15.f,1.f,5.f };
-	Info.iMonsterType = (_int)MON_ALLIGATOR;
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Atros"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 20.f,1.f,10.f };
-
-	Info.vPos = { 15.f,1.f,5.f };
-	Info.iMonsterType = (_int)MON_ALLIGATOR;
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Atros"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 20.f,1.f,10.f };
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Baphomet"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 25.f,1.f,15.f };
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Minorous"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 30.f,1.f,15.f };
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 35.f,1.f,13.f };
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 35.f,1.f,10.f };
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
@@ -524,6 +490,8 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuestUI"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

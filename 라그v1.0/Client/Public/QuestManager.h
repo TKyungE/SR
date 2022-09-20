@@ -21,6 +21,7 @@ public:
 	class CClientQuest* Find_Active(const _tchar* pQuestTag);
 	void Increase_Count(MONSTERTYPE eType);
 	HRESULT Clear_Quest(const _tchar* pQuestTag);
+	map<const _tchar*, class CClientQuest*> Get_Actives(void) { return m_Actives; }
 	
 private:
 	map<const _tchar*, class CClientQuest*>			m_Prototypes;

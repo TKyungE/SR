@@ -64,10 +64,7 @@ CClientQuest * CQuestManager::Find_Active(const _tchar * pQuestTag)
 void CQuestManager::Increase_Count(MONSTERTYPE eType)
 {
 	for (auto& iter : m_Actives)
-	{
-		if (eType == dynamic_cast<CHuntQuest1*>((&iter)->second)->Get_QInfo().eMonType)
-			dynamic_cast<CHuntQuest1*>((&iter)->second)->Increase_Count();
-	}
+		dynamic_cast<CHuntQuest*>((&iter)->second)->Increase_Count(eType);	
 }
 
 HRESULT CQuestManager::Clear_Quest(const _tchar * pQuestTag)

@@ -14,8 +14,8 @@
 #include "Transparent_Wall.h"
 
 bool g_bCollider = false;
-bool g_bTalk = false;
-bool g_bCut = false;
+int g_iTalk = 0;
+int g_iCut = 0;
 bool g_bFirst = true;
 bool g_bQuest = false;
 bool g_bReward = false;
@@ -276,6 +276,9 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LetterBox"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuestUI"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

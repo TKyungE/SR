@@ -283,6 +283,9 @@
     <Filter Include="01.Levels\Desert">
       <UniqueIdentifier>{9586cf90-4a99-4214-9a34-2f08de2e8c9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\Town2">
+      <UniqueIdentifier>{759e2c83-a2c7-4027-a401-3f9678461290}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\BackGroundObj\House3">
       <UniqueIdentifier>{5b4ab8dd-1405-40d8-99ab-298686e6fe24}</UniqueIdentifier>
     </Filter>
@@ -343,17 +346,17 @@
     <Filter Include="04.UI\05. Equip">
       <UniqueIdentifier>{e5cf10bb-83ae-41b2-9282-7f84486ed484}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\Gacha">
-      <UniqueIdentifier>{0c3c1956-c457-44c7-bfd3-805c9ae38718}</UniqueIdentifier>
+    <Filter Include="04.UI\QuestUI">
+      <UniqueIdentifier>{be3f6a86-88ee-4e52-a7ff-4fbff6056a26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Quest\CollectQuest">
+      <UniqueIdentifier>{19d3bec9-7d13-4750-baed-9f937d3938c3}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\NPC\05.SlotGacha">
-      <UniqueIdentifier>{e51ea163-fc9d-48e2-812c-10047e5ee2cb}</UniqueIdentifier>
+      <UniqueIdentifier>{99e816dc-ac0b-45b5-94fb-e77241e7f4b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\Laze">
-      <UniqueIdentifier>{dcf20696-9d6b-48df-a23e-e12016a61870}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\Town2">
-      <UniqueIdentifier>{759e2c83-a2c7-4027-a401-3f9678461290}</UniqueIdentifier>
+    <Filter Include="04.UI\Gacha">
+      <UniqueIdentifier>{df0f09bd-a8f7-45a2-8486-8d915bf26d60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -675,14 +678,14 @@
     <ClInclude Include="..\public\Equip.h">
       <Filter>04.UI\05. Equip</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Gacha.h">
-      <Filter>04.UI\Gacha</Filter>
+    <ClInclude Include="..\Public\QuestUI.h">
+      <Filter>04.UI\QuestUI</Filter>
     </ClInclude>
     <ClInclude Include="..\public\SlotGacha.h">
       <Filter>02.GameObject\NPC\05.SlotGacha</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Level_Maze.h">
-      <Filter>01.Levels\Laze</Filter>
+    <ClInclude Include="..\public\Gacha.h">
+      <Filter>04.UI\Gacha</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -992,14 +995,14 @@
     <ClCompile Include="..\private\Equip.cpp">
       <Filter>04.UI\05. Equip</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Gacha.cpp">
-      <Filter>04.UI\Gacha</Filter>
+    <ClCompile Include="..\Private\QuestUI.cpp">
+      <Filter>04.UI\QuestUI</Filter>
     </ClCompile>
     <ClCompile Include="..\private\SlotGacha.cpp">
       <Filter>02.GameObject\NPC\05.SlotGacha</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Level_Maze.cpp">
-      <Filter>01.Levels\Laze</Filter>
+    <ClCompile Include="..\private\Gacha.cpp">
+      <Filter>04.UI\Gacha</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1017,9 +1020,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl">
-      <Filter>06. ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl">
       <Filter>06. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

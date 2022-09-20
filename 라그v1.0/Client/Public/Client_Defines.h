@@ -26,13 +26,13 @@ extern HWND			g_hWnd;
 extern HINSTANCE	g_hInst;
 
 extern bool g_bCollider;
-extern bool g_bTalk;
-extern bool g_bCut;
+extern int g_iTalk;
+extern int g_iCut;
 extern bool g_bFirst;
 extern bool g_bQuest;
 extern bool g_bReward;
 
-extern bool g_Gacha;
+
 //extern int g_iFrame;
 
 #define     fSOUND  0.1f

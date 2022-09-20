@@ -54,7 +54,7 @@ void CSpace::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (nullptr != m_pRendererCom && g_bTalk && !g_bCut)
+	if (nullptr != m_pRendererCom && 0 != g_iTalk && 0 == g_iCut)
 		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_UI, this);
 }
 

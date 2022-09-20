@@ -80,7 +80,7 @@ void CSkillSlot::Tick(_float fTimeDelta)
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
-
+	ShowCursor(false);
 	_int iDest;
 	if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_InvenMouse() && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().eItemNum != CStatInfo::EITEM_END)
 	{
@@ -119,7 +119,7 @@ void CSkillSlot::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (nullptr != m_pRendererCom && !g_bCut)
+	if (nullptr != m_pRendererCom && 0 == g_iCut)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
@@ -128,7 +128,7 @@ HRESULT CSkillSlot::Render()
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
-
+	ShowCursor(false);
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 

@@ -242,6 +242,7 @@
     <ClInclude Include="..\public\Portal.h" />
     <ClInclude Include="..\public\PowerTotem.h" />
     <ClInclude Include="..\Public\QuestManager.h" />
+    <ClInclude Include="..\Public\QuestUI.h" />
     <ClInclude Include="..\Public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
@@ -351,6 +352,7 @@
     <ClCompile Include="..\private\Portal.cpp" />
     <ClCompile Include="..\private\PowerTotem.cpp" />
     <ClCompile Include="..\Private\QuestManager.cpp" />
+    <ClCompile Include="..\Private\QuestUI.cpp" />
     <ClCompile Include="..\Private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />

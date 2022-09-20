@@ -5,6 +5,7 @@
 #include "TextBox.h"
 #include "QuestManager.h"
 #include "Player.h"
+#include "Layer.h"
 
 CSlotGacha::CSlotGacha(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -90,9 +91,10 @@ void CSlotGacha::Tick(_float fTimeDelta)
 	Safe_AddRef(pInstance);
 
 
-	if (CKeyMgr::Get_Instance()->Key_Up('V') && m_bTalk && !g_bCut)
+
+	if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 	{
-		g_bCut = true;
+		g_iCut = 2;
 		    
 		CTextBox::TINFO tTInfo;
 		tTInfo.iScriptSize = (_int)m_vNormalScript.size();
@@ -102,17 +104,18 @@ void CSlotGacha::Tick(_float fTimeDelta)
 			tTInfo.pScript[i] = m_vNormalScript[i];
 
 		tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
-		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_SlotBox"), &tTInfo)))
 			return;
 	}
-	if (CKeyMgr::Get_Instance()->Key_Up('J'))
+
+	if (CKeyMgr::Get_Instance()->Key_Up('J') && g_iCut != 0 && m_bSlot)
 	{
+		
 		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Gacha"), m_tInfo.iLevelIndex, TEXT("Layer_UI"))))
 			return;
-
+		dynamic_cast<CTextBox*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_SlotBox"))->Get_Objects().front())->TextBoxDead();
+		m_bSlot = false;
 	}
-	
-
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
 	{
@@ -144,14 +147,15 @@ void CSlotGacha::Late_Tick(_float fTimeDelta)
 
 	if (pInstance->Collision(this, TEXT("Com_QuestCollider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 	{
+		m_bSlot = true;
 		m_bTalk = true;
-		g_bTalk = true;
+		g_iTalk = 2;
 	}
 	else
 	{
 		m_bTalk = false;
-		g_bTalk = false;
-		g_bCut = false;
+		if (2 == g_iTalk)
+			g_iTalk = 0;
 	}
 
 	Safe_Release(pInstance);

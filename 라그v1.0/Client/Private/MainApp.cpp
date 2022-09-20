@@ -179,7 +179,7 @@ HRESULT CMainApp::Ready_Quest(void)
 	
 	//Quest
 	if (FAILED(m_pQuestManager->Add_Prototype(TEXT("Prototype_Quest_HuntQuest1"), 
-		CHuntQuest1::Create(m_pGraphic_Device))))
+		CHuntQuest::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	return S_OK;
