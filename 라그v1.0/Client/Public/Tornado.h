@@ -39,6 +39,7 @@ private:
 	STATE				m_eCurState;
 	_float				m_fDeadTime = 0.f;
 	_float				m_CollTime = 0.f;
+	CGameObject*			m_StatInfo;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

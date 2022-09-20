@@ -44,7 +44,16 @@ HRESULT CCamera_Dynamic::Initialize(void* pArg)
 void CCamera_Dynamic::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	if (m_bCri)
+	{
+		m_fCriTime += fTimeDelta;
+		if (m_fCriTime > 0.1f)
+		{
+			m_CameraDesc.fFovy = m_fCriFovy;
+			m_bCri = false;
+			m_fCriTime = 0.f;
+		}
+	}
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
@@ -210,6 +219,17 @@ void CCamera_Dynamic::CameraRotationX(_float fTimeDelta, _float fIncrease)
 	D3DXVec3TransformNormal(&m_vecCameraNormal, &m_vecCameraNormal, &matXRot);*/
 
 	D3DXMatrixRotationAxis(&m_matRotX, &_float3(0.f, 1.f, 0.f), m_XfAngle);
+}
+
+void CCamera_Dynamic::CriHit()
+{
+	if (!m_bCri)
+	{
+		m_fCriFovy = m_CameraDesc.fFovy;
+		m_CameraDesc.fFovy -= 0.05f;
+		m_bCri = true;
+		m_fCriTime = 0.f;
+	}
 }
 
 CCamera_Dynamic * CCamera_Dynamic::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
