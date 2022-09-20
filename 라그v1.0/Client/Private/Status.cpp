@@ -93,6 +93,7 @@ void CStatus::Tick(_float fTimeDelta)
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
+	ShowCursor(false);
 	for (int i = 0; i < 4; ++i)
 	{
 		if (PtInRect(&m_rcButton[i], ptMouse))

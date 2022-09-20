@@ -122,7 +122,7 @@ void CTextBox::TextBoxDead()
 {
 	Set_Dead();
 
-	if (0 != g_iCut)
+	if (g_iCut != 0)
 		g_iCut = 0;
 
 }
