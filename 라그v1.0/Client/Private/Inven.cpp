@@ -163,7 +163,7 @@ void CInven::Late_Tick(_float fTimeDelta)
 
 	Check_Slot();
 
-	if (nullptr != m_pRendererCom && !g_bCut)
+	if (nullptr != m_pRendererCom && 0 == g_iCut)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 

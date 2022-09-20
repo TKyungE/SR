@@ -154,7 +154,7 @@ void CGacha::Late_Tick(_float fTimeDelta)
 
 	Motion_Change();
 
-	if (nullptr != m_pRendererCom && !g_bCut)
+	if (nullptr != m_pRendererCom && 0 == g_iCut)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 

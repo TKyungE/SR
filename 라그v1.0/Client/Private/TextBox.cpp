@@ -235,8 +235,8 @@ void CTextBox::Running_TextBox(void)
 				
 				Set_Dead();
 				
-				if (g_bCut)
-					g_bCut = false;
+				if (0 != g_iCut)
+					g_iCut = 0;
 				
 				break;
 			}
@@ -275,8 +275,8 @@ void CTextBox::Running_TextBox(void)
 
 				Set_Dead();
 
-				if (g_bCut)
-					g_bCut = false;
+				if (0 != g_iCut)
+					g_iCut = 0;
 
 				break;
 			}

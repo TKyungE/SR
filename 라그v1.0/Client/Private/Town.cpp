@@ -14,8 +14,8 @@
 #include "Transparent_Wall.h"
 
 bool g_bCollider = false;
-bool g_bTalk = false;
-bool g_bCut = false;
+int g_iTalk = 0;
+int g_iCut = 0;
 bool g_bFirst = true;
 bool g_bQuest = false;
 bool g_bReward = false;

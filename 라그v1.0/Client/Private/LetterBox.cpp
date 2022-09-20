@@ -51,13 +51,13 @@ void CLetterBox::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	if ((g_iWinSizeY * 0.125f) > m_fUpY && g_bCut)
+	if ((g_iWinSizeY * 0.125f) > m_fUpY && 0 != g_iCut)
 		m_fUpY += 2.f;
 		
-	if ((g_iWinSizeY * 0.875f) < m_fDownY && g_bCut)
+	if ((g_iWinSizeY * 0.875f) < m_fDownY && 0 != g_iCut)
 		m_fDownY -= 2.f;
 
-	if (!g_bCut)
+	if (0 == g_iCut)
 	{
 		if (m_fUpY > (g_iWinSizeY * -0.125f))
 			m_fUpY -= 2.f;

@@ -90,9 +90,9 @@ void CSlotGacha::Tick(_float fTimeDelta)
 	Safe_AddRef(pInstance);
 
 
-	if (CKeyMgr::Get_Instance()->Key_Up('V') && m_bTalk && !g_bCut)
+	if (CKeyMgr::Get_Instance()->Key_Up('V') && m_bTalk && 0 == g_iCut)
 	{
-		g_bCut = true;
+		g_iCut = 2;
 		    
 		CTextBox::TINFO tTInfo;
 		tTInfo.iScriptSize = (_int)m_vNormalScript.size();
@@ -145,13 +145,13 @@ void CSlotGacha::Late_Tick(_float fTimeDelta)
 	if (pInstance->Collision(this, TEXT("Com_QuestCollider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 	{
 		m_bTalk = true;
-		g_bTalk = true;
+		g_iTalk = 2;
 	}
 	else
 	{
 		m_bTalk = false;
-		g_bTalk = false;
-		g_bCut = false;
+		if (2 == g_iTalk)
+			g_iTalk = 0;
 	}
 
 	Safe_Release(pInstance);
