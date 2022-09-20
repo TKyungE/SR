@@ -219,10 +219,10 @@ HRESULT CFireDragon::Initialize(void * pArg)
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 3.f,3.f,1.f };
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 
 	Safe_Release(pGameInstance);
 

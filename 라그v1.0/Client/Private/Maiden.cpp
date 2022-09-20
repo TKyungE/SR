@@ -55,6 +55,7 @@ HRESULT CMaiden::Initialize(void * pArg)
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.7f,1.f };
+	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_MIDBOSS, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 1.f,1.f,1.f };
 

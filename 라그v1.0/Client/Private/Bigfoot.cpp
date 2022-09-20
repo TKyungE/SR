@@ -935,9 +935,9 @@ HRESULT CBigfoot::RespawnMonster()
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,1.f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 2.f,2.f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
@@ -1012,7 +1012,7 @@ void CBigfoot::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
+	/*if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -1028,7 +1028,7 @@ void CBigfoot::CheckColl()
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}
+	}*/
 	Safe_Release(pInstance);
 }
 void CBigfoot::DropItem()

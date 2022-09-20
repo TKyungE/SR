@@ -911,12 +911,12 @@ HRESULT CAlligator::RespawnMonster()
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.5f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo)))
 		return E_FAIL;
 	
 	tInfo.vPos = { 0.8f,0.8f,1.f };
 	
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
 		return E_FAIL;
 	
 	Safe_Release(pGameInstance);
@@ -996,7 +996,7 @@ void CAlligator::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	
+	/*
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
@@ -1013,7 +1013,7 @@ void CAlligator::CheckColl()
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}
+	}*/
 	Safe_Release(pInstance);
 }
 void CAlligator::DropItem()
