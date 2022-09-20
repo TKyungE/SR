@@ -33,8 +33,10 @@ HRESULT CQuestUI::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	//m_fSizeY = (_float)g_iWinSizeY * 0.3f;
+	m_fSizeX = (_float)g_iWinSizeX * 0.2f;
+	m_fSizeY = (_float)g_iWinSizeY * 0.3f;
 	m_fX = g_iWinSizeX * 1.1f;
+	m_fY = g_iWinSizeY * 0.5f;
 
 	return S_OK;
 }
@@ -55,8 +57,41 @@ void CQuestUI::Tick(_float fTimeDelta)
 		{
 		case CClientQuest::QUEST_HUNT:
 		{
-			_int iSizeY = dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().iCount;
-			m_fSizeY = (_float)g_iWinSizeY * (0.1f * (_float)iSizeY);
+			m_iCount = dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().iCount;
+			m_pWString = new wstring[m_iCount + 1];
+			if (Pair.second->Get_Clear())
+				m_pWString[0] = TEXT("[¿Ï·á] ¸ñÇ¥ »ç³É");
+			else
+				m_pWString[0] = TEXT("[ÁøÇàÁß] ¸ñÇ¥ »ç³É");
+
+			for (_int i = 0; i < m_iCount; ++i)
+			{
+				switch (dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().pMonType[i])
+				{
+				case MON_ALLIGATOR:
+					m_pWString[i + 1] = TEXT("¾Ç¾î : ");
+					break;
+				case MON_ELDERWILOW:
+					m_pWString[i + 1] = TEXT("¿¤´õ Àª·Î¿ì : ");
+					break;
+				case MON_BIGFOOT:
+					m_pWString[i + 1] = TEXT("ºòÇ² : ");
+					break;
+				case MON_BYORGUE:
+					m_pWString[i + 1] = TEXT("ºÌ¸£±× : ");
+					break;
+				case MON_BLOODYMURDERER:
+					m_pWString[i + 1] = TEXT("ÇÇ ¹¯Àº »ìÀÎÀÚ : ");
+					break;
+				case MON_DANDELION:
+					m_pWString[i + 1] = TEXT("´Üµ¨¶óÀÌ¿Â : ");
+					break;
+				}
+			
+				m_pWString[i + 1] += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_Count()[i]);
+				m_pWString[i + 1] += TEXT(" / ");
+				m_pWString[i + 1] += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().pHuntGoal[i]);
+			}
 			break;
 		}
 		/*case CClientQuest::QUEST_COLLECT:
@@ -68,12 +103,6 @@ void CQuestUI::Tick(_float fTimeDelta)
 	}
 
 	Safe_Release(pQuestManager);
-
-	m_fSizeX = (_float)g_iWinSizeX * 0.2f;
-	
-	
-	m_fY = g_iWinSizeY * 0.5f;
-
 
 	if (g_iWinSizeX * 0.9f < m_fX)
 		m_fX -= g_iWinSizeX * 0.005f;
@@ -122,7 +151,10 @@ HRESULT CQuestUI::Render()
 
 		Safe_AddRef(pInstance);
 
-		//pInstance->Get_Font2()->DrawText(nullptr, m_wstr.c_str(), (_int)m_wstr.length(), &m_rcBox, DT_LEFT | DT_WORDBREAK, D3DCOLOR_ARGB(255, 0, 0, 0));
+		/*for (_int i = 0; i < (m_iCount + 1); ++i)
+		{
+			pInstance->Get_Font2()->DrawText(nullptr, m_pWString[i].c_str(), (_int)m_pWString[i].length(), &m_rcBox, DT_LEFT | DT_WORDBREAK, D3DCOLOR_ARGB(255, 0, 0, 0));
+		}*/
 
 		Safe_Release(pInstance);
 	}

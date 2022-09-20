@@ -24,6 +24,7 @@ private:
 public:
 	QINFO_DERIVED Get_QInfoDerived(void) { return m_tQInfo; }
 	void Increase_Count(MONSTERTYPE eType);
+	_uint* Get_Count(void) { return m_pCount; }
 
 public:
 	virtual HRESULT Initialize_Prototype(void) override;
