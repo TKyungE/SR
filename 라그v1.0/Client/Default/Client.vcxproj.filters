@@ -367,6 +367,9 @@
     <Filter Include="03.Effect\Default\13.CriHit2">
       <UniqueIdentifier>{308b7985-fc50-4bce-b0cd-2ac04ce36fec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\00.PlayerUI\03. AlphaUI">
+      <UniqueIdentifier>{fd061c48-a018-4873-9946-1d44ea6418c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -705,6 +708,9 @@
     <ClInclude Include="..\public\CriHitUI.h">
       <Filter>03.Effect\Default\13.CriHit2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\AlphaUI.h">
+      <Filter>04.UI\00.PlayerUI\03. AlphaUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1030,6 +1036,9 @@
     </ClCompile>
     <ClCompile Include="..\private\CriHitUI.cpp">
       <Filter>03.Effect\Default\13.CriHit2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AlphaUI.cpp">
+      <Filter>04.UI\00.PlayerUI\03. AlphaUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
