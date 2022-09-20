@@ -358,6 +358,9 @@
     <Filter Include="04.UI\Gacha">
       <UniqueIdentifier>{df0f09bd-a8f7-45a2-8486-8d915bf26d60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\Maze">
+      <UniqueIdentifier>{1959e95b-89b4-4493-8f00-340fb4a1ac2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -687,6 +690,9 @@
     <ClInclude Include="..\public\Gacha.h">
       <Filter>04.UI\Gacha</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Level_Maze.h">
+      <Filter>01.Levels\Maze</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1004,6 +1010,9 @@
     <ClCompile Include="..\private\Gacha.cpp">
       <Filter>04.UI\Gacha</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Level_Maze.cpp">
+      <Filter>01.Levels\Maze</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1022,5 +1031,6 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl">
       <Filter>06. ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl" />
   </ItemGroup>
 </Project>
