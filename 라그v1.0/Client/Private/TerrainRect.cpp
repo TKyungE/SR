@@ -2,6 +2,7 @@
 #include "..\Public\TerrainRect.h"
 #include "GameInstance.h"
 #include "Terrain.h"
+#include "Layer.h"
 
 CTerrainRect::CTerrainRect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -85,28 +86,45 @@ HRESULT CTerrainRect::Render(void)
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
+	if (m_tRectInfo.iLevelIndex != LEVEL_MAZE)
+	{
+		m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+		m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+		m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
+		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
 
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tRectInfo.iTex)))
+			return E_FAIL;
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
+		if (nullptr == m_pGraphic_Device)
+			return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tRectInfo.iTex)))
-		return E_FAIL;
+		m_pGraphic_Device->SetStreamSource(0, m_pVBuffer, 0, sizeof(VTXTEX));
+		m_pGraphic_Device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
+		m_pGraphic_Device->SetIndices(m_pIBuffer);
 
-	if (nullptr == m_pGraphic_Device)
-		return E_FAIL;
+		
 
-	m_pGraphic_Device->SetStreamSource(0, m_pVBuffer, 0, sizeof(VTXTEX));
-	m_pGraphic_Device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
-	m_pGraphic_Device->SetIndices(m_pIBuffer);
+		m_pGraphic_Device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+	}
+	else
+	{
+		if (FAILED(SetUp_ShaderResource()))
+			return E_FAIL;
 
-	m_pGraphic_Device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+		m_pShaderCom->Begin(2);
 
+		m_pGraphic_Device->SetStreamSource(0, m_pVBuffer, 0, sizeof(VTXTEX));
+		m_pGraphic_Device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
+		m_pGraphic_Device->SetIndices(m_pIBuffer);
+
+		m_pGraphic_Device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+
+		m_pShaderCom->End();
+	}
 	return S_OK;
 }
 
@@ -127,6 +145,54 @@ HRESULT CTerrainRect::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+	
+
+	return S_OK;
+}
+
+HRESULT CTerrainRect::SetUp_ShaderResource()
+{
+	if (nullptr == m_pShaderCom)
+		return E_FAIL;
+
+
+	_float4x4		WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
+	_float4x4		ViewMatrixInv;
+	_float4			vCamPosition;
+
+	WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	CLayer* pLayer = pInstance->Find_Layer(m_tRectInfo.iLevelIndex, TEXT("Layer_Player"));
+
+	list<class CGameObject*> GameObject = pLayer->Get_Objects();
+
+	PlayerWorldMatrix = GameObject.front()->Get_World();
+
+	memcpy(&vCamPosition, &PlayerWorldMatrix.m[3][0], sizeof(_float4));
+
+	Safe_Release(pInstance);
+
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_tRectInfo.iTex))))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -170,6 +236,7 @@ void CTerrainRect::Free(void)
 		Safe_Release(m_pIBuffer);
 		Safe_Release(m_pVBuffer);
 	}
+	Safe_Release(m_pShaderCom);
 
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTransformCom);

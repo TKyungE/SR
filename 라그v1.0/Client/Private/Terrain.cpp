@@ -145,6 +145,8 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 			tRectInfo.TextureArray[j] = vTex;
 		}
 
+		tRectInfo.iLevelIndex = m_tInfo.iLevelIndex;
+
 		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TerrainRect"), m_tInfo.iLevelIndex, TEXT("Layer_TerrainRect"), &tRectInfo)))
 		{
 			ERR_MSG(TEXT("Failed to Cloned : CTerrainRect"));

@@ -91,6 +91,7 @@
 #include "QuestUI.h"
 #include "CriHit.h"
 #include "CriHitUI.h"
+#include "AlphaUI.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -877,6 +878,10 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		return E_FAIL;
 
 
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Alpha"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Test/%d.dds"), 1))))
+		return E_FAIL;
+
 	//   NPC ´ëÈ­ ==========================================================================================
 
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Quest1"),
@@ -937,7 +942,7 @@ HRESULT CLoader::Loading_Prototype()
 		CPlayerHp::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlayerMp"),
-		CPlayerMp::Create(m_pGraphic_Device))))
+		CAlphaUI::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlayerExp"),
 		CPlayerExp::Create(m_pGraphic_Device))))
@@ -1191,6 +1196,12 @@ HRESULT CLoader::Loading_Prototype()
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Maiden"),
 		CMaiden::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+
+
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlphaUI"),
+		CAlphaUI::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

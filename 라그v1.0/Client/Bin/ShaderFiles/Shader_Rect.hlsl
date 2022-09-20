@@ -6,8 +6,8 @@ float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture g_Texture;
 
 float g_fAlpha;
-float			g_fMinRange = 1.f;
-float			g_fMaxRange = 3.f;
+float			g_fMinRange = 0.f;
+float			g_fMaxRange = 2.f;
 
 float4			g_vCamPosition;
 
@@ -137,6 +137,19 @@ PS_OUT PS_MAIN_MONSTER(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_UI(PS_IN In)
+{
+	PS_OUT			Out = (PS_OUT)0;
+
+	Out.vColor = tex2D(MonsterSampler, In.vTexUV);
+
+	Out.vColor.r = 0.5f;
+	Out.vColor.gb = 0.f;
+	Out.vColor.a = ((1.f - Out.vColor.a) * 0.5f) - g_fAlpha;
+
+	return Out;
+}
+
 technique DefaultTechnique
 {
 	pass DefaultPass
@@ -190,5 +203,16 @@ technique DefaultTechnique
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_MONSTER();
+	}
+
+	pass UI
+	{
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_UI();
 	}
 }

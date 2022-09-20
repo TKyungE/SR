@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CShader;
 class CRenderer;
 class CTexture;
 class CTransform;
@@ -17,6 +18,7 @@ public:
 
 		_float3 vPos;
 		_uint iTex; 
+		_uint iLevelIndex;
 	}RECTINFO;
 
 private:
@@ -35,10 +37,10 @@ private:
 	CRenderer* m_pRendererCom = nullptr;
 	CTexture* m_pTextureCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
-
+	CShader*		m_pShaderCom = nullptr;
 private:
 	HRESULT SetUp_Components(void);
-
+	HRESULT SetUp_ShaderResource();
 private:
 	RECTINFO m_tRectInfo;
 	_uint m_iIndex = 0;
