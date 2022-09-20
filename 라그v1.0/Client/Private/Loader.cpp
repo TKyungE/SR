@@ -951,7 +951,7 @@ HRESULT CLoader::Loading_Prototype()
 		CPlayerHp::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlayerMp"),
-		CAlphaUI::Create(m_pGraphic_Device))))
+		CPlayerMp::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlayerExp"),
 		CPlayerExp::Create(m_pGraphic_Device))))

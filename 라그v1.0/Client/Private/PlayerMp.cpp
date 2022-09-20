@@ -31,7 +31,7 @@ HRESULT CPlayerMp::Initialize(void* pArg)
 	m_fSizeY = 13.f;
 	m_fX = 50.f;
 	m_fY = 112.f;
-
+	m_tInfo.bDead = false;
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
@@ -49,7 +49,7 @@ void CPlayerMp::Tick(_float fTimeDelta)
 	_float fX = m_fSizeX * ((float)m_tInfo.pTarget->Get_Info().iMp / (float)m_tInfo.pTarget->Get_Info().iMaxMp);
 
 	m_pTransformCom->Set_Scaled(_float3(fX, m_fSizeY, 1.f));
-
+	m_tInfo.bDead = false;
 }
 
 void CPlayerMp::Late_Tick(_float fTimeDelta)
