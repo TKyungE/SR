@@ -253,6 +253,7 @@ void CVillage_Quest1::Late_Tick(_float fTimeDelta)
 		m_bTalk = false;
 		if (1 == g_iTalk)
 			g_iTalk = 0;
+
 	}
 
 	Safe_Release(pInstance);

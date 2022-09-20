@@ -59,7 +59,7 @@ private:
 	_float		m_fSizeY = 0.f;
 	_float		m_fX = 0.f;
 	_float		m_fY = 0.f;
-
+	_bool		m_bSlot = false;
 	_float		m_fAlpha = 0.f;
 	_int m_iQuestTex = 0;
 

@@ -56,7 +56,8 @@ private:
 	CMyButton*		m_pButton = nullptr;
 
 	TINFO m_tTInfo;
-
+public:
+	void TextBoxDead();
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
@@ -67,7 +68,7 @@ private:
 	void Running_TextBox(void);
 	void Print_Text(void);
 	void Change_Button(void);
-
+	
 public:
 	static CTextBox* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

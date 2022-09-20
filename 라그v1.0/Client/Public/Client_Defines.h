@@ -32,7 +32,7 @@ extern bool g_bFirst;
 extern bool g_bQuest;
 extern bool g_bReward;
 
-extern bool g_Gacha;
+
 //extern int g_iFrame;
 
 #define     fSOUND  0.1f
