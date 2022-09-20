@@ -52,7 +52,7 @@ void CMainApp::Tick(_float fTimeDelta)
 {
 	if (nullptr == m_pGameInstance)
 		return;
-
+	
 	m_pGameInstance->Tick_Engine(fTimeDelta);
 
 	m_pQuestManager->Tick();
@@ -64,12 +64,13 @@ void CMainApp::Tick(_float fTimeDelta)
 
 HRESULT CMainApp::Render()
 {
+	
 	m_pGameInstance->Render_Begin();
-
+	
 	m_pRenderer->Render_GameObjects();
 
 	m_pGameInstance->Render_End();
-
+	
 	++m_iNumRender;
 
 	if (m_fTimeAcc > 1.0f)

@@ -955,6 +955,7 @@ void CDandelion::DropItem()
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	tInfo.pTerrain = m_tInfo.pTarget;
 	if (iDest == 0)
 		tInfo.iLv = 2;
 	else

@@ -104,9 +104,9 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 
 	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")))
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
+		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
-			g_bCut = true;
+			g_iCut = 1;
 
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vQuestScript.size();
@@ -125,9 +125,9 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	}
 	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")) && !pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
+		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
-			g_bCut = true;
+			g_iCut = 1;
 
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vNotClearScript.size();
@@ -145,9 +145,9 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	}
 	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")) && pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
+		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
-			g_bCut = true;
+			g_iCut = 1;
 
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vClearScript.size();
@@ -166,9 +166,9 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	}
 	else
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && !g_bCut)
+		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
-			g_bCut = true;
+			g_iCut = 1;
 
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vNormalScript.size();
@@ -256,12 +256,13 @@ void CVillage_Quest1::Late_Tick(_float fTimeDelta)
 	if (pInstance->Collision(this, TEXT("Com_QuestCollider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 	{
 		m_bTalk = true;
-		g_bTalk = true;
+		g_iTalk = 1;
 	}
 	else
 	{
 		m_bTalk = false;
-		g_bTalk = false;
+		if (1 == g_iTalk)
+			g_iTalk = 0;
 	}
 
 	Safe_Release(pInstance);
@@ -277,7 +278,7 @@ HRESULT CVillage_Quest1::Render(void)
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
-	if (g_bCut && m_bTalk)
+	if (0 != g_iCut && m_bTalk)
 	{
 		if (FAILED(m_pCharTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;

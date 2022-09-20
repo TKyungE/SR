@@ -7,6 +7,7 @@ class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
 class CTexture;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -35,7 +36,7 @@ private:
 	CTexture* m_pTextureComIDLE_Back = nullptr;
 	CTexture* m_pTextureComMove_Front = nullptr;
 	CTexture* m_pTextureComMove_Back = nullptr;
-
+	CCollider*				m_pColliderCom = nullptr;
 
 private:
 	void OnTerrain();
@@ -50,6 +51,7 @@ private:
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
 	HRESULT TextureRender();
+	void CheckColl();
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;

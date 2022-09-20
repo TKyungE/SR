@@ -96,7 +96,7 @@ void CPlayer::Tick(_float fTimeDelta)
 			break;
 		}
 	}
-	if (!g_bFirst && !g_bCut)
+	if (!g_bFirst && 0 == g_iCut)
 	{
 		if (GetKeyState('W') < 0)
 		{
@@ -123,7 +123,7 @@ void CPlayer::Tick(_float fTimeDelta)
 	Check_Stat();
 	OnTerrain();
 
-	if (!g_bCut)
+	if (0 == g_iCut)
 	{
 		if (g_bFirst)
 		{

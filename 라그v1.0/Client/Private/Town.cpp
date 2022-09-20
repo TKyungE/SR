@@ -14,8 +14,8 @@
 #include "Transparent_Wall.h"
 
 bool g_bCollider = false;
-bool g_bTalk = false;
-bool g_bCut = false;
+int g_iTalk = 0;
+int g_iCut = 0;
 bool g_bFirst = true;
 bool g_bQuest = false;
 bool g_bReward = false;
@@ -61,6 +61,7 @@ void CTown::Tick(_float fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 
+
 	/*CGameObject* Dest;
 	CGameObject* Sour;*/
 
@@ -88,6 +89,7 @@ void CTown::Tick(_float fTimeDelta)
 void CTown::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+
 
 	SetWindowText(g_hWnd, TEXT("타운레벨입니다."));
 
@@ -337,7 +339,9 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 				return E_FAIL;
 		}
 	}
-
+	tInfo.vPos = { 16.1f,1.f,21.8f };
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SlotGacha"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
