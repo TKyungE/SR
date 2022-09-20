@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\WorldHpBar.h"
 #include"GameInstance.h"
-
+#include "Layer.h"
 
 CWorldHpBar::CWorldHpBar(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:CGameObject(pGraphic_Device)
@@ -76,26 +76,80 @@ HRESULT CWorldHpBar::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+	_float4x4 WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
+	_float4			vCamPosition;
+
+	WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	CLayer* pLayer = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"));
+
+	list<class CGameObject*> GameObject = pLayer->Get_Objects();
+
+	PlayerWorldMatrix = GameObject.front()->Get_World();
+
+	memcpy(&vCamPosition, &PlayerWorldMatrix.m[3][0], sizeof(_float4));
+
+	Safe_Release(pInstance);
+
+	m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
+	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
-		return E_FAIL;
+	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(0));
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
+	m_pShaderCom->Begin(3);
+
 	m_pVIBufferCom->Render();
 
-	if (FAILED(m_pTransformCom2->Bind_OnGraphicDev()))
+	m_pShaderCom->End();
+
+
+
+	_float4x4 WorldMatrix2, ViewMatrix2, ProjMatrix2, PlayerWorldMatrix2;
+	_float4			vCamPosition2;
+
+	WorldMatrix2 = m_pTransformCom2->Get_WorldMatrix();
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix2);
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix2);
+
+	CGameInstance* pInstance2 = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance2);
+
+	CLayer* pLayer2 = pInstance2->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"));
+
+	list<class CGameObject*> GameObject2 = pLayer2->Get_Objects();
+
+	PlayerWorldMatrix2 = GameObject2.front()->Get_World();
+
+	memcpy(&vCamPosition2, &PlayerWorldMatrix2.m[3][0], sizeof(_float4));
+
+	Safe_Release(pInstance2);
+
+	m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix2, &WorldMatrix2), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix2, &ViewMatrix2), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix2, &ProjMatrix2), sizeof(_float4x4));
+	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(2)))
-		return E_FAIL;
+
+	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(2));
+
+	m_pShaderCom->Begin(3);
+
 	m_pVIBufferCom2->Render();
-	if (FAILED(Release_RenderState()))
-		return E_FAIL;
 
-
+	m_pShaderCom->End();
 
 	return S_OK;
 }
@@ -125,6 +179,9 @@ HRESULT CWorldHpBar::SetUp_Components()
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform2"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom2, &TransformDesc)))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -135,9 +192,9 @@ HRESULT CWorldHpBar::SetUp_RenderState()
 	m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
 
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	/*m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);*/
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 	return S_OK;
@@ -206,6 +263,7 @@ _float4x4 CWorldHpBar::Get_World(void)
 void CWorldHpBar::Free()
 {
 	__super::Free();
+	Safe_Release(m_pShaderCom);
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTransformCom2);

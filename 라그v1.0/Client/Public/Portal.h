@@ -3,6 +3,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CShader;
 class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
@@ -43,6 +44,7 @@ private:
 	CVIBuffer_Cube* m_pVIBuffer = nullptr;
 	CTexture* m_pTextureCom = nullptr;
 	CCollider* m_pColliderCom = nullptr;
+	CShader*	m_pShaderCom = nullptr;
 
 private:
 	INDEXPOS	m_IndexPos;

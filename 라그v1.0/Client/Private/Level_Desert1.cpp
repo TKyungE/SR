@@ -680,7 +680,7 @@ HRESULT CLevel_Desert1::Ready_Layer_Portal(const _tchar * pLayerTag)
 		tInfo.iLevelIndex = LEVEL_DESERT1;
 		tInfo.vPos = iter->BackGroundPos;
 		tInfo.vScale = iter->vScale;
-		tInfo.iNextLevel = LEVEL_TOWN;
+		tInfo.iNextLevel = LEVEL_TOWN2;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_DESERT1, pLayerTag, &tInfo)))
 			return E_FAIL;
@@ -700,7 +700,7 @@ HRESULT CLevel_Desert1::Ready_Layer_Portal(const _tchar * pLayerTag)
 		tInfo.iLevelIndex = LEVEL_DESERT1;
 		tInfo.vPos = iter->BackGroundPos;
 		tInfo.vScale = iter->vScale;
-		tInfo.iNextLevel = LEVEL_DESERT1;
+		tInfo.iNextLevel = LEVEL_MAZE;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_DESERT1, pLayerTag, &tInfo)))
 			return E_FAIL;

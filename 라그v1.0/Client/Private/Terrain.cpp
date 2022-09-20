@@ -2,6 +2,7 @@
 #include "..\Public\Terrain.h"
 #include "GameInstance.h"
 #include "TerrainRect.h"
+#include "Layer.h"
 
 CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -73,21 +74,33 @@ HRESULT CTerrain::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 	
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
+	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
+	{
+		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
-		return E_FAIL;
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
+			return E_FAIL;
 
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
+		if (FAILED(SetUp_RenderState()))
+			return E_FAIL;
 
+		m_pVIBufferCom->Render();
 
+		if (FAILED(Release_RenderState()))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(SetUp_ShaderResource()))
+			return E_FAIL;
 
-	m_pVIBufferCom->Render();
+		m_pShaderCom->Begin(2);
 
-	if (FAILED(Release_RenderState()))
-		return E_FAIL;
+		m_pVIBufferCom->Render();
+
+		m_pShaderCom->End();
+	}
 
 	return S_OK;
 }
@@ -225,6 +238,8 @@ HRESULT CTerrain::SetUp_Components()
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -243,6 +258,52 @@ HRESULT CTerrain::Release_RenderState()
 {
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	m_pGraphic_Device->SetTexture(0, nullptr);
+
+	return S_OK;
+}
+
+HRESULT CTerrain::SetUp_ShaderResource()
+{
+	if (nullptr == m_pShaderCom)
+		return E_FAIL;
+
+
+	_float4x4		WorldMatrix, ViewMatrix, ProjMatrix,PlayerWorldMatrix;
+	_float4x4		ViewMatrixInv;
+	_float4			vCamPosition;
+
+	WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	CLayer* pLayer = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"));
+
+	list<class CGameObject*> GameObject = pLayer->Get_Objects();
+	
+	PlayerWorldMatrix = GameObject.front()->Get_World();
+
+	memcpy(&vCamPosition, &PlayerWorldMatrix.m[3][0], sizeof(_float4));
+
+	Safe_Release(pInstance);
+
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_tInfo.iMp))))
+		return E_FAIL;
+
+
 
 	return S_OK;
 }
@@ -281,6 +342,7 @@ _float4x4 CTerrain::Get_World(void)
 void CTerrain::Free()
 {
 	__super::Free();
+	Safe_Release(m_pShaderCom);
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);

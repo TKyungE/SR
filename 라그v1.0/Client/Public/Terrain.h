@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CShader;
 class CTexture;
 class CRenderer;
 class CTransform;
@@ -32,13 +33,14 @@ private: /* For.Components */
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;
-
+	CShader*				m_pShaderCom = nullptr;
 private:
 	HRESULT OnLoadData(const _tchar* pFilePath);
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
+	HRESULT SetUp_ShaderResource();
 
 public:
 	static CTerrain* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

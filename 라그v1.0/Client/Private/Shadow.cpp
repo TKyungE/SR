@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\Shadow.h"
 #include "GameInstance.h"
+#include "Layer.h"
 
 CShadow::CShadow(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -78,24 +79,66 @@ HRESULT CShadow::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	Off_SamplerState();
-
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
+	if (m_tInfo.iLevelIndex == LEVEL_MAZE)
+	{
 
 
-	//상태에 따라 바인드하는 함수
-	TextureRender();
+		_float4x4	WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
+		_float4			vCamPosition;
 
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
+		WorldMatrix = m_pTransformCom->Get_WorldMatrix();
 
-	m_pVIBufferCom->Render();
+		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
 
-	if (FAILED(Release_RenderState()))
-		return E_FAIL;
+		CGameInstance* pInstance = CGameInstance::Get_Instance();
 
-	On_SamplerState();
+		Safe_AddRef(pInstance);
+
+		CLayer* pLayer = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"));
+
+		list<class CGameObject*> GameObject = pLayer->Get_Objects();
+
+		PlayerWorldMatrix = GameObject.front()->Get_World();
+
+		memcpy(&vCamPosition, &PlayerWorldMatrix.m[3][0], sizeof(_float4));
+
+		Safe_Release(pInstance);
+
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
+		if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
+			return E_FAIL;
+		TextureRender();
+
+		m_pShaderCom->Begin(4);
+
+		m_pVIBufferCom->Render();
+
+		m_pShaderCom->End();
+
+	}
+	else
+	{
+		Off_SamplerState();
+
+		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
+
+		TextureRender();
+
+		if (FAILED(SetUp_RenderState()))
+			return E_FAIL;
+		
+		m_pVIBufferCom->Render();
+
+		
+		if (FAILED(Release_RenderState()))
+			return E_FAIL;
+
+		On_SamplerState();
+	}
 	return S_OK;
 }
 
@@ -180,8 +223,14 @@ HRESULT CShadow::TextureRender()
 	switch (m_eCurState)
 	{
 	case IDLE:
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-			return E_FAIL;
+		if (m_tInfo.iLevelIndex == LEVEL_MAZE)
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_tFrame.iFrameStart));
+		
+		else
+		{
+			if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+				return E_FAIL;
+		}
 		break;
 	default:
 		break;
@@ -239,7 +288,8 @@ HRESULT CShadow::SetUp_Components()
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -297,6 +347,7 @@ _float4x4 CShadow::Get_World(void)
 void CShadow::Free()
 {
 	__super::Free();
+	Safe_Release(m_pShaderCom);
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);

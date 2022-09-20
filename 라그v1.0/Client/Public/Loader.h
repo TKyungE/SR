@@ -40,6 +40,8 @@ public:
 	HRESULT Loading_ForMidBoss();
 	HRESULT Loading_ForTown2();
 	HRESULT Loading_ForDesert1();
+	HRESULT Loading_ForMaze();
+
 
 	HRESULT Loading_Static(LEVEL Level);
 	HRESULT Loading_Prototype();

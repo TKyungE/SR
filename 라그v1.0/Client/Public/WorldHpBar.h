@@ -4,6 +4,7 @@
 #include"Client_Defines.h"
 
 BEGIN(Engine)
+class CShader;
 class CTexture;
 class CRenderer;
 class CTransform;
@@ -32,6 +33,7 @@ private: /* For.Components */
 	CTransform*				m_pTransformCom2 = nullptr;
 	CVIBuffer_WingRect*			m_pVIBufferCom = nullptr;
 	CVIBuffer_WingRect*			m_pVIBufferCom2 = nullptr;
+	CShader*				m_pShaderCom = nullptr;
 private:
 
 	_float4x4				m_ProjMatrix;

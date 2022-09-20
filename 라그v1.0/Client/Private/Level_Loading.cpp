@@ -11,6 +11,7 @@
 #include "Level_MidBoss.h"
 #include "Level_Town2.h"
 #include "Level_Desert1.h"
+#include "Level_Maze.h"
 
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -76,6 +77,9 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 				break;
 			case LEVEL_DESERT1:
 				pNewLevel = CLevel_Desert1::Create(m_pGraphic_Device);
+				break;
+			case LEVEL_MAZE:
+				pNewLevel = CLevel_Maze::Create(m_pGraphic_Device);
 				break;
 			}
 

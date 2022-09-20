@@ -6,6 +6,11 @@ float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture g_Texture;
 
 float g_fAlpha;
+float			g_fMinRange = 1.f;
+float			g_fMaxRange = 3.f;
+
+float4			g_vCamPosition;
+
 
 sampler TextureSampler = sampler_state {
 	texture = g_Texture;
@@ -21,6 +26,13 @@ sampler CharNpcSampler = sampler_state {
 	
 };
 
+sampler MonsterSampler = sampler_state {
+	texture = g_Texture;
+	MINFILTER = NONE;
+	MAGFILTER = NONE;
+	MIPFILTER = NONE;
+
+};
 struct VS_IN
 {
 	float3 vPosition : POSITION;
@@ -83,6 +95,47 @@ PS_OUT PS_NPC(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_TERRAIN(PS_IN In)
+{
+	PS_OUT			Out = (PS_OUT)0;
+
+	Out.vColor = tex2D(TextureSampler, In.vTexUV);
+
+	// dot, cross, normalize
+
+	float4		vFogColor = Out.vColor;
+
+	float		fDistance = length(g_vCamPosition - vector(In.vWorldPos, 1.f));
+
+	 float		fFogPower = min((g_fMaxRange - max(fDistance - g_fMinRange, 0.f)), g_fMaxRange - g_fMinRange) / (g_fMaxRange - g_fMinRange);
+
+	//float		fFogPower = max(fDistance - g_fMinRange, 0.f) / (g_fMaxRange - g_fMinRange);
+
+	Out.vColor += vFogColor * fFogPower;
+
+	return Out;
+}
+
+PS_OUT PS_MAIN_MONSTER(PS_IN In)
+{
+	PS_OUT			Out = (PS_OUT)0;
+
+	Out.vColor = tex2D(MonsterSampler, In.vTexUV);
+
+	// dot, cross, normalize
+
+	float4		vFogColor = Out.vColor;
+
+	float		fDistance = length(g_vCamPosition - vector(In.vWorldPos, 1.f));
+
+	float		fFogPower = min((g_fMaxRange - max(fDistance - g_fMinRange, 0.f)), g_fMaxRange - g_fMinRange) / (g_fMaxRange - g_fMinRange);
+
+	//float		fFogPower = max(fDistance - g_fMinRange, 0.f) / (g_fMaxRange - g_fMinRange);
+
+	Out.vColor += vFogColor * fFogPower;
+
+	return Out;
+}
 
 technique DefaultTechnique
 {
@@ -113,5 +166,29 @@ technique DefaultTechnique
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_NPC();
+	}
+	pass Terrain
+	{
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_TERRAIN();
+	}
+	pass Monster
+	{
+		AlphaTestEnable = true;
+		AlphaFunc = GREATER;
+		AlphaRef = 100;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_MONSTER();
+	}
+	pass Shadow
+	{
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_MONSTER();
 	}
 }

@@ -212,6 +212,7 @@
     <ClInclude Include="..\Public\LetterBox.h" />
     <ClInclude Include="..\public\Level_ChoboField.h" />
     <ClInclude Include="..\Public\Level_Desert1.h" />
+    <ClInclude Include="..\Public\Level_Maze.h" />
     <ClInclude Include="..\Public\Level_MidBoss.h" />
     <ClInclude Include="..\Public\Level_Town2.h" />
     <ClInclude Include="..\public\Loading.h" />
@@ -320,6 +321,7 @@
     <ClCompile Include="..\Private\LetterBox.cpp" />
     <ClCompile Include="..\private\Level_ChoboField.cpp" />
     <ClCompile Include="..\Private\Level_Desert1.cpp" />
+    <ClCompile Include="..\Private\Level_Maze.cpp" />
     <ClCompile Include="..\Private\Level_MidBoss.cpp" />
     <ClCompile Include="..\Private\Level_Town2.cpp" />
     <ClCompile Include="..\private\Loading.cpp" />
@@ -398,6 +400,7 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

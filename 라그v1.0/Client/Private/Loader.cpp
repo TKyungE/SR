@@ -124,6 +124,9 @@ unsigned int APIENTRY Thread_Main(void* pArg)
 	case LEVEL_DESERT1:
 		pLoader->Loading_ForDesert1();
 		break;
+	case LEVEL_MAZE:
+		pLoader->Loading_ForMaze();
+		break;
 	}
 
 	LeaveCriticalSection(&pLoader->Get_CriticalSection());
@@ -167,8 +170,6 @@ HRESULT CLoader::Loading_ForLogoLevel()
 
 HRESULT CLoader::Loading_ForGamePlayLevel()
 {
-
-
 	m_isFinished = true;
 
 
@@ -207,6 +208,13 @@ HRESULT CLoader::Loading_ForTown2()
 }
 
 HRESULT CLoader::Loading_ForDesert1()
+{
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_ForMaze()
 {
 	m_isFinished = true;
 

@@ -176,7 +176,7 @@ HRESULT CMonster::Initialize(void * pArg)
 		return E_FAIL;
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
-
+	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	tInfo.pTarget = this;
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);

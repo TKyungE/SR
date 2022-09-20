@@ -63,20 +63,34 @@ HRESULT CSky::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-	
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
-		return E_FAIL;
+	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
+	{
+		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
 
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
+			return E_FAIL;
 
-	m_pVIBufferCom->Render();
+		if (FAILED(SetUp_RenderState()))
+			return E_FAIL;
 
-	if (FAILED(Release_RenderState()))
-		return E_FAIL;
+		m_pVIBufferCom->Render();
+
+		if (FAILED(Release_RenderState()))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(SetUp_ShaderResource()))
+			return E_FAIL;
+
+		m_pShaderCom->Begin(0);
+
+		m_pVIBufferCom->Render();
+
+		m_pShaderCom->End();
+	}
 
 	return S_OK;
 }
@@ -107,6 +121,11 @@ HRESULT CSky::SetUp_Components()
 		return E_FAIL;
 
 
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Cube"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	
+
 	return S_OK;
 }
 
@@ -136,6 +155,29 @@ HRESULT CSky::Release_RenderState()
 
 	m_pGraphic_Device->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
+	return S_OK;
+}
+
+HRESULT CSky::SetUp_ShaderResource()
+{
+	if (nullptr == m_pShaderCom)
+		return E_FAIL;
+
+	_float4x4 WorldMatrix, ViewMatrix, ProjMatrix;
+	WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(2))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -174,6 +216,7 @@ void CSky::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);

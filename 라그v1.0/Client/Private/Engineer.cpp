@@ -43,7 +43,7 @@ HRESULT CEngineer::Initialize(void * pArg)
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = { 0.7f,0.7f,1.f };
-
+	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 	Safe_Release(pGameInstance);
 	return S_OK;
