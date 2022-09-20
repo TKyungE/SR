@@ -35,8 +35,7 @@ private: /* For.Components */
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 	CShader*				m_pShaderCom = nullptr;
 private:
-	STATE				m_ePreState;
-	STATE				m_eCurState;
+
 	_float				m_fDeadTime = 0.f;
 	_float              m_fMoveX = 0.f;
 	_float				m_fTime = 0.f;
@@ -44,9 +43,7 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
-	void Motion_Change();
 	void Move_Frame(_float fTimeDelta);
-	HRESULT TextureRender();
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 	void	OnBillboard();

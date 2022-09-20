@@ -90,6 +90,8 @@
 #include "Gacha.h"
 #include "QuestUI.h"
 #include "CriHit.h"
+#include "CriHitUI.h"
+
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
 {
@@ -377,6 +379,9 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_CriHit"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/CriHit/%d.png"), 1))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_CriHit2"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/CriHit2/%d.bmp"), 10))))
 		return E_FAIL;
 	//Skill ÅØ½ºÃÄ
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_ThunderCloud"),
@@ -961,7 +966,9 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_QuestUI"),
 		CQuestUI::Create(m_pGraphic_Device))))
 		return E_FAIL;
-
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CriHit2"),
+		CCriHitUI::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	//Player °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pGraphic_Device))))

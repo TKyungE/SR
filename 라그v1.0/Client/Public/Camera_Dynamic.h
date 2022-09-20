@@ -40,7 +40,11 @@ private:
 	_bool  m_bTrue = false;
 	_bool m_bWheelMove = false;
 	_bool m_bTest = false;
-
+	_bool	m_bCri = false;
+	_float m_fCriFovy = 0.f;
+	_float m_fCriTime = 0.f;
+public:
+	void CriHit();
 public:
 	static CCamera_Dynamic* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

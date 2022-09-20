@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "..\Public\ThunderSword.h"
 #include "GameInstance.h"
+#include "Layer.h"
+#include "StatInfo.h"
+#include "Camera_Dynamic.h"
 
 CThunderSword::CThunderSword(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -45,6 +48,12 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_tInfo.fX = 0.5f;
 	m_tInfo.iDmg = 79 + (m_tInfo.pTarget->Get_Info().iDmg / 2);
 	m_tInfo.iMoney = 22;
+
+
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 
@@ -177,8 +186,27 @@ void CThunderSword::CheckColl()
 	CGameObject* pTarget;
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
 	{
-		pTarget->Set_Hp(m_tInfo.iDmg);
-		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+		_float fCri = _float(rand() % 100 + 1);
+		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
+
+		if (fCri <= fLUK)
+		{
+			pTarget->Set_Hp(m_tInfo.iDmg * 2);
+			pTarget->Set_Hit(m_tInfo.iDmg * 2, *(_float3*)&pTarget->Get_World().m[3][0]);
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = pTarget;
+			tInfo.vPos = *(_float3*)&pTarget->Get_World().m[3][0];
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit2"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			dynamic_cast<CCamera_Dynamic*>(pInstance->Find_Layer(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Camera"))->Get_Objects().front())->CriHit();
+		}
+		else
+		{
+			pTarget->Set_Hp(m_tInfo.iDmg);
+			pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+		}
 		if (pTarget->Get_Info().iHp <= 0)
 			pTarget->Set_Dead();
 		Set_Dead();
@@ -187,8 +215,27 @@ void CThunderSword::CheckColl()
 	{
 		if (pTarget->Get_Info().iMp == 0)
 		{
-			pTarget->Set_Hp(m_tInfo.iDmg);
-			pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+			_float fCri = _float(rand() % 100 + 1);
+			_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
+
+			if (fCri <= fLUK)
+			{
+				pTarget->Set_Hp(m_tInfo.iDmg * 2);
+				pTarget->Set_Hit(m_tInfo.iDmg * 2, *(_float3*)&pTarget->Get_World().m[3][0]);
+				CGameObject::INFO tInfo;
+				tInfo.pTarget = pTarget;
+				tInfo.vPos = *(_float3*)&pTarget->Get_World().m[3][0];
+				if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+					return;
+				if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit2"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+					return;
+				dynamic_cast<CCamera_Dynamic*>(pInstance->Find_Layer(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Camera"))->Get_Objects().front())->CriHit();
+			}
+			else
+			{
+				pTarget->Set_Hp(m_tInfo.iDmg);
+				pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+			}
 			if (pTarget->Get_Info().iHp <= 0)
 				pTarget->Set_Dead();
 			Set_Dead();
@@ -197,8 +244,27 @@ void CThunderSword::CheckColl()
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
 	{
 
-		pTarget->Set_Hp(m_tInfo.iDmg);
-		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+		_float fCri = _float(rand() % 100 + 1);
+		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
+
+		if (fCri <= fLUK)
+		{
+			pTarget->Set_Hp(m_tInfo.iDmg * 2);
+			pTarget->Set_Hit(m_tInfo.iDmg * 2, *(_float3*)&pTarget->Get_World().m[3][0]);
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = pTarget;
+			tInfo.vPos = *(_float3*)&pTarget->Get_World().m[3][0];
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit2"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			dynamic_cast<CCamera_Dynamic*>(pInstance->Find_Layer(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Camera"))->Get_Objects().front())->CriHit();
+		}
+		else
+		{
+			pTarget->Set_Hp(m_tInfo.iDmg);
+			pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+		}
 		if (pTarget->Get_Info().iHp <= 0)
 			pTarget->Set_Dead();
 		Set_Dead();

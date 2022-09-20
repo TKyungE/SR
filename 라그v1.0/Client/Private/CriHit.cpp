@@ -32,8 +32,6 @@ HRESULT CCriHit::Initialize(void* pArg)
 		return E_FAIL;
 
 
-	m_ePreState = STATE_END;
-	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 0;
 	m_tFrame.fFrameSpeed = 0.1f;
@@ -41,6 +39,7 @@ HRESULT CCriHit::Initialize(void* pArg)
 
 	m_tInfo.vPos.y += 1.2f;
 	m_tInfo.vPos.x -= 1.f;
+	m_tInfo.vPos.z -= 0.1f;
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
@@ -86,16 +85,15 @@ HRESULT CCriHit::Render()
 
 		Off_SamplerState();
 
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
-
-		TextureRender();
-
 		if (FAILED(SetUp_RenderState()))
 			return E_FAIL;
 
-		m_pVIBufferCom->Render();
+		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+			return E_FAIL;
 
+		m_pVIBufferCom->Render();
 
 		if (FAILED(Release_RenderState()))
 			return E_FAIL;
@@ -106,34 +104,11 @@ HRESULT CCriHit::Render()
 }
 
 
-void CCriHit::Motion_Change()
-{
-	if (m_ePreState != m_eCurState)
-	{
-		switch (m_eCurState)
-		{
-		case IDLE:
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 0;
-			m_tFrame.fFrameSpeed = 0.1f;
-			break;
-		}
 
-		m_ePreState = m_eCurState;
-	}
-}
 
 void CCriHit::Move_Frame(_float fTimeDelta)
 {
-	switch (m_eCurState)
-	{
-	case IDLE:
-		m_tFrame.iFrameStart = m_pTextureCom->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
-		break;
-	default:
-		break;
-	}
-
+	m_tFrame.iFrameStart = m_pTextureCom->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 }
 void CCriHit::OnBillboard()
 {
@@ -149,19 +124,6 @@ void CCriHit::OnBillboard()
 }
 
 
-HRESULT CCriHit::TextureRender()
-{
-	switch (m_eCurState)
-	{
-	case IDLE:
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
-		break;
-	default:
-		break;
-	}
-	return S_OK;
-}
 
 HRESULT CCriHit::On_SamplerState()
 {
@@ -197,11 +159,9 @@ HRESULT CCriHit::SetUp_Components()
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_CriHit"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
-
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
@@ -212,7 +172,6 @@ HRESULT CCriHit::SetUp_Components()
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
-
 	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 	return S_OK;

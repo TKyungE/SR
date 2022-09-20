@@ -188,6 +188,7 @@
     <ClInclude Include="..\Public\ClientQuest.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\CriHit.h" />
+    <ClInclude Include="..\public\CriHitUI.h" />
     <ClInclude Include="..\public\Dandelion.h" />
     <ClInclude Include="..\public\DandelionAttack.h" />
     <ClInclude Include="..\public\DefaultAttack.h" />
@@ -299,6 +300,7 @@
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\Private\ClientQuest.cpp" />
     <ClCompile Include="..\private\CriHit.cpp" />
+    <ClCompile Include="..\private\CriHitUI.cpp" />
     <ClCompile Include="..\private\Dandelion.cpp" />
     <ClCompile Include="..\private\DandelionAttack.cpp" />
     <ClCompile Include="..\private\DefaultAttack.cpp" />

@@ -364,6 +364,9 @@
     <Filter Include="03.Effect\Default\12.CriHit">
       <UniqueIdentifier>{e3575965-981d-49bb-b11d-0658d49f5d53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default\13.CriHit2">
+      <UniqueIdentifier>{308b7985-fc50-4bce-b0cd-2ac04ce36fec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -699,6 +702,9 @@
     <ClInclude Include="..\public\CriHit.h">
       <Filter>03.Effect\Default\12.CriHit</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\CriHitUI.h">
+      <Filter>03.Effect\Default\13.CriHit2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1021,6 +1027,9 @@
     </ClCompile>
     <ClCompile Include="..\private\CriHit.cpp">
       <Filter>03.Effect\Default\12.CriHit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\CriHitUI.cpp">
+      <Filter>03.Effect\Default\13.CriHit2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
