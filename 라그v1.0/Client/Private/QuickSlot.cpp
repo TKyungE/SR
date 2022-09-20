@@ -49,6 +49,9 @@ HRESULT CQuickSlot::Initialize(void* pArg)
 	m_fX = 400.f;
 	m_fY = 684.f;
 	m_pvecItem.reserve(10);
+	m_tFrame.iFrameStart = 0;
+	m_tFrame.iFrameEnd = 9;
+	m_tFrame.fFrameSpeed = 0.1f;
 	for (int i = 0; i < 10; ++i)
 	{
 		m_pvecItem.push_back({CStatInfo::EITEM_END,0,0});
@@ -59,18 +62,22 @@ HRESULT CQuickSlot::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 	Set_Slot();
-
+	m_pMouseTransformCom->Set_Scaled(_float3(22.f, 31.f, 1.f));
 	return S_OK;
 }
 
 void CQuickSlot::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+	Move_Frame(fTimeDelta);
 	Check_Slot(fTimeDelta);
 	Use_Slot();
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
+	ShowCursor(false);
+	_float3 vMousePos = { (float)(ptMouse.x+9.f) - g_iWinSizeX * 0.5f, -(float)(ptMouse.y+13.f) + g_iWinSizeY * 0.5f, 0.f };
+	m_pMouseTransformCom->Set_State(CTransform::STATE_POSITION, vMousePos);
 
 	_int iDest;
 	for (int i = 0; i < 10; ++i)
@@ -181,8 +188,8 @@ void CQuickSlot::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (nullptr != m_pRendererCom && 0 == g_iCut)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
+	if (nullptr != m_pRendererCom)
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_MOUSE, this);
 }
 
 HRESULT CQuickSlot::Render()
@@ -190,48 +197,53 @@ HRESULT CQuickSlot::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
-		return E_FAIL;
-
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
-
-	m_pVIBufferCom->Render();
-
-	for (int i = 0; i < 10; ++i)
+	if (0 == g_iCut)
 	{
-		if (m_pvecItem[i].eItemNum == CStatInfo::EITEM_END)
-			continue;
-		if (FAILED(m_pItemTexture->Bind_OnGraphicDev(m_pvecItem[i].eItemNum)))
+		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
-		m_pSlotTrans[i]->Bind_OnGraphicDev();
-		m_pSlotBuffer[i]->Render();
-	}
-	wstring szCount[10];
-	for (int i = 0; i < 10; ++i)
-	{
-		szCount[i] = TEXT("");
-		szCount[i] += to_wstring(m_pvecItem[i].iCount);
-	}
-	
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
-	for (int i = 0; i < 10; ++i)
-	{
-		if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+			return E_FAIL;
+		m_pVIBufferCom->Render();
+
+		for (int i = 0; i < 10; ++i)
 		{
-			if (m_pvecItem[i].iCount > 0)
-				pGameInstance->Get_Font()->DrawText(nullptr, szCount[i].c_str(), (int)szCount[i].length(), &m_rcCount[i], DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
-
+			if (m_pvecItem[i].eItemNum == CStatInfo::EITEM_END)
+				continue;
+			if (FAILED(m_pItemTexture->Bind_OnGraphicDev(m_pvecItem[i].eItemNum)))
+				return E_FAIL;
+			m_pSlotTrans[i]->Bind_OnGraphicDev();
+			m_pSlotBuffer[i]->Render();
 		}
+		wstring szCount[10];
+		for (int i = 0; i < 10; ++i)
+		{
+			szCount[i] = TEXT("");
+			szCount[i] += to_wstring(m_pvecItem[i].iCount);
+		}
+
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		for (int i = 0; i < 10; ++i)
+		{
+			if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+			{
+				if (m_pvecItem[i].iCount > 0)
+					pGameInstance->Get_Font()->DrawText(nullptr, szCount[i].c_str(), (int)szCount[i].length(), &m_rcCount[i], DT_RIGHT, D3DCOLOR_ARGB(255, 0, 0, 0));
+
+			}
+		}
+
+		Safe_Release(pGameInstance);
 	}
-	
-	Safe_Release(pGameInstance);
+	if (FAILED(m_pMouseTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
 
-
+	if (FAILED(m_pMouseTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+		return E_FAIL;
+	m_pMouseBuffer->Render();
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 
@@ -251,10 +263,13 @@ HRESULT CQuickSlot::SetUp_Components()
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture2"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Item"), (CComponent**)&m_pItemTexture)))
 		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture3"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Mouse"), (CComponent**)&m_pMouseTextureCom)))
+		return E_FAIL;
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_WingRect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer88"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pMouseBuffer)))
+		return E_FAIL;
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -263,6 +278,8 @@ HRESULT CQuickSlot::SetUp_Components()
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform88"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pMouseTransformCom, &TransformDesc)))
 		return E_FAIL;
 	wstring szBuffer[10];
 	wstring szTrans[10];
@@ -288,7 +305,9 @@ HRESULT CQuickSlot::SetUp_RenderState()
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
-
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -297,6 +316,9 @@ HRESULT CQuickSlot::SetUp_RenderState()
 
 HRESULT CQuickSlot::Release_RenderState()
 {
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
@@ -343,9 +365,12 @@ void CQuickSlot::Free()
 		Safe_Release(m_pSlotTrans[i]);
 	}
 	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pMouseTransformCom);
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pMouseBuffer);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pMouseTextureCom);
 	Safe_Release(m_pItemTexture);
 }
 void CQuickSlot::Set_Slot()
@@ -476,4 +501,8 @@ void CQuickSlot::Use_Slot()
 			break;
 		}
 	}
+}
+void CQuickSlot::Move_Frame(_float fTimeDelta)
+{
+	m_tFrame.iFrameStart = m_pMouseTextureCom->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 }
