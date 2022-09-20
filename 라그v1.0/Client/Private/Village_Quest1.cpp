@@ -190,9 +190,9 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 		CHuntQuest::QINFO_DERIVED tQInfo;
 		tQInfo.iCount = 3;
 		tQInfo.pHuntGoal = new _uint[tQInfo.iCount];
-
-		for (_int i = 0; i < tQInfo.iCount; ++i)
-			tQInfo.pHuntGoal[i] = 3;
+		tQInfo.pHuntGoal[0] = 3;
+		tQInfo.pHuntGoal[1] = 3;
+		tQInfo.pHuntGoal[2] = 1;
 		
 		tQInfo.pMonType = new MONSTERTYPE[tQInfo.iCount];
 		tQInfo.pMonType[0] = MON_ALLIGATOR;

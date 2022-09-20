@@ -66,7 +66,7 @@ void CQuestUI::Tick(_float fTimeDelta)
 			if (Pair.second->Get_Clear())
 			{
 				m_wProcessing = TEXT("[완료]");
-				m_wString = TEXT("            목표 사냥\n");
+				m_wString = TEXT("         목표 사냥\n");
 			}
 			else
 			{
