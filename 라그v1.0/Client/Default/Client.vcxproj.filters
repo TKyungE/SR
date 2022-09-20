@@ -687,6 +687,9 @@
     <ClInclude Include="..\public\Gacha.h">
       <Filter>04.UI\Gacha</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CollectQuest.h">
+      <Filter>02.GameObject\Quest\CollectQuest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1003,6 +1006,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Gacha.cpp">
       <Filter>04.UI\Gacha</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CollectQuest.cpp">
+      <Filter>02.GameObject\Quest\CollectQuest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
