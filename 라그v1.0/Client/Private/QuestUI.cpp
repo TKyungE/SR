@@ -38,12 +38,17 @@ HRESULT CQuestUI::Initialize(void * pArg)
 	m_fX = g_iWinSizeX * 1.1f;
 	m_fY = g_iWinSizeY * 0.5f;
 
+	m_rcRect = { 1035, 275, 1300, 1000};
+
 	return S_OK;
 }
 
 void CQuestUI::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	if (!m_wString.empty())
+		m_wString = TEXT("");
 
 	CQuestManager* pQuestManager = CQuestManager::Get_Instance();
 	if (nullptr == pQuestManager)
@@ -58,39 +63,44 @@ void CQuestUI::Tick(_float fTimeDelta)
 		case CClientQuest::QUEST_HUNT:
 		{
 			m_iCount = dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().iCount;
-			m_pWString = new wstring[m_iCount + 1];
 			if (Pair.second->Get_Clear())
-				m_pWString[0] = TEXT("[¿Ï·á] ¸ñÇ¥ »ç³É");
-			else
-				m_pWString[0] = TEXT("[ÁøÇàÁß] ¸ñÇ¥ »ç³É");
-
-			for (_int i = 0; i < m_iCount; ++i)
 			{
-				switch (dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().pMonType[i])
+				m_wProcessing = TEXT("[¿Ï·á] ");
+				m_wString = TEXT("¸ñÇ¥ »ç³É\n");
+			}
+			else
+			{
+				m_wProcessing = TEXT("[ÁøÇàÁß] ");
+				m_wString = TEXT("            ¸ñÇ¥ »ç³É\n");
+				for (_int i = 0; i < m_iCount; ++i)
 				{
-				case MON_ALLIGATOR:
-					m_pWString[i + 1] = TEXT("¾Ç¾î : ");
-					break;
-				case MON_ELDERWILOW:
-					m_pWString[i + 1] = TEXT("¿¤´õ Àª·Î¿ì : ");
-					break;
-				case MON_BIGFOOT:
-					m_pWString[i + 1] = TEXT("ºòÇ² : ");
-					break;
-				case MON_BYORGUE:
-					m_pWString[i + 1] = TEXT("ºÌ¸£±× : ");
-					break;
-				case MON_BLOODYMURDERER:
-					m_pWString[i + 1] = TEXT("ÇÇ ¹¯Àº »ìÀÎÀÚ : ");
-					break;
-				case MON_DANDELION:
-					m_pWString[i + 1] = TEXT("´Üµ¨¶óÀÌ¿Â : ");
-					break;
+					switch (dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().pMonType[i])
+					{
+					case MON_ALLIGATOR:
+						m_wString += TEXT("¾Ç¾î : ");
+						break;
+					case MON_ELDERWILOW:
+						m_wString += TEXT("¿¤´õ Àª·Î¿ì : ");
+						break;
+					case MON_BIGFOOT:
+						m_wString += TEXT("ºòÇ² : ");
+						break;
+					case MON_BYORGUE:
+						m_wString += TEXT("ºÌ¸£±× : ");
+						break;
+					case MON_BLOODYMURDERER:
+						m_wString += TEXT("ÇÇ ¹¯Àº »ìÀÎÀÚ : ");
+						break;
+					case MON_DANDELION:
+						m_wString += TEXT("´Üµ¨¶óÀÌ¿Â : ");
+						break;
+					}
+
+					m_wString += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_Count()[i]);
+					m_wString += TEXT(" / ");
+					m_wString += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().pHuntGoal[i]);
+					m_wString += TEXT("\n");
 				}
-			
-				m_pWString[i + 1] += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_Count()[i]);
-				m_pWString[i + 1] += TEXT(" / ");
-				m_pWString[i + 1] += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().pHuntGoal[i]);
 			}
 			break;
 		}
@@ -117,7 +127,7 @@ void CQuestUI::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (nullptr != m_pRendererCom)
+	if (nullptr != m_pRendererCom && !m_wString.empty())
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
@@ -151,10 +161,8 @@ HRESULT CQuestUI::Render()
 
 		Safe_AddRef(pInstance);
 
-		/*for (_int i = 0; i < (m_iCount + 1); ++i)
-		{
-			pInstance->Get_Font2()->DrawText(nullptr, m_pWString[i].c_str(), (_int)m_pWString[i].length(), &m_rcBox, DT_LEFT | DT_WORDBREAK, D3DCOLOR_ARGB(255, 0, 0, 0));
-		}*/
+		pInstance->Get_Font2()->DrawText(nullptr, m_wProcessing.c_str(), (_int)m_wProcessing.length(), &m_rcRect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 150, 0));
+		pInstance->Get_Font2()->DrawText(nullptr, m_wString.c_str(), (_int)m_wString.length(), &m_rcRect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 0, 0));
 
 		Safe_Release(pInstance);
 	}

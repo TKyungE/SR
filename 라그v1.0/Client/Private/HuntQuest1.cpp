@@ -18,7 +18,10 @@ void CHuntQuest::Increase_Count(MONSTERTYPE eType)
 	for (_uint i = 0; i < m_tQInfo.iCount; ++i)
 	{
 		if (eType == m_tQInfo.pMonType[i])
-			++m_pCount[i];
+		{
+			if (m_pCount[i] < m_tQInfo.pHuntGoal[i])
+				++m_pCount[i];
+		}
 	}
 }
 

@@ -36,8 +36,10 @@ private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 
-	wstring* m_pWString = nullptr;
-	RECT* m_rcRect = nullptr;
+	wstring m_wString;
+	wstring m_wProcessing;
+	//RECT* m_pRect = nullptr;
+	RECT m_rcRect;
 
 	_bool m_bTextRender = false;
 

@@ -452,7 +452,7 @@ void CQuickSlot::Use_Slot()
 			if (m_tInfo.pTarget->Get_Info().iMp >= 20 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
 			{
 				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(1);
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(10, iIndex);
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(5, iIndex);
 				m_ThunderCool = 0.f;
 			}
 			break;
@@ -460,7 +460,7 @@ void CQuickSlot::Use_Slot()
 			if (m_tInfo.pTarget->Get_Info().iMp >= 10 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
 			{
 				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(2);
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(5, iIndex);
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(3, iIndex);
 				m_TornadoCool = 0.f;
 			}
 			break;
@@ -468,7 +468,7 @@ void CQuickSlot::Use_Slot()
 			if (m_tInfo.pTarget->Get_Info().iMp >= 5 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
 			{
 				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(3);
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(2, iIndex);
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(1, iIndex);
 				m_FireBall = 0.f;
 			}
 			break;
