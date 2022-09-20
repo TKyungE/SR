@@ -4,7 +4,7 @@
 CHuntQuest::CHuntQuest(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CClientQuest(pGraphic_Device)
 {
-	ZeroMemory(&m_tQInfo, sizeof(QINFO));
+	ZeroMemory(&m_tQInfo, sizeof(QINFO_DERIVED));
 }
 
 CHuntQuest::CHuntQuest(const CHuntQuest & rhs)
