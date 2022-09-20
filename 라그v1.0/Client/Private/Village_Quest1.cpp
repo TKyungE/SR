@@ -104,7 +104,7 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 
 	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")))
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && 0 == g_iCut)
+		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
 			g_iCut = 1;
 
@@ -125,7 +125,7 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	}
 	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")) && !pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && 0 == g_iCut)
+		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
 			g_iCut = 1;
 
@@ -145,7 +145,7 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	}
 	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")) && pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && 0 == g_iCut)
+		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
 			g_iCut = 1;
 
@@ -166,7 +166,7 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 	}
 	else
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk && 0 == g_iCut)
+		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
 			g_iCut = 1;
 

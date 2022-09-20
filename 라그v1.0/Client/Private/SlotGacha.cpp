@@ -92,7 +92,7 @@ void CSlotGacha::Tick(_float fTimeDelta)
 
 
 
-	if (CKeyMgr::Get_Instance()->Key_Up('V') && m_bTalk && 0 == g_iCut)
+	if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 	{
 		g_iCut = 2;
 		    
@@ -107,6 +107,7 @@ void CSlotGacha::Tick(_float fTimeDelta)
 		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_SlotBox"), &tTInfo)))
 			return;
 	}
+
 	if (CKeyMgr::Get_Instance()->Key_Up('J') && g_iCut != 0 && m_bSlot)
 	{
 		
@@ -115,8 +116,6 @@ void CSlotGacha::Tick(_float fTimeDelta)
 		dynamic_cast<CTextBox*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_SlotBox"))->Get_Objects().front())->TextBoxDead();
 		m_bSlot = false;
 	}
-	
-
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
 	{

@@ -120,11 +120,6 @@ HRESULT CTextBox::Render()
 
 void CTextBox::TextBoxDead()
 {
-	/*for (auto& iterator : m_vButtonArray)
-		iterator->Set_Dead();
-
-	m_vButtonArray.clear();*/
-
 	Set_Dead();
 
 	if (g_iCut != 0)
