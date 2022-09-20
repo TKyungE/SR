@@ -65,12 +65,12 @@ void CQuestUI::Tick(_float fTimeDelta)
 			m_iCount = dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().iCount;
 			if (Pair.second->Get_Clear())
 			{
-				m_wProcessing = TEXT("[완료] ");
-				m_wString = TEXT("목표 사냥\n");
+				m_wProcessing = TEXT("[완료]");
+				m_wString = TEXT("            목표 사냥\n");
 			}
 			else
 			{
-				m_wProcessing = TEXT("[진행중] ");
+				m_wProcessing = TEXT("[진행중]");
 				m_wString = TEXT("            목표 사냥\n");
 				for (_int i = 0; i < m_iCount; ++i)
 				{

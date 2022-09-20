@@ -364,6 +364,7 @@ void CQuickSlot::Free()
 		Safe_Release(m_pSlotBuffer[i]);
 		Safe_Release(m_pSlotTrans[i]);
 	}
+
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pMouseTransformCom);
 	Safe_Release(m_pVIBufferCom);

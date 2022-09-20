@@ -37,7 +37,7 @@ private: /* For.Components */
 	CVIBuffer_WingRect*			m_pVIBufferCom = nullptr;
 	CTransform*				m_pSlotTrans[10];
 	CVIBuffer_Rect*			m_pSlotBuffer[10];
-	CVIBuffer_Rect*			m_pMouseBuffer;
+	CVIBuffer_Rect*			m_pMouseBuffer = nullptr;
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;

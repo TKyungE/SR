@@ -352,6 +352,12 @@
     <Filter Include="02.GameObject\Quest\CollectQuest">
       <UniqueIdentifier>{19d3bec9-7d13-4750-baed-9f937d3938c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\NPC\05.SlotGacha">
+      <UniqueIdentifier>{99e816dc-ac0b-45b5-94fb-e77241e7f4b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\Gacha">
+      <UniqueIdentifier>{df0f09bd-a8f7-45a2-8486-8d915bf26d60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -675,6 +681,12 @@
     <ClInclude Include="..\Public\QuestUI.h">
       <Filter>04.UI\QuestUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\SlotGacha.h">
+      <Filter>02.GameObject\NPC\05.SlotGacha</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Gacha.h">
+      <Filter>04.UI\Gacha</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -985,6 +997,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\QuestUI.cpp">
       <Filter>04.UI\QuestUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SlotGacha.cpp">
+      <Filter>02.GameObject\NPC\05.SlotGacha</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Gacha.cpp">
+      <Filter>04.UI\Gacha</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
