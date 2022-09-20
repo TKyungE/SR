@@ -64,6 +64,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	tInfo.pTarget = this;
 	tInfo.vPos = { 0.7f,0.7f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.bHit = false;
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 
@@ -74,6 +75,9 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//Pet
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), m_tInfo.iLevelIndex, TEXT("Layer_Pet"), &tInfo);
 
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_AlphaUI"), m_tInfo.iLevelIndex, TEXT("Layer_AlphaUI"), &tInfo)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
@@ -1203,15 +1207,25 @@ void CPlayer::Check_Hit()
 
 		CLayer* pLayer = pGameInstance->Find_Layer(m_tInfo.iLevelIndex,TEXT("Layer_Camera"));
 
+		CLayer* pLayer2 = pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_AlphaUI"));
+
+		
 		Safe_AddRef(pLayer);
+		Safe_AddRef(pLayer2);
 
 		list<class CGameObject*> pGameObject = pLayer->Get_Objects();
 		pGameObject.front()->Set_bHit(true);
 
 		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
+
+		list<class CGameObject*> pGameObject2 = pLayer2->Get_Objects();
+		pGameObject2.front()->Set_bHit(true);
+		pGameObject2.front()->Set_UiMP(1);
 		m_tInfo.bHit = false;
 
+
 		Safe_Release(pLayer);
+		Safe_Release(pLayer2);
 
 		Safe_Release(pGameInstance);
 	}

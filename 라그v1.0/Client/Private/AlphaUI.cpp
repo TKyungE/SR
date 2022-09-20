@@ -26,14 +26,18 @@ HRESULT CAlphaUI::Initialize(void* pArg)
 		return E_FAIL;
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
-
+	m_tInfo.bDead = false;
+	m_tInfo.bHit = false;
+	m_tInfo.iMp = 0;		// 이걸로 계속 중첩으로 맞았는지 검사할 거임
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_fSizeX = (_float)g_iWinSizeX;
-	m_fSizeY = (_float)g_iWinSizeY;
-	m_fX = 0.f;
-	m_fY = 0.f;
+	m_fTime = 0.1f;
+
+	m_fSizeX = (_float)g_iWinSizeX * 1.2f;
+	m_fSizeY = (_float)g_iWinSizeY * 1.2f;
+	m_fX = (g_iWinSizeX - (g_iWinSizeX * 1.2f)) * 0.5f;
+	m_fY = (_float)g_iWinSizeY * 0.5f;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
@@ -47,13 +51,55 @@ void CAlphaUI::Tick(_float fTimeDelta)
 	RECT	rcRect;
 	SetRect(&rcRect, _int(m_fX - m_fSizeX * 0.5f), _int(m_fY - m_fSizeY * 0.5f), _int(m_fX + m_fSizeX * 0.5f), _int(m_fY + m_fSizeY * 0.5f));
 
+
+
 }
 
 void CAlphaUI::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (nullptr != m_pRendererCom)
+	m_fTimeDelta += fTimeDelta;
+
+	if (m_tInfo.iMp == 1)
+	{
+		m_fTime = 0.001f;
+		m_fAlpha = 0.f;
+		m_bCheck = false;
+
+		m_tInfo.iMp = 0;
+	}
+
+
+
+	if (m_fTimeDelta > m_fTime && !m_bCheck && m_tInfo.bHit)
+	{
+		m_fAlpha += 0.01f;
+		m_fTimeDelta = 0.f;
+		m_fTime -= 0.05f;
+		if (m_fAlpha >= 1.f)
+		{
+			m_fTime = 0.1f;
+			m_fAlpha = 0.f;
+			m_bCheck = true;
+		}
+	}
+	else if (m_fTimeDelta > m_fTime && m_bCheck && m_tInfo.bHit)
+	{
+		m_fAlpha -= 0.1f;
+		m_fTimeDelta = 0.f;
+		m_fTime -= 0.1f;
+		if (m_fAlpha <= 0.f)
+		{
+			m_fTime = 0.001f;
+			m_fAlpha = 0.f;
+			m_tInfo.bHit = false;
+			m_bCheck = false;
+		}
+	}
+
+
+	if (nullptr != m_pRendererCom && m_tInfo.bHit && m_fAlpha != 0.f)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
@@ -66,11 +112,11 @@ HRESULT CAlphaUI::Render()
 	WorldMatrix = m_pTransformCom->Get_WorldMatrix();
 
 	D3DXMatrixIdentity(&ViewMatrix);
-
-	m_pShaderCom->Set_RawValue("g_WorldMatrix", &WorldMatrix, sizeof(_float4x4));
+	
+	m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix,&WorldMatrix), sizeof(_float4x4));
 	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
 	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&m_ProjMatrix, &m_ProjMatrix), sizeof(_float4x4));
-
+	m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float));
 	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(0));
 
 	m_pShaderCom->Begin(5);

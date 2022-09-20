@@ -872,7 +872,7 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 
 
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Alpha"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Test/%d.bmp"), 1))))
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Test/%d.dds"), 1))))
 		return E_FAIL;
 
 	//   NPC ¥Î»≠ ==========================================================================================

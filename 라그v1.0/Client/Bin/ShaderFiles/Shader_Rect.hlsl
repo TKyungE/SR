@@ -6,8 +6,8 @@ float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture g_Texture;
 
 float g_fAlpha;
-float			g_fMinRange = 1.f;
-float			g_fMaxRange = 3.f;
+float			g_fMinRange = 0.f;
+float			g_fMaxRange = 2.f;
 
 float4			g_vCamPosition;
 
@@ -143,8 +143,9 @@ PS_OUT PS_MAIN_UI(PS_IN In)
 
 	Out.vColor = tex2D(MonsterSampler, In.vTexUV);
 
-
-	Out.vColor.g = 1.f;
+	Out.vColor.r = 0.5f;
+	Out.vColor.gb = 0.f;
+	Out.vColor.a = ((1.f - Out.vColor.a) * 0.5f) - g_fAlpha;
 
 	return Out;
 }

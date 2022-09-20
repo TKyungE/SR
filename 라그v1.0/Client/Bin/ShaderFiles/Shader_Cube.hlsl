@@ -57,7 +57,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	Out.vColor = texCUBE(TextureSampler, In.vTexUV);
 
-	//Out.vColor.rgb = 0.f;
+	Out.vColor.rgb = 0.f;
 
 	return Out;
 }
