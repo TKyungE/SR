@@ -127,8 +127,8 @@ void CTextBox::TextBoxDead()
 
 	Set_Dead();
 
-	if (g_bCut)
-		g_bCut = false;
+	if (g_iCut != 0)
+		g_iCut = 0;
 
 }
 

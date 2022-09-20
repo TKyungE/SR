@@ -107,7 +107,7 @@ void CSlotGacha::Tick(_float fTimeDelta)
 		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_SlotBox"), &tTInfo)))
 			return;
 	}
-	if (CKeyMgr::Get_Instance()->Key_Up('J') && g_bCut && m_bSlot)
+	if (CKeyMgr::Get_Instance()->Key_Up('J') && g_iCut != 0 && m_bSlot)
 	{
 		
 		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Gacha"), m_tInfo.iLevelIndex, TEXT("Layer_UI"))))
