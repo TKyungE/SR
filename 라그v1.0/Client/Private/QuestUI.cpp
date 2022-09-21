@@ -34,11 +34,8 @@ HRESULT CQuestUI::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_fSizeX = (_float)g_iWinSizeX * 0.2f;
-	m_fSizeY = (_float)g_iWinSizeY * 0.3f;
 	m_fX = g_iWinSizeX * 1.1f;
 	m_fY = g_iWinSizeY * 0.5f;
-
-	m_rcRect = { 1035, 275, 1300, 1000};
 
 	return S_OK;
 }
@@ -62,16 +59,32 @@ void CQuestUI::Tick(_float fTimeDelta)
 	
 	Safe_AddRef(pQuestManager);
 
+	if (0 != m_iQuestCount)
+		m_iQuestCount = 0;
+
 	for (auto& Pair : pQuestManager->Get_Actives())
 		++m_iQuestCount;
+
+	if (m_iQuestCount > 0)
+		m_fSizeY = (_float)g_iWinSizeY * (0.15f * m_iQuestCount);
+	else
+		m_fSizeY = (_float)g_iWinSizeY * 0.3f;
 	
 	m_pString = new wstring[m_iQuestCount];
 	m_pProcessing = new wstring[m_iQuestCount];
 	m_pRect = new RECT[m_iQuestCount];
 
+	_int j = 0;
+	for (_int i = m_iQuestCount - 1; i >= 0; --i)
+	{
+		m_pRect[j] = { 1035, _long(325 - (275 * (0.25f * i))), 1300, _long(575 - (275 * (0.25f * i))) };
+		++j;
+	}
+
 	_int i = 0;
 	for (auto& Pair : pQuestManager->Get_Actives())
 	{
+		wstring wQuest;
 		switch (Pair.second->Get_QInfo().eType)
 		{
 		case CClientQuest::QUEST_HUNT:
@@ -80,60 +93,61 @@ void CQuestUI::Tick(_float fTimeDelta)
 			if (Pair.second->Get_Clear())
 			{
 				m_pProcessing[i] = TEXT("[완료]");
-				m_pString[i] = TEXT("         목표 사냥\n");
+				wQuest = TEXT("         목표 사냥\n");
 			}
 			else
 			{
 				m_pProcessing[i] = TEXT("[진행중]");
-				m_pString[i] = TEXT("            목표 사냥\n");
+				wQuest = TEXT("            목표 사냥\n");
 				for (_int i = 0; i < m_iCount; ++i)
 				{
 					switch (dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().pMonType[i])
 					{
 					case MON_ALLIGATOR:
-						m_pString[i] += TEXT("악어 : ");
+						wQuest += TEXT("악어 : ");
 						break;
 					case MON_ELDERWILOW:
-						m_pString[i] += TEXT("엘더 윌로우 : ");
+						wQuest += TEXT("엘더 윌로우 : ");
 						break;
 					case MON_BIGFOOT:
-						m_pString[i] += TEXT("빅풋 : ");
+						wQuest += TEXT("빅풋 : ");
 						break;
 					case MON_BYORGUE:
-						m_pString[i] += TEXT("뵤르그 : ");
+						wQuest += TEXT("뵤르그 : ");
 						break;
 					case MON_BLOODYMURDERER:
-						m_pString[i] += TEXT("피 묻은 살인자 : ");
+						wQuest += TEXT("피 묻은 살인자 : ");
 						break;
 					case MON_DANDELION:
-						m_pString[i] += TEXT("단델라이온 : ");
+						wQuest += TEXT("단델라이온 : ");
 						break;
 					case MON_ATROS:
-						m_pString[i] += TEXT("아트로스 : ");
+						wQuest += TEXT("아트로스 : ");
 						break;
 					case MON_BAPHOMET:
-						m_pString[i] += TEXT("바포메트 : ");
+						wQuest += TEXT("바포메트 : ");
 						break;
 					case MON_MINOROUS:
-						m_pString[i] += TEXT("미노로스 : ");
+						wQuest += TEXT("미노로스 : ");
 						break;
 					case MON_SKELETON:
-						m_pString[i] += TEXT("스켈레톤 : ");
+						wQuest += TEXT("스켈레톤 : ");
 						break;
 					case MON_WRAITH:
-						m_pString[i] += TEXT("레이스 : ");
+						wQuest += TEXT("레이스 : ");
 						break;
 					case MON_ZOMBIE:
-						m_pString[i] += TEXT("좀비 : ");
+						wQuest += TEXT("좀비 : ");
 						break;
 					}
 
-					m_pString[i] += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_Count()[i]);
-					m_pString[i] += TEXT(" / ");
-					m_pString[i] += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().pHuntGoal[i]);
-					m_pString[i] += TEXT("\n");
+					wQuest += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_Count()[i]);
+					wQuest += TEXT(" / ");
+					wQuest += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_QInfoDerived().pHuntGoal[i]);
+					wQuest += TEXT("\n");
 				}
 			}
+			m_pString[i] = wQuest;
 			break;
 		}
 		case CClientQuest::QUEST_COLLECT:
@@ -142,119 +156,125 @@ void CQuestUI::Tick(_float fTimeDelta)
 			if (Pair.second->Get_Clear())
 			{
 				m_pProcessing[i] = TEXT("[완료]");
-				m_pString[i] = TEXT("         아이템 수집\n");
+				wQuest = TEXT("         아이템 수집\n");
 			}
 			else
 			{
 				m_pProcessing[i] = TEXT("[진행중]");
-				m_pString[i] = TEXT("            아이템 수집\n");
+				wQuest = TEXT("            아이템 수집\n");
 				for (_int i = 0; i < m_iCount; ++i)
 				{
 					switch (dynamic_cast<CCollectQuest*>(Pair.second)->Get_QInfoDerived().pItemType[i])
 					{
 					case CStatInfo::HPPOTION:
-						m_pString[i] += TEXT("빨강포션 : ");
+						wQuest += TEXT("빨강포션 : ");
 						break;
 					case CStatInfo::MPPOTION:
-						m_pString[i] += TEXT("파랑포션 : ");
+						wQuest += TEXT("파랑포션 : ");
 						break;
 					case CStatInfo::ENGINE:
-						m_pString[i] += TEXT("비행정엔진 : ");
+						wQuest += TEXT("비행정엔진 : ");
 						break;
 					case CStatInfo::TIARA:
-						m_pString[i] += TEXT("쥬신티아라 : ");
+						wQuest += TEXT("쥬신티아라 : ");
 						break;
 					case CStatInfo::BOBY:
-						m_pString[i] += TEXT("쥬신타이즈 : ");
+						wQuest += TEXT("쥬신타이즈 : ");
 						break;
 					case CStatInfo::SHOES:
-						m_pString[i] += TEXT("쥬신슈즈 : ");
+						wQuest += TEXT("쥬신슈즈 : ");
 						break;
 					case CStatInfo::ROBE:
-						m_pString[i] += TEXT("쥬신로브 : ");
+						wQuest += TEXT("쥬신로브 : ");
 						break;
 					case CStatInfo::PANDANT:
-						m_pString[i] += TEXT("쥬신팬던트 : ");
+						wQuest += TEXT("쥬신팬던트 : ");
 						break;
 					case CStatInfo::EARRING:
-						m_pString[i] += TEXT("쥬신귀걸이 : ");
+						wQuest += TEXT("쥬신귀걸이 : ");
 						break;
 					case CStatInfo::BRACELET:
-						m_pString[i] += TEXT("쥬신팔찌 : ");
+						wQuest += TEXT("쥬신팔찌 : ");
 						break;
 					case CStatInfo::RING:
-						m_pString[i] += TEXT("쥬신반지 : ");
+						wQuest += TEXT("쥬신반지 : ");
 						break;
 					case CStatInfo::STAFF:
-						m_pString[i] += TEXT("쥬신스태프 : ");
+						wQuest += TEXT("쥬신스태프 : ");
 						break;
 					case CStatInfo::ORB:
-						m_pString[i] += TEXT("쥬신오브 : ");
+						wQuest += TEXT("쥬신오브 : ");
 						break;
 					case CStatInfo::RIDEEGG:
-						m_pString[i] += TEXT("알파카알 : ");
+						wQuest += TEXT("알파카알 : ");
 						break;
 					case CStatInfo::PETEGG:
-						m_pString[i] += TEXT("포링알 : ");
+						wQuest += TEXT("포링알 : ");
 						break;
 					case CStatInfo::WING:
-						m_pString[i] += TEXT("요정날개 : ");
+						wQuest += TEXT("요정날개 : ");
 						break;
 					case CStatInfo::MON1:
-						m_pString[i] += TEXT("엘리게이터의 독 : ");
+						wQuest += TEXT("엘리게이터의 독 : ");
 						break;
 					case CStatInfo::MON2:
-						m_pString[i] += TEXT("윌로우의 몸통 : ");
+						wQuest += TEXT("윌로우의 몸통 : ");
 						break;
 					case CStatInfo::MON3:
-						m_pString[i] += TEXT("빅풋의 발바닥 : ");
+						wQuest += TEXT("빅풋의 발바닥 : ");
 						break;
 					case CStatInfo::MON4:
-						m_pString[i] += TEXT("도적의 두건 : ");
+						wQuest += TEXT("도적의 두건 : ");
 						break;
 					case CStatInfo::MON5:
-						m_pString[i] += TEXT("살인자의 식칼 : ");
+						wQuest += TEXT("살인자의 식칼 : ");
 						break;
 					case CStatInfo::MON6:
-						m_pString[i] += TEXT("썩은 붕대 : ");
+						wQuest += TEXT("썩은 붕대 : ");
 						break;
 					case CStatInfo::MON7:
-						m_pString[i] += TEXT("아트로스의 발톱 : ");
+						wQuest += TEXT("아트로스의 발톱 : ");
 						break;
 					case CStatInfo::MON8:
-						m_pString[i] += TEXT("바포메트의 뚜껑: ");
+						wQuest += TEXT("바포메트의 뚜껑: ");
 						break;
 					case CStatInfo::MON9:
-						m_pString[i] += TEXT("미노로스의 우유 : ");
+						wQuest += TEXT("미노로스의 우유 : ");
 						break;
 					case CStatInfo::MON10:
-						m_pString[i] += TEXT("해골바가지 : ");
+						wQuest += TEXT("해골바가지 : ");
 						break;
 					case CStatInfo::MON11:
-						m_pString[i] += TEXT("레이스의 틀니 : ");
+						wQuest += TEXT("레이스의 틀니 : ");
 						break;
 					case CStatInfo::MON12:
-						m_pString[i] += TEXT("좀비 고기 : ");
+						wQuest += TEXT("좀비 고기 : ");
 						break;
 					}
 
-					m_pString[i] += to_wstring(dynamic_cast<CCollectQuest*>(Pair.second)->Get_Count()[i]);
-					m_pString[i] += TEXT(" / ");
-					m_pString[i] += to_wstring(dynamic_cast<CCollectQuest*>(Pair.second)->Get_QInfoDerived().pCollectGoal[i]);
-					m_pString[i] += TEXT("\n");
+					wQuest += to_wstring(dynamic_cast<CCollectQuest*>(Pair.second)->Get_Count()[i]);
+					wQuest += TEXT(" / ");
+					wQuest += to_wstring(dynamic_cast<CCollectQuest*>(Pair.second)->Get_QInfoDerived().pCollectGoal[i]);
+					wQuest += TEXT("\n");
 				}
 			}
+			m_pString[i] = wQuest;
 			break;
 		}
 		}
+
+		++i;
 	}
 
 	Safe_Release(pQuestManager);
 
-	if (g_iWinSizeX * 0.9f < m_fX)
-		m_fX -= g_iWinSizeX * 0.005f;
-	else
-		m_bTextRender = true;
+	if (0 < m_iQuestCount)
+	{
+		if (g_iWinSizeX * 0.9f < m_fX)
+			m_fX -= g_iWinSizeX * 0.005f;
+		else
+			m_bTextRender = true;
+	}
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 0.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
@@ -264,7 +284,7 @@ void CQuestUI::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (nullptr != m_pRendererCom && nullptr != m_pString)
+	if (nullptr != m_pRendererCom && 0 < m_iQuestCount)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
@@ -298,8 +318,11 @@ HRESULT CQuestUI::Render()
 
 		Safe_AddRef(pInstance);
 
-		pInstance->Get_Font2()->DrawText(nullptr, m_wProcessing.c_str(), (_int)m_wProcessing.length(), &m_rcRect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 150, 0));
-		pInstance->Get_Font2()->DrawText(nullptr, m_wString.c_str(), (_int)m_wString.length(), &m_rcRect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 0, 0));
+		for (_int i = 0; i < m_iQuestCount; ++i)
+		{
+			pInstance->Get_Font2()->DrawText(nullptr, m_pProcessing[i].c_str(), (_int)m_pProcessing[i].length(), &m_pRect[i], DT_LEFT, D3DCOLOR_ARGB(255, 255, 150, 0));
+			pInstance->Get_Font2()->DrawText(nullptr, m_pString[i].c_str(), (_int)m_pString[i].length(), &m_pRect[i], DT_LEFT, D3DCOLOR_ARGB(255, 0, 0, 0));
+		}
 
 		Safe_Release(pInstance);
 	}
