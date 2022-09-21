@@ -301,7 +301,7 @@ HRESULT CInven::Render()
 					szText += TEXT("윌로우의몸통: 윌로우는\n 튼튼한 목재로 사용 된다.");
 					break;
 				case CStatInfo::MON3:
-					szText += TEXT("빅풋의발다박: 미식가들\n 사이에서 유명한 식재료.");
+					szText += TEXT("빅풋의발바박: 미식가들\n 사이에서 유명한 식재료.");
 					break;
 				case CStatInfo::MON4:
 					szText += TEXT("도적의두건: 도적단을\n토벌했다는 증표로 쓰인다.");

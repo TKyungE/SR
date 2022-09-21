@@ -21,6 +21,9 @@ public:
 
 		_int iQuestIndex;
 		_int iLevelIndex;
+		_bool bGetQuest;
+		_bool bGetReward;
+		_int iNumQuest;
 	}TINFO;
 private:
 	CTextBox(LPDIRECT3DDEVICE9 pGraphic_Device);

@@ -17,8 +17,8 @@ bool g_bCollider = false;
 int g_iTalk = 0;
 int g_iCut = 0;
 bool g_bFirst = true;
-bool g_bQuest = false;
-bool g_bReward = false;
+int g_iQuest = 0;
+int g_iReward = 0;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -314,7 +314,7 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN, pLayerTag, &tInfo)))
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
 		else if (iter.iIndex == 5)
@@ -335,7 +335,7 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN, pLayerTag, &tInfo)))
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
 	}

@@ -172,7 +172,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Alligator.h" />
-    <ClInclude Include="..\Public\AlphaUI.h" />
     <ClInclude Include="..\public\Angry.h" />
     <ClInclude Include="..\Public\Atros.h" />
     <ClInclude Include="..\public\AuraBlue.h" />
@@ -188,8 +187,7 @@
     <ClInclude Include="..\Public\Camera_Dynamic.h" />
     <ClInclude Include="..\Public\ClientQuest.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
-    <ClInclude Include="..\public\CriHit.h" />
-    <ClInclude Include="..\public\CriHitUI.h" />
+    <ClInclude Include="..\Public\CollectQuest.h" />
     <ClInclude Include="..\public\Dandelion.h" />
     <ClInclude Include="..\public\DandelionAttack.h" />
     <ClInclude Include="..\public\DefaultAttack.h" />
@@ -215,7 +213,6 @@
     <ClInclude Include="..\Public\LetterBox.h" />
     <ClInclude Include="..\public\Level_ChoboField.h" />
     <ClInclude Include="..\Public\Level_Desert1.h" />
-    <ClInclude Include="..\Public\Level_Maze.h" />
     <ClInclude Include="..\Public\Level_MidBoss.h" />
     <ClInclude Include="..\Public\Level_Town2.h" />
     <ClInclude Include="..\public\Loading.h" />
@@ -250,8 +247,6 @@
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
     <ClInclude Include="..\public\Shadow.h" />
-    <ClInclude Include="..\public\Shop.h" />
-    <ClInclude Include="..\public\ShopNPC.h" />
     <ClInclude Include="..\Public\Skeleton.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\Public\Sky.h" />
@@ -288,7 +283,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Alligator.cpp" />
-    <ClCompile Include="..\Private\AlphaUI.cpp" />
     <ClCompile Include="..\private\Angry.cpp" />
     <ClCompile Include="..\Private\Atros.cpp" />
     <ClCompile Include="..\private\AuraBlue.cpp" />
@@ -303,8 +297,7 @@
     <ClCompile Include="..\private\Byorgue.cpp" />
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\Private\ClientQuest.cpp" />
-    <ClCompile Include="..\private\CriHit.cpp" />
-    <ClCompile Include="..\private\CriHitUI.cpp" />
+    <ClCompile Include="..\Private\CollectQuest.cpp" />
     <ClCompile Include="..\private\Dandelion.cpp" />
     <ClCompile Include="..\private\DandelionAttack.cpp" />
     <ClCompile Include="..\private\DefaultAttack.cpp" />
@@ -330,7 +323,6 @@
     <ClCompile Include="..\Private\LetterBox.cpp" />
     <ClCompile Include="..\private\Level_ChoboField.cpp" />
     <ClCompile Include="..\Private\Level_Desert1.cpp" />
-    <ClCompile Include="..\Private\Level_Maze.cpp" />
     <ClCompile Include="..\Private\Level_MidBoss.cpp" />
     <ClCompile Include="..\Private\Level_Town2.cpp" />
     <ClCompile Include="..\private\Loading.cpp" />
@@ -365,8 +357,6 @@
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
-    <ClCompile Include="..\private\Shop.cpp" />
-    <ClCompile Include="..\private\ShopNPC.cpp" />
     <ClCompile Include="..\Private\Skeleton.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
@@ -412,7 +402,6 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
