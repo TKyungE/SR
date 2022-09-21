@@ -96,7 +96,9 @@ private:
 	_int	m_StatDmg = 0;
 	_int	m_StatHp = 0;
 	_int	m_StatMp = 0;
+	_bool	m_bShot = false;
 public:
+	_bool	Get_Shot() { return m_bShot; }
 	_float3 Get_Pos();
 	_bool Get_Front() { return m_bFront; }
 	void Set_Front(_bool bfront) { m_bFront = bfront; }

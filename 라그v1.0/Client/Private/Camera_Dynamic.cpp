@@ -144,36 +144,76 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	}
 	else if (!g_bFirst && 0 == g_iCut)
 	{
-		if (!m_bTest)
+		if (m_CameraDesc.Info.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
 		{
-			m_pTransform->Set_State(CTransform::STATE_RIGHT, _float3(1.f, 0.f, 0.f));
-			m_pTransform->Set_State(CTransform::STATE_UP, _float3(0.f, 1.f, 0.f));
-			m_pTransform->Set_State(CTransform::STATE_LOOK, _float3(0.f, 0.f, 1.f));
+			if (!m_bTest)
+			{
+				m_pTransform->Set_State(CTransform::STATE_RIGHT, _float3(1.f, 0.f, 0.f));
+				m_pTransform->Set_State(CTransform::STATE_UP, _float3(0.f, 1.f, 0.f));
+				m_pTransform->Set_State(CTransform::STATE_LOOK, _float3(0.f, 0.f, 1.f));
 			
-			m_bTest = true;
+				m_bTest = true;
+			}
+			_float3 vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+			vPos.y += 0.3f;
+			m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+			_long			MouseMove = 0;
+
+			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
+			{
+				m_pTransform->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.1f);
+			}
+
+			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
+			{
+				m_pTransform->Turn(m_pTransform->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
+			}
 		}
 
-		/*_float3 vRight = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[0][0];
-		_float3 vUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
-		_float3 vLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];*/
-		
-		_float3 vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
-		vPos.y += 0.3f;
-		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-	
-	
-		_long			MouseMove = 0;
-
-		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
+		else
 		{
-			m_pTransform->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.1f);
-		}
+			_float3 vTargetPos, vPos,vTargetUp, vTargetLook, vTargetRight, vRight;
+			vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+			vTargetPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
+			vTargetLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
+			vTargetUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
+			vTargetRight = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[0][0];
+			D3DXVec3Normalize(&vTargetPos, &vTargetPos);
+			D3DXVec3Normalize(&vTargetUp, &vTargetUp);
+			D3DXVec3Normalize(&vTargetLook, &vTargetLook);
+			D3DXVec3Normalize(&vTargetRight, &vTargetRight);
+			if (!dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Shot())
+			{
+				vTargetPos *= -2.f;
+				vPos += vTargetPos;
+				vPos += vTargetUp * +1.5f;
+				D3DXVec3Cross(&vRight, &vTargetUp, &vTargetLook);
+				m_pTransform->Set_State(CTransform::STATE_RIGHT, vRight);
+				m_pTransform->Set_State(CTransform::STATE_UP, vTargetUp);
+				m_pTransform->Set_State(CTransform::STATE_LOOK, vTargetLook);
+				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+				m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
+			}
+			else if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Shot())
+			{
+				vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+				vPos.y += 0.3f;
+				vPos.z += 0.3f;
+				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+				_long			MouseMove = 0;
 
-		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
-		{
-			m_pTransform->Turn(m_pTransform->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
-		}
+				if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
+				{
+					m_pTransform->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.04f);
+				}
 
+				if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
+				{
+					m_pTransform->Turn(m_pTransform->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.04f);
+				}
+			}
+		}
 	}
 	
 
@@ -184,6 +224,7 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 
 	else if (0 == g_iCut && !m_bWheelMove && m_CameraDesc.fFovy < D3DXToRadian(60.f))
 		m_CameraDesc.fFovy += D3DXToRadian(0.25f);
+
 
 
 	Safe_Release(pGameInstance);

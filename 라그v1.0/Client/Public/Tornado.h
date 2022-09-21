@@ -51,7 +51,7 @@ private:
 	HRESULT Off_SamplerState();
 	void	OnBillboard();
 	void CheckColl();
-	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
+
 public:
 	static CTornado* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

@@ -44,13 +44,17 @@ HRESULT CWing::Initialize(void* pArg)
 	m_tFrame.fFrameSpeed = 0.1f;
 	m_tInfo.bDead = false;
 	m_bTurn = false;
-	m_fAngle = D3DXToRadian(135.f);
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
+		m_fAngle = D3DXToRadian(135.f);
+	else
+		m_fAngle = D3DXToRadian(0.f);
 	return S_OK;
 }
 
 void CWing::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
 
 }
 
@@ -62,17 +66,27 @@ void CWing::Late_Tick(_float fTimeDelta)
 		Set_Dead();
 		return;
 	}
-	Set_TargetPos();
-	WingTurn(fTimeDelta);
-	_float4x4		ViewMatrix;
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex == LEVEL_SKY)
+	{
+		Set_TargetPos();
+		WingTurn2(fTimeDelta);
+	}
 
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
+	{
+		Set_TargetPos2();
+		WingTurn(fTimeDelta);
+		_float4x4		ViewMatrix;
 
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 0.5f,0.5f,1.f };
-	//m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
-	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+		D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+		_float3 vScale = { 0.5f,0.5f,1.f };
+		//m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+		m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+		m_pTransformCom2->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+		//m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	}
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -139,6 +153,35 @@ void CWing::Move_Frame(_float fTimeDelta)
 
 void CWing::Set_TargetPos()
 {
+	_float3 vScale = { 0.5f,0.5f,1.f };
+	_float3 vTargetPos, vTargetLook, vTargetUp, vPos , vRight;
+	vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+	vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[2][0];
+	vTargetLook = *(_float3*)&m_tInfo.pTarget->Get_World().m[2][0];
+	vTargetUp = *(_float3*)&m_tInfo.pTarget->Get_World().m[1][0];
+	D3DXVec3Normalize(&vTargetPos, &vTargetPos);
+	D3DXVec3Normalize(&vTargetLook, &vTargetLook);
+	D3DXVec3Normalize(&vTargetUp, &vTargetUp);
+	vTargetPos *= -0.01f;
+	vPos += vTargetPos;
+	vPos += vTargetUp * 0.15f;
+	D3DXVec3Cross(&vRight,&vTargetUp, &vTargetLook);
+
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight * vScale.x);
+	m_pTransformCom2->Set_State(CTransform::STATE_RIGHT, vRight * vScale.x);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, vTargetUp * vScale.y);
+	m_pTransformCom2->Set_State(CTransform::STATE_UP, vTargetUp * vScale.y);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vTargetLook);
+	m_pTransformCom2->Set_State(CTransform::STATE_LOOK, vTargetLook);
+
+	
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+}
+
+void CWing::Set_TargetPos2()
+{
 	if (m_tInfo.pTarget->Get_Info().iHp <= 0 || m_tInfo.pTarget->Get_Info().bDead)
 	{
 		Set_Dead();
@@ -148,12 +191,11 @@ void CWing::Set_TargetPos()
 		vPos.z -= 0.1f;
 	else
 		vPos.z += 0.1f;
-	vPos.y += 0.2f;
-//	vPos.x -= 0.2f;
+	vPos.y += 0.3f;
+	//	vPos.x -= 0.2f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-//	vPos.x += 0.4f;
+	//	vPos.x += 0.4f;
 	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
-
 }
 
 void CWing::WingTurn(_float fTimeDelta)
@@ -274,6 +316,51 @@ void CWing::WingTurn(_float fTimeDelta)
 
 }
 
+void CWing::WingTurn2(_float fTimeDelta)
+{
+	
+	if (m_fAngle <= 1.1f && !m_bTurn)
+	{
+		m_fAngle += D3DXToRadian(2.5f);
+		if (m_fAngle >= 1.1f)
+			m_bTurn = true;
+	}
+	if (m_bTurn)
+	{
+		m_fAngle -= D3DXToRadian(2.5f);
+		if (m_fAngle <= 0.f)
+			m_bTurn = false;
+	}
+	_float3	vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	_float3	vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+	_float3	vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	_float4x4	RotationMatrix;
+	D3DXMatrixRotationAxis(&RotationMatrix, &vUp, -m_fAngle);
+
+	D3DXVec3TransformNormal(&vRight, &vRight, &RotationMatrix);
+	D3DXVec3TransformNormal(&vUp, &vUp, &RotationMatrix);
+	D3DXVec3TransformNormal(&vLook, &vLook, &RotationMatrix);
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
+	////////////////////////////////////////////////////
+	_float3	vRight2 = m_pTransformCom2->Get_State(CTransform::STATE_RIGHT);
+	_float3	vUp2 = m_pTransformCom2->Get_State(CTransform::STATE_UP);
+	_float3	vLook2 = m_pTransformCom2->Get_State(CTransform::STATE_LOOK);
+	_float4x4	RotationMatrix2;
+	D3DXMatrixRotationAxis(&RotationMatrix2, &vUp2, m_fAngle);
+
+	D3DXVec3TransformNormal(&vRight2, &vRight2, &RotationMatrix2);
+	D3DXVec3TransformNormal(&vUp2, &vUp2, &RotationMatrix2);
+	D3DXVec3TransformNormal(&vLook2, &vLook2, &RotationMatrix2);
+
+	m_pTransformCom2->Set_State(CTransform::STATE_RIGHT, vRight2);
+	m_pTransformCom2->Set_State(CTransform::STATE_UP, vUp2);
+	m_pTransformCom2->Set_State(CTransform::STATE_LOOK, vLook2);
+
+}
+
 
 HRESULT CWing::On_SamplerState()
 {
@@ -335,6 +422,7 @@ HRESULT CWing::SetUp_RenderState()
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
+
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);

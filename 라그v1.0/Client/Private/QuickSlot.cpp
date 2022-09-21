@@ -69,6 +69,8 @@ HRESULT CQuickSlot::Initialize(void* pArg)
 void CQuickSlot::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+	if(m_tInfo.pTarget->Get_Info().iLevelIndex == LEVEL_SKY)
+		m_SkyCool += fTimeDelta;
 	Move_Frame(fTimeDelta);
 	Check_Slot(fTimeDelta);
 	Use_Slot();
@@ -241,12 +243,15 @@ HRESULT CQuickSlot::Render()
 
 		Safe_Release(pGameInstance);
 	}
-	if (FAILED(m_pMouseTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
 
-	if (FAILED(m_pMouseTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-		return E_FAIL;
-	m_pMouseBuffer->Render();
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
+	{
+		if (FAILED(m_pMouseTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
+		if (FAILED(m_pMouseTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;
+		m_pMouseBuffer->Render();
+	}
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 
@@ -402,110 +407,161 @@ void CQuickSlot::Set_Slot()
 }
 void CQuickSlot::Check_Slot(_float fTimeDelta)
 {
-	m_ThunderCool += fTimeDelta;
-	m_TornadoCool += fTimeDelta;
-	m_FireBall += fTimeDelta;
-	for (int i = 0; i < 10; ++i)
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
 	{
-		switch (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).eItemNum)
+		m_ThunderCool += fTimeDelta;
+		m_TornadoCool += fTimeDelta;
+		m_FireBall += fTimeDelta;
+		for (int i = 0; i < 10; ++i)
 		{
-		case CStatInfo::SKILL_THUNDER:
-			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount > 0 && m_ThunderCool > 1.f)
+			switch (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).eItemNum)
 			{
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1,i);
-				m_ThunderCool = 0.f;
+			case CStatInfo::SKILL_THUNDER:
+				if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount > 0 && m_ThunderCool > 1.f)
+				{
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, i);
+					m_ThunderCool = 0.f;
+				}
+				break;
+			case CStatInfo::SKILL_TORNADO:
+				if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount > 0 && m_TornadoCool > 1.f)
+				{
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, i);
+					m_TornadoCool = 0.f;
+				}
+				break;
+			case CStatInfo::SKILL_FIREBALL:
+				if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount > 0 && m_FireBall > 1.f)
+				{
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, i);
+					m_FireBall = 0.f;
+				}
+				break;
+			default:
+				break;
 			}
-			break;
-		case CStatInfo::SKILL_TORNADO:
-			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount > 0 && m_TornadoCool > 1.f)
-			{
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, i);
-				m_TornadoCool = 0.f;
-			}
-			break;
-		case CStatInfo::SKILL_FIREBALL:
-			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i).iCount > 0 && m_FireBall > 1.f)
-			{
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, i);
-				m_FireBall = 0.f;
-			}
-			break;
-		default:
-			break;
+			m_pvecItem[i] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i);
 		}
-		m_pvecItem[i] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(i);
+	}
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex == LEVEL_SKY)
+	{
+		m_ThunderCool += fTimeDelta;
+		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_SkyQuickSlot(1).iCount > 0 && m_ThunderCool > 1.f)
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_SkyQuickUseItemCount(-1, 1);
+			m_ThunderCool = 0.f;
+		}
+		m_pvecItem[0] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_SkyQuickSlot(0);
+		m_pvecItem[1] = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_SkyQuickSlot(1);
+		for (int i = 2; i < 10; ++i)
+		{
+			m_pvecItem[i] = { CStatInfo::EITEM_END,0,0 };
+		}
 	}
 }
 
 void CQuickSlot::Use_Slot()
 {
 	_int iIndex = 99;
-	if (CKeyMgr::Get_Instance()->Key_Down('1'))
-		iIndex = 0;
-	if (CKeyMgr::Get_Instance()->Key_Down('2'))
-		iIndex = 1;
-	if (CKeyMgr::Get_Instance()->Key_Down('3'))
-		iIndex = 2;
-	if (CKeyMgr::Get_Instance()->Key_Down('4'))
-		iIndex = 3;
-	if (CKeyMgr::Get_Instance()->Key_Down('5'))
-		iIndex = 4;
-	if (CKeyMgr::Get_Instance()->Key_Down('6'))
-		iIndex = 5;
-	if (CKeyMgr::Get_Instance()->Key_Down('7'))
-		iIndex = 6;
-	if (CKeyMgr::Get_Instance()->Key_Down('8'))
-		iIndex = 7;
-	if (CKeyMgr::Get_Instance()->Key_Down('9'))
-		iIndex = 8;
-	if (CKeyMgr::Get_Instance()->Key_Down('0'))
-		iIndex = 9;
-
-	if (iIndex != 99)
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
 	{
-		switch (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).eItemNum)
+		if (CKeyMgr::Get_Instance()->Key_Down('1'))
+			iIndex = 0;
+		if (CKeyMgr::Get_Instance()->Key_Down('2'))
+			iIndex = 1;
+		if (CKeyMgr::Get_Instance()->Key_Down('3'))
+			iIndex = 2;
+		if (CKeyMgr::Get_Instance()->Key_Down('4'))
+			iIndex = 3;
+		if (CKeyMgr::Get_Instance()->Key_Down('5'))
+			iIndex = 4;
+		if (CKeyMgr::Get_Instance()->Key_Down('6'))
+			iIndex = 5;
+		if (CKeyMgr::Get_Instance()->Key_Down('7'))
+			iIndex = 6;
+		if (CKeyMgr::Get_Instance()->Key_Down('8'))
+			iIndex = 7;
+		if (CKeyMgr::Get_Instance()->Key_Down('9'))
+			iIndex = 8;
+		if (CKeyMgr::Get_Instance()->Key_Down('0'))
+			iIndex = 9;
+
+		if (iIndex != 99)
 		{
-		case CStatInfo::HPPOTION:
-			m_tInfo.pTarget->Set_Hp(-1000);
-			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, iIndex);
-			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount <= 0)
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemNum(CStatInfo::EITEM_END, iIndex);
-			break;
-		case CStatInfo::MPPOTION:
-			m_tInfo.pTarget->Set_Mp(100);
-			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, iIndex);
-			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount <= 0)
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemNum(CStatInfo::EITEM_END, iIndex);
-			break;
-		case CStatInfo::SKILL_THUNDER:
-			if (m_tInfo.pTarget->Get_Info().iMp >= 20 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
+			switch (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).eItemNum)
 			{
-				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(1);
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(5, iIndex);
-				m_ThunderCool = 0.f;
+			case CStatInfo::HPPOTION:
+				m_tInfo.pTarget->Set_Hp(-1000);
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, iIndex);
+				if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount <= 0)
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemNum(CStatInfo::EITEM_END, iIndex);
+				break;
+			case CStatInfo::MPPOTION:
+				m_tInfo.pTarget->Set_Mp(100);
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickUseItemCount(-1, iIndex);
+				if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount <= 0)
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemNum(CStatInfo::EITEM_END, iIndex);
+				break;
+			case CStatInfo::SKILL_THUNDER:
+				if (m_tInfo.pTarget->Get_Info().iMp >= 20 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
+				{
+					dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(1);
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(5, iIndex);
+					m_ThunderCool = 0.f;
+				}
+				break;
+			case CStatInfo::SKILL_TORNADO:
+				if (m_tInfo.pTarget->Get_Info().iMp >= 10 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
+				{
+					dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(2);
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(3, iIndex);
+					m_TornadoCool = 0.f;
+				}
+				break;
+			case CStatInfo::SKILL_FIREBALL:
+				if (m_tInfo.pTarget->Get_Info().iMp >= 5 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
+				{
+					dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(3);
+					dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(1, iIndex);
+					m_FireBall = 0.f;
+				}
+				break;
+			case CStatInfo::RIDE_ALPACA:
+				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Ride_Alpaca();
+				break;
+			case CStatInfo::WING:
+				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Wing_Fly();
+				break;
+			default:
+				break;
 			}
+		}
+	}
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex == LEVEL_SKY)
+	{
+		if (GetKeyState(VK_RBUTTON) < 0 && m_SkyCool > 0.1f)
+		{
+			iIndex = 1;
+			m_SkyCool = 0.f;
+		}
+		else if (GetKeyState(VK_LBUTTON) < 0 && m_SkyCool > 0.1f)
+		{
+			iIndex = 0;
+			m_SkyCool = 0.f;
+		}
+		
+		switch (iIndex)
+		{
+		case 0:
+			dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(1);
 			break;
-		case CStatInfo::SKILL_TORNADO:
-			if (m_tInfo.pTarget->Get_Info().iMp >= 10 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
+		case 1:
+			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_SkyQuickSlot(1).iCount == 0)
 			{
 				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(2);
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(3, iIndex);
-				m_TornadoCool = 0.f;
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_SkyQuickItemCount(3, 1);
+				m_ThunderCool = 0.f;
 			}
-			break;
-		case CStatInfo::SKILL_FIREBALL:
-			if (m_tInfo.pTarget->Get_Info().iMp >= 5 && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_QuickSlot(iIndex).iCount == 0)
-			{
-				dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Use_Skill(3);
-				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(1, iIndex);
-				m_FireBall = 0.f;
-			}
-			break;
-		case CStatInfo::RIDE_ALPACA:
-			dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Ride_Alpaca();
-			break;
-		case CStatInfo::WING:
-			dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Wing_Fly();
 			break;
 		default:
 			break;

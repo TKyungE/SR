@@ -338,7 +338,7 @@ void CTornado::CheckColl()
 		else
 		{
 			pTarget->Set_Hp(m_tInfo.iDmg);
-			pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+			pTarget->Set_Hit(m_tInfo.iDmg, *(_float3*)&pTarget->Get_World().m[3][0]);
 		}
 		if (pTarget->Get_Info().iHp <= 0)
 			pTarget->Set_Dead();
@@ -368,7 +368,7 @@ void CTornado::CheckColl()
 			else
 			{
 				pTarget->Set_Hp(m_tInfo.iDmg);
-				pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+				pTarget->Set_Hit(m_tInfo.iDmg, *(_float3*)&pTarget->Get_World().m[3][0]);
 			}
 			if (pTarget->Get_Info().iHp <= 0)
 				pTarget->Set_Dead();
@@ -397,28 +397,11 @@ void CTornado::CheckColl()
 		else
 		{
 			pTarget->Set_Hp(m_tInfo.iDmg);
-			pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+			pTarget->Set_Hit(m_tInfo.iDmg, *(_float3*)&pTarget->Get_World().m[3][0]);
 		}
 		if (pTarget->Get_Info().iHp <= 0)
 			pTarget->Set_Dead();
 		Set_Dead();
 	}
 	Safe_Release(pInstance);
-}
-_float3 CTornado::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
-{
-	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];
-	D3DXVec3Normalize(&vLook, &vLook);
-
-	vLook = vLook * 0.5f;
-
-	_float Angle = D3DXVec3Dot(&vLook, (_float3*)&pSour->Get_World().m[1][0]);
-	_float3 SourUp = *(_float3*)&pSour->Get_World().m[1][0];
-	_float3 Proj = (Angle / D3DXVec3Length(&SourUp) * D3DXVec3Length(&SourUp)) * *(_float3*)&pSour->Get_World().m[1][0];
-
-	_float3 CollisionPos = *(_float3*)&pSour->Get_World().m[3][0] + Proj;
-	CollisionPos.y += 1.f;
-	CollisionPos.x = pDest->Get_World().m[3][0];
-
-	return CollisionPos;
 }

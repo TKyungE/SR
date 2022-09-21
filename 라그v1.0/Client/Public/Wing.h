@@ -45,6 +45,7 @@ private:
 	_float3				m_OriginvRight;
 	_float3				m_OriginvLook;
 	_float				m_fAngle = 0.f;
+	
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
@@ -54,7 +55,9 @@ private:
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 	void	Set_TargetPos();
+	void	Set_TargetPos2();
 	void	WingTurn(_float fTimeDelta);
+	void	WingTurn2(_float fTimeDelta);
 public:
 	static CWing* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

@@ -376,6 +376,36 @@
     <Filter Include="02.GameObject\NPC\06.ShopNPC">
       <UniqueIdentifier>{82d4b7d7-7916-40f9-8784-dc6fc6619595}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\SkyField">
+      <UniqueIdentifier>{a3527cc7-07dc-4432-97e8-308746eb63f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Cloud">
+      <UniqueIdentifier>{4adf80ae-5418-4b85-9cc3-6fc081a42031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\12.Wyvern">
+      <UniqueIdentifier>{4c4bb8e0-b9e1-4deb-8658-4d25463b245e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\13.SkyDragon">
+      <UniqueIdentifier>{c6e64c92-bbd6-4920-9410-6efc171fe3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\11.SkyFireBall">
+      <UniqueIdentifier>{a3861313-d88b-45d2-b4eb-e6cf5985dac8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\12.SkyThunder">
+      <UniqueIdentifier>{54a2e6e2-0165-4707-aed6-54c58d8a9b08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\13.SkyMeteor">
+      <UniqueIdentifier>{f53c1235-5249-40b2-b860-e3eed6865dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\14.Shadowball">
+      <UniqueIdentifier>{15915a9f-4116-480a-a411-68295a499834}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\14.ThunderTarget">
+      <UniqueIdentifier>{4275c626-7591-42b9-a66a-054cb0e58cfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\15.Target">
+      <UniqueIdentifier>{5fa2c8e2-68be-4742-934d-722e463df523}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -726,6 +756,33 @@
     <ClInclude Include="..\Public\ShopNPC.h">
       <Filter>02.GameObject\NPC\06.ShopNPC</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\SkyField.h">
+      <Filter>01.Levels\SkyField</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Cloud.h">
+      <Filter>02.GameObject\BackGroundObj\Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Wyvern.h">
+      <Filter>02.GameObject\Monster\12.Wyvern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyDragon.h">
+      <Filter>02.GameObject\Monster\13.SkyDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ShadowBall.h">
+      <Filter>03.Effect\Skill\14.Shadowball</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyFireBall.h">
+      <Filter>03.Effect\Skill\11.SkyFireBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyThunder.h">
+      <Filter>03.Effect\Skill\12.SkyThunder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ThunderTarget.h">
+      <Filter>03.Effect\Default\14.ThunderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Target.h">
+      <Filter>03.Effect\Default\15.Target</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1063,6 +1120,33 @@
     </ClCompile>
     <ClCompile Include="..\Private\ShopNPC.cpp">
       <Filter>02.GameObject\NPC\06.ShopNPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyField.cpp">
+      <Filter>01.Levels\SkyField</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Cloud.cpp">
+      <Filter>02.GameObject\BackGroundObj\Cloud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Wyvern.cpp">
+      <Filter>02.GameObject\Monster\12.Wyvern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyDragon.cpp">
+      <Filter>02.GameObject\Monster\13.SkyDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ShadowBall.cpp">
+      <Filter>03.Effect\Skill\14.Shadowball</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyFireBall.cpp">
+      <Filter>03.Effect\Skill\11.SkyFireBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyThunder.cpp">
+      <Filter>03.Effect\Skill\12.SkyThunder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ThunderTarget.cpp">
+      <Filter>03.Effect\Default\14.ThunderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Target.cpp">
+      <Filter>03.Effect\Default\15.Target</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
