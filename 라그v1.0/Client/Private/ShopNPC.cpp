@@ -41,11 +41,13 @@ HRESULT CShopNPC::Initialize(void * pArg)
 	
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = 400.f;
-	m_fSizeY = 400.f;
-	m_fX = 250.f;
-	m_fY = 370.f;
+	m_fSizeX = 600.f;
+	m_fSizeY = 600.f;
+	m_fX = 280.f;
+	m_fY = 250.f;
 
+	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
+	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 
 	m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
@@ -89,7 +91,6 @@ void CShopNPC::Tick(_float fTimeDelta)
 	Safe_AddRef(pInstance);
 
 
-
 	if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 	{
 		g_iCut = 4;
@@ -101,12 +102,15 @@ void CShopNPC::Tick(_float fTimeDelta)
 		for (_int i = 0; i < m_vNormalScript.size(); ++i)
 			tTInfo.pScript[i] = m_vNormalScript[i];
 
+		tTInfo.iQuestIndex = 1;
 		tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
-		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_ShopBox"), &tTInfo)))
+		tTInfo.iNumQuest = 4;
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 			return;
 	}
 
-	if (CKeyMgr::Get_Instance()->Key_Down('J') && g_iCut != 0 && m_bSlot)
+	if (g_iQuest == 4 && g_iCut == 0 && m_bSlot)
 	{
 		CGameObject::INFO tInfo;
 
@@ -120,12 +124,16 @@ void CShopNPC::Tick(_float fTimeDelta)
 	
 		m_bShop = true;
 		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_Shop(true);
-		dynamic_cast<CTextBox*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_ShopBox"))->Get_Objects().front())->TextBoxDead();
+
+	//	dynamic_cast<CTextBox*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_ShopBox"))->Get_Objects().front())->TextBoxDead();
+
 		m_bSlot = false;
 	}
-	if (GetKeyState('H') & 8000 && g_iCut == 0 && !m_bSlot)
+	if (GetKeyState('H') & 8000 && g_iCut == 0 && g_iQuest == 4)
 	{
 		m_bShop = false;
+		g_iQuest = 0;
+		g_iReward = 0;
 	}
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
 	{
@@ -182,6 +190,55 @@ HRESULT CShopNPC::Render(void)
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
+	if (0 != g_iCut && m_bTalk)
+	{
+		if (FAILED(m_pCharTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
+
+		_float4x4	WorldMatrix, ViewMatrix;
+
+		WorldMatrix = *D3DXMatrixTranspose(&WorldMatrix, &m_pCharTransformCom->Get_WorldMatrix());
+
+		D3DXMatrixIdentity(&ViewMatrix);
+
+		_float4x4 SaveViewMatrix, SaveProjVatrix;
+
+		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &SaveViewMatrix);
+		m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
+
+		/*	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);*/
+
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", &WorldMatrix, sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&m_ProjMatrix, &m_ProjMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float));
+
+		
+		_uint iIndex = 0;
+		if (g_iReward == 4)
+		{
+			iIndex = 1;
+		}
+
+		m_pShaderCom->Set_Texture("g_Texture", m_pCharTextureCom->Get_Texture(iIndex));
+
+		/*if (FAILED(m_pCharTextureCom->Bind_OnGraphicDev(0)))
+		return E_FAIL;*/
+
+		m_pShaderCom->Begin(1);
+
+		m_pCharVIBufferCom->Render();
+
+		m_pShaderCom->End();
+
+		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &SaveViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
+	}
+
+
+
+
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
@@ -225,7 +282,8 @@ HRESULT CShopNPC::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_QuestCollider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pQuestColliderCom)))
 		return E_FAIL;
 
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
 
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -239,6 +297,14 @@ HRESULT CShopNPC::SetUp_Components(void)
 
 
 
+
+	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ShopNPC"), (CComponent**)&m_pCharTextureCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTransform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pCharTransformCom, &TransformDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -301,9 +367,6 @@ void CShopNPC::OnBillboard()
 
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
-
-
 }
 
 void CShopNPC::Ready_Script(void)
@@ -352,9 +415,12 @@ void CShopNPC::Free(void)
 
 	m_vNormalScript.clear();
 
-
-
 	__super::Free();
+	
+	Safe_Release(m_pCharTransformCom);
+	Safe_Release(m_pCharVIBufferCom);
+	Safe_Release(m_pCharTextureCom);
+	Safe_Release(m_pShaderCom);
 
 	Safe_Release(m_pQuestColliderCom);
 	Safe_Release(m_pColliderCom);

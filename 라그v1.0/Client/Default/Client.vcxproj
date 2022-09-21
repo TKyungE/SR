@@ -414,6 +414,7 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

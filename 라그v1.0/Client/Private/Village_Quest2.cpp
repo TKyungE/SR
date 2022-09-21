@@ -36,10 +36,10 @@ HRESULT CVillage_Quest2::Initialize(void * pArg)
 
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = 400.f;
-	m_fSizeY = 400.f;
-	m_fX = 250.f;
-	m_fY = 370.f;
+	m_fSizeX = 600.f;
+	m_fSizeY = 600.f;
+	m_fX = 280.f;
+	m_fY = 250.f;
 
 	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
@@ -378,7 +378,7 @@ HRESULT CVillage_Quest2::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Quest1"), (CComponent**)&m_pCharTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Engineer"), (CComponent**)&m_pCharTextureCom)))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))

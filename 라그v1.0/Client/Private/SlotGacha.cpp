@@ -103,18 +103,21 @@ void CSlotGacha::Tick(_float fTimeDelta)
 		for (_int i = 0; i < m_vNormalScript.size(); ++i)
 			tTInfo.pScript[i] = m_vNormalScript[i];
 
+		tTInfo.iQuestIndex = 1;
 		tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
-		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_SlotBox"), &tTInfo)))
+		tTInfo.iNumQuest = 2;
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 			return;
 	}
 
-	if (GetKeyState('J') & 8000 && g_iCut != 0 && m_bSlot)
+	//g_iQuest, g_iReward
+	if (g_iQuest == 2 && g_iCut == 0 && m_bSlot)
 	{
-		
 		pInstance->Add_GameObject(TEXT("Prototype_GameObject_Gacha"), m_tInfo.iLevelIndex, TEXT("Layer_UI"));
 			
-		dynamic_cast<CTextBox*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_SlotBox"))->Get_Objects().front())->TextBoxDead();
+		//dynamic_cast<CTextBox*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_SlotBox"))->Get_Objects().front())->TextBoxDead();
 		m_bSlot = false;
+		g_iQuest = 0;
 	}
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))

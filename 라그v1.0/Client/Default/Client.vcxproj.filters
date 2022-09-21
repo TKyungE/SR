@@ -1082,5 +1082,8 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl">
       <Filter>06. ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl">
+      <Filter>06. ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

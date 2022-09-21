@@ -20,9 +20,9 @@ sampler TextureSampler = sampler_state {
 };
 sampler CharNpcSampler = sampler_state {
 	texture = g_Texture;
-	MINFILTER = POINT;
-	MAGFILTER = POINT;
-	MIPFILTER = POINT;
+	MINFILTER = NONE;
+	MAGFILTER = NONE;
+	MIPFILTER = NONE;
 	
 };
 
@@ -93,11 +93,6 @@ PS_OUT PS_NPC(PS_IN In)
 
 	Out.vColor = tex2D(CharNpcSampler, In.vTexUV);
 	Out.vColor.a = Out.vColor.a * g_fAlpha;
-
-	if (Out.vColor.a == 0.f)
-	{
-		discard;
-	}
 
 	return Out;
 }

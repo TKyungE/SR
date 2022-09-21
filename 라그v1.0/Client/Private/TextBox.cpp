@@ -247,6 +247,9 @@ void CTextBox::Running_TextBox(void)
 				if (0 != g_iCut)
 					g_iCut = 0;
 				
+				if (m_tTInfo.iNumQuest == 4)
+					g_iReward = 0;
+
 				break;
 			}
 			case CMyButton::BUTTON_BACK:
@@ -257,6 +260,10 @@ void CTextBox::Running_TextBox(void)
 					m_wstr = TEXT("");
 					m_iIndex = 0;
 				}
+
+				if (m_tTInfo.iNumQuest == 4)
+					g_iReward = 0;
+
 				iter->TurnOff_Clicked();
 				break;
 			}
@@ -268,7 +275,9 @@ void CTextBox::Running_TextBox(void)
 					m_wstr = TEXT("");
 					m_iIndex = 0;
 				}
-
+				if (m_tTInfo.iNumQuest == 4)
+					g_iReward = m_tTInfo.iNumQuest;
+				
 				iter->TurnOff_Clicked();
 				break;
 			}

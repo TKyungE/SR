@@ -4,6 +4,7 @@
 #include "ClientQuest.h"
 
 BEGIN(Engine)
+class CShader;
 class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
@@ -41,6 +42,12 @@ private:
 	CTexture* m_pTextureCom = nullptr;
 	CCollider* m_pColliderCom = nullptr;
 	CCollider* m_pQuestColliderCom = nullptr;
+
+
+	CVIBuffer_Rect* m_pCharVIBufferCom = nullptr;
+	CTransform* m_pCharTransformCom = nullptr;
+	CTexture* m_pCharTextureCom = nullptr;
+	CShader*	m_pShaderCom = nullptr;
 public:
 	_bool	Get_Shop() { return m_bShop; }
 
@@ -61,7 +68,7 @@ private:
 	_float		m_fX = 0.f;
 	_float		m_fY = 0.f;
 	_bool		m_bSlot = false;
-	_float		m_fAlpha = 0.f;
+	_float		m_fAlpha = 1.f;
 	_int m_iQuestTex = 0;
 
 private:
