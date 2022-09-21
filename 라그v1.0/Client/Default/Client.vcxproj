@@ -256,6 +256,7 @@
     <ClInclude Include="..\Public\Skeleton.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\Public\Sky.h" />
+    <ClInclude Include="..\public\SkyDragon.h" />
     <ClInclude Include="..\public\SkyField.h" />
     <ClInclude Include="..\public\SlotGacha.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
@@ -282,6 +283,7 @@
     <ClInclude Include="..\public\Wing.h" />
     <ClInclude Include="..\public\WorldHpBar.h" />
     <ClInclude Include="..\Public\Wraith.h" />
+    <ClInclude Include="..\public\Wyvern.h" />
     <ClInclude Include="..\Public\Zombie.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
@@ -373,6 +375,7 @@
     <ClCompile Include="..\Private\Skeleton.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
+    <ClCompile Include="..\private\SkyDragon.cpp" />
     <ClCompile Include="..\private\SkyField.cpp" />
     <ClCompile Include="..\private\SlotGacha.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />
@@ -399,6 +402,7 @@
     <ClCompile Include="..\private\Wing.cpp" />
     <ClCompile Include="..\private\WorldHpBar.cpp" />
     <ClCompile Include="..\Private\Wraith.cpp" />
+    <ClCompile Include="..\private\Wyvern.cpp" />
     <ClCompile Include="..\Private\Zombie.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">

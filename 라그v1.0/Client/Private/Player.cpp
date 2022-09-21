@@ -204,12 +204,12 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 
 		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
 		{
-			m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.03f);
+			m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.04f);
 		}
 
 		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
 		{
-			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.03f);
+			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.04f);
 		}
 		Safe_Release(pGameInstance);
 	}

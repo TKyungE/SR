@@ -382,6 +382,12 @@
     <Filter Include="02.GameObject\BackGroundObj\Cloud">
       <UniqueIdentifier>{4adf80ae-5418-4b85-9cc3-6fc081a42031}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\12.Wyvern">
+      <UniqueIdentifier>{4c4bb8e0-b9e1-4deb-8658-4d25463b245e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\13.SkyDragon">
+      <UniqueIdentifier>{c6e64c92-bbd6-4920-9410-6efc171fe3ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -735,6 +741,10 @@
     <ClInclude Include="..\public\Cloud.h">
       <Filter>02.GameObject\BackGroundObj\Cloud</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Wyvern.h">
+      <Filter>02.GameObject\Monster\12.Wyvern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyDragon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1076,6 +1086,10 @@
     <ClCompile Include="..\private\Cloud.cpp">
       <Filter>02.GameObject\BackGroundObj\Cloud</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Wyvern.cpp">
+      <Filter>02.GameObject\Monster\12.Wyvern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyDragon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

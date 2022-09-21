@@ -81,7 +81,7 @@ void CSkyField::Tick(_float fTimeDelta)
 			g_bCollider = false;
 	}
 
-
+	Create_Monster(fTimeDelta);
 
 	Safe_Release(pGameInstance);
 }
@@ -228,7 +228,7 @@ void CSkyField::Create_Monster(_float fTimeDelta)
 
 	CGameObject::INFO tInfo;
 	fRainTime += fTimeDelta;
-	if (fRainTime > 1.f)
+	if (fRainTime > 3.f)
 	{
 		fRainTime = 0.f;
 		
@@ -241,8 +241,8 @@ void CSkyField::Create_Monster(_float fTimeDelta)
 		tInfo.vPos.y = vPos.y + iTemp;
 		tInfo.vPos.z = vPos.z + iDest;
 		tInfo.iLevelIndex = LEVEL_SKY;
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_SKY,TEXT("Layer_Monster"), &tInfo)))
+		tInfo.pTarget = Info.pTarget;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wyvern"), LEVEL_SKY,TEXT("Layer_Monster"), &tInfo)))
 				return;
 
 		
