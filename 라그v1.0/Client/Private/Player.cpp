@@ -138,9 +138,10 @@ void CPlayer::Tick(_float fTimeDelta)
 			}
 
 			Player_Move(fTimeDelta);
-			Move_Frame(fTimeDelta);
-			Get_PickingPoint();
+			Move_Frame(fTimeDelta);		
 		}
+
+		Get_PickingPoint();
 	}
 	else
 	{
@@ -498,12 +499,9 @@ void CPlayer::OnBillboard()
 	else if (m_bLeft)
 		m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
-
-	
 		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
 		m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
 		m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
-	
 }
 
 HRESULT CPlayer::On_SamplerState()

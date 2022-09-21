@@ -305,7 +305,16 @@ HRESULT CTerrain::SetUp_ShaderResource()
 	if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_tInfo.iMp))))
 		return E_FAIL;
 
+	_float	fMin = 1.f;
+	_float	fMax = 4.f;
+	
 
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
+		return E_FAIL;
+	 
 
 	return S_OK;
 }

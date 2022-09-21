@@ -3,6 +3,7 @@
 
 float4x4	g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 textureCUBE g_Texture;
+float g_fAlpha;
 
 sampler TextureSampler = sampler_state {
 	texture = g_Texture;
@@ -62,6 +63,23 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_TREE_MAIN(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
+
+	Out.vColor = texCUBE(TextureSampler, In.vTexUV);
+
+	Out.vColor.a = Out.vColor.a * g_fAlpha;
+
+	if (Out.vColor.a == 0.f)
+	{
+		discard;
+	}
+
+	return Out;
+}
+
+
 technique DefaultTechnique
 {
 	pass SkyBox
@@ -74,4 +92,14 @@ technique DefaultTechnique
 		PixelShader = compile ps_3_0 PS_MAIN();
 	}
 
+	pass Tree
+	{
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_TREE_MAIN();
+	}
 }

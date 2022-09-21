@@ -120,6 +120,7 @@ HRESULT CLevel_Desert1::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iIndex = iter.iIndex;
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iLevelIndex = LEVEL_DESERT1;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_DESERT1, pLayerTag, &indexpos)))
 			return E_FAIL;

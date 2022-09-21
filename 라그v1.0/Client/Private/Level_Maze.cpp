@@ -120,6 +120,7 @@ HRESULT CLevel_Maze::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iIndex = iter.iIndex;
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iLevelIndex = LEVEL_MAZE;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_MAZE, pLayerTag, &indexpos)))
 			return E_FAIL;
@@ -277,10 +278,11 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 		return E_FAIL;
 
 
-	/*Info.vPos = { 35.f,1.f,13.f };
+	Info.vPos = { 13.f,1.f,14.f };
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
-		return E_FAIL;*/
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 	return S_OK;
 }

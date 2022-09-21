@@ -119,6 +119,7 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iIndex = iter.iIndex;
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iLevelIndex = LEVEL_TOWN;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_TOWN, pLayerTag, &indexpos)))
 			return E_FAIL;

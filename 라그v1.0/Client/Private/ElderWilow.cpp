@@ -168,7 +168,7 @@ void CElderWilow::Late_Tick(_float fTimeDelta)
 		{
 			Check_Hit();
 			Motion_Change();
-			CheckColl();
+			
 		}
 		OnBillboard();
 
@@ -180,6 +180,8 @@ void CElderWilow::Late_Tick(_float fTimeDelta)
 		{
 			if (nullptr != m_pRendererCom)
 				m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+
+			CheckColl();
 		}
 		Safe_Release(pInstance);
 	}

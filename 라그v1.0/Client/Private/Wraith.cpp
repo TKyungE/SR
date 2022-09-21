@@ -169,8 +169,9 @@ void CWraith::Late_Tick(_float fTimeDelta)
 			CheckColl();
 		}
 		OnBillboard();
+
 		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 	}
 }
 
@@ -180,20 +181,78 @@ HRESULT CWraith::Render(void)
 	{
 		if (FAILED(__super::Render()))
 			return E_FAIL;
-		Off_SamplerState();
 
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		_float4x4	WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
+		_float4			vCamPosition;
+
+		WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+
+		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+		CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+		Safe_AddRef(pInstance);
+
+		CLayer* pLayer = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"));
+
+		list<class CGameObject*> GameObject = pLayer->Get_Objects();
+
+		PlayerWorldMatrix = GameObject.front()->Get_World();
+
+		memcpy(&vCamPosition, &PlayerWorldMatrix.m[3][0], sizeof(_float4));
+
+		Safe_Release(pInstance);
+
+		_float fAlpha = 0.5f;
+
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
+		if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 			return E_FAIL;
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
+			return E_FAIL;
+
+
+			if (m_tInfo.iLevelIndex == LEVEL_MAZE)
+		{
+				_float	fMin = 1.f;
+				_float	fMax = 4.f;
+
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
+				return E_FAIL;
+
+		}
+		else
+		{
+			_float	fMin = 3.f;
+			_float	fMax = 7.f;
+
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
+				return E_FAIL;
+
+		}
+
 		TextureRender();
 
-		if (FAILED(SetUp_RenderState()))
-			return E_FAIL;
+		/*if (FAILED(SetUp_RenderState()))
+		return E_FAIL;*/
+
+		m_pShaderCom->Begin(6);
 
 		m_pVIBufferCom->Render();
 
-		if (FAILED(Release_RenderState()))
-			return E_FAIL;
-		On_SamplerState();
+		m_pShaderCom->End();
+		
+
+		//On_SamplerState();
 		if (g_bCollider)
 			m_pColliderCom->Render();
 	}
@@ -234,7 +293,8 @@ HRESULT CWraith::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -514,6 +574,8 @@ _float4x4 CWraith::Get_World(void)
 void CWraith::Free(void)
 {
 	__super::Free();
+
+	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
@@ -692,49 +754,64 @@ HRESULT CWraith::TextureRender()
 	case IDLE:
 		if (m_bFront)
 		{
-			if (FAILED(m_pTextureComIDLE_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComIDLE_Front->Get_Texture(m_tFrame.iFrameStart));
+			/*if (FAILED(m_pTextureComIDLE_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
 		}
 		else
 		{
-			if (FAILED(m_pTextureComIDLE_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComIDLE_Back->Get_Texture(m_tFrame.iFrameStart));
+
+			/*	if (FAILED(m_pTextureComIDLE_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
 		}
 		break;
 	case MOVE:
 		if (m_bFront)
 		{
-			if (FAILED(m_pTextureComMove_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComMove_Front->Get_Texture(m_tFrame.iFrameStart));
+
+			/*if (FAILED(m_pTextureComMove_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
 		}
 		else
 		{
-			if (FAILED(m_pTextureComMove_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComMove_Back->Get_Texture(m_tFrame.iFrameStart));
+
+			/*if (FAILED(m_pTextureComMove_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
 		}
 		break;
 	case DEAD:
 		if (m_bFront)
 		{
-			if (FAILED(m_pTextureComDead_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComDead_Front->Get_Texture(m_tFrame.iFrameStart));
+
+			/*	if (FAILED(m_pTextureComDead_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
 		}
 		else
 		{
-			if (FAILED(m_pTextureComDead_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComDead_Back->Get_Texture(m_tFrame.iFrameStart));
+
+			/*if (FAILED(m_pTextureComDead_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
 		}
 		break;
 	case SKILL:
 		if (m_bFront)
 		{
-			if (FAILED(m_pTextureComAttack_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComAttack_Front->Get_Texture(m_tFrame.iFrameStart));
+
+			/*if (FAILED(m_pTextureComAttack_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
 		}
 		else
 		{
-			if (FAILED(m_pTextureComAttack_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComAttack_Back->Get_Texture(m_tFrame.iFrameStart));
+
+			/*	if (FAILED(m_pTextureComAttack_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
 		}
 		break;
 	default:

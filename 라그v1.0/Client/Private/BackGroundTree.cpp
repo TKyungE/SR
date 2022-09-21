@@ -2,6 +2,7 @@
 #include "..\Public\BackGroundTree.h"
 
 #include "GameInstance.h"
+#include "Layer.h"
 
 CBackGroundTree::CBackGroundTree(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	:CGameObject(_pGraphic_Device)
@@ -30,7 +31,7 @@ HRESULT CBackGroundTree::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-	
+
 
 	m_pTransformCom->Set_Scaled(m_IndexPos.vScale);
 
@@ -82,6 +83,9 @@ void CBackGroundTree::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
+
+	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 
 	Safe_AddRef(pInstance);
@@ -89,7 +93,7 @@ void CBackGroundTree::Late_Tick(_float fTimeDelta)
 	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
 	{
 		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_ALPHABLEND, this);
 	}
 	Safe_Release(pInstance);
 }
@@ -99,48 +103,179 @@ HRESULT CBackGroundTree::Render(void)
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+	_float4x4	PlayerWorldMatrix;
+	_float4 vPlayerPosition;
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	CLayer* pLayer = pInstance->Find_Layer(m_IndexPos.iLevelIndex, TEXT("Layer_Player"));
+
+	list<class CGameObject*> GameObject = pLayer->Get_Objects();
+
+	PlayerWorldMatrix = GameObject.front()->Get_World();
+
+	memcpy(&vPlayerPosition, &PlayerWorldMatrix.m[3][0], sizeof(_float3));
+
+	Safe_Release(pInstance);
+
+	_float fAlpha = 1.f;
+
+
+
+	_float4x4 WorldMatrix3, ViewMatrix3, ProjMatrix3;
+
+	WorldMatrix3 = m_pTransformCom->Get_WorldMatrix();
+
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix3);
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix3);
+
+
+	m_pShaderCom2->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix3, &WorldMatrix3), sizeof(_float4x4));
+	m_pShaderCom2->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix3, &ViewMatrix3), sizeof(_float4x4));
+	m_pShaderCom2->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix3, &ProjMatrix3), sizeof(_float4x4));
+
+	if (vPlayerPosition.z >= m_pTransformCom->Get_State(CTransform::STATE_POSITION).z)
+	{
+		if (vPlayerPosition.x > m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - m_IndexPos.vScale.x &&
+			vPlayerPosition.x < m_pTransformCom->Get_State(CTransform::STATE_POSITION).x + m_IndexPos.vScale.x)
+		{
+			fAlpha = 0.5f;
+		}
+	}
+
+	if (FAILED(m_pShaderCom2->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
-		return E_FAIL;
+	m_pShaderCom2->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(0));
 
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
+
+
+	//if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	//	return E_FAIL;
+
+	//if (FAILED(SetUp_RenderState()))
+	//	return E_FAIL;
+
+	m_pShaderCom2->Begin(1);
 
 	m_pVIBuffer->Render();
 
-	if (FAILED(Release_RenderState()))
-		return E_FAIL;
+	m_pShaderCom2->End();
+
+	/*if (FAILED(Release_RenderState()))
+		return E_FAIL;*/
 
 
-	if (FAILED(m_pRectTransform->Bind_OnGraphicDev()))
+	_float4x4 WorldMatrix, ViewMatrix, ProjMatrix;
+
+	WorldMatrix = m_pRectTransform->Get_WorldMatrix();
+
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+
+	m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
+	
+	if (vPlayerPosition.z >= m_pTransformCom->Get_State(CTransform::STATE_POSITION).z)
+	{
+		if (vPlayerPosition.x > m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - m_IndexPos.vScale.x - 1.5f &&
+			vPlayerPosition.x < m_pTransformCom->Get_State(CTransform::STATE_POSITION).x + m_IndexPos.vScale.x + 1.5f)
+		{
+			fAlpha = 0.5f;
+		}
+	}
+
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
 		return E_FAIL;
 
-	if (FAILED(m_pRectTexture->Bind_OnGraphicDev(0)))
-		return E_FAIL;
+	fAlpha = 1.f;
 
-	if (FAILED(SetUp_Rect_RenderState()))
-		return E_FAIL;
+	m_pShaderCom->Set_Texture("g_Texture", m_pRectTexture->Get_Texture(0));
+
+
+	//if (FAILED(m_pRectTransform->Bind_OnGraphicDev()))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pRectTexture->Bind_OnGraphicDev(0)))
+	//	return E_FAIL;
+
+	//if (FAILED(SetUp_Rect_RenderState()))
+	//	return E_FAIL;
+
+	m_pShaderCom->Begin(1);
 
 	m_VIBufferRect->Render();
 
-	if (FAILED(Release_RenderState()))
+	m_pShaderCom->End();
+
+	//if (FAILED(Release_RenderState()))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pRectTransform2->Bind_OnGraphicDev()))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pRectTexture2->Bind_OnGraphicDev(0)))
+	//	return E_FAIL;
+
+	//if (FAILED(SetUp_Rect_RenderState()))
+	//	return E_FAIL;
+
+	_float4x4 WorldMatrix2, ViewMatrix2, ProjMatrix2, PlayerWorldMatrix2;
+	_float4 vPlayerPosition2;
+	WorldMatrix2 = m_pRectTransform2->Get_WorldMatrix();
+
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix2);
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix2);
+
+	CGameInstance* pInstance1 = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance1);
+
+	CLayer* pLayer2 = pInstance1->Find_Layer(m_IndexPos.iLevelIndex, TEXT("Layer_Player"));
+
+	list<class CGameObject*> GameObject2 = pLayer2->Get_Objects();
+
+	PlayerWorldMatrix2 = GameObject2.front()->Get_World();
+
+	memcpy(&vPlayerPosition2, &PlayerWorldMatrix2.m[3][0], sizeof(_float3));
+
+	Safe_Release(pInstance1);
+
+	m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix2, &WorldMatrix2), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix2, &ViewMatrix2), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix2, &ProjMatrix2), sizeof(_float4x4));
+
+
+	if (vPlayerPosition.z >= m_pTransformCom->Get_State(CTransform::STATE_POSITION).z)
+	{
+		if (vPlayerPosition.x > m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - m_IndexPos.vScale.x &&
+			vPlayerPosition.x < m_pTransformCom->Get_State(CTransform::STATE_POSITION).x + m_IndexPos.vScale.x)
+		{
+			fAlpha = 0.5f;
+		}
+	}
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
 		return E_FAIL;
 
-	if (FAILED(m_pRectTransform2->Bind_OnGraphicDev()))
-		return E_FAIL;
+	m_pShaderCom->Set_Texture("g_Texture", m_pRectTexture2->Get_Texture(0));
 
-	if (FAILED(m_pRectTexture2->Bind_OnGraphicDev(0)))
-		return E_FAIL;
 
-	if (FAILED(SetUp_Rect_RenderState()))
-		return E_FAIL;
+	m_pShaderCom->Begin(1);
+
 
 	m_VIBufferRect2->Render();
 
-	if (FAILED(Release_RenderState()))
-		return E_FAIL;
+
+	m_pShaderCom->End();
 
 	if (g_bCollider)
 		m_pColliderCom->Render();
@@ -156,20 +291,20 @@ HRESULT CBackGroundTree::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer1"), LEVEL_STATIC , TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_VIBufferRect)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer1"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_VIBufferRect)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC,TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_VIBufferRect2)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_VIBufferRect2)))
 		return E_FAIL;
 
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_BackGroundTree"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture1"), LEVEL_STATIC,TEXT("Prototype_Component_Texture_BackGroundTreeRect"), (CComponent**)&m_pRectTexture)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture1"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_BackGroundTreeRect"), (CComponent**)&m_pRectTexture)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture2"), LEVEL_STATIC,TEXT("Prototype_Component_Texture_BackGroundTreeRect"), (CComponent**)&m_pRectTexture2)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture2"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_BackGroundTreeRect"), (CComponent**)&m_pRectTexture2)))
 		return E_FAIL;
 
 
@@ -189,6 +324,12 @@ HRESULT CBackGroundTree::SetUp_Components(void)
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader2"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Cube"), (CComponent**)&m_pShaderCom2)))
 		return E_FAIL;
 
 	return S_OK;
@@ -291,6 +432,9 @@ _float4x4 CBackGroundTree::Get_World(void)
 void CBackGroundTree::Free(void)
 {
 	__super::Free();
+
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pShaderCom2);
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);

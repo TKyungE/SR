@@ -49,10 +49,8 @@ void CAlphaUI::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 	RECT	rcRect;
+
 	SetRect(&rcRect, _int(m_fX - m_fSizeX * 0.5f), _int(m_fY - m_fSizeY * 0.5f), _int(m_fX + m_fSizeX * 0.5f), _int(m_fY + m_fSizeY * 0.5f));
-
-
-
 }
 
 void CAlphaUI::Late_Tick(_float fTimeDelta)

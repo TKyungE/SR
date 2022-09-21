@@ -123,6 +123,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iIndex = iter.iIndex;
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iLevelIndex = LEVEL_GAMEPLAY;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
@@ -237,6 +238,11 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 	_uint iCount = 0;
 	
+	Info.vPos = { 13.f,1.f,14.f };
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		return E_FAIL;
+
 	for (; iter != m_vMonsterPos1.end(); ++iter)
 	{
 		if (iCount >= 1)

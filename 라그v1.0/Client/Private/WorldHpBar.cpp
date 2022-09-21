@@ -102,6 +102,29 @@ HRESULT CWorldHpBar::Render()
 	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
 	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 		return E_FAIL;
+	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
+	{
+		_float fMin = 3.f;
+		_float fMax = 6.f;
+		m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float));
+		m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float));
+
+	}
+	else
+	{
+		_float	fMin = 1.f;
+		_float	fMax = 4.f;
+
+
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
+				return E_FAIL;
+	}
+
+	
+		
 
 	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(0));
 

@@ -133,6 +133,12 @@ HRESULT CHouse::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
 	
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader2"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Cube"), (CComponent**)&m_pShaderCom2)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -324,6 +330,9 @@ _float4x4 CHouse::Get_World(void)
 void CHouse::Free(void)
 {
 	__super::Free();
+
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pShaderCom2);
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);

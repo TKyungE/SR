@@ -210,6 +210,25 @@ HRESULT CSkeleton::Render(void)
 		if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 			return E_FAIL;
 		
+		_float fAlpha = 1.f;
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
+			return E_FAIL;
+
+		if (m_tInfo.iLevelIndex == LEVEL_MAZE)
+		{
+			_float	fMin = 1.f;
+			_float	fMax = 4.f;
+
+
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
+				return E_FAIL;
+
+		}
+
+
 		TextureRender();
 
 		/*if (FAILED(SetUp_RenderState()))

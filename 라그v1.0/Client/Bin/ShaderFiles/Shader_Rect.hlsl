@@ -2,7 +2,7 @@
 
 
 
-float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
+float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix; 
 texture g_Texture;
 
 float g_fAlpha;
@@ -58,6 +58,8 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vTexUV = In.vTexUV;
 	Out.vWorldPos = mul(float4(In.vPosition, 1.f), g_WorldMatrix).xyz;
 
+	
+
 	return Out;
 }
 
@@ -92,6 +94,11 @@ PS_OUT PS_NPC(PS_IN In)
 	Out.vColor = tex2D(CharNpcSampler, In.vTexUV);
 	Out.vColor.a = Out.vColor.a * g_fAlpha;
 
+	if (Out.vColor.a == 0.f)
+	{
+		discard;
+	}
+
 	return Out;
 }
 
@@ -103,15 +110,15 @@ PS_OUT PS_MAIN_TERRAIN(PS_IN In)
 
 	// dot, cross, normalize
 
-	float4		vFogColor = Out.vColor;
+	float4		vFogColor = vector(1.f,1.f,1.f,1.f);
 
 	float		fDistance = length(g_vCamPosition - vector(In.vWorldPos, 1.f));
 
-	 float		fFogPower = min((g_fMaxRange - max(fDistance - g_fMinRange, 0.f)), g_fMaxRange - g_fMinRange) / (g_fMaxRange - g_fMinRange);
+	//float		fFogPower = min((g_fMaxRange - max(fDistance - g_fMinRange, 0.f)), g_fMaxRange - g_fMinRange) / (g_fMaxRange - g_fMinRange);
 
-	//float		fFogPower = max(fDistance - g_fMinRange, 0.f) / (g_fMaxRange - g_fMinRange);
+	float		fFogPower = max(fDistance - g_fMinRange, 0.f) / (g_fMaxRange - g_fMinRange);
 
-	Out.vColor += vFogColor * fFogPower;
+	Out.vColor -= (vFogColor * fFogPower);
 
 	return Out;
 }
@@ -124,15 +131,21 @@ PS_OUT PS_MAIN_MONSTER(PS_IN In)
 
 	// dot, cross, normalize
 
-	float4		vFogColor = Out.vColor;
+	float4		vFogColor = vector(1.f, 1.f, 1.f, 1.f);
 
 	float		fDistance = length(g_vCamPosition - vector(In.vWorldPos, 1.f));
 
-	float		fFogPower = min((g_fMaxRange - max(fDistance - g_fMinRange, 0.f)), g_fMaxRange - g_fMinRange) / (g_fMaxRange - g_fMinRange);
+//	float		fFogPower = min((g_fMaxRange - max(fDistance - g_fMinRange, 0.f)), g_fMaxRange - g_fMinRange) / (g_fMaxRange - g_fMinRange);
 
-	//float		fFogPower = max(fDistance - g_fMinRange, 0.f) / (g_fMaxRange - g_fMinRange);
+	float		fFogPower = max(fDistance - g_fMinRange, 0.f) / (g_fMaxRange - g_fMinRange);
 
-	Out.vColor += vFogColor * fFogPower;
+	Out.vColor -= (vFogColor * fFogPower);
+	Out.vColor.a = Out.vColor.a * g_fAlpha;
+
+	if (Out.vColor.a == 0.f)
+	{
+		discard;
+	}
 
 	return Out;
 }
@@ -146,6 +159,11 @@ PS_OUT PS_MAIN_UI(PS_IN In)
 	Out.vColor.r = 0.5f;
 	Out.vColor.gb = 0.f;
 	Out.vColor.a = ((1.f - Out.vColor.a) * 0.5f) - g_fAlpha;
+
+	if (Out.vColor.a == 0.f)
+	{
+		discard;
+	}
 
 	return Out;
 }
@@ -214,5 +232,15 @@ technique DefaultTechnique
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_UI();
+	}
+	pass AlphaMonster
+	{
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_MONSTER();
 	}
 }

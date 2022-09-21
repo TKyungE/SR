@@ -35,6 +35,8 @@ HRESULT CShadow::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(m_tInfo.vPos);
 	m_pTransformCom->Turn(vRight, 1.f);
 	
+	m_fRandom = (rand() % 10) * 0.001f;
+
 
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
@@ -81,8 +83,6 @@ HRESULT CShadow::Render()
 
 	if (m_tInfo.iLevelIndex == LEVEL_MAZE)
 	{
-
-
 		_float4x4	WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
 		_float4			vCamPosition;
 
@@ -110,6 +110,22 @@ HRESULT CShadow::Render()
 		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
 		if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 			return E_FAIL;
+
+		_float fAlpha = 1.f;
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
+			return E_FAIL;
+
+		_float	fMin = 1.f;
+		_float	fMax = 4.f;
+
+
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
+			return E_FAIL;
+
+
 		TextureRender();
 
 		m_pShaderCom->Begin(4);

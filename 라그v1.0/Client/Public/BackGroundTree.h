@@ -5,6 +5,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CShader;
 class CRenderer;
 class CTransform;
 class CVIBuffer_Cube;
@@ -22,6 +23,7 @@ public:
 		_float3		vPos;
 		_float3		vScale;
 		_uint	iIndex;
+		_uint	iLevelIndex;
 	}INDEXPOS;
 private:
 	CBackGroundTree(LPDIRECT3DDEVICE9 _pGraphic_Device);
@@ -52,6 +54,8 @@ private:
 
 
 	CCollider*	m_pColliderCom = nullptr;
+	CShader*	m_pShaderCom = nullptr;
+	CShader*	m_pShaderCom2 = nullptr;
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);

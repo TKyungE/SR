@@ -3,6 +3,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CShader;
 class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
@@ -41,6 +42,8 @@ private:
 	CTexture* m_pTextureComDead_Front = nullptr;
 	CTexture* m_pTextureComDead_Back = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
+
+	CShader*	m_pShaderCom = nullptr;
 private:
 	void OnTerrain();
 	void	OnBillboard();
