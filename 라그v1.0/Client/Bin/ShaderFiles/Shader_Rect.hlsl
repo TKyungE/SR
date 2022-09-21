@@ -109,6 +109,7 @@ PS_OUT PS_MAIN_TERRAIN(PS_IN In)
 
 	float		fDistance = length(g_vCamPosition - vector(In.vWorldPos, 1.f));
 
+
 	//float		fFogPower = min((g_fMaxRange - max(fDistance - g_fMinRange, 0.f)), g_fMaxRange - g_fMinRange) / (g_fMaxRange - g_fMinRange);
 
 	float		fFogPower = max(fDistance - g_fMinRange, 0.f) / (g_fMaxRange - g_fMinRange);

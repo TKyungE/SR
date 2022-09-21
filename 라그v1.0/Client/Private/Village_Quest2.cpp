@@ -5,6 +5,9 @@
 #include "TextBox.h"
 #include "QuestManager.h"
 #include "Player.h"
+#include "StatInfo.h"
+#include "Inven.h"
+#include "Layer.h"
 
 CVillage_Quest2::CVillage_Quest2(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -221,6 +224,19 @@ void CVillage_Quest2::Tick(_float fTimeDelta)
 			return;
 
 		m_tInfo.pTarget->Set_Money(1000);
+
+		CStatInfo* pStat = (CStatInfo*)pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
+
+		/*for (_int i = 0; i < 24; ++i)
+		{
+
+		}
+		pStat->Set_UseItemCount(-2, CStatInfo::MON2);
+		if (pStat->Get_Item(CStatInfo::MON2).iCount <= 0)
+			pStat->Set_ItemNum(CStatInfo::EITEM_END, CStatInfo::MON2);
+
+		pStat->Set_UseItemCount(-2, CStatInfo::MON1);
+		pStat->Set_UseItemCount(-1, CStatInfo::MON3);*/
 
 		g_iQuest = 0;
 		g_iReward = 0;

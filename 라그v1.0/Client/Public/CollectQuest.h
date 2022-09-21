@@ -37,6 +37,7 @@ private:
 	CStatInfo* m_pStatInfo = nullptr;
 	_uint* m_pCount = nullptr;
 	_bool* m_pClear = nullptr;
+	_bool m_bType = false;
 
 public:
 	static CCollectQuest* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
