@@ -175,9 +175,9 @@ PS_OUT PS_MAIN_HPBAR(PS_IN In)
 	{
 		if (Out.vColor.r > 0.9f)
 		{
-			Out.vColor.r = 0.3137.f;
-			Out.vColor.g = 0.3607.f;
-			Out.vColor.b = 0.5019.f;
+			Out.vColor.r = 0.3137f;
+			Out.vColor.g = 0.3607f;
+			Out.vColor.b = 0.5019f;
 		}
 			
 	}

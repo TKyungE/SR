@@ -216,7 +216,7 @@ void CWorldHpBar::OnBillboard()
 
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 
-	m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 2.f));
+	m_pTransformCom->Set_Scaled(_float3(1.f, 2.f, 1.f));
 }
 
 CWorldHpBar * CWorldHpBar::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
