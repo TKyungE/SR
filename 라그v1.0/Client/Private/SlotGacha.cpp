@@ -108,11 +108,11 @@ void CSlotGacha::Tick(_float fTimeDelta)
 			return;
 	}
 
-	if (CKeyMgr::Get_Instance()->Key_Up('J') && g_iCut != 0 && m_bSlot)
+	if (GetKeyState('J') & 8000 && g_iCut != 0 && m_bSlot)
 	{
 		
-		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Gacha"), m_tInfo.iLevelIndex, TEXT("Layer_UI"))))
-			return;
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_Gacha"), m_tInfo.iLevelIndex, TEXT("Layer_UI"));
+			
 		dynamic_cast<CTextBox*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_SlotBox"))->Get_Objects().front())->TextBoxDead();
 		m_bSlot = false;
 	}
@@ -156,6 +156,7 @@ void CSlotGacha::Late_Tick(_float fTimeDelta)
 		m_bTalk = false;
 		if (2 == g_iTalk)
 			g_iTalk = 0;
+		m_bSlot = false;
 	}
 
 	Safe_Release(pInstance);

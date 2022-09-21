@@ -87,6 +87,7 @@ private:
 	_bool   m_bRide = false;
 	_bool	m_bFly = false;
 	_bool	m_bUI = false;
+	_bool   m_bPoring = false;
 	_float	m_fFly_fY = 0.f;
 	STATE				m_ePreState;
 	STATE				m_eCurState;
@@ -104,6 +105,8 @@ public:
 	void Set_Fly(_bool _bFly) { m_bFly = _bFly; }
 	void Set_UI(_bool _UI) { m_bUI = _UI; }
 	void Use_Skill(_int iIndex);
+	void Ride_Alpaca();
+	void Wing_Fly();
 private:
 	void Player_Move(_float fTimeDelta);
 	void Motion_Change();

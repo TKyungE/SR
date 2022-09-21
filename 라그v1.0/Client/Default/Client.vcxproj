@@ -188,8 +188,9 @@
     <ClInclude Include="..\Public\Camera_Dynamic.h" />
     <ClInclude Include="..\Public\ClientQuest.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
-    <ClInclude Include="..\public\CriHit.h" />
-    <ClInclude Include="..\public\CriHitUI.h" />
+    <ClInclude Include="..\Public\CollectQuest.h" />
+    <ClInclude Include="..\Public\CriHit.h" />
+    <ClInclude Include="..\Public\CriHitUI.h" />
     <ClInclude Include="..\public\Dandelion.h" />
     <ClInclude Include="..\public\DandelionAttack.h" />
     <ClInclude Include="..\public\DefaultAttack.h" />
@@ -250,6 +251,8 @@
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
     <ClInclude Include="..\public\Shadow.h" />
+    <ClInclude Include="..\Public\Shop.h" />
+    <ClInclude Include="..\Public\ShopNPC.h" />
     <ClInclude Include="..\Public\Skeleton.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\Public\Sky.h" />
@@ -301,8 +304,9 @@
     <ClCompile Include="..\private\Byorgue.cpp" />
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\Private\ClientQuest.cpp" />
-    <ClCompile Include="..\private\CriHit.cpp" />
-    <ClCompile Include="..\private\CriHitUI.cpp" />
+    <ClCompile Include="..\Private\CollectQuest.cpp" />
+    <ClCompile Include="..\Private\CriHit.cpp" />
+    <ClCompile Include="..\Private\CriHitUI.cpp" />
     <ClCompile Include="..\private\Dandelion.cpp" />
     <ClCompile Include="..\private\DandelionAttack.cpp" />
     <ClCompile Include="..\private\DefaultAttack.cpp" />
@@ -363,6 +367,8 @@
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
+    <ClCompile Include="..\Private\Shop.cpp" />
+    <ClCompile Include="..\Private\ShopNPC.cpp" />
     <ClCompile Include="..\Private\Skeleton.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
@@ -408,7 +414,6 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -65,7 +65,7 @@ HRESULT CInven::Initialize(void* pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 	Set_Slot();
 	
-	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::HPPOTION ,0,10 }, 0);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::WING ,0,1 }, 0);
 	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::MPPOTION ,1,20 }, 1);
 	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::TIARA ,2,1 }, 2);
 	//dynamic_cast<CStatInfo*>(m_StatInfo)->Set_InvenItem({ CStatInfo::BOBY ,3,1 }, 3);
@@ -149,13 +149,20 @@ void CInven::Tick(_float fTimeDelta)
 		{
 			if (CKeyMgr::Get_Instance()->Key_Down(VK_RBUTTON))
 			{
-				if (m_vecItem[i].eItemNum != CStatInfo::EITEM_END && !dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+				if (!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Shop())
 				{
-					UseItem(m_vecItem[i].eItemNum, i);
+					if (m_vecItem[i].eItemNum != CStatInfo::EITEM_END && !dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+						UseItem(m_vecItem[i].eItemNum, i);
+				}
+				else if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Shop())
+				{
+					if (m_vecItem[i].eItemNum != CStatInfo::EITEM_END && !dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MousePick())
+						SellItem(m_vecItem[i].eItemNum, i);
 				}
 			}
 		}
 	}
+	
 }
 
 void CInven::Late_Tick(_float fTimeDelta)
@@ -187,8 +194,6 @@ HRESULT CInven::Render()
 		return E_FAIL;
 
 	m_pVIBufferCom->Render();
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
-		return E_FAIL;
 
 	for (int i = 0; i < 24; ++i)
 	{
@@ -296,7 +301,7 @@ HRESULT CInven::Render()
 					szText += TEXT("윌로우의몸통: 윌로우는\n 튼튼한 목재로 사용 된다.");
 					break;
 				case CStatInfo::MON3:
-					szText += TEXT("빅풋의발다박: 미식가들\n 사이에서 유명한 식재료.");
+					szText += TEXT("빅풋의발바박: 미식가들\n 사이에서 유명한 식재료.");
 					break;
 				case CStatInfo::MON4:
 					szText += TEXT("도적의두건: 도적단을\n토벌했다는 증표로 쓰인다.");
@@ -479,6 +484,25 @@ void CInven::UseItem(CStatInfo::EITEM _eItem,_int Index)
 		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index).iCount <= 0)
 			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::EITEM_END, Index);
 		break;
+	case CStatInfo::PETEGG:
+		if(!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Poring())
+		{
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_Poring();
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(-1, Index);
+			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index).iCount <= 0)
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::EITEM_END, Index);
+		}
+		break;
+	case CStatInfo::RIDEEGG:
+		if(!dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Ride())
+		{ 
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_Ride();
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_SkillSlot({ CStatInfo::RIDE_ALPACA,3,0 }, 3);
+			dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(-1, Index);
+			if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index).iCount <= 0)
+				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::EITEM_END, Index);
+		}
+		break;
 	case CStatInfo::EARRING:
 		if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_EquipSlot(0).eItemNum == CStatInfo::EITEM_END)
 		{
@@ -562,6 +586,101 @@ void CInven::UseItem(CStatInfo::EITEM _eItem,_int Index)
 	default:
 		break;
 	}
+}
+
+void CInven::SellItem(CStatInfo::EITEM _eItem, _int Index)
+{
+	_int iSellPrice = 0;
+	switch (_eItem)
+	{
+	case Client::CStatInfo::HPPOTION:
+		iSellPrice = 15;
+		break;
+	case Client::CStatInfo::MPPOTION:
+		iSellPrice = 10;
+		break;
+	case Client::CStatInfo::TIARA:
+		iSellPrice = 50;
+		break;
+	case Client::CStatInfo::BOBY:
+		iSellPrice = 50;
+		break;
+	case Client::CStatInfo::SHOES:
+		iSellPrice = 25;
+		break;
+	case Client::CStatInfo::ROBE:
+		iSellPrice = 25;
+		break;
+	case Client::CStatInfo::PANDANT:
+		iSellPrice = 35;
+		break;
+	case Client::CStatInfo::EARRING:
+		iSellPrice = 30;
+		break;
+	case Client::CStatInfo::BRACELET:
+		iSellPrice = 20;
+		break;
+	case Client::CStatInfo::RING:
+		iSellPrice = 20;
+		break;
+	case Client::CStatInfo::STAFF:
+		iSellPrice = 100;
+		break;
+	case Client::CStatInfo::ORB:
+		iSellPrice = 75;
+		break;
+	case Client::CStatInfo::RIDEEGG:
+		iSellPrice = 1000;
+		break;
+	case Client::CStatInfo::PETEGG:
+		iSellPrice = 1000;
+		break;
+	case Client::CStatInfo::MON1:
+		iSellPrice = 10;
+		break;
+	case Client::CStatInfo::MON2:
+		iSellPrice = 15;
+		break;
+	case Client::CStatInfo::MON3:
+		iSellPrice = 20;
+		break;
+	case Client::CStatInfo::MON4:
+		iSellPrice = 25;
+		break;
+	case Client::CStatInfo::MON5:
+		iSellPrice = 30;
+		break;
+	case Client::CStatInfo::MON6:
+		iSellPrice = 35;
+		break;
+	case Client::CStatInfo::MON7:
+		iSellPrice = 40;
+		break;
+	case Client::CStatInfo::MON8:
+		iSellPrice = 45;
+		break;
+	case Client::CStatInfo::MON9:
+		iSellPrice = 50;
+		break;
+	case Client::CStatInfo::MON10:
+		iSellPrice = 55;
+		break;
+	case Client::CStatInfo::MON11:
+		iSellPrice = 60;
+		break;
+	case Client::CStatInfo::MON12:
+		iSellPrice = 65;
+		break;
+	default:
+		return;
+		break;
+	}
+
+	m_tInfo.pTarget->Set_Money(iSellPrice);
+	dynamic_cast<CStatInfo*>(m_StatInfo)->Set_UseItemCount(-1, Index);
+	if (dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(Index).iCount <= 0)
+		dynamic_cast<CStatInfo*>(m_StatInfo)->Set_ItemNum(CStatInfo::EITEM_END, Index);
+
 }
 
 CInven * CInven::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

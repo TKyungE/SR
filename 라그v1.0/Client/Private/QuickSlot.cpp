@@ -94,6 +94,7 @@ void CQuickSlot::Tick(_float fTimeDelta)
 						{
 						case CStatInfo::HPPOTION:
 						case CStatInfo::MPPOTION:
+						case CStatInfo::WING:
 							iDest = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iSlotNum;
 
 							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickSlot(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Item(iDest), i);
@@ -109,6 +110,7 @@ void CQuickSlot::Tick(_float fTimeDelta)
 						case CStatInfo::SKILL_THUNDER:
 						case CStatInfo::SKILL_TORNADO:
 						case CStatInfo::SKILL_FIREBALL:
+						case CStatInfo::RIDE_ALPACA:
 							iDest = dynamic_cast<CStatInfo*>(m_StatInfo)->Get_MouseItem().iSlotNum;
 
 							dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickSlot(dynamic_cast<CStatInfo*>(m_StatInfo)->Get_SkillSlot(iDest), i);
@@ -221,7 +223,8 @@ HRESULT CQuickSlot::Render()
 		for (int i = 0; i < 10; ++i)
 		{
 			szCount[i] = TEXT("");
-			szCount[i] += to_wstring(m_pvecItem[i].iCount);
+			if(m_pvecItem[i].eItemNum != CStatInfo::WING)
+				szCount[i] += to_wstring(m_pvecItem[i].iCount);
 		}
 
 		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
@@ -497,6 +500,12 @@ void CQuickSlot::Use_Slot()
 				dynamic_cast<CStatInfo*>(m_StatInfo)->Set_QuickItemCount(1, iIndex);
 				m_FireBall = 0.f;
 			}
+			break;
+		case CStatInfo::RIDE_ALPACA:
+			dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Ride_Alpaca();
+			break;
+		case CStatInfo::WING:
+			dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Wing_Fly();
 			break;
 		default:
 			break;

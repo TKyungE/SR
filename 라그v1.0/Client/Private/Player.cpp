@@ -62,18 +62,11 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
-	tInfo.vPos = { 0.7f,0.7f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	tInfo.bHit = false;
+	tInfo.vPos = { 0.7f,0.7f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-
-	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	tInfo.vPos = vPos;
-	tInfo.vPos.z += 0.35f;
-	tInfo.vPos.x += 0.35f;
-	//Pet
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), m_tInfo.iLevelIndex, TEXT("Layer_Pet"), &tInfo);
 
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_AlphaUI"), m_tInfo.iLevelIndex, TEXT("Layer_AlphaUI"), &tInfo)))
@@ -329,23 +322,7 @@ void CPlayer::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	//if (pInstance->Collision(this, COLLISION_BOSS, &pTarget))
-	//{
-	//	_float3 vBackPos;
-	//	if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-	//	{
-	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-	//	}
-	//	else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-	//	{
-	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-	//	}
-	//	vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
-	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	//}
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_NPC, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
@@ -622,6 +599,54 @@ void CPlayer::Use_Skill(_int iIndex)
 	Safe_Release(pInstance);
 }
 
+void CPlayer::Ride_Alpaca()
+{
+	if (!m_bFly && m_eCurState == IDLE)
+	{
+		switch (m_bRide)
+		{
+		case true:
+			m_bRide = false;
+			break;
+		case false:
+			m_bRide = true;
+			if (m_eCurState == MOVE)
+			{
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 4;
+				m_tFrame.fFrameSpeed = 0.07f;
+			}
+			break;
+		}
+	}
+}
+
+void CPlayer::Wing_Fly()
+{
+	if (!m_bRide)
+	{
+		switch (m_bFly)
+		{
+		case true:
+			m_bFly = false;
+			m_fFly_fY = 0.f;
+			break;
+		case false:
+			m_bFly = true;
+			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+			if (nullptr == pGameInstance)
+				return;
+			Safe_AddRef(pGameInstance);
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = this;
+			tInfo.vPos = { 0.5f,0.5f,1.f };
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wing"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+			Safe_Release(pGameInstance);
+			break;
+		}
+	}
+}
+
 void CPlayer::Key_Input(_float fTimeDelta)
 {
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
@@ -658,48 +683,6 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		}
 		
 		Check_Front();
-	}
-
-	if (CKeyMgr::Get_Instance()->Key_Down('F') && !m_bRide)
-	{
-		switch (m_bFly)
-		{
-		case true:
-			m_bFly = false;
-			m_fFly_fY = 0.f;
-			break;
-		case false:
-			m_bFly = true;
-			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-			if (nullptr == pGameInstance)
-				return;
-			Safe_AddRef(pGameInstance);
-			CGameObject::INFO tInfo;
-			tInfo.pTarget = this;
-			tInfo.vPos = { 0.5f,0.5f,1.f };
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wing"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-			Safe_Release(pGameInstance);
-			break;
-		}
-	}
-
-	if (CKeyMgr::Get_Instance()->Key_Down('R') && !m_bFly && m_eCurState == IDLE)
-	{
-		switch (m_bRide)
-		{
-		case true:
-			m_bRide = false;
-			break;
-		case false:
-			m_bRide = true;
-			if (m_eCurState == MOVE)
-			{
-				m_tFrame.iFrameStart = 0;
-				m_tFrame.iFrameEnd = 4;
-				m_tFrame.fFrameSpeed = 0.07f;
-			}
-			break;
-		}
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP) && m_bFly)
@@ -1186,6 +1169,26 @@ void CPlayer::Check_Stat()
 	m_tInfo.iMaxMp = 1000 + m_StatMp;
 	if (m_tInfo.iMp < 0)
 		m_tInfo.iMp = 0;
+
+	if (m_StatInfo != nullptr && !m_bPoring && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Poring())
+	{
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		if (nullptr == pGameInstance)
+			return;
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.pTarget = this;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		tInfo.vPos = vPos;
+		tInfo.vPos.z += 0.35f;
+		tInfo.vPos.x += 0.35f;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), m_tInfo.iLevelIndex, TEXT("Layer_Pet"), &tInfo);
+		
+		Safe_Release(pGameInstance);
+
+		m_bPoring = true;
+	}
 }
 
 

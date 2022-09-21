@@ -17,8 +17,8 @@ bool g_bCollider = false;
 int g_iTalk = 0;
 int g_iCut = 0;
 bool g_bFirst = true;
-bool g_bQuest = false;
-bool g_bReward = false;
+int g_iQuest = 0;
+int g_iReward = 0;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -315,7 +315,7 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN, pLayerTag, &tInfo)))
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
 		else if (iter.iIndex == 5)
@@ -336,12 +336,16 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN, pLayerTag, &tInfo)))
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
 	}
 	tInfo.vPos = { 16.1f,1.f,21.8f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SlotGacha"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
+	tInfo.vPos = { 11.5f,1.f,15.f };
+	tInfo.pTarget = Info.pTarget;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ShopNPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 	Safe_Release(pGameInstance);
 	return S_OK;

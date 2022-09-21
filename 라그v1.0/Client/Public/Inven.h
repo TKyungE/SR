@@ -54,6 +54,7 @@ private:
 	void	Set_Slot();
 	void	Check_Slot();
 	void	UseItem(CStatInfo::EITEM _eItem, _int Index);
+	void	SellItem(CStatInfo::EITEM _eItem, _int Index);
 public:
 	static CInven* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
