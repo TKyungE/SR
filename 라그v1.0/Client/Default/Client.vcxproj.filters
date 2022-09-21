@@ -369,7 +369,7 @@
     </Filter>
     <Filter Include="04.UI\00.PlayerUI\03. AlphaUI">
       <UniqueIdentifier>{fd061c48-a018-4873-9946-1d44ea6418c2}</UniqueIdentifier>
-</Filter>
+    </Filter>
     <Filter Include="04.UI\06.Shop">
       <UniqueIdentifier>{8cbf5c7d-d1d3-40e2-aed8-118e9e8c6633}</UniqueIdentifier>
     </Filter>
@@ -705,22 +705,25 @@
     <ClInclude Include="..\public\Gacha.h">
       <Filter>04.UI\Gacha</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CollectQuest.h">
+      <Filter>02.GameObject\Quest\CollectQuest</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Level_Maze.h">
       <Filter>01.Levels\Maze</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\CriHit.h">
+    <ClInclude Include="..\Public\CriHit.h">
       <Filter>03.Effect\Default\12.CriHit</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\CriHitUI.h">
+    <ClInclude Include="..\Public\CriHitUI.h">
       <Filter>03.Effect\Default\13.CriHit2</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AlphaUI.h">
       <Filter>04.UI\00.PlayerUI\03. AlphaUI</Filter>
-</ClInclude>
-    <ClInclude Include="..\public\Shop.h">
+    </ClInclude>
+    <ClInclude Include="..\Public\Shop.h">
       <Filter>04.UI\06.Shop</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\ShopNPC.h">
+    <ClInclude Include="..\Public\ShopNPC.h">
       <Filter>02.GameObject\NPC\06.ShopNPC</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1040,22 +1043,25 @@
     <ClCompile Include="..\private\Gacha.cpp">
       <Filter>04.UI\Gacha</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\CollectQuest.cpp">
+      <Filter>02.GameObject\Quest\CollectQuest</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\Level_Maze.cpp">
       <Filter>01.Levels\Maze</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\CriHit.cpp">
+    <ClCompile Include="..\Private\CriHit.cpp">
       <Filter>03.Effect\Default\12.CriHit</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\CriHitUI.cpp">
+    <ClCompile Include="..\Private\CriHitUI.cpp">
       <Filter>03.Effect\Default\13.CriHit2</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AlphaUI.cpp">
       <Filter>04.UI\00.PlayerUI\03. AlphaUI</Filter>
-</ClCompile>
-    <ClCompile Include="..\private\Shop.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Private\Shop.cpp">
       <Filter>04.UI\06.Shop</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\ShopNPC.cpp">
+    <ClCompile Include="..\Private\ShopNPC.cpp">
       <Filter>02.GameObject\NPC\06.ShopNPC</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1074,9 +1080,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Rect.hlsl">
-      <Filter>06. ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cube.hlsl">
       <Filter>06. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
