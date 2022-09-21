@@ -32,7 +32,8 @@ HRESULT CWorldHpBar::Initialize(void * pArg)
 
 	m_tInfo.bDead = false;
 	
-
+	m_pTransformCom->Set_Scaled(_float3(1.f, 2.f, 1.f));
+	m_pTransformCom2->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
 	return S_OK;
 }
@@ -41,22 +42,17 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	
 	if (m_tInfo.pTarget->Get_Info().iHp <= 0)
 	{
 		Set_Dead();
 	}
 	
 	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-	vPos.y += m_tInfo.vPos.y;
-	vPos.x -= 0.5f;
-	m_pTransformCom2->Set_Scaled({ 1.f, 0.1f, 1.f });
-	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
-	m_fSizeX = m_tInfo.pTarget->Get_Info().iHp /(float)m_tInfo.pTarget->Get_Info().iMaxHp;
+	vPos.y += 0.5f;
 
-	m_pTransformCom->Set_Scaled({m_fSizeX, 0.1f, 1.f });
-	_float fX = (1.f - m_fSizeX) / 2.f;
-	vPos.z -= 0.001f;
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+
+	
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	
@@ -67,6 +63,7 @@ void CWorldHpBar::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 	OnBillboard();
+
 	if (nullptr != m_pRendererCom && 0 == g_iCut)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -102,6 +99,11 @@ HRESULT CWorldHpBar::Render()
 	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
 	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 		return E_FAIL;
+
+	_float fHpBar = (m_tInfo.pTarget->Get_Info().iHp / (float)m_tInfo.pTarget->Get_Info().iMaxHp);
+
+	m_pShaderCom->Set_RawValue("g_fHPBar", &fHpBar, sizeof(_float));
+	
 	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
 	{
 		_float fMin = 3.f;
@@ -123,54 +125,14 @@ HRESULT CWorldHpBar::Render()
 				return E_FAIL;
 	}
 
-	
-		
-
-	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(0));
+	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(2));
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(3);
+	m_pShaderCom->Begin(7);
 
 	m_pVIBufferCom->Render();
-
-	m_pShaderCom->End();
-
-
-
-	_float4x4 WorldMatrix2, ViewMatrix2, ProjMatrix2, PlayerWorldMatrix2;
-	_float4			vCamPosition2;
-
-	WorldMatrix2 = m_pTransformCom2->Get_WorldMatrix();
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix2);
-	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix2);
-
-	CGameInstance* pInstance2 = CGameInstance::Get_Instance();
-
-	Safe_AddRef(pInstance2);
-
-	CLayer* pLayer2 = pInstance2->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"));
-
-	list<class CGameObject*> GameObject2 = pLayer2->Get_Objects();
-
-	PlayerWorldMatrix2 = GameObject2.front()->Get_World();
-
-	memcpy(&vCamPosition2, &PlayerWorldMatrix2.m[3][0], sizeof(_float4));
-
-	Safe_Release(pInstance2);
-
-	m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix2, &WorldMatrix2), sizeof(_float4x4));
-	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix2, &ViewMatrix2), sizeof(_float4x4));
-	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix2, &ProjMatrix2), sizeof(_float4x4));
-	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
-		return E_FAIL;
-
-	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(2));
-
-	m_pShaderCom->Begin(3);
-
-	m_pVIBufferCom2->Render();
 
 	m_pShaderCom->End();
 
@@ -188,7 +150,7 @@ HRESULT CWorldHpBar::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_WingRect"), (CComponent**)&m_pVIBufferCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_WingRect"), (CComponent**)&m_pVIBufferCom2)))
 		return E_FAIL;
@@ -239,17 +201,22 @@ void CWorldHpBar::OnBillboard()
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	
-
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
 	
-	_float3 vScale = { 1.f,0.1f,1.f };
-	m_pTransformCom2->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pTransformCom2->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+	m_pTransformCom2->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
+
+	//m_pTransformCom2->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+
 	m_pTransformCom2->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
-	vScale = { m_fSizeX,0.1f,1.f };
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
+
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+
+	m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 2.f));
 }
 
 CWorldHpBar * CWorldHpBar::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

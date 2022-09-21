@@ -2,13 +2,13 @@
 
 
 
-float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix; 
+float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture g_Texture;
 
 float g_fAlpha;
 float			g_fMinRange = 0.f;
 float			g_fMaxRange = 2.f;
-
+float			g_fHPBar;
 float4			g_vCamPosition;
 
 
@@ -23,7 +23,7 @@ sampler CharNpcSampler = sampler_state {
 	MINFILTER = NONE;
 	MAGFILTER = NONE;
 	MIPFILTER = NONE;
-	
+
 };
 
 sampler MonsterSampler = sampler_state {
@@ -58,7 +58,7 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vTexUV = In.vTexUV;
 	Out.vWorldPos = mul(float4(In.vPosition, 1.f), g_WorldMatrix).xyz;
 
-	
+
 
 	return Out;
 }
@@ -105,7 +105,7 @@ PS_OUT PS_MAIN_TERRAIN(PS_IN In)
 
 	// dot, cross, normalize
 
-	float4		vFogColor = vector(1.f,1.f,1.f,1.f);
+	float4		vFogColor = vector(1.f, 1.f, 1.f, 1.f);
 
 	float		fDistance = length(g_vCamPosition - vector(In.vWorldPos, 1.f));
 
@@ -130,7 +130,7 @@ PS_OUT PS_MAIN_MONSTER(PS_IN In)
 
 	float		fDistance = length(g_vCamPosition - vector(In.vWorldPos, 1.f));
 
-//	float		fFogPower = min((g_fMaxRange - max(fDistance - g_fMinRange, 0.f)), g_fMaxRange - g_fMinRange) / (g_fMaxRange - g_fMinRange);
+	//	float		fFogPower = min((g_fMaxRange - max(fDistance - g_fMinRange, 0.f)), g_fMaxRange - g_fMinRange) / (g_fMaxRange - g_fMinRange);
 
 	float		fFogPower = max(fDistance - g_fMinRange, 0.f) / (g_fMaxRange - g_fMinRange);
 
@@ -163,6 +163,32 @@ PS_OUT PS_MAIN_UI(PS_IN In)
 	return Out;
 }
 
+
+PS_OUT PS_MAIN_HPBAR(PS_IN In)
+{
+	PS_OUT			Out = (PS_OUT)0;
+
+	Out.vColor = tex2D(MonsterSampler, In.vTexUV);
+
+	if (In.vTexUV.x > g_fHPBar)
+	{
+		if (Out.vColor.r > 0.9f)
+		{
+			Out.vColor.r = 0.3137.f;
+			Out.vColor.g = 0.3607.f;
+			Out.vColor.b = 0.5019.f;
+		}
+			
+	}
+
+	return Out;
+}
+
+
+
+
+
+
 technique DefaultTechnique
 {
 	pass DefaultPass
@@ -173,7 +199,7 @@ technique DefaultTechnique
 		BlendOp = Add;*/
 
 		AlphaTestEnable = true;
-		AlphaFunc= GREATER; 
+		AlphaFunc = GREATER;
 		AlphaRef = 100;
 
 		VertexShader = compile vs_3_0 VS_MAIN();
@@ -237,5 +263,14 @@ technique DefaultTechnique
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_MONSTER();
+	}
+	pass HpBar
+	{
+		AlphaTestEnable = true;
+		AlphaFunc = GREATER;
+		AlphaRef = 100;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_HPBAR();
 	}
 }
