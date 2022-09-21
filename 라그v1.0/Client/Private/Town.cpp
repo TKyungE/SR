@@ -321,8 +321,8 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 		else if (iter.iIndex == 5)
 		{
 			tInfo.vPos = iter.BackGroundPos;
-			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Chief"), LEVEL_TOWN, pLayerTag, &tInfo)))
+			tInfo.iMp = iter.iIndex;						// 인덱스 인데 인포구조체에 인덱스 없어서 MP로 대체 함
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Default_NPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
 		else if (iter.iIndex == 6)
@@ -347,6 +347,12 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 	tInfo.pTarget = Info.pTarget;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ShopNPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
+
+	tInfo.vPos = { 10.f, 0.05f, 12.f };
+	tInfo.iLevelIndex = LEVEL_TOWN;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Chief"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
