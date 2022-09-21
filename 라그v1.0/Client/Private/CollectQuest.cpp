@@ -62,29 +62,24 @@ void CCollectQuest::Tick(void)
 
 	for (_uint i = 0; i < m_tQInfo.iCount; ++i)
 	{
-		if (m_pClear[i])
+		for (_uint j = 0; j < 24; ++j)
 		{
-			m_bClear = true;
-			continue;
-		}
-		else
-		{
-			m_bClear = false;
-
-			for (_uint j = 0; j < 24; ++j)
+			if (m_tQInfo.pItemType[i] == m_pStatInfo->Get_Item(j).eItemNum)
 			{
-				if (m_tQInfo.pItemType[i] == m_pStatInfo->Get_Item(j).eItemNum)
-				{
-					m_pCount[i] = m_pStatInfo->Get_Item(j).iCount;
-					if ((_int)m_tQInfo.pCollectGoal[i] <= m_pStatInfo->Get_Item(j).iCount)
-					{
-						m_pClear[i] = true;
-					}
-				}
+				m_pCount[i] = m_pStatInfo->Get_Item(j).iCount;
+				if ((_int)m_tQInfo.pCollectGoal[i] <= m_pStatInfo->Get_Item(j).iCount)
+					m_pClear[i] = true;
 			}
 		}
-		
 	}
+
+	for (_uint i = 0; i < m_tQInfo.iCount; ++i)
+	{
+		if (!m_pClear[i])
+			return;
+	}
+
+	m_bClear = true;
 }
 
 CCollectQuest * CCollectQuest::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -122,4 +117,10 @@ void CCollectQuest::Free(void)
 
 	if (nullptr != m_tQInfo.pItemType)
 		Safe_Delete_Array(m_tQInfo.pItemType);
+
+	if (nullptr != m_pCount)
+		Safe_Delete_Array(m_pCount);
+
+	if (nullptr != m_pClear)
+		Safe_Delete_Array(m_pClear);
 }

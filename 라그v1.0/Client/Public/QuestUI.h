@@ -36,14 +36,15 @@ private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 
-	wstring m_wString;
-	wstring m_wProcessing;
-	//RECT* m_pRect = nullptr;
-	RECT m_rcRect;
+	wstring* m_pString;
+	wstring* m_pProcessing;
+	RECT* m_pRect = nullptr;
+	//RECT m_rcRect;
 
 	_bool m_bTextRender = false;
 
 	_int m_iCount = 0;
+	_int m_iQuestCount = 0;
 
 private:
 	HRESULT SetUp_Components();

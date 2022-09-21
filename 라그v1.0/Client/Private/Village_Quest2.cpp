@@ -156,7 +156,7 @@ void CVillage_Quest2::Tick(_float fTimeDelta)
 			for (_int i = 0; i < m_vClearScript.size(); ++i)
 				tTInfo.pScript[i] = m_vClearScript[i];
 
-			tTInfo.iQuestIndex = 3;
+			tTInfo.iQuestIndex = 1;
 			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
 			tTInfo.iNumQuest = 3;
 
@@ -220,7 +220,7 @@ void CVillage_Quest2::Tick(_float fTimeDelta)
 		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_CollectQuest1"))))
 			return;
 
-		m_tInfo.pTarget->Set_Exp(50);
+		m_tInfo.pTarget->Set_Money(1000);
 
 		g_iQuest = 0;
 		g_iReward = 0;
