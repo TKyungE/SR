@@ -20,6 +20,9 @@ private:
 	virtual ~CInven() = default;
 
 public:
+	vector<CStatInfo::ITEM> Get_VecItem(void) { return m_vecItem; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg)override;
 	virtual void Tick(_float fTimeDelta)override;

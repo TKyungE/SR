@@ -66,17 +66,38 @@ void CCollectQuest::Tick(void)
 		{
 			if (m_tQInfo.pItemType[i] == m_pStatInfo->Get_Item(j).eItemNum)
 			{
-				m_pCount[i] = m_pStatInfo->Get_Item(j).iCount;
+				m_bType = true;
+
 				if ((_int)m_tQInfo.pCollectGoal[i] <= m_pStatInfo->Get_Item(j).iCount)
 					m_pClear[i] = true;
+
+				if ((_int)m_tQInfo.pCollectGoal[i] >= m_pStatInfo->Get_Item(j).iCount)
+					m_pCount[i] = m_pStatInfo->Get_Item(j).iCount;
+
+				if (m_pStatInfo->Get_Item(j).iCount < (_int)m_tQInfo.pCollectGoal[i])
+					m_pClear[i] = false;
+
+				break;
 			}
+			else
+			{
+				m_bType = false;
+				m_pClear[i] = false;
+			}
+				
 		}
+
+		if (!m_bType)
+			m_pCount[i] = 0;
 	}
 
 	for (_uint i = 0; i < m_tQInfo.iCount; ++i)
 	{
 		if (!m_pClear[i])
+		{
+			m_bClear = false;
 			return;
+		}
 	}
 
 	m_bClear = true;

@@ -162,7 +162,6 @@ void CInven::Tick(_float fTimeDelta)
 			}
 		}
 	}
-	
 }
 
 void CInven::Late_Tick(_float fTimeDelta)
