@@ -28,7 +28,7 @@ public:
 	virtual void Free(void) override;
 public:
 	enum EITEM{HPPOTION,MPPOTION,GOLD,ENGINE,TIARA,BOBY,SHOES,ROBE,PANDANT,EARRING,BRACELET,RING,STAFF,ORB,RIDEEGG,PETEGG,WING,
-		MON1,MON2, MON3, MON4, MON5, MON6, MON7, MON8, MON9, MON10, MON11, MON12,SKILL_THUNDER,SKILL_TORNADO,SKILL_FIREBALL,RIDE_ALPACA,EITEM_END};
+		MON1,MON2, MON3, MON4, MON5, MON6, MON7, MON8, MON9, MON10, MON11, MON12,SKILL_THUNDER,SKILL_TORNADO,SKILL_FIREBALL,RIDE_ALPACA,SKILL_SKYFIRE,SKILL_SKYTHUNDER,EITEM_END};
 	typedef struct tagStat
 	{
 		_int iSTR;
@@ -48,6 +48,7 @@ private:
 	STAT m_tMaxStat;
 	ITEM m_tItem[24];		//인벤토리 내의 아이템
 	ITEM m_pQuickSlot[10];
+	ITEM m_pSkyQuickSlot[2];
 	ITEM m_SkillSlot[7];
 	ITEM m_EquipSlot[10];
 	_bool	m_bMousePick = false;
@@ -61,6 +62,7 @@ private:
 	_int m_iEquipInt = 0;
 	_int m_iEquipLuk = 0;
 public:
+	ITEM Get_SkyQuickSlot(_int iNum) { return m_pSkyQuickSlot[iNum]; }
 	ITEM Get_EquipSlot(_int iNum) { return m_EquipSlot[iNum]; }
 	ITEM Get_SkillSlot(_int iNum) { return m_SkillSlot[iNum]; }
 	ITEM Get_QuickSlot(_int iNum) { return m_pQuickSlot[iNum]; }
@@ -85,6 +87,9 @@ public:
 	void Set_QuickUseItemCount(_int _ItemCount, _int iNum) { m_pQuickSlot[iNum].iCount += _ItemCount; }
 	void Set_QuickItemSlot(_int _ItemSlot, _int iNum) { m_pQuickSlot[iNum].iSlotNum = _ItemSlot; }
 	void Set_SkillSlot(ITEM _Item, _int iNum){ m_SkillSlot[iNum] = _Item; }
+
+	void Set_SkyQuickItemCount(_int _ItemCount, _int iNum) { m_pSkyQuickSlot[iNum].iCount = _ItemCount; }
+	void Set_SkyQuickUseItemCount(_int _ItemCount, _int iNum) { m_pSkyQuickSlot[iNum].iCount += _ItemCount; }
 
 	void Set_STR(_int _iSTR) { m_tStat.iSTR += _iSTR; }
 	void Set_DEX(_int _iDEX) { m_tStat.iDEX += _iDEX; }

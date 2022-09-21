@@ -54,6 +54,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		m_tInfo.iMp = m_tInfo.iMaxMp;
 		m_tInfo.iMaxExp = 100;
 		m_tInfo.iExp = 0;
+		m_tInfo.iMoney = 0;
 	}
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -67,13 +68,18 @@ HRESULT CPlayer::Initialize(void * pArg)
 	tInfo.vPos = { 0.7f,0.7f,1.f };
 	if(m_tInfo.iLevelIndex != LEVEL_SKY)
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-
-	if (m_tInfo.iLevelIndex == LEVEL_SKY)
-		Wing_Fly();
-
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_AlphaUI"), m_tInfo.iLevelIndex, TEXT("Layer_AlphaUI"), &tInfo)))
 		return E_FAIL;
-
+	if (m_tInfo.iLevelIndex == LEVEL_SKY)
+	{
+		Wing_Fly();
+		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		tInfo.iLevelIndex = LEVEL_SKY;
+		tInfo.pTarget = this;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Target"), LEVEL_SKY, TEXT("Layer_Skill"), &tInfo)))
+			return E_FAIL;
+	}
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -85,15 +91,30 @@ void CPlayer::Tick(_float fTimeDelta)
 
 	if (CKeyMgr::Get_Instance()->Key_Down('C'))
 	{
-		switch (g_bFirst)
+		if (m_tInfo.iLevelIndex != LEVEL_SKY)
 		{
-		case true:
-			g_bFirst = false;
-			break;
-		case false:
-			m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			g_bFirst = true;
-			break;
+			switch (g_bFirst)
+			{
+			case true:
+				g_bFirst = false;
+				break;
+			case false:
+				m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+				g_bFirst = true;
+				break;
+			}
+		}
+		else
+		{
+			switch (m_bShot)
+			{
+			case true:
+				m_bShot = false;
+				break;
+			case false:
+				m_bShot = true;
+				break;
+			}
 		}
 	}
 	if (!g_bFirst && 0 == g_iCut)
@@ -517,89 +538,123 @@ void CPlayer::Use_Skill(_int iIndex)
 		return;
 
 	Safe_AddRef(pInstance);
-
-	switch (iIndex)
+	if (m_tInfo.iLevelIndex != LEVEL_SKY)
 	{
-	case 1:
-		if (!m_bUseSkill && !m_bThunder)
+		switch (iIndex)
 		{
-			CGameObject::INFO tInfo;
+		case 1:
+			if (!m_bUseSkill && !m_bThunder)
+			{
+				CGameObject::INFO tInfo;
 
-			tInfo.vPos = m_fPickPoint;
-			tInfo.pTarget = this;
-			pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
+				tInfo.vPos = m_fPickPoint;
+				tInfo.pTarget = this;
+				pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
 
-			m_bUseSkill = true;
-			m_bThunder = true;
+				m_bUseSkill = true;
+				m_bThunder = true;
+			}
+			break;
+		case 2:
+			if (!m_bUseSkill && !m_bTornado)
+			{
+				CGameObject::INFO tInfo;
+
+				tInfo.vPos = m_fPickPoint;
+				tInfo.pTarget = this;
+				pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
+
+				m_bUseSkill = true;
+				m_bTornado = true;
+			}
+			break;
+		case 3:
+			if (!m_bUseSkill && !m_bFireBall)
+			{
+				CGameObject::INFO tInfo;
+
+				tInfo.vPos = m_fPickPoint;
+				tInfo.pTarget = this;
+				pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
+
+				m_bUseSkill = true;
+				m_bFireBall = true;
+			}
+			break;
+		default:
+			break;
 		}
-		break;
-	case 2:
-		if (!m_bUseSkill && !m_bTornado)
+
+		if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bThunder)
 		{
-			CGameObject::INFO tInfo;
 
-			tInfo.vPos = m_fPickPoint;
-			tInfo.pTarget = this;
-			pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
-
-			m_bUseSkill = true;
-			m_bTornado = true;
+			pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+			Skill_Thunder(TEXT("Layer_Skill"), m_fPickPoint);
+			m_bUseSkill = false;
+			m_bThunder = false;
+			m_eCurState = SKILL;
+			m_tFrame.iFrameStart = 0;
+			m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			m_tInfo.iMp -= 20;
 		}
-		break;
-	case 3:
-		if (!m_bUseSkill && !m_bFireBall)
+		if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 		{
-			CGameObject::INFO tInfo;
 
-			tInfo.vPos = m_fPickPoint;
-			tInfo.pTarget = this;
-			pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
-
-			m_bUseSkill = true;
-			m_bFireBall = true;
+			pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+			Skill_Tornado(TEXT("Layer_Skill"), m_fPickPoint);
+			m_bUseSkill = false;
+			m_bTornado = false;
+			m_eCurState = SKILL;
+			m_tFrame.iFrameStart = 0;
+			m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			m_tInfo.iMp -= 10;
 		}
-		break;
-	default:
-		break;
-	}
+		if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireBall)
+		{
 
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bThunder)
-	{
-		
-		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
-		Skill_Thunder(TEXT("Layer_Skill"), m_fPickPoint);
-		m_bUseSkill = false;
-		m_bThunder = false;
-		m_eCurState = SKILL;
-		m_tFrame.iFrameStart = 0;
-		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_tInfo.iMp -= 20;
+			pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+			Skill_FireBall(TEXT("Layer_Skill"), m_fPickPoint);
+			m_bUseSkill = false;
+			m_bFireBall = false;
+			m_eCurState = SKILL;
+			m_tFrame.iFrameStart = 0;
+			m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			m_tInfo.iMp -= 5;
+		}
 	}
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
+	if (m_tInfo.iLevelIndex == LEVEL_SKY)
 	{
-		
-		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
-		Skill_Tornado(TEXT("Layer_Skill"), m_fPickPoint);
-		m_bUseSkill = false;
-		m_bTornado = false;
-		m_eCurState = SKILL;
-		m_tFrame.iFrameStart = 0;
-		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_tInfo.iMp -= 10;
+		_float3 vLook;
+		CGameObject::INFO tInfo;
+		switch (iIndex)
+		{
+		case 1:
+			vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+			D3DXVec3Normalize(&vLook, &vLook);
+			vLook *= 15.f;
+			tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			tInfo.vPos.y -= 0.5f;
+			tInfo.iLevelIndex = LEVEL_SKY;
+			tInfo.vTargetPos = tInfo.vPos + vLook;
+			tInfo.pTarget = this;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyFireBall"), LEVEL_SKY, TEXT("Layer_Skill"), &tInfo)))
+				return;
+			break;
+		case 2:
+			tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			tInfo.iLevelIndex = LEVEL_SKY;
+			tInfo.pTarget = this;
+			tInfo.iMp = 1;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderTarget"), LEVEL_SKY, TEXT("Layer_Skill"), &tInfo)))
+				return;
+			tInfo.iMp = 0;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderTarget"), LEVEL_SKY, TEXT("Layer_Skill"), &tInfo)))
+				return;
+			break;
+		default:
+			break;
+		}
 	}
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireBall)
-	{
-		
-		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
-		Skill_FireBall(TEXT("Layer_Skill"), m_fPickPoint);
-		m_bUseSkill = false;
-		m_bFireBall = false;
-		m_eCurState = SKILL;
-		m_tFrame.iFrameStart = 0;
-		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_tInfo.iMp -= 5;
-	}
-
 	Safe_Release(pInstance);
 }
 

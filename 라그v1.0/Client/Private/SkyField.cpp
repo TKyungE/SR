@@ -36,6 +36,9 @@ HRESULT CSkyField::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
@@ -80,6 +83,9 @@ void CSkyField::Tick(_float fTimeDelta)
 		if (g_bCollider)
 			g_bCollider = false;
 	}
+	RECT rcWindow{ 0,0,1280,720 };
+	ClipCursor(&rcWindow);
+	SetCursorPos(640, 360);
 
 	Create_Monster(fTimeDelta);
 
@@ -156,7 +162,18 @@ HRESULT CSkyField::Ready_Layer_Player(const _tchar * pLayerTag)
 
 HRESULT CSkyField::Ready_Layer_Monster(const _tchar * pLayerTag)
 {
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
 
+	CGameObject::INFO tInfo;
+
+	tInfo.vPos = {10.f,10.f,30.f};
+	tInfo.iLevelIndex = LEVEL_SKY;
+	tInfo.pTarget = Info.pTarget;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyDragon"), LEVEL_SKY, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }

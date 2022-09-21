@@ -251,6 +251,7 @@
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
     <ClInclude Include="..\public\Shadow.h" />
+    <ClInclude Include="..\public\ShadowBall.h" />
     <ClInclude Include="..\public\Shop.h" />
     <ClInclude Include="..\public\ShopNPC.h" />
     <ClInclude Include="..\Public\Skeleton.h" />
@@ -258,6 +259,8 @@
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\public\SkyDragon.h" />
     <ClInclude Include="..\public\SkyField.h" />
+    <ClInclude Include="..\public\SkyFireBall.h" />
+    <ClInclude Include="..\public\SkyThunder.h" />
     <ClInclude Include="..\public\SlotGacha.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
     <ClInclude Include="..\Public\Space.h" />
@@ -266,11 +269,13 @@
     <ClInclude Include="..\public\Stone.h" />
     <ClInclude Include="..\public\Sword.h" />
     <ClInclude Include="..\public\SwordSlice.h" />
+    <ClInclude Include="..\public\Target.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TerrainRect.h" />
     <ClInclude Include="..\Public\TextBox.h" />
     <ClInclude Include="..\public\ThunderCloud.h" />
     <ClInclude Include="..\Public\ThunderSword.h" />
+    <ClInclude Include="..\public\ThunderTarget.h" />
     <ClInclude Include="..\Public\Tornado.h" />
     <ClInclude Include="..\public\Town.h" />
     <ClInclude Include="..\Public\Transparent_Wall.h" />
@@ -370,6 +375,7 @@
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
+    <ClCompile Include="..\private\ShadowBall.cpp" />
     <ClCompile Include="..\private\Shop.cpp" />
     <ClCompile Include="..\private\ShopNPC.cpp" />
     <ClCompile Include="..\Private\Skeleton.cpp" />
@@ -377,6 +383,8 @@
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\private\SkyDragon.cpp" />
     <ClCompile Include="..\private\SkyField.cpp" />
+    <ClCompile Include="..\private\SkyFireBall.cpp" />
+    <ClCompile Include="..\private\SkyThunder.cpp" />
     <ClCompile Include="..\private\SlotGacha.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\Space.cpp" />
@@ -385,11 +393,13 @@
     <ClCompile Include="..\private\Stone.cpp" />
     <ClCompile Include="..\private\Sword.cpp" />
     <ClCompile Include="..\private\SwordSlice.cpp" />
+    <ClCompile Include="..\private\Target.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TerrainRect.cpp" />
     <ClCompile Include="..\Private\TextBox.cpp" />
     <ClCompile Include="..\private\ThunderCloud.cpp" />
     <ClCompile Include="..\Private\ThunderSword.cpp" />
+    <ClCompile Include="..\private\ThunderTarget.cpp" />
     <ClCompile Include="..\Private\Tornado.cpp" />
     <ClCompile Include="..\private\Town.cpp" />
     <ClCompile Include="..\Private\Transparent_Wall.cpp" />

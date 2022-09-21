@@ -47,6 +47,9 @@ HRESULT CStatInfo::Initialize(void * pArg)
 	m_SkillSlot[0].eItemNum = SKILL_THUNDER;
 	m_SkillSlot[1].eItemNum = SKILL_TORNADO;
 	m_SkillSlot[2].eItemNum = SKILL_FIREBALL;
+
+	m_pSkyQuickSlot[0] = { SKILL_SKYFIRE,0,0 };
+	m_pSkyQuickSlot[1] = { SKILL_SKYTHUNDER,0,0 };
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	
 	return S_OK;

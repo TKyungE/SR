@@ -49,6 +49,7 @@ private:
 	_float					m_ThunderCool = 0.f;
 	_float					m_TornadoCool = 0.f;
 	_float					m_FireBall = 0.f;
+	_float					m_SkyCool = 0.f;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

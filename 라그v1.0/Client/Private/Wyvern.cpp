@@ -31,7 +31,7 @@ HRESULT CWyvern::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	_float3 vScale = { 1.5f,1.5f,1.f };
+	_float3 vScale = { 1.5f,1.5f,1.5f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -78,12 +78,12 @@ void CWyvern::Tick(_float fTimeDelta)
 
 	if (m_eCurState == DEAD)
 	{
-		if (m_tFrame.iFrameStart == 3)
+		if (m_tFrame.iFrameStart == 2)
 			{
 				m_tInfo.bDead = true;
 					return;
 			}
-		if (m_tFrame.iFrameStart != 3)
+		if (m_tFrame.iFrameStart != 2)
 			Move_Frame(fTimeDelta);
 		m_tInfo.bDead = false;
 			return;
@@ -245,12 +245,12 @@ void CWyvern::Check_Hit()
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_SKY, TEXT("Layer_DmgFont"), &tInfo)))
 			return;
 
 		tInfo.vPos = m_tInfo.vTargetPos;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_SKY, TEXT("Layer_Effect"), &tInfo)))
 			return;
 
 		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
@@ -393,7 +393,7 @@ HRESULT CWyvern::Skill_PoisonArrow(const _tchar * pLayerTag)
 	tInfo.iLevelIndex = LEVEL_SKY;
 	tInfo.vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PoisonArrow"), LEVEL_SKY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ShadowBall"), LEVEL_SKY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -418,7 +418,7 @@ void CWyvern::Motion_Change()
 			break;
 		case DEAD:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 3;
+			m_tFrame.iFrameEnd = 2;
 			m_tFrame.fFrameSpeed = 0.3f;
 			m_bDead = true;
 			break;
