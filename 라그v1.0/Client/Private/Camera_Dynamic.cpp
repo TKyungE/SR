@@ -144,36 +144,43 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	}
 	else if (!g_bFirst && 0 == g_iCut)
 	{
-		if (!m_bTest)
+		if (m_CameraDesc.Info.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
 		{
-			m_pTransform->Set_State(CTransform::STATE_RIGHT, _float3(1.f, 0.f, 0.f));
-			m_pTransform->Set_State(CTransform::STATE_UP, _float3(0.f, 1.f, 0.f));
-			m_pTransform->Set_State(CTransform::STATE_LOOK, _float3(0.f, 0.f, 1.f));
+			if (!m_bTest)
+			{
+				m_pTransform->Set_State(CTransform::STATE_RIGHT, _float3(1.f, 0.f, 0.f));
+				m_pTransform->Set_State(CTransform::STATE_UP, _float3(0.f, 1.f, 0.f));
+				m_pTransform->Set_State(CTransform::STATE_LOOK, _float3(0.f, 0.f, 1.f));
 			
-			m_bTest = true;
+				m_bTest = true;
+			}
+			_float3 vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+			vPos.y += 0.3f;
+			m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+			_long			MouseMove = 0;
+
+			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
+			{
+				m_pTransform->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.1f);
+			}
+
+			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
+			{
+				m_pTransform->Turn(m_pTransform->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
+			}
 		}
 
-		/*_float3 vRight = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[0][0];
-		_float3 vUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
-		_float3 vLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];*/
-		
-		_float3 vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
-		vPos.y += 0.3f;
-		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-	
-	
-		_long			MouseMove = 0;
-
-		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
+		else
 		{
-			m_pTransform->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.1f);
-		}
+			_float4x4 CameraRotationMatrix, CameraMatrix;
+			D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(45.f));
 
-		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
-		{
-			m_pTransform->Turn(m_pTransform->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
+			_float3 Camera;
+			CameraMatrix = m_matRotX * CameraRotationMatrix;
+			D3DXVec3TransformNormal(&Camera, &m_vecCameraNormal, &CameraMatrix);
+			m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * 2.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 		}
-
 	}
 	
 
@@ -184,6 +191,7 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 
 	else if (0 == g_iCut && !m_bWheelMove && m_CameraDesc.fFovy < D3DXToRadian(60.f))
 		m_CameraDesc.fFovy += D3DXToRadian(0.25f);
+
 
 
 	Safe_Release(pGameInstance);

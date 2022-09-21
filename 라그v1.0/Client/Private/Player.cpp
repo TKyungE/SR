@@ -65,9 +65,11 @@ HRESULT CPlayer::Initialize(void * pArg)
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	tInfo.bHit = false;
 	tInfo.vPos = { 0.7f,0.7f,1.f };
+	if(m_tInfo.iLevelIndex != LEVEL_SKY)
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-
+	if (m_tInfo.iLevelIndex == LEVEL_SKY)
+		Wing_Fly();
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_AlphaUI"), m_tInfo.iLevelIndex, TEXT("Layer_AlphaUI"), &tInfo)))
 		return E_FAIL;
@@ -115,12 +117,33 @@ void CPlayer::Tick(_float fTimeDelta)
 		{
 			m_pTransformCom->Go_Right(fTimeDelta);
 		}
+		if (m_tInfo.iLevelIndex == LEVEL_SKY)
+		{
+			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+			if (nullptr == pGameInstance)
+				return;
+			Safe_AddRef(pGameInstance);
+			_long			MouseMove = 0;
+
+			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
+			{
+				m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.1f);
+			}
+
+			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
+			{
+				m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
+			}
+			Safe_Release(pGameInstance);
+		}
 	}
 
 
 	Check_Stat();
-	OnTerrain();
-
+	if (m_tInfo.iLevelIndex != LEVEL_SKY)
+		OnTerrain();
+	if (m_tInfo.iLevelIndex == LEVEL_SKY)
+		Move_Frame(fTimeDelta);
 	if (0 == g_iCut)
 	{
 		if (g_bFirst)
@@ -144,11 +167,6 @@ void CPlayer::Tick(_float fTimeDelta)
 	if (m_tInfo.iHp >= m_tInfo.iMaxHp)
 		m_tInfo.iHp = m_tInfo.iMaxHp;
 	
-	if (GetKeyState('N') & 0x8000)
-	{
-		if (m_tInfo.iHp > 0)
-			m_tInfo.iHp -= 10;
-	}
 	if (GetKeyState('M') & 0x8000)
 	{
 		if (m_tInfo.iHp<m_tInfo.iMaxHp)
@@ -180,28 +198,12 @@ void CPlayer::Tick(_float fTimeDelta)
 	{
 		Use_Skill(99);
 	}
+
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	/*if (GetKeyState('Q') & 0x8000)
-	{
-		CGameInstance* pInstance = CGameInstance::Get_Instance();
-
-		Safe_AddRef(pInstance);
-
-		CLayer* pLayer = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Camera"));
-
-		Safe_AddRef(pLayer);
-
-		list<class CGameObject*> pGameObject = pLayer->Get_Objects();
-		pGameObject.front()->Set_bHit(true);
-		m_tInfo.bHit = true;
-
-		Safe_Release(pLayer);
-		Safe_Release(pInstance);
-	}*/
 
 	Motion_Change();
 	
@@ -238,7 +240,7 @@ HRESULT CPlayer::Render(void)
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
-	if (g_bFirst)
+	if (g_bFirst || m_tInfo.iLevelIndex == LEVEL_SKY)
 	{
 		m_pVIBuffer->Render();
 	}

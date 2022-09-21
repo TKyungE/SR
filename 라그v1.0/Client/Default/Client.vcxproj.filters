@@ -369,12 +369,18 @@
     </Filter>
     <Filter Include="04.UI\00.PlayerUI\03. AlphaUI">
       <UniqueIdentifier>{fd061c48-a018-4873-9946-1d44ea6418c2}</UniqueIdentifier>
-</Filter>
+    </Filter>
     <Filter Include="04.UI\06.Shop">
       <UniqueIdentifier>{8cbf5c7d-d1d3-40e2-aed8-118e9e8c6633}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\NPC\06.ShopNPC">
       <UniqueIdentifier>{82d4b7d7-7916-40f9-8784-dc6fc6619595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\SkyField">
+      <UniqueIdentifier>{a3527cc7-07dc-4432-97e8-308746eb63f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Cloud">
+      <UniqueIdentifier>{4adf80ae-5418-4b85-9cc3-6fc081a42031}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -716,12 +722,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\AlphaUI.h">
       <Filter>04.UI\00.PlayerUI\03. AlphaUI</Filter>
-</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\Shop.h">
       <Filter>04.UI\06.Shop</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ShopNPC.h">
       <Filter>02.GameObject\NPC\06.ShopNPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyField.h">
+      <Filter>01.Levels\SkyField</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Cloud.h">
+      <Filter>02.GameObject\BackGroundObj\Cloud</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1051,12 +1063,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\AlphaUI.cpp">
       <Filter>04.UI\00.PlayerUI\03. AlphaUI</Filter>
-</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\private\Shop.cpp">
       <Filter>04.UI\06.Shop</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ShopNPC.cpp">
       <Filter>02.GameObject\NPC\06.ShopNPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyField.cpp">
+      <Filter>01.Levels\SkyField</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Cloud.cpp">
+      <Filter>02.GameObject\BackGroundObj\Cloud</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -62,14 +62,13 @@ void CTown::Tick(_float fTimeDelta)
 
 
 
-	/*CGameObject* Dest;
-	CGameObject* Sour;*/
-
-	/*if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
+	if (GetKeyState(VK_F1) < 0)
 	{
-		m_bNextLevel = true;
-		pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
-	}*/
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device,LEVEL_SKY))))
+			return;
+	}
+
+
 	if (GetKeyState('Y') < 0)
 	{
 		if (!g_bCollider)

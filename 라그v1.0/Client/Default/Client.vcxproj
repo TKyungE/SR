@@ -188,6 +188,7 @@
     <ClInclude Include="..\Public\Camera_Dynamic.h" />
     <ClInclude Include="..\Public\ClientQuest.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\public\Cloud.h" />
     <ClInclude Include="..\public\CriHit.h" />
     <ClInclude Include="..\public\CriHitUI.h" />
     <ClInclude Include="..\public\Dandelion.h" />
@@ -255,6 +256,7 @@
     <ClInclude Include="..\Public\Skeleton.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\Public\Sky.h" />
+    <ClInclude Include="..\public\SkyField.h" />
     <ClInclude Include="..\public\SlotGacha.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
     <ClInclude Include="..\Public\Space.h" />
@@ -303,6 +305,7 @@
     <ClCompile Include="..\private\Byorgue.cpp" />
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\Private\ClientQuest.cpp" />
+    <ClCompile Include="..\private\Cloud.cpp" />
     <ClCompile Include="..\private\CriHit.cpp" />
     <ClCompile Include="..\private\CriHitUI.cpp" />
     <ClCompile Include="..\private\Dandelion.cpp" />
@@ -370,6 +373,7 @@
     <ClCompile Include="..\Private\Skeleton.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
+    <ClCompile Include="..\private\SkyField.cpp" />
     <ClCompile Include="..\private\SlotGacha.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\Space.cpp" />

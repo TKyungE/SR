@@ -72,6 +72,7 @@ void CWing::Late_Tick(_float fTimeDelta)
 	_float3 vScale = { 0.5f,0.5f,1.f };
 	//m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+	m_pTransformCom2->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
 	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -148,7 +149,7 @@ void CWing::Set_TargetPos()
 		vPos.z -= 0.1f;
 	else
 		vPos.z += 0.1f;
-	vPos.y += 0.2f;
+	vPos.y += 0.3f;
 //	vPos.x -= 0.2f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 //	vPos.x += 0.4f;

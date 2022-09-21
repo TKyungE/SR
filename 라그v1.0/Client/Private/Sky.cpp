@@ -34,6 +34,7 @@ HRESULT CSky::Initialize(void* pArg)
 	}
 	else
 		m_tInfo.iMp = 2;
+	m_tInfo.bDead = false;
 
 	return S_OK;
 }

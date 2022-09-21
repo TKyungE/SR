@@ -12,7 +12,7 @@
 #include "Level_Town2.h"
 #include "Level_Desert1.h"
 #include "Level_Maze.h"
-
+#include "SkyField.h"
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
 {
@@ -80,6 +80,9 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 				break;
 			case LEVEL_MAZE:
 				pNewLevel = CLevel_Maze::Create(m_pGraphic_Device);
+				break;
+			case LEVEL_SKY:
+				pNewLevel = CSkyField::Create(m_pGraphic_Device);
 				break;
 			}
 

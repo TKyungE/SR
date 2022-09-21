@@ -94,7 +94,7 @@
 #include "AlphaUI.h"
 #include "Shop.h"
 #include "ShopNPC.h"
-
+#include "Cloud.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -132,6 +132,9 @@ unsigned int APIENTRY Thread_Main(void* pArg)
 		pLoader->Loading_ForDesert1();
 		break;
 	case LEVEL_MAZE:
+		pLoader->Loading_ForMaze();
+		break;
+	case LEVEL_SKY:
 		pLoader->Loading_ForMaze();
 		break;
 	}
@@ -1152,7 +1155,9 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_House"),
 		CHouse::Create(m_pGraphic_Device))))
 		return E_FAIL;
-
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Cloud"),
+		CCloud::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Stone"),
 		CStone::Create(m_pGraphic_Device))))
 		return E_FAIL;
