@@ -117,25 +117,7 @@ void CPlayer::Tick(_float fTimeDelta)
 		{
 			m_pTransformCom->Go_Right(fTimeDelta);
 		}
-		if (m_tInfo.iLevelIndex == LEVEL_SKY)
-		{
-			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-			if (nullptr == pGameInstance)
-				return;
-			Safe_AddRef(pGameInstance);
-			_long			MouseMove = 0;
-
-			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
-			{
-				m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.1f);
-			}
-
-			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
-			{
-				m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
-			}
-			Safe_Release(pGameInstance);
-		}
+		
 	}
 
 
@@ -210,9 +192,27 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	Check_Hit();
 	
 	LevelUp();
+	if (m_tInfo.iLevelIndex != LEVEL_SKY)
+		OnBillboard();
+	if (m_tInfo.iLevelIndex == LEVEL_SKY)
+	{
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		if (nullptr == pGameInstance)
+			return;
+		Safe_AddRef(pGameInstance);
+		_long			MouseMove = 0;
 
-	OnBillboard();
+		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
+		{
+			m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.03f);
+		}
 
+		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
+		{
+			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.03f);
+		}
+		Safe_Release(pGameInstance);
+	}
 	CheckColl();
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();

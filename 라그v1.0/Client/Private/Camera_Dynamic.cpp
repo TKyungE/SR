@@ -173,13 +173,14 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 
 		else
 		{
-			_float4x4 CameraRotationMatrix, CameraMatrix;
-			D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(45.f));
-
-			_float3 Camera;
-			CameraMatrix = m_matRotX * CameraRotationMatrix;
-			D3DXVec3TransformNormal(&Camera, &m_vecCameraNormal, &CameraMatrix);
-			m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * 2.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
+			_float3 vTargetPos, vPos;
+			vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+			vTargetPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
+			D3DXVec3Normalize(&vTargetPos, &vTargetPos);
+			vTargetPos *= -2.f;
+			vPos += vTargetPos;
+			m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+			m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 		}
 	}
 	
