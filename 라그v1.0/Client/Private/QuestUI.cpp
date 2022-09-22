@@ -293,22 +293,29 @@ HRESULT CQuestUI::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
+	_float4x4 WorldMatrix, ViewMatrix;
 
-	_float4x4		ViewMatrix;
+	WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+
 	D3DXMatrixIdentity(&ViewMatrix);
 
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
-		return E_FAIL;
+	m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&m_ProjMatrix, &m_ProjMatrix), sizeof(_float4x4));
+
+	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(0));
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
+	m_pShaderCom->Begin(8);
+
 	m_pVIBufferCom->Render();
+
+	m_pShaderCom->End();
 
 	if (m_bTextRender)
 	{
@@ -345,6 +352,10 @@ HRESULT CQuestUI::SetUp_Components()
 
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
+		return E_FAIL;
+
+	/* For.Com_Shader */
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* For.Com_Transform */
@@ -451,6 +462,7 @@ void CQuestUI::Free()
 
 	__super::Free();
 
+	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);

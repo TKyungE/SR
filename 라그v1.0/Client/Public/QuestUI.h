@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CShader;
 class CTexture;
 class CRenderer;
 class CTransform;
@@ -31,6 +32,7 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
+	CShader*				m_pShaderCom = nullptr;
 
 private:
 	_float4x4				m_ProjMatrix;

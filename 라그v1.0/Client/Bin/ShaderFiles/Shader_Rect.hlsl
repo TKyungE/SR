@@ -185,10 +185,15 @@ PS_OUT PS_MAIN_HPBAR(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_QUESTUI(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
 
-
-
-
+	Out.vColor = tex2D(TextureSampler, In.vTexUV);
+	Out.vColor.a = 0.7f;
+	
+	return Out;
+}
 
 technique DefaultTechnique
 {
@@ -273,5 +278,16 @@ technique DefaultTechnique
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_HPBAR();
+	}
+
+	pass QuestUI
+	{
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_QUESTUI();
 	}
 }
