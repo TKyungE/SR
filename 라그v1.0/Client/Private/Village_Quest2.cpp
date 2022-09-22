@@ -227,16 +227,27 @@ void CVillage_Quest2::Tick(_float fTimeDelta)
 
 		CStatInfo* pStat = (CStatInfo*)pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 
-		/*for (_int i = 0; i < 24; ++i)
+		for (_int i = 0; i < 24; ++i)
 		{
-
+			if (pStat->Get_Item(i).eItemNum == CStatInfo::MON2)
+			{
+				pStat->Set_UseItemCount(-2, i);
+				if (pStat->Get_Item(i).iCount <= 0)
+					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
+			}
+			else if (pStat->Get_Item(i).eItemNum == CStatInfo::MON1)
+			{
+				pStat->Set_UseItemCount(-2, i);
+				if (pStat->Get_Item(i).iCount <= 0)
+					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
+			}
+			else if (pStat->Get_Item(i).eItemNum == CStatInfo::MON3)
+			{
+				pStat->Set_UseItemCount(-1, i);
+				if (pStat->Get_Item(i).iCount <= 0)
+					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
+			}
 		}
-		pStat->Set_UseItemCount(-2, CStatInfo::MON2);
-		if (pStat->Get_Item(CStatInfo::MON2).iCount <= 0)
-			pStat->Set_ItemNum(CStatInfo::EITEM_END, CStatInfo::MON2);
-
-		pStat->Set_UseItemCount(-2, CStatInfo::MON1);
-		pStat->Set_UseItemCount(-1, CStatInfo::MON3);*/
 
 		g_iQuest = 0;
 		g_iReward = 0;
