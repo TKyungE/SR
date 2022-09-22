@@ -429,7 +429,7 @@ HRESULT CLevel_Maze::Ready_Layer_Portal(const _tchar * pLayerTag)
 		++iCount;
 	}
 
-	for (; iter != m_vecPortal.end(); ++iter)
+	/*for (; iter != m_vecPortal.end(); ++iter)
 	{
 		if (iCount == 1)
 		{
@@ -447,7 +447,7 @@ HRESULT CLevel_Maze::Ready_Layer_Portal(const _tchar * pLayerTag)
 			return E_FAIL;
 
 		++iCount;
-	}
+	}*/
 
 	Safe_Release(pGameInstance);
 	return S_OK;
