@@ -97,6 +97,7 @@ private:
 	_int	m_StatHp = 0;
 	_int	m_StatMp = 0;
 	_bool	m_bShot = false;
+	_float	m_fY = 0.f;
 public:
 	_bool	Get_Shot() { return m_bShot; }
 	_float3 Get_Pos();

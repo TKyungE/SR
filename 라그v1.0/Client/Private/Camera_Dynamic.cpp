@@ -201,6 +201,19 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 				vPos.y += 0.3f;
 				vPos.z += 0.3f;
 				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+				
+				vTargetPos *= 2.f;
+				vPos += vTargetPos;
+				vPos += vTargetUp * +1.5f;
+				D3DXVec3Cross(&vRight, &vTargetUp, &vTargetLook);
+				m_pTransform->Set_State(CTransform::STATE_RIGHT, vRight);
+				m_pTransform->Set_State(CTransform::STATE_UP, vTargetUp);
+				m_pTransform->Set_State(CTransform::STATE_LOOK, vTargetLook);
+				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+				m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
+
+
+
 				_long			MouseMove = 0;
 
 				if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
