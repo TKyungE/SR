@@ -245,6 +245,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 			pCom->Set_State(CTransform::STATE_RIGHT, m_pTransformCom->Get_State(CTransform::STATE_RIGHT));
 
 			Safe_Release(pInstance);
+
 		}
 		Safe_Release(pGameInstance);
 	}

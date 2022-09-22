@@ -112,11 +112,11 @@ HRESULT CSkyField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_SKY, pLayerTag, &tInfo)))
 		return E_FAIL;
 	
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 300; ++i)
 	{
-		_float iSour = rand() % 30000 * 0.001f;
-		_float iTemp = rand() % 20000 * 0.001f;
-		_float iDest = rand() % 20000 * 0.001f;
+		_float iSour = rand() % 50000 * 0.001f;
+		_float iTemp = rand() % 40000 * 0.001f;
+		_float iDest = rand() % 50000 * 0.001f;
 
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;
@@ -167,7 +167,7 @@ HRESULT CSkyField::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 
-	tInfo.vPos = {10.f,10.f,30.f};
+	tInfo.vPos = {10.f,10.f,40.f};
 	tInfo.iLevelIndex = LEVEL_SKY;
 	tInfo.pTarget = Info.pTarget;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyDragon"), LEVEL_SKY, pLayerTag, &tInfo)))
@@ -245,13 +245,13 @@ void CSkyField::Create_Monster(_float fTimeDelta)
 
 	CGameObject::INFO tInfo;
 	fRainTime += fTimeDelta;
-	if (fRainTime > 3.f)
+	if (fRainTime > 5.f)
 	{
 		fRainTime = 0.f;
 		
-		_float iSour = rand() % 30000 * 0.001f;
-		_float iTemp = rand() % 20000 * 0.001f;
-		_float iDest = rand() % 20000 * 0.001f;
+		_float iSour = rand() % 50000 * 0.001f;
+		_float iTemp = rand() % 30000 * 0.001f;
+		_float iDest = rand() % 50000 * 0.001f;
 			
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;

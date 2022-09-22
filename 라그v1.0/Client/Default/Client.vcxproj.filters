@@ -406,6 +406,12 @@
     <Filter Include="03.Effect\Default\15.Target">
       <UniqueIdentifier>{5fa2c8e2-68be-4742-934d-722e463df523}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Skill\15.SkyDragonSkill">
+      <UniqueIdentifier>{02324f0d-5d67-4ab9-bf3c-25c6e9913cb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\16.SkyTarget">
+      <UniqueIdentifier>{1b032747-a0e4-4dc7-9057-ca81e391abfd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -783,6 +789,15 @@
     <ClInclude Include="..\public\Target.h">
       <Filter>03.Effect\Default\15.Target</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\SkyMeteor.h">
+      <Filter>03.Effect\Skill\13.SkyMeteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyDragonSkill.h">
+      <Filter>03.Effect\Skill\15.SkyDragonSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyTarget.h">
+      <Filter>03.Effect\Default\16.SkyTarget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1147,6 +1162,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Target.cpp">
       <Filter>03.Effect\Default\15.Target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyMeteor.cpp">
+      <Filter>03.Effect\Skill\13.SkyMeteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyDragonSkill.cpp">
+      <Filter>03.Effect\Skill\15.SkyDragonSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyTarget.cpp">
+      <Filter>03.Effect\Default\16.SkyTarget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
