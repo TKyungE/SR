@@ -158,9 +158,8 @@ void CPlayer::Tick(_float fTimeDelta)
 
 			Player_Move(fTimeDelta);
 			Move_Frame(fTimeDelta);		
+			Get_PickingPoint();
 		}
-
-		Get_PickingPoint();
 	}
 	else
 	{
@@ -631,9 +630,9 @@ void CPlayer::Use_Skill(_int iIndex)
 			D3DXVec3Normalize(&vLook, &vLook);
 			vLook *= 15.f;
 			tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			tInfo.vPos.y -= 0.5f;
 			tInfo.iLevelIndex = LEVEL_SKY;
 			tInfo.vTargetPos = tInfo.vPos + vLook;
+			tInfo.vPos.y -= 0.5f;
 			tInfo.pTarget = this;
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyFireBall"), LEVEL_SKY, TEXT("Layer_Skill"), &tInfo)))
 				return;

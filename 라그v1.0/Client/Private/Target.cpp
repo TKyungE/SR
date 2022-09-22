@@ -272,9 +272,9 @@ void CTarget::Set_TargetPos()
 	D3DXVec3Normalize(&vTargetLook, &vTargetLook);
 	D3DXVec3Normalize(&vTargetUp, &vTargetUp);
 	D3DXVec3Normalize(&vTargetRight, &vTargetRight);
-	vTargetPos *= 4.f;
+	vTargetPos *= 2.f;
 	vPos += vTargetPos;
-	vPos += -vTargetUp * 1.5f;
+	//vPos += -vTargetUp * 1.5f;
 	D3DXVec3Cross(&vRight, &vTargetUp, &vTargetLook);
 
 
