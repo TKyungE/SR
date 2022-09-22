@@ -44,9 +44,8 @@ HRESULT CSkyField::Initialize()
 
 
 	fSound = fSOUND;
-	/*CSoundMgr::Get_Instance()->BGM_Pause();
-	CSoundMgr::Get_Instance()->PlayBGM(L"Stage1_Sound.wav", fSOUND);*/
-	CSoundMgr::Get_Instance()->PlayBGM(L"Boss_Sound1.wav", fSOUND);
+	CSoundMgr::Get_Instance()->BGM_Stop();
+	CSoundMgr::Get_Instance()->PlayBGM(L"SKY.wav", fSOUND);
 
 
 	return S_OK;
@@ -245,7 +244,7 @@ void CSkyField::Create_Monster(_float fTimeDelta)
 
 	CGameObject::INFO tInfo;
 	fRainTime += fTimeDelta;
-	if (fRainTime > 5.f)
+	if (fRainTime > 3.f)
 	{
 		fRainTime = 0.f;
 		

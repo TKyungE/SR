@@ -51,6 +51,9 @@ HRESULT CTown::Initialize()
 	if (FAILED(Ready_Layer_Portal(TEXT("Layer_Portal"))))
 		return E_FAIL;
 
+	CSoundMgr::Get_Instance()->BGM_Stop();
+	CSoundMgr::Get_Instance()->PlayBGM(L"TOWN.wav", fSOUND);
+
 	return S_OK;
 }
 
