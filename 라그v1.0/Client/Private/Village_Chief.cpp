@@ -4,6 +4,8 @@
 #include "CollectQuest.h"
 #include "TextBox.h"
 #include "QuestManager.h"
+#include "StatInfo.h"
+#include "Layer.h"
 
 CVillage_Chief::CVillage_Chief(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -98,7 +100,7 @@ void CVillage_Chief::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pQuestManager);
 
-	if (nullptr != pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Finish(TEXT("Quest_CollectQuest1")))
+	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr == pQuestManager->Find_Finish(TEXT("Quest_CollectQuest1")))
 	{
 		m_bQuestRender = true;
 
@@ -169,6 +171,27 @@ void CVillage_Chief::Tick(_float fTimeDelta)
 			else
 				m_iQuestTex = 1;
 		}
+		else
+		{
+			if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
+			{
+				g_iCut = 5;
+
+				CTextBox::TINFO tTInfo;
+				tTInfo.iScriptSize = (_int)m_vNormalScript.size();
+
+				tTInfo.pScript = new wstring[m_vNormalScript.size()];
+				for (_int i = 0; i < m_vNormalScript.size(); ++i)
+					tTInfo.pScript[i] = m_vNormalScript[i];
+
+				tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+
+				if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+					return;
+			}
+			else
+				m_bQuestRender = false;
+		}
 	}
 	else
 	{
@@ -220,7 +243,25 @@ void CVillage_Chief::Tick(_float fTimeDelta)
 		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_CollectQuestMiddle"))))
 			return;
 
-		m_tInfo.pTarget->Set_Exp(50);
+		CStatInfo* pStat = (CStatInfo*)pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
+
+		for (_int i = 0; i < 24; ++i)
+		{
+			if (pStat->Get_Item(i).eItemNum == CStatInfo::ENGINE)
+			{
+				pStat->Set_UseItemCount(-1, i);
+				if (pStat->Get_Item(i).iCount <= 0)
+					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
+				i = 0;
+				continue;
+			}
+			if (pStat->Get_Item(i).eItemNum == CStatInfo::EITEM_END)
+			{
+				pStat->Set_UseItemCount(1, i);
+				pStat->Set_ItemNum(CStatInfo::WING, i);
+				break;
+			}
+		}
 
 		g_iQuest = 0;
 		g_iReward = 0;

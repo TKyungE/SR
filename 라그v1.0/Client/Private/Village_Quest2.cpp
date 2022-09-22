@@ -491,6 +491,26 @@ void CVillage_Quest2::OnBillboard()
 
 	_float3 vScale = m_pQuestTransformCom->Get_Scale();
 
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+	
+	Safe_AddRef(pInstance);
+
+	_float4x4 PlayerWorld = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"))->Get_Objects().front()->Get_World();
+	
+	Safe_Release(pInstance);
+
+	_float3 PlayerPos = *(_float3*)&PlayerWorld.m[3][0];
+	_float3 PlayerRight = *(_float3*)&PlayerWorld.m[0][0];
+	_float3 QuestPos = m_pQuestTransformCom->Get_State(CTransform::STATE_POSITION);
+	_float3 QuestLook = PlayerPos - QuestPos;
+
+	D3DXVec3Normalize(&PlayerRight, &PlayerRight);
+	D3DXVec3Normalize(&QuestLook, &QuestLook);
+
+	D3DXVec3Dot(&PlayerRight, &QuestLook);
+
 	m_pQuestTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
 	m_pQuestTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0] * vScale.z);
 }

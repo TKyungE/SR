@@ -196,12 +196,12 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 		tQInfo.pHuntGoal = new _uint[tQInfo.iCount];
 		tQInfo.pHuntGoal[0] = 3;
 		tQInfo.pHuntGoal[1] = 3;
-		tQInfo.pHuntGoal[2] = 1;
+		tQInfo.pHuntGoal[2] = 2;
 		
 		tQInfo.pMonType = new MONSTERTYPE[tQInfo.iCount];
-		tQInfo.pMonType[0] = MON_ALLIGATOR;
-		tQInfo.pMonType[1] = MON_ELDERWILOW;
-		tQInfo.pMonType[2] = MON_BIGFOOT;
+		tQInfo.pMonType[0] = MON_DANDELION;
+		tQInfo.pMonType[1] = MON_BYORGUE;
+		tQInfo.pMonType[2] = MON_BLOODYMURDERER;
 
 		tQInfo.tQInfo.eType = CClientQuest::QUEST_HUNT;
 
@@ -471,16 +471,16 @@ void CVillage_Quest1::OnBillboard()
 
 void CVillage_Quest1::Ready_Script(void)
 {
-	m_vQuestScript.push_back(TEXT("우리 마을에 온 것을 환영하네. 나는 이 마을의 촌장일세."));
-	m_vQuestScript.push_back(TEXT("음? 성으로 가고싶다고? 안타깝지만 자네의 레벨이 너무 낮네. 이 마을을 벗어나는 것도 위험할걸세."));
-	m_vQuestScript.push_back(TEXT("레벨을 올리기 위해 퀘스트를 주겠네. 경험이 오를게야."));
-	m_vQuestScript.push_back(TEXT("저쪽의 포탈을 타고 나가 악어와 엘더 윌로우를 각각 3마리씩, 그리고 빅풋 한 마리를 잡아오게."));
+	m_vQuestScript.push_back(TEXT("큰일이야! 마을에 위험이 닥쳤어!"));
+	m_vQuestScript.push_back(TEXT("도적단이 마을 근처의 동굴을 점거했다네. 이 마을을 벗어나는 유일한 길이 위험해졌어."));
+	m_vQuestScript.push_back(TEXT("도적단을 물리쳐주면 내 사례하겠네. 제발 우리를 도와주게나."));
+	m_vQuestScript.push_back(TEXT("저쪽의 포탈을 타고 나가 동굴에 자리잡은 도적단을 퇴치해주게."));
 
-	m_vNotClearScript.push_back(TEXT("이렇게 시간을 버리다간 성은 커녕 이 마을에서 나가지도 못할걸세. 빨리 가서 잡아오게!"));
+	m_vNotClearScript.push_back(TEXT("이렇게 시간을 버리다간 마을이 위험해질걸세. 빨리 가서 잡아오게!"));
 	
-	m_vNormalScript.push_back(TEXT("안녕하신가. 나는 이 마을의 촌장이라네. 새로운 모험가는 언제나 환영일세."));
+	m_vNormalScript.push_back(TEXT("안녕하신가. 나는 이 마을의 촌장이라네. 우리 마을에 온 것을 환영하네. 새로운 모험가는 언제나 환영이야."));
 
-	m_vClearScript.push_back(TEXT("오오! 정말로 잡아온 것인가? 마을의 골칫덩이들을 잡아줘서 고맙네."));
+	m_vClearScript.push_back(TEXT("오오! 정말로 도적단을 퇴치한 것인가? 마을의 골칫덩이들을 혼내줘서 고맙네."));
 	m_vClearScript.push_back(TEXT("이건 약소하지만 우리 마을을 도와준 보상일세. \n\n보상 : 경험치 50"));
 }
 
