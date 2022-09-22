@@ -118,15 +118,6 @@ HRESULT CTextBox::Render()
 	return S_OK;
 }
 
-void CTextBox::TextBoxDead()
-{
-	Set_Dead();
-
-	if (g_iCut != 0)
-		g_iCut = 0;
-
-}
-
 HRESULT CTextBox::SetUp_Components()
 {
 	/* For.Com_Renderer */

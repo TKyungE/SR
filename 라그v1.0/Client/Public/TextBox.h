@@ -59,8 +59,7 @@ private:
 	CMyButton*		m_pButton = nullptr;
 
 	TINFO m_tTInfo;
-public:
-	void TextBoxDead();
+
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

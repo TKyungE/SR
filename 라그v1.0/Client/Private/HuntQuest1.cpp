@@ -45,7 +45,7 @@ HRESULT CHuntQuest::Initialize(void * pArg)
 
 	m_pCount = new _uint[m_tQInfo.iCount];
 
-	for (_int i = 0; i < m_tQInfo.iCount; ++i)
+	for (_uint i = 0; i < m_tQInfo.iCount; ++i)
 		m_pCount[i] = 0;
 
 	return S_OK;

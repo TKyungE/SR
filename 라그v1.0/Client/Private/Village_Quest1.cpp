@@ -44,7 +44,6 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 
-
 	m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 	m_pQuestTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
@@ -322,7 +321,6 @@ HRESULT CVillage_Quest1::Render(void)
 		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
 	}
 	
-
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
