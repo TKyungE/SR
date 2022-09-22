@@ -31,7 +31,7 @@ extern int g_iCut;
 extern bool g_bFirst;
 extern int g_iQuest;
 extern int g_iReward;
-
+extern bool g_bSky;
 
 //extern int g_iFrame;
 

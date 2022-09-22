@@ -5,6 +5,8 @@
 #include "SoundMgr.h"
 #include "Layer.h"
 #include "QuestManager.h"
+#include "Level_Loading.h"
+
 
 CSkyDragon::CSkyDragon(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -73,12 +75,20 @@ void CSkyDragon::Tick(_float fTimeDelta)
 	m_fSkillCool += fTimeDelta;
 	m_fMeteor += fTimeDelta;
 
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+	Safe_AddRef(pInstance);
+
 	if (!m_bDead)
 		Check_Front();
 
 	if (m_eCurState == DEAD)
 	{
-		
+		pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
+		if (FAILED(pInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN2))))
+			return;
+		return;
 	}
 
 	if (!m_bSkill && !m_bDead)
@@ -95,11 +105,6 @@ void CSkyDragon::Tick(_float fTimeDelta)
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.3f);
 
-	CGameInstance* pInstance = CGameInstance::Get_Instance();
-	if (nullptr == pInstance)
-		return;
-
-	Safe_AddRef(pInstance);
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTER, this)))
 	{

@@ -105,6 +105,10 @@
 #include "SkyMeteor.h"
 #include "SkyDragonSkill.h"
 #include "SkyTarget.h"
+#include "AirShip.h"
+#include "SkyNPC.h"
+#include "SkyLoading.h"
+#include "LogoUI.h"
 
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -256,6 +260,12 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_SlotGacha"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Slot/%d.png"), 1))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_SkyNPC"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/SkyNPC/%d.png"), 8))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_AirShip"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/AirShip/%d.png"), 1))))
+		return E_FAIL;
 	//Pet ÅØ½ºÃÄ
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Poring_IDLE_Back"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Poring/IDLE_Back/%d.png"), 4))))
@@ -340,6 +350,9 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Shop"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/Shop/%d.png"), 1))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_LogoUI"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/Logo/%d.png"), 1))))
 		return E_FAIL;
 	// Terrain ÅØ½ºÃÄ
 	
@@ -975,6 +988,12 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ShopNPC"),
 		CShopNPC::Create(m_pGraphic_Device))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AirShip"),
+		CAirShip::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SkyNPC"),
+		CSkyNPC::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	//UI °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"),
 		CUI::Create(m_pGraphic_Device))))
@@ -1032,6 +1051,12 @@ HRESULT CLoader::Loading_Prototype()
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Shop"),
 		CShop::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SkyLoading"),
+		CSkyLoading::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LogoUI"),
+		CLogoUI::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	//Player °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),

@@ -412,6 +412,18 @@
     <Filter Include="03.Effect\Default\16.SkyTarget">
       <UniqueIdentifier>{1b032747-a0e4-4dc7-9057-ca81e391abfd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\NPC\07.SkyNPC">
+      <UniqueIdentifier>{d6288c79-c7f7-490c-b5f3-47fb0bcba37c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\08.AirShip">
+      <UniqueIdentifier>{241f84ff-5bba-4ebc-b377-e845acec94fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Loading\SkyLoading">
+      <UniqueIdentifier>{6664d148-2c2b-4de1-9ecf-9d2a524de925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Loading\LogoUI">
+      <UniqueIdentifier>{cba6f014-00bf-468f-b476-577dfee72c58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -443,9 +455,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01.Levels\Loading</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Loader.h">
-      <Filter>01.Levels\Loading\Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\public\BackGround.h">
       <Filter>02.GameObject\BackGround</Filter>
@@ -797,6 +806,21 @@
     </ClInclude>
     <ClInclude Include="..\public\SkyTarget.h">
       <Filter>03.Effect\Default\16.SkyTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyNPC.h">
+      <Filter>02.GameObject\NPC\07.SkyNPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\AirShip.h">
+      <Filter>02.GameObject\NPC\08.AirShip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loader.h">
+      <Filter>01.Levels\Loading\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyLoading.h">
+      <Filter>02.GameObject\Loading\SkyLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\LogoUI.h">
+      <Filter>02.GameObject\Loading\LogoUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1171,6 +1195,18 @@
     </ClCompile>
     <ClCompile Include="..\private\SkyTarget.cpp">
       <Filter>03.Effect\Default\16.SkyTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyNPC.cpp">
+      <Filter>02.GameObject\NPC\07.SkyNPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\AirShip.cpp">
+      <Filter>02.GameObject\NPC\08.AirShip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkyLoading.cpp">
+      <Filter>02.GameObject\Loading\SkyLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LogoUI.cpp">
+      <Filter>02.GameObject\Loading\LogoUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

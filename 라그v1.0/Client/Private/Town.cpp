@@ -19,6 +19,7 @@ int g_iCut = 0;
 bool g_bFirst = true;
 int g_iQuest = 0;
 int g_iReward = 0;
+bool g_bSky = false;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -345,12 +346,17 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 	tInfo.vPos = { 16.1f,1.f,21.8f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SlotGacha"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
+
+	tInfo.vPos = { 13.1f,1.f,9.f };
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_AirShip"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
+
 	tInfo.vPos = { 11.5f,1.f,15.f };
 	tInfo.pTarget = Info.pTarget;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ShopNPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	tInfo.vPos = { 10.f, 0.05f, 12.f };
+	tInfo.vPos = { 13.f, 0.05f, 8.f };
 	tInfo.iLevelIndex = LEVEL_TOWN;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Chief"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
