@@ -88,6 +88,7 @@ void CSoundMgr::PlayBGM(TCHAR * pSoundKey, float fVolume)
 		return;
 	
 	m_System->playSound(iter->second, 0, false, &m_Channel[SOUND_BGM]);
+	m_Channel[SOUND_BGM]->setMode(FMOD_LOOP_NORMAL);
 	m_Channel[SOUND_BGM]->setVolume(fVolume);
 	m_System->update();
 }
