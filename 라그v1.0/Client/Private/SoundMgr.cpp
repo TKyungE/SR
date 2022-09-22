@@ -64,11 +64,13 @@ void CSoundMgr::PlayEffect(TCHAR * pSoundKey, float fVolume)
 
 	m_System->playSound(iter->second, 0, false, &m_Channel[SOUND_EFFECT]);
 	m_Channel[SOUND_EFFECT]->setVolume(fVolume);
+	m_System->update();
 }
 
-void CSoundMgr::BGM_Pause()
+void CSoundMgr::BGM_Stop()
 {
-	m_Channel[SOUND_BGM]->setPaused(true);
+	m_Channel[SOUND_BGM]->stop();
+	m_Channel[SOUND_EFFECT]->stop();
 }
 
 
@@ -86,7 +88,9 @@ void CSoundMgr::PlayBGM(TCHAR * pSoundKey, float fVolume)
 		return;
 	
 	m_System->playSound(iter->second, 0, false, &m_Channel[SOUND_BGM]);
+	m_Channel[SOUND_BGM]->setMode(FMOD_LOOP_NORMAL);
 	m_Channel[SOUND_BGM]->setVolume(fVolume);
+	m_System->update();
 }
 
 void CSoundMgr::LoadBGMFile()
