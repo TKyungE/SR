@@ -57,6 +57,7 @@ HRESULT CBigfoot::Initialize(void * pArg)
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,1.f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.iMonsterType = MON_BIGFOOT;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
 
 	tInfo.vPos = { 2.f,2.f,1.f };

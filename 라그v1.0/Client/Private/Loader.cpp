@@ -365,7 +365,7 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		return E_FAIL;
 	// sky 텍스쳐
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Sky"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 5))))
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 6))))
 		return E_FAIL;
 
 	//Effect 텍스쳐

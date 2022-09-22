@@ -104,7 +104,7 @@ HRESULT CLevel_Maze::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	CGameObject::INFO info;
 	ZeroMemory(&info, sizeof(CGameObject::INFO));
-	info.pstrPath = TEXT("../../Data/Terrain/test.dat");
+	info.pstrPath = TEXT("../../Data/Terrain/Maze.dat");
 	info.iLevelIndex = LEVEL_MAZE;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_MAZE, pLayerTag, &info)))
@@ -181,43 +181,6 @@ HRESULT CLevel_Maze::Ready_Layer_BackGround(const _tchar * pLayerTag)
 			return E_FAIL;
 	}
 
-	/*CHouse3::INDEXPOS index;
-	ZeroMemory(&index, sizeof(CHouse3::INDEXPOS));
-	index.vPos = _float3(6.f, 0.f, 17.5f);
-
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House3"), LEVEL_MAZE, pLayerTag, &index)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House4"), LEVEL_MAZE, pLayerTag, nullptr)))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House5"), LEVEL_MAZE, pLayerTag, nullptr)))
-		return E_FAIL;
-
-
-	CHouse6::INDEXPOS index2;
-	ZeroMemory(&index2, sizeof(CHouse6::INDEXPOS));
-	index2.vPos = _float3(13.5f, 0.f, 6.f);
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House6"), LEVEL_MAZE, pLayerTag, &index2)))
-		return E_FAIL;
-
-	CHouse6::INDEXPOS index3;
-	ZeroMemory(&index3, sizeof(CHouse6::INDEXPOS));
-	index3.vPos = _float3(13.f, 0.f, 17.f);
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House6"), LEVEL_MAZE, pLayerTag, &index3)))
-		return E_FAIL;
-
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House7"), LEVEL_MAZE, pLayerTag, nullptr)))
-		return E_FAIL;
-
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ItemBox"), LEVEL_MAZE, pLayerTag, nullptr)))
-		return E_FAIL;*/
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -267,21 +230,179 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 	Info.iLevelIndex = LEVEL_MAZE;
 
-	Info.vPos = { 5.f,1.f,10.f };
+	auto iter = m_vMonsterPos1.begin();
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
-		return E_FAIL;
+	_uint iCount = 0;
 
-	Info.vPos = { 10.f,1.f,15.f };
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
-		return E_FAIL;
+		Info.vPos = (*iter);
 
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+		++iCount;
+	}
 
-	Info.vPos = { 13.f,1.f,14.f };
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
-		return E_FAIL;
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
 
 	Safe_Release(pGameInstance);
 	return S_OK;
@@ -429,7 +550,7 @@ HRESULT CLevel_Maze::Ready_Layer_Portal(const _tchar * pLayerTag)
 		++iCount;
 	}
 
-	for (; iter != m_vecPortal.end(); ++iter)
+	/*for (; iter != m_vecPortal.end(); ++iter)
 	{
 		if (iCount == 1)
 		{
@@ -447,7 +568,7 @@ HRESULT CLevel_Maze::Ready_Layer_Portal(const _tchar * pLayerTag)
 			return E_FAIL;
 
 		++iCount;
-	}
+	}*/
 
 	Safe_Release(pGameInstance);
 	return S_OK;
@@ -477,7 +598,7 @@ void CLevel_Maze::Open_Level(void)
 
 void CLevel_Maze::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/test.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/MazePos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;

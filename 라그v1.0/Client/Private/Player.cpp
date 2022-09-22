@@ -81,6 +81,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 			return E_FAIL;
 	}
 	
+	m_tInfo.bHit = false;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -1273,6 +1275,7 @@ void CPlayer::Check_Hit()
 		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), m_tInfo.iLevelIndex, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
