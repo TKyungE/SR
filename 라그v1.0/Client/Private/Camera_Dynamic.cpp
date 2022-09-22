@@ -174,26 +174,41 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 		else
 		{
 			_float3 vTargetPos, vPos,vTargetUp, vTargetLook, vTargetRight, vRight;
+			
 			vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+
 			vTargetPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
 			vTargetLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
+			
 			vTargetUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
+			
 			vTargetRight = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[0][0];
+			
 			D3DXVec3Normalize(&vTargetPos, &vTargetPos);
 			D3DXVec3Normalize(&vTargetUp, &vTargetUp);
 			D3DXVec3Normalize(&vTargetLook, &vTargetLook);
 			D3DXVec3Normalize(&vTargetRight, &vTargetRight);
+			
 			if (!dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Shot())
 			{
-				vTargetPos *= -2.f;
+				vTargetPos *= -2.f; 
 				vPos += vTargetPos;
-				vPos += vTargetUp * +1.5f;
-				D3DXVec3Cross(&vRight, &vTargetUp, &vTargetLook);
-				m_pTransform->Set_State(CTransform::STATE_RIGHT, vRight);
-				m_pTransform->Set_State(CTransform::STATE_UP, vTargetUp);
-				m_pTransform->Set_State(CTransform::STATE_LOOK, vTargetLook);
+				vPos += vTargetUp * 1.5f;
+
 				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-				m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
+
+				_float3 vLook, vRealRight, vUp;
+				vLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0] - *(_float3*)&m_pTransform->Get_WorldMatrix().m[3][0];
+				vUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
+				D3DXVec3Cross(&vRealRight, &vUp, &vLook);
+
+				D3DXVec3Normalize(&vLook, &vLook);
+				D3DXVec3Normalize(&vUp, &vUp);
+				D3DXVec3Normalize(&vRealRight, &vRealRight);
+
+				m_pTransform->Set_State(CTransform::STATE_RIGHT, vRealRight);
+				m_pTransform->Set_State(CTransform::STATE_UP, vUp);
+				m_pTransform->Set_State(CTransform::STATE_LOOK, vLook);
 			}
 			else if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Shot())
 			{
@@ -228,9 +243,6 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 			}
 		}
 	}
-	
-
-	
 
 	if (0 != g_iCut && m_CameraDesc.fFovy > D3DXToRadian(40.f))
 		m_CameraDesc.fFovy -= D3DXToRadian(0.25f);
