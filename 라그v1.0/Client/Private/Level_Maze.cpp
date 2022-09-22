@@ -104,7 +104,7 @@ HRESULT CLevel_Maze::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	CGameObject::INFO info;
 	ZeroMemory(&info, sizeof(CGameObject::INFO));
-	info.pstrPath = TEXT("../../Data/Terrain/test.dat");
+	info.pstrPath = TEXT("../../Data/Terrain/Maze.dat");
 	info.iLevelIndex = LEVEL_MAZE;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_MAZE, pLayerTag, &info)))
@@ -477,7 +477,7 @@ void CLevel_Maze::Open_Level(void)
 
 void CLevel_Maze::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/test.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/MazePos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;
