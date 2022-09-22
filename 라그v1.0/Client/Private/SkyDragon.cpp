@@ -43,7 +43,7 @@ HRESULT CSkyDragon::Initialize(void * pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 50000;
+	m_tInfo.iMaxHp = 150000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_tInfo.iExp = 300;
@@ -71,28 +71,24 @@ void CSkyDragon::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	m_fSkillCool += fTimeDelta;
-
+	m_fMeteor += fTimeDelta;
 
 	if (!m_bDead)
 		Check_Front();
 
 	if (m_eCurState == DEAD)
 	{
-		if (m_tFrame.iFrameStart == 4)
-		{
-			m_tInfo.bDead = true;
-			return;
-		}
-		if (m_tFrame.iFrameStart != 4)
-			Move_Frame(fTimeDelta);
-		m_tInfo.bDead = false;
-		return;
+		
 	}
 
 	if (!m_bSkill && !m_bDead)
 		Chase(fTimeDelta);
 
-
+	if (m_fMeteor > 10.f)
+	{
+		Use_Meteor();
+		m_fMeteor = 0.f;
+	}
 	Move_Frame(fTimeDelta);
 	if (m_eCurState == SKILL)
 		Use_Skill(fTimeDelta);
@@ -393,7 +389,7 @@ HRESULT CSkyDragon::Skill_PoisonArrow(const _tchar * pLayerTag)
 	tInfo.iLevelIndex = LEVEL_SKY;
 	tInfo.vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ShadowBall"), LEVEL_SKY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyDragonSkill"), LEVEL_SKY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -487,6 +483,28 @@ void CSkyDragon::Use_Skill(_float fTimeDelta)
 		m_bSkill = false;
 	}
 }
+HRESULT CSkyDragon::Use_Meteor()
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	tInfo.iLevelIndex = LEVEL_SKY;
+	tInfo.pTarget = m_tInfo.pTarget;
+	for (int i = 1; i < 7; ++i)
+	{
+		tInfo.iMp = i;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyTarget"), LEVEL_SKY, TEXT("Layer_MonsterSkill"), &tInfo)))
+			return E_FAIL;
+	}
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
 HRESULT CSkyDragon::TextureRender()
 {
 	switch (m_eCurState)
@@ -529,7 +547,7 @@ void CSkyDragon::OnBillboard()
 
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0] * vScale.z);
 }
 void CSkyDragon::CheckColl()
 {

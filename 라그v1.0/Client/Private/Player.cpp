@@ -231,28 +231,6 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
 		{
 			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.04f);
-	/*		_float3	vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-			_float3	vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
-			_float3	vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
-			_float4x4	RotationMatrix;
-			D3DXMatrixRotationAxis(&RotationMatrix, &vRight, D3DXToRadian(90.f) * fTimeDelta * MouseMove * 0.04f);
-
-			_float3 vChangeLook;
-			D3DXVec3TransformNormal(&vChangeLook, &vLook, &RotationMatrix);
-			D3DXVec3Normalize(&vLook, &vLook);
-			D3DXVec3Normalize(&vChangeLook, &vChangeLook);
-			
-			_float a = D3DXVec3Dot(&vChangeLook, &_float3{ 0.f, 0.f, 1.f });
-			if (0.5f < a && 1 > a)
-			{
-				D3DXVec3TransformNormal(&vRight, &vRight, &RotationMatrix);
-				D3DXVec3TransformNormal(&vUp, &vUp, &RotationMatrix);
-
-				m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
-				m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
-				m_pTransformCom->Set_State(CTransform::STATE_LOOK, vChangeLook);
-			}*/
 		}
 		Safe_Release(pGameInstance);
 	}

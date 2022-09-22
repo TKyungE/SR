@@ -58,7 +58,7 @@ void CTarget::Late_Tick(_float fTimeDelta)
 	Motion_Change();
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CTarget::Render()

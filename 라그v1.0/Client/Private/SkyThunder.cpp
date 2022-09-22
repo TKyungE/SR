@@ -76,13 +76,13 @@ void CSkyThunder::Late_Tick(_float fTimeDelta)
 	if (!m_tInfo.pTarget)
 	{
 		vLook = m_tInfo.vTargetPos - vPosition;
-		vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 8.f * fTimeDelta;
+		vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 12.f * fTimeDelta;
 	}
 	if (!m_tInfo.pTarget->Get_Info().bDead)
 	{
 		vLook = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - vPosition;
 		m_tInfo.vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-		vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 8.f * fTimeDelta;
+		vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 12.f * fTimeDelta;
 	}
 	else
 	{

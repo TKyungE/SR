@@ -55,12 +55,14 @@ private:
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
 	void Use_Skill(_float fTimeDelta);
+	HRESULT Use_Meteor();
 	HRESULT TextureRender();
 	void CheckColl();
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 	_float				m_fSkillCool = 0.f;
+	_float				m_fMeteor = 0.f;
 	_float				m_fMove = 0.f;
 	_int				m_irand = 0;
 	_bool				m_bSkill = false;

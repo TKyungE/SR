@@ -212,8 +212,6 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 				m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 
-
-
 				_long			MouseMove = 0;
 
 				if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
