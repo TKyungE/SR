@@ -70,7 +70,8 @@ private:
 	void Running_TextBox(void);
 	void Print_Text(void);
 	void Change_Button(void);
-	
+public:
+	_int Get_ScriptIndex() { return m_iScriptIndex; }
 public:
 	static CTextBox* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

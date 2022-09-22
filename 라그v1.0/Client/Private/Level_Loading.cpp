@@ -13,6 +13,7 @@
 #include "Level_Desert1.h"
 #include "Level_Maze.h"
 #include "SkyField.h"
+
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
 {
@@ -34,12 +35,21 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevel)
 		return E_FAIL;
 
 	Safe_AddRef(pGameInstance);
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Texture_Loading"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Loading/%d.jpg"), 1))))
-		return E_FAIL;
-	
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Loading"), LEVEL_LOADING, TEXT("Layer_UI"))))
-		return E_FAIL;
+	if (m_eNextLevel != LEVEL_SKY)
+	{
+		if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Texture_Loading"),
+			CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Loading/%d.jpg"), 1))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Loading"), LEVEL_LOADING, TEXT("Layer_UI"))))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyLoading"), LEVEL_LOADING, TEXT("Layer_UI"))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyNPC"), LEVEL_LOADING, TEXT("Layer_UI"))))
+			return E_FAIL;
+	}
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
@@ -50,9 +60,8 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 
 	if (true == m_pLoader->Get_Finished())
 	{
-		/*if (GetKeyState(VK_RETURN) & 0x8000)
-		{*/
-			/* 넥스트레벨에 대한 준비가 끝나면 실제 넥스트레벨을 할당한다. */
+		if (m_eNextLevel != LEVEL_SKY)
+		{
 			CLevel*			pNewLevel = nullptr;
 
 			switch (m_eNextLevel)
@@ -85,7 +94,7 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 				pNewLevel = CSkyField::Create(m_pGraphic_Device);
 				break;
 			}
-
+		
 			if (nullptr == pNewLevel)
 				return;
 
@@ -99,7 +108,27 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 
 			Safe_Release(pGameInstance);
 		}		
-	//}
+		else if(g_bSky)
+		{
+			CLevel*			pNewLevel = nullptr;
+
+			pNewLevel = CSkyField::Create(m_pGraphic_Device);
+			
+			if (nullptr == pNewLevel)
+				return;
+
+			CGameInstance* pGameInstance = CGameInstance::Get_Instance();
+			if (nullptr == pGameInstance)
+				return;
+			Safe_AddRef(pGameInstance);
+
+			if (FAILED(pGameInstance->Open_Level(m_eNextLevel, pNewLevel)))
+				return;
+
+			Safe_Release(pGameInstance);
+		}
+
+	}
 }
 
 void CLevel_Loading::Late_Tick(_float fTimeDelta)

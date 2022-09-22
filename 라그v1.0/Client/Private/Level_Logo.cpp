@@ -16,8 +16,12 @@ HRESULT CLevel_Logo::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-//	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
-//		return E_FAIL;
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_UI"))))
+		return E_FAIL;
+
+	CSoundMgr::Get_Instance()->BGM_Stop();
+	CSoundMgr::Get_Instance()->PlayBGM(L"LOGO.wav", fSOUND);
+
 
 	return S_OK;
 }
@@ -57,11 +61,7 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGround"), LEVEL_LOGO, pLayerTag, nullptr)))
-		return E_FAIL;*/
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Logo"), LEVEL_LOGO, pLayerTag, nullptr)))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_NextButton"), LEVEL_LOGO, pLayerTag, &m_bNextLevel)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LogoUI"), LEVEL_LOGO, pLayerTag)))
 		return E_FAIL;
 	Safe_Release(pGameInstance);
 

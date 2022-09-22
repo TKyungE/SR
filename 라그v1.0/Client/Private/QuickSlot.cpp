@@ -77,7 +77,6 @@ void CQuickSlot::Tick(_float fTimeDelta)
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
-	ShowCursor(false);
 	_float3 vMousePos = { (float)(ptMouse.x+9.f) - g_iWinSizeX * 0.5f, -(float)(ptMouse.y+13.f) + g_iWinSizeY * 0.5f, 0.f };
 	m_pMouseTransformCom->Set_State(CTransform::STATE_POSITION, vMousePos);
 

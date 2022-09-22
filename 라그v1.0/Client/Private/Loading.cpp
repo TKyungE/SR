@@ -72,9 +72,11 @@ HRESULT CLoading::Render()
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
+	
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
-		return E_FAIL;
-
+	return E_FAIL;
+	
+	
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
