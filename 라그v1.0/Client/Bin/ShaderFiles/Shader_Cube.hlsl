@@ -36,7 +36,7 @@ VS_OUT VS_MAIN(VS_IN In)
 
 	Out.vPosition = mul(float4(In.vPosition, 1.f), matWVP);
 	Out.vTexUV = In.vTexUV;
-	Out.vWorldPos = mul(float4(In.vPosition,1.f), g_WorldMatrix).xyz;
+	Out.vWorldPos = mul(float4(In.vPosition, 1.f), g_WorldMatrix).xyz;
 	return Out;
 }
 
@@ -55,7 +55,7 @@ struct PS_OUT
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT)0;
-	
+
 	Out.vColor = texCUBE(TextureSampler, In.vTexUV);
 
 	Out.vColor.rgb = 0.f;
@@ -85,13 +85,9 @@ PS_OUT PS_MAIN_SKYBOX2(PS_IN In)
 
 	Out.vColor = texCUBE(TextureSampler, In.vTexUV);
 
-	if (Out.vColor.a == 1.f)
-	{
-		Out.vColor.r = 0.9960f;
-		Out.vColor.g = 0.4862f;
-		Out.vColor.b = 0.0549f;
-	}
-	
+	//Out.vColor.r = (Out.vColor.r * 0.5f) + (0.9725f * 0.8f);
+	//Out.vColor.g = (Out.vColor.g * 0.5f) + (0.4745f * 0.75f);
+	//Out.vColor.b = (Out.vColor.b * 0.5f) + (0.054f * 0.75f);
 
 	return Out;
 }

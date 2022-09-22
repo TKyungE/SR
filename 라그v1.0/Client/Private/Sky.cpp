@@ -32,8 +32,13 @@ HRESULT CSky::Initialize(void* pArg)
 	{
 		m_tInfo.iMp = 4;
 	}
+	else if (m_tInfo.iLevelIndex == LEVEL_SKY)
+	{
+		m_tInfo.iMp = 4;
+	}
 	else
 		m_tInfo.iMp = 2;
+
 	m_tInfo.bDead = false;
 
 	return S_OK;
@@ -187,7 +192,7 @@ HRESULT CSky::SetUp_ShaderResource()
 	if (FAILED(m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(2))))
+	if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_tInfo.iMp))))
 		return E_FAIL;
 
 	return S_OK;
