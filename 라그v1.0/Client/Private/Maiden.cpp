@@ -252,6 +252,7 @@ void CMaiden::Check_Hit()
 		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_MIDBOSS, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo);
@@ -553,6 +554,7 @@ void CMaiden::Check_Front()
 		tInfo.pTarget = m_tInfo.pTarget;
 		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 		tInfo.vPos = { 19.f,0.f,21.f };
+
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PowerTotem"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
 			return;
 		m_tInfo.iMp = 1;

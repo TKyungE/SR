@@ -383,7 +383,7 @@ void CLevel_MidBoss::LoadData(void)
 	ReadFile(hFile, str5, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str6, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str7, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
-	ReadFile(hFile, str8, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	//ReadFile(hFile, str8, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 
 
@@ -394,7 +394,7 @@ void CLevel_MidBoss::LoadData(void)
 	iHouse2Size = stoi(str5);
 	iPortalSize = stoi(str6);
 	iNPCSize = stoi(str7);
-	iWallSize = stoi(str8);
+	//iWallSize = stoi(str8);
 
 
 
@@ -566,7 +566,7 @@ void CLevel_MidBoss::LoadData(void)
 			m_vecNPC.push_back(NPCPos);
 		}
 
-		for (_uint i = 0; i < iWallSize; ++i)
+		/*for (_uint i = 0; i < iWallSize; ++i)
 		{
 			if (0 == dwByte)
 				break;
@@ -582,7 +582,7 @@ void CLevel_MidBoss::LoadData(void)
 			WallPos.vScale = Scale;
 
 			m_vecWall.push_back(WallPos);
-		}
+		}*/
 
 		if (0 == dwByte)
 			break;
