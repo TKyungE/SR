@@ -65,7 +65,18 @@ HRESULT CSky::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
+	if (m_tInfo.iLevelIndex == LEVEL_SKY)
+	{
+		if (FAILED(SetUp_ShaderResource()))
+			return E_FAIL;
+
+		m_pShaderCom->Begin(2);
+
+		m_pVIBufferCom->Render();
+
+		m_pShaderCom->End();
+	}
+	else if (m_tInfo.iLevelIndex != LEVEL_MAZE)
 	{
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;

@@ -79,6 +79,23 @@ PS_OUT PS_TREE_MAIN(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_SKYBOX2(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
+
+	Out.vColor = texCUBE(TextureSampler, In.vTexUV);
+
+	if (Out.vColor.a == 1.f)
+	{
+		Out.vColor.r = 0.9960f;
+		Out.vColor.g = 0.4862f;
+		Out.vColor.b = 0.0549f;
+	}
+	
+
+	return Out;
+}
+
 
 technique DefaultTechnique
 {
@@ -101,5 +118,14 @@ technique DefaultTechnique
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_TREE_MAIN();
+	}
+	pass SkyBox2
+	{
+		ZEnable = true;
+		ZWriteEnable = false;
+		CullMode = cw;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_SKYBOX2();
 	}
 }
