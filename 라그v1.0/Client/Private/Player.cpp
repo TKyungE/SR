@@ -162,7 +162,10 @@ void CPlayer::Tick(_float fTimeDelta)
 			Player_Move(fTimeDelta);
 			Move_Frame(fTimeDelta);		
 		}
-		Get_PickingPoint();
+		if (m_tInfo.iLevelIndex != LEVEL_SKY)
+			Get_PickingPoint();
+		
+		
 	}
 	else
 	{
