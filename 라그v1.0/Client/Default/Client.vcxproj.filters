@@ -262,9 +262,6 @@
     <Filter Include="04.UI\Button">
       <UniqueIdentifier>{966ec960-d5ac-4b8b-afa5-23b23fba33ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Monster\06.Atros">
-      <UniqueIdentifier>{e6cae052-15ae-474e-91d6-064c0afad733}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Monster\07.Baphomet">
       <UniqueIdentifier>{8d3e5807-8064-447c-b93a-c89f514d74a4}</UniqueIdentifier>
     </Filter>
@@ -423,6 +420,9 @@
     </Filter>
     <Filter Include="02.GameObject\Loading\LogoUI">
       <UniqueIdentifier>{cba6f014-00bf-468f-b476-577dfee72c58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\06.Atros">
+      <UniqueIdentifier>{e6cae052-15ae-474e-91d6-064c0afad733}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

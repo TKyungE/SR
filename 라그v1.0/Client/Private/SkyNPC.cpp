@@ -88,7 +88,7 @@ void CSkyNPC::Tick(_float fTimeDelta)
 
 		tTInfo.iQuestIndex = 7;
 		tTInfo.iLevelIndex = LEVEL_LOADING;
-		tTInfo.iNumQuest = 44;
+		tTInfo.iNumQuest = 44; 
 		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pGameInstance);
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), LEVEL_LOADING, TEXT("Layer_SkyText"), &tTInfo)))

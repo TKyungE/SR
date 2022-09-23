@@ -194,8 +194,8 @@ HRESULT CTerrainRect::SetUp_ShaderResource()
 	if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_tRectInfo.iTex))))
 		return E_FAIL;
 
-	_float	fMin = 1.f;
-	_float	fMax = 4.f;
+	_float	fMin = 3.f;
+	_float	fMax = 6.f;
 
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
