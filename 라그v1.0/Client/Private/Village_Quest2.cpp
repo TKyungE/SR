@@ -48,11 +48,11 @@ HRESULT CVillage_Quest2::Initialize(void * pArg)
 	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 
 	m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
-	m_pQuestTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
+	m_pQuestTransformCom->Set_Scaled(_float3(0.6f, 0.6f, 1.f));
 
 	m_tInfo.vPos.y += 0.5f;
 	_float3 vQuestPos = m_tInfo.vPos;
-	vQuestPos.y += 0.7f;
+	vQuestPos.y += 0.5f;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_pQuestTransformCom->Set_State(CTransform::STATE_POSITION, vQuestPos);
@@ -252,6 +252,8 @@ void CVillage_Quest2::Tick(_float fTimeDelta)
 		g_iQuest = 0;
 		g_iReward = 0;
 	}
+
+	m_pQuestTransformCom->Turn(m_pQuestTransformCom->Get_State(CTransform::STATE_UP), fTimeDelta * 2.f);
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
 	{
@@ -488,31 +490,6 @@ void CVillage_Quest2::OnBillboard()
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
 	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
-
-	_float3 vScale = m_pQuestTransformCom->Get_Scale();
-
-	CGameInstance* pInstance = CGameInstance::Get_Instance();
-	if (nullptr == pInstance)
-		return;
-	
-	Safe_AddRef(pInstance);
-
-	_float4x4 PlayerWorld = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"))->Get_Objects().front()->Get_World();
-	
-	Safe_Release(pInstance);
-
-	_float3 PlayerPos = *(_float3*)&PlayerWorld.m[3][0];
-	_float3 PlayerRight = *(_float3*)&PlayerWorld.m[0][0];
-	_float3 QuestPos = m_pQuestTransformCom->Get_State(CTransform::STATE_POSITION);
-	_float3 QuestLook = PlayerPos - QuestPos;
-
-	D3DXVec3Normalize(&PlayerRight, &PlayerRight);
-	D3DXVec3Normalize(&QuestLook, &QuestLook);
-
-	D3DXVec3Dot(&PlayerRight, &QuestLook);
-
-	m_pQuestTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pQuestTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0] * vScale.z);
 }
 
 void CVillage_Quest2::Ready_Script(void)

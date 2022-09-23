@@ -15,7 +15,6 @@
 #include "House3.h"
 #include "House6.h"
 
-
 //bool g_bCollider = false;
 //bool g_bTalk = false;
 //bool g_bCut = false;
@@ -326,7 +325,7 @@ HRESULT CLevel_Town2::Ready_Layer_NPC(const _tchar * pLayerTag)
 	tInfo.iHp = 1;
 	for (auto& iter : m_vecNPC)
 	{
-		if (iter.iIndex <= 3)
+		if (iter.iIndex <= 3 && iter.iIndex > 0)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;						// 인덱스 인데 인포구조체에 인덱스 없어서 MP로 대체 함
@@ -340,7 +339,7 @@ HRESULT CLevel_Town2::Ready_Layer_NPC(const _tchar * pLayerTag)
 			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
-		else if (iter.iIndex == 5)
+		else if (iter.iIndex == 0)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
