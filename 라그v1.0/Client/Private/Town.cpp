@@ -275,7 +275,6 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SpaceUI"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -351,7 +350,7 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_AirShip"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	tInfo.vPos = { 11.5f,1.f,15.f };
+	tInfo.vPos = { 11.5f,0.f,15.f };
 	tInfo.pTarget = Info.pTarget;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ShopNPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;

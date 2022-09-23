@@ -1,6 +1,7 @@
 #include "..\Public\CollisionMgr.h"
 #include "GameInstance.h"
 #include "GameObject.h"
+#include "Transform.h"
 
 IMPLEMENT_SINGLETON(CCollisionMgr)
 
@@ -39,7 +40,7 @@ _bool CCollisionMgr::Collision(CGameObject * pGameObject, const _tchar* szDestCo
 
 	for (auto& iter : m_GameObjects[iCollisionGroup])
 	{
-		if (Collision_AABB(pGameObject, szDestColliderName, iter, szSourColliderName))
+		if (Can_Collision(pGameObject, iter) && Collision_AABB(pGameObject, szDestColliderName, iter, szSourColliderName))
 		{
 			*pTarget = iter;
 			return true;
@@ -61,6 +62,20 @@ void CCollisionMgr::Release_Objects(void)
 			m_GameObjects[i].clear();
 		}
 	}
+}
+
+_bool CCollisionMgr::Can_Collision(CGameObject * pGameObject, CGameObject * pCollObject)
+{
+	CTransform* pGameTransform = (CTransform*)(pGameObject->Find_Component(TEXT("Com_Transform")));
+	CTransform* pCollTransform = (CTransform*)(pCollObject->Find_Component(TEXT("Com_Transform")));
+
+	_float3 vGamePos = pGameTransform->Get_State(CTransform::STATE_POSITION);
+	_float3 vCollPos = pCollTransform->Get_State(CTransform::STATE_POSITION);
+
+	if (5.f > D3DXVec3Length(&(vGamePos - vCollPos)))
+		return true;
+
+	return false;
 }
 
 _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, const _tchar* szDestColliderName, class CGameObject* _Sour, const _tchar* szSourColliderName)

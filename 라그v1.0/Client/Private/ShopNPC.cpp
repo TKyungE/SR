@@ -52,7 +52,7 @@ HRESULT CShopNPC::Initialize(void * pArg)
 	m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
 
-	m_tInfo.vPos.y -= 0.5f;
+	m_tInfo.vPos.y += 0.5f;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 

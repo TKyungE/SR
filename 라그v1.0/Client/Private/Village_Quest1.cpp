@@ -508,7 +508,7 @@ CGameObject * CVillage_Quest1::Clone(void * pArg)
 
 _float4x4 CVillage_Quest1::Get_World(void)
 {
-	return m_pTransformCom->Get_WorldMatrix();;
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CVillage_Quest1::Free(void)
