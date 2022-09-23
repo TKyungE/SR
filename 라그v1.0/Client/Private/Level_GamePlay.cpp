@@ -237,10 +237,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 	_uint iCount = 0;
 	
-	Info.vPos = { 13.f,1.f,14.f };
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
 
 	for (; iter != m_vMonsterPos1.end(); ++iter)
 	{

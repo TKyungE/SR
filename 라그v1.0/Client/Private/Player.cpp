@@ -122,23 +122,23 @@ void CPlayer::Tick(_float fTimeDelta)
 		}
 	}
 
-	if (!g_bFirst)
-	{
-		CGameInstance* pInstance = CGameInstance::Get_Instance();
-		Safe_AddRef(pInstance);
+	//if (!g_bFirst)
+	//{
+	//	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	//	Safe_AddRef(pInstance);
 
-		CTransform* pTransform = (CTransform*)pInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_Camera"), TEXT("Com_Transform"));
+	//	CTransform* pTransform = (CTransform*)pInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_Camera"), TEXT("Com_Transform"));
 
-		_float3 vRight = pTransform->Get_State(CTransform::STATE_RIGHT);
-		_float3 vUp = pTransform->Get_State(CTransform::STATE_UP);
-		_float3 vLook = pTransform->Get_State(CTransform::STATE_LOOK);
+	//	_float3 vRight = pTransform->Get_State(CTransform::STATE_RIGHT);
+	//	_float3 vUp = pTransform->Get_State(CTransform::STATE_UP);
+	//	_float3 vLook = pTransform->Get_State(CTransform::STATE_LOOK);
 
-		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
-		m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
-		m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
+	//	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
+	//	m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
+	//	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
 
-		Safe_Release(pInstance);
-	}
+	//	Safe_Release(pInstance);
+	//}
 
 	if (!g_bFirst && 0 == g_iCut)
 	{

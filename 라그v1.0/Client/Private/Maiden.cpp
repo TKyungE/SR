@@ -104,6 +104,7 @@ void CMaiden::Tick(_float fTimeDelta)
 				m_bSkill2 = true;
 				m_fSkillCool2 = 0;
 				m_fSkillCool = 0;
+				CSoundMgr::Get_Instance()->PlayEffect(L"Maiden_Skill.wav", fSOUND);
 			}
 
 		}
@@ -113,7 +114,7 @@ void CMaiden::Tick(_float fTimeDelta)
 		
 		if(m_bSkill2 && m_bStart && !m_bSkill)
 			Use_Skill2(fTimeDelta);
-
+		
 		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
 
 		CGameInstance* pInstance = CGameInstance::Get_Instance();
@@ -519,7 +520,7 @@ void CMaiden::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
-		CSoundMgr::Get_Instance()->PlayEffect(L"Maiden_Die.wav", fSOUND);
+		CSoundMgr::Get_Instance()->PlayEffect(L"Maiden_Die.wav", fSOUND + 0.2f);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && !m_bTotem)
 	{
@@ -631,7 +632,6 @@ void CMaiden::Use_Skill(_float fTimeDelta)
 }
 void CMaiden::Use_Skill2(_float fTimeDelta)
 {
-	CSoundMgr::Get_Instance()->PlayEffect(L"Maiden_Skill.wav", fSOUND);
 	if (m_iSkillMove == 0)
 	{
 		_float3		vPosition = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
@@ -863,7 +863,7 @@ void CMaiden::CheckColl()
 void CMaiden::Create_BlueFire(_float fTimeDelta)
 {
 	m_bBlueFireTime += fTimeDelta;
-	if (m_bBlueFireTime > 0.1f)
+	if (m_bBlueFireTime > 0.3f)
 	{
 		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pGameInstance);
@@ -884,7 +884,6 @@ void CMaiden::Create_BlueFire(_float fTimeDelta)
 		tInfo.fX = 1.f;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BossSkillTarget"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo)))
 			return;
-		CSoundMgr::Get_Instance()->PlayEffect(L"SkyDragon_Skill.wav", fSOUND);
 		Safe_Release(pGameInstance);
 		m_bBlueFireTime = 0.f;
 	}

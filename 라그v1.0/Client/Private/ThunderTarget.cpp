@@ -99,7 +99,7 @@ void CThunderTarget::Late_Tick(_float fTimeDelta)
 		tInfo.iLevelIndex = LEVEL_SKY;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyThunder"), LEVEL_SKY, TEXT("Layer_Skill"), &tInfo)))
 			return;
-		CSoundMgr::Get_Instance()->PlayEffect(L"SkyThunder.wav", fSOUND);
+		CSoundMgr::Get_Instance()->PlayEffect(L"SkyThunder.wav", fSOUND -0.05f);
 		Safe_Release(pGameInstance);
 		m_fSkillCool = 0.f;
 	}

@@ -174,21 +174,15 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 		else
 		{
 			_float3 vTargetPos, vPos,vTargetUp, vTargetLook, vTargetRight, vRight;
-			
 			vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
-
 			vTargetPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
 			vTargetLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
-			
 			vTargetUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
-			
 			vTargetRight = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[0][0];
-			
 			D3DXVec3Normalize(&vTargetPos, &vTargetPos);
 			D3DXVec3Normalize(&vTargetUp, &vTargetUp);
 			D3DXVec3Normalize(&vTargetLook, &vTargetLook);
 			D3DXVec3Normalize(&vTargetRight, &vTargetRight);
-			
 			if (!dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Shot())
 			{
 				vTargetPos *= -2.f; 
