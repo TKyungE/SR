@@ -102,6 +102,9 @@
 #include "SkyThunder.h"
 #include "ThunderTarget.h"
 #include "Target.h"
+#include "Town_Quest1.h"
+#include "Town_Quest2.h"
+#include "Town_Quest3.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -965,6 +968,16 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ShopNPC"),
 		CShopNPC::Create(m_pGraphic_Device))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Town_Quest1"),
+		CTown_Quest1::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Town_Quest2"),
+		CTown_Quest2::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Town_Quest3"),
+		CTown_Quest3::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	//UI °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"),
 		CUI::Create(m_pGraphic_Device))))

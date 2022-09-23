@@ -363,11 +363,11 @@ HRESULT CLevel_Town2::Ready_Layer_NPC(const _tchar * pLayerTag)
 				return E_FAIL;
 		}
 
-		/*else if (iter.iIndex == 11)
+		else if (iter.iIndex == 11)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TOWN_Quest1"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Town_Quest1"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
 
@@ -375,7 +375,7 @@ HRESULT CLevel_Town2::Ready_Layer_NPC(const _tchar * pLayerTag)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TOWN_Quest2"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Town_Quest2"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
 
@@ -383,9 +383,9 @@ HRESULT CLevel_Town2::Ready_Layer_NPC(const _tchar * pLayerTag)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TOWN_Quest3"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Town_Quest3"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 				return E_FAIL;
-		}*/
+		}
 	}
 
 	Safe_Release(pGameInstance);

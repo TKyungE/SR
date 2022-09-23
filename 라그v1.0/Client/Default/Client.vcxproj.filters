@@ -406,6 +406,15 @@
     <Filter Include="03.Effect\Default\15.Target">
       <UniqueIdentifier>{5fa2c8e2-68be-4742-934d-722e463df523}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\NPC\05. Town_Quest1">
+      <UniqueIdentifier>{b2aedcef-6ff1-47ef-8883-bbb87b07c3e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\06. Town_Quest2">
+      <UniqueIdentifier>{c3b51d19-a4c4-4b63-935c-f305fd2e8682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\07. Town_Quest3">
+      <UniqueIdentifier>{50e9032d-f7e7-4aa6-b88e-db5fef57e7ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -783,6 +792,15 @@
     <ClInclude Include="..\public\Target.h">
       <Filter>03.Effect\Default\15.Target</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Town_Quest1.h">
+      <Filter>02.GameObject\NPC\05. Town_Quest1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Town_Quest2.h">
+      <Filter>02.GameObject\NPC\06. Town_Quest2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Town_Quest3.h">
+      <Filter>02.GameObject\NPC\07. Town_Quest3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1147,6 +1165,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Target.cpp">
       <Filter>03.Effect\Default\15.Target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Town_Quest1.cpp">
+      <Filter>02.GameObject\NPC\05. Town_Quest1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Town_Quest2.cpp">
+      <Filter>02.GameObject\NPC\06. Town_Quest2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Town_Quest3.cpp">
+      <Filter>02.GameObject\NPC\07. Town_Quest3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
