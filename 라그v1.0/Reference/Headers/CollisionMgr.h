@@ -16,6 +16,7 @@ public:
 	HRESULT Add_ColiisionGroup(_uint iCollisionGroup, class CGameObject* pGameObject);
 	_bool Collision(CGameObject * pGameObject, const _tchar* szDestColliderName, _uint iCollisionGroup, const _tchar* szSourColliderName, CGameObject** pTarget);
 	void Release_Objects(void);
+	_bool Can_Collision(CGameObject * pGameObject, CGameObject * pCollObject);
 
 public:
 	_float3 Get_Collision(void) { return m_vCollision; }
