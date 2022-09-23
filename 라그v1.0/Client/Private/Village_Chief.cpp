@@ -37,9 +37,9 @@ HRESULT CVillage_Chief::Initialize(void * pArg)
 
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = 400.f;
+	m_fSizeX = 300.f;
 	m_fSizeY = 400.f;
-	m_fX = 250.f;
+	m_fX = 300.f;
 	m_fY = 370.f;
 
 	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
@@ -100,7 +100,7 @@ void CVillage_Chief::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pQuestManager);
 
-	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr == pQuestManager->Find_Finish(TEXT("Quest_CollectQuest1")))
+	if (nullptr != pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Finish(TEXT("Quest_CollectQuest1")))
 	{
 		m_bQuestRender = true;
 
@@ -421,7 +421,7 @@ HRESULT CVillage_Chief::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Quest1"), (CComponent**)&m_pCharTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Chief"), (CComponent**)&m_pCharTextureCom)))
 		return E_FAIL;
 
 

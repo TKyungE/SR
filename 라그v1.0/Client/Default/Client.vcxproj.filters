@@ -343,9 +343,6 @@
     <Filter Include="04.UI\05. Equip">
       <UniqueIdentifier>{e5cf10bb-83ae-41b2-9282-7f84486ed484}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\QuestUI">
-      <UniqueIdentifier>{be3f6a86-88ee-4e52-a7ff-4fbff6056a26}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Quest\CollectQuest">
       <UniqueIdentifier>{19d3bec9-7d13-4750-baed-9f937d3938c3}</UniqueIdentifier>
     </Filter>
@@ -423,6 +420,18 @@
     </Filter>
     <Filter Include="02.GameObject\Camera">
       <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\09.Town_Quest1">
+      <UniqueIdentifier>{77882c8e-5e72-4d2b-b015-ee1eda0ef812}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\10.Town_Quest2">
+      <UniqueIdentifier>{699abb20-968f-4b4e-b87d-3a10f1ae8a13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\11.Town_Quest3">
+      <UniqueIdentifier>{8cd89d04-1309-4eaf-b895-4b226cede030}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\QuestUI">
+      <UniqueIdentifier>{be3f6a86-88ee-4e52-a7ff-4fbff6056a26}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -822,6 +831,15 @@
     <ClInclude Include="..\public\LogoUI.h">
       <Filter>02.GameObject\Loading\LogoUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Town_Quest1.h">
+      <Filter>02.GameObject\NPC\09.Town_Quest1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Town_Quest2.h">
+      <Filter>02.GameObject\NPC\10.Town_Quest2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Town_Quest3.h">
+      <Filter>02.GameObject\NPC\11.Town_Quest3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1207,6 +1225,15 @@
     </ClCompile>
     <ClCompile Include="..\private\LogoUI.cpp">
       <Filter>02.GameObject\Loading\LogoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Town_Quest1.cpp">
+      <Filter>02.GameObject\NPC\09.Town_Quest1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Town_Quest2.cpp">
+      <Filter>02.GameObject\NPC\10.Town_Quest2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Town_Quest3.cpp">
+      <Filter>02.GameObject\NPC\11.Town_Quest3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
