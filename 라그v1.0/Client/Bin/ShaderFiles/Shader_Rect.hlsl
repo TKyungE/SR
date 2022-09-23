@@ -18,21 +18,14 @@ sampler TextureSampler = sampler_state {
 	MAGFILTER = linear;
 	MIPFILTER = linear;
 };
-sampler CharNpcSampler = sampler_state {
+
+sampler NoneSampler = sampler_state {
 	texture = g_Texture;
 	MINFILTER = NONE;
 	MAGFILTER = NONE;
 	MIPFILTER = NONE;
-
 };
 
-sampler MonsterSampler = sampler_state {
-	texture = g_Texture;
-	MINFILTER = NONE;
-	MAGFILTER = NONE;
-	MIPFILTER = NONE;
-
-};
 struct VS_IN
 {
 	float3 vPosition : POSITION;
@@ -91,7 +84,7 @@ PS_OUT PS_NPC(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT)0;
 
-	Out.vColor = tex2D(CharNpcSampler, In.vTexUV);
+	Out.vColor = tex2D(NoneSampler, In.vTexUV);
 	Out.vColor.a = Out.vColor.a * g_fAlpha;
 
 	return Out;
@@ -123,7 +116,7 @@ PS_OUT PS_MAIN_MONSTER(PS_IN In)
 {
 	PS_OUT			Out = (PS_OUT)0;
 
-	Out.vColor = tex2D(MonsterSampler, In.vTexUV);
+	Out.vColor = tex2D(NoneSampler, In.vTexUV);
 
 	// dot, cross, normalize
 
@@ -150,7 +143,7 @@ PS_OUT PS_MAIN_UI(PS_IN In)
 {
 	PS_OUT			Out = (PS_OUT)0;
 
-	Out.vColor = tex2D(MonsterSampler, In.vTexUV);
+	Out.vColor = tex2D(NoneSampler, In.vTexUV);
 
 	Out.vColor.r = 0.5f;
 	Out.vColor.gb = 0.f;
@@ -169,7 +162,7 @@ PS_OUT PS_MAIN_HPBAR(PS_IN In)
 {
 	PS_OUT			Out = (PS_OUT)0;
 
-	Out.vColor = tex2D(MonsterSampler, In.vTexUV);
+	Out.vColor = tex2D(NoneSampler, In.vTexUV);
 
 	if (In.vTexUV.x > g_fHPBar)
 	{
@@ -191,6 +184,15 @@ PS_OUT PS_MAIN_QUESTUI(PS_IN In)
 
 	Out.vColor = tex2D(TextureSampler, In.vTexUV);
 	Out.vColor.a = 0.7f;
+	
+	return Out;
+}
+
+PS_OUT PS_MAIN_Rect(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
+
+	Out.vColor = tex2D(NoneSampler, In.vTexUV);
 	
 	return Out;
 }
@@ -290,4 +292,15 @@ technique DefaultTechnique
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_QUESTUI();
 	}
+
+	pass Rect
+	{
+		AlphaTestEnable = true;
+		AlphaFunc = GREATER;
+		AlphaRef = 100;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_Rect();
+	}
+
 }

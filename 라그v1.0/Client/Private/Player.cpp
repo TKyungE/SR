@@ -161,8 +161,11 @@ void CPlayer::Tick(_float fTimeDelta)
 
 			Player_Move(fTimeDelta);
 			Move_Frame(fTimeDelta);		
-			Get_PickingPoint();
 		}
+		if (m_tInfo.iLevelIndex != LEVEL_SKY)
+			Get_PickingPoint();
+		
+		
 	}
 	else
 	{
@@ -260,7 +263,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	if(pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
 	{	
 		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 	}
 
 	Safe_Release(pInstance);
