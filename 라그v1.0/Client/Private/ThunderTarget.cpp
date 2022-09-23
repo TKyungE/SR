@@ -68,7 +68,7 @@ void CThunderTarget::Late_Tick(_float fTimeDelta)
 		Safe_AddRef(pGameInstance);
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
-		if (pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Monster")) != nullptr)
+		if (pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Monster")) != nullptr && pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss")) != nullptr)
 		{
 			for (auto& iter : pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Monster"))->Get_Objects())
 			{
@@ -83,6 +83,14 @@ void CThunderTarget::Late_Tick(_float fTimeDelta)
 					MinDist = HelpDistance;
 					tInfo.pTarget = iter;
 				}
+			}
+			_float3 vTarget = *(_float3*)&pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss"))->Get_Objects().front()->Get_World().m[3][0];
+			
+			HelpDistance = D3DXVec3Length(&(vTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+			if (MinDist > HelpDistance)
+			{
+				MinDist = HelpDistance;
+				tInfo.pTarget = pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss"))->Get_Objects().front();
 			}
 		}
 

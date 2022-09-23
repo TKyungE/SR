@@ -1243,7 +1243,7 @@ void CPlayer::Check_Stat()
 	if (m_tInfo.iMp < 0)
 		m_tInfo.iMp = 0;
 
-	if (m_StatInfo != nullptr && !m_bPoring && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Poring())
+	if (m_StatInfo != nullptr && !m_bPoring && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Poring() && m_tInfo.iLevelIndex != LEVEL_SKY)
 	{
 		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 		if (nullptr == pGameInstance)
