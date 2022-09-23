@@ -104,7 +104,7 @@ HRESULT CLevel_Maze::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	CGameObject::INFO info;
 	ZeroMemory(&info, sizeof(CGameObject::INFO));
-	info.pstrPath = TEXT("../../Data/Terrain/Maze.dat");
+	info.pstrPath = TEXT("../../Data/Terrain/Maze1.dat");
 	info.iLevelIndex = LEVEL_MAZE;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_MAZE, pLayerTag, &info)))
@@ -235,6 +235,22 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 	_uint iCount = 0;
 
 	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	/*for (; iter != m_vMonsterPos1.end(); ++iter)
 	{
 		if (iCount >= 1)
 		{
@@ -402,7 +418,7 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 			return E_FAIL;
 
 		++iCount;
-	}
+	}*/
 
 	Safe_Release(pGameInstance);
 	return S_OK;
@@ -598,7 +614,7 @@ void CLevel_Maze::Open_Level(void)
 
 void CLevel_Maze::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/MazePos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/MazePos2.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;

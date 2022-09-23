@@ -56,6 +56,7 @@ HRESULT CWraith::Initialize(void * pArg)
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,1.f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.iMonsterType = MON_WRAITH;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
 
 	tInfo.vPos = { 1.f,1.f,1.f };
@@ -74,38 +75,11 @@ void CWraith::Tick(_float fTimeDelta)
 	if (!m_bRespawn)
 	{
 		m_fSkillCool += fTimeDelta;
-		if (m_tInfo.iMp == 2 && !m_bAngry)
-		{
-			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-			Safe_AddRef(pGameInstance);
-			CGameObject::INFO tInfo;
-			tInfo.pTarget = this;
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-			Safe_Release(pGameInstance);
-			m_bAngry = true;
-		}
+		
 		OnTerrain();
 		if (!m_bDead)
 			Check_Front();
-		if (m_eCurState == DEAD)
-		{
-			if (m_tFrame.iFrameStart == 1)
-			{
-				m_fDeadTime += fTimeDelta;
-				if (m_fDeadTime > 3.f)
-				{
-					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
-					m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);
-					m_pTransformCom->Bind_OnGraphicDev();
-					m_bRespawn = true;
-					return;
-				}
-			}
-			if (m_tFrame.iFrameStart != 1)
-				Move_Frame(fTimeDelta);
-			m_tInfo.bDead = false;
-			return;
-		}
+		
 		if (m_tInfo.iMp == 1)
 		{
 			if (!m_bSkill && !m_bDead && !m_bRun)
@@ -155,6 +129,8 @@ void CWraith::Tick(_float fTimeDelta)
 	}
 
 	m_tInfo.bDead = false;
+
+
 }
 
 void CWraith::Late_Tick(_float fTimeDelta)
@@ -722,15 +698,9 @@ void CWraith::Check_Front()
 		m_bDead = true;
 		Motion_Change();
 	}
-	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && !m_bRun)
 	{
 		m_bRun = true;
-		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-		Safe_AddRef(pGameInstance);
-		CGameObject::INFO tInfo;
-		tInfo.pTarget = this;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-		Safe_Release(pGameInstance);
 	}
 }
 void CWraith::Use_Skill(_float fTimeDelta)

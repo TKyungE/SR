@@ -8,7 +8,7 @@ BEGIN(Engine)
 class ENGINE_DLL CRenderer final : public CComponent
 {
 public:
-	enum RENDERGROUP {RENDER_PRIORITY, RENDER_NONALPHABLEND, RENDER_ALPHABLEND, RENDER_UI,RENDER_MOUSE, RENDER_END };
+	enum RENDERGROUP {RENDER_PRIORITY, RENDER_NONALPHABLEND, RENDER_ALPHABLEND, RENDER_UI,RENDER_BUTTON,RENDER_MOUSE, RENDER_END };
 
 private:
 	CRenderer(LPDIRECT3DDEVICE9 pGraphic_Device);	
@@ -32,6 +32,7 @@ private:
 	HRESULT Render_NonAlphaBlend();
 	HRESULT Render_AlphaBlend();
 	HRESULT Render_UI();
+	HRESULT Render_Button();
 	HRESULT Render_Mouse();
 public:
 	static CRenderer* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

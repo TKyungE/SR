@@ -28,13 +28,14 @@ HRESULT CSky::Initialize(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
+
 	if (m_tInfo.iLevelIndex == LEVEL_CHOBOFIELD)
 	{
 		m_tInfo.iMp = 4;
 	}
 	else if (m_tInfo.iLevelIndex == LEVEL_SKY)
 	{
-		m_tInfo.iMp = 4;
+		m_tInfo.iMp = 2;
 	}
 	else
 		m_tInfo.iMp = 2;
