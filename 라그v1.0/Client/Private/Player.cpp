@@ -122,7 +122,7 @@ void CPlayer::Tick(_float fTimeDelta)
 		}
 	}
 
-	if (!g_bFirst)
+	if (!g_bFirst && m_tInfo.iLevelIndex != LEVEL_SKY)
 	{
 		CGameInstance* pInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pInstance);
