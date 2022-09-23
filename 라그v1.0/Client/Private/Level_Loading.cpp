@@ -47,9 +47,11 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevel)
 	{
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyLoading"), LEVEL_LOADING, TEXT("Layer_UI"))))
 			return E_FAIL;
+
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyNPC"), LEVEL_LOADING, TEXT("Layer_UI"))))
 			return E_FAIL;
 	}
+
 	Safe_Release(pGameInstance);
 	return S_OK;
 }

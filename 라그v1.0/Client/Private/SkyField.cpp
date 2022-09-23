@@ -13,6 +13,7 @@
 #include "Layer.h"
 #include "Portal.h"
 #include "Transparent_Wall.h"
+#include "SkyDragon.h"
 
 CSkyField::CSkyField(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -36,7 +37,7 @@ HRESULT CSkyField::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_SkyBoss"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
@@ -272,19 +273,19 @@ void CSkyField::Open_Level(void)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (nullptr != pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Portal")))
+	if (nullptr != pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss")))
 	{
-		for (auto& iter : pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Portal"))->Get_Objects())
+		if (pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss"))->Get_Objects().empty())
 		{
-			if (dynamic_cast<CPortal*>(iter)->Get_Level())
-			{
-				pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
-				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
-				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
-					return;
-			}
+			if (!g_bFirst)
+				g_bFirst = true;
+			
+			pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
+			if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN2))))
+				return;
 		}
 	}
+
 	Safe_Release(pGameInstance);
 }
 

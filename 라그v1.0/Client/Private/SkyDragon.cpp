@@ -83,14 +83,6 @@ void CSkyDragon::Tick(_float fTimeDelta)
 	if (!m_bDead)
 		Check_Front();
 
-	if (m_eCurState == DEAD)
-	{
-		pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
-		if (FAILED(pInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN2))))
-			return;
-		return;
-	}
-
 	if (!m_bSkill && !m_bDead)
 		Chase(fTimeDelta);
 
@@ -113,9 +105,7 @@ void CSkyDragon::Tick(_float fTimeDelta)
 	}
 
 	Safe_Release(pInstance);
-
-
-	m_tInfo.bDead = false;
+	//m_tInfo.bDead = false;
 }
 
 void CSkyDragon::Late_Tick(_float fTimeDelta)

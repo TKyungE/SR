@@ -214,9 +214,6 @@
     <Filter Include="02.GameObject\Boss\Meiden">
       <UniqueIdentifier>{cfbe9a46-ef29-46f4-a85e-3e94a7e9d8e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Camera">
-      <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Levels\MidBoss">
       <UniqueIdentifier>{b1e7dcf6-c4ff-48e1-9f9b-13ecdaded839}</UniqueIdentifier>
     </Filter>
@@ -423,6 +420,9 @@
     </Filter>
     <Filter Include="02.GameObject\Loading\LogoUI">
       <UniqueIdentifier>{cba6f014-00bf-468f-b476-577dfee72c58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera">
+      <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
