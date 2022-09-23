@@ -58,6 +58,7 @@ private:
 	HRESULT Use_Meteor();
 	HRESULT TextureRender();
 	void CheckColl();
+	void Ready_Script(void);
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
@@ -70,6 +71,7 @@ private:
 	_bool				m_bDead = false;
 	_bool				m_bIDLE = false;
 	_bool				m_bRight = false;
+	vector<wstring> m_vNormalScript;
 public:
 	static CSkyDragon* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

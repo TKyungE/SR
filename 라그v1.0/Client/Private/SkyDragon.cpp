@@ -6,7 +6,7 @@
 #include "Layer.h"
 #include "QuestManager.h"
 #include "Level_Loading.h"
-
+#include "TextBox.h"
 
 CSkyDragon::CSkyDragon(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -49,7 +49,7 @@ HRESULT CSkyDragon::Initialize(void * pArg)
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_tInfo.iExp = 300;
-
+	m_tInfo.iMonsterType = MON_SKYDRAGON;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -83,6 +83,33 @@ void CSkyDragon::Tick(_float fTimeDelta)
 	if (!m_bDead)
 		Check_Front();
 
+	if (m_eCurState == DEAD)
+	{
+		if (m_tFrame.iFrameStart == 3)
+		{
+			g_iCut = 4;
+
+			CTextBox::TINFO tTInfo;
+			tTInfo.iScriptSize = (_int)m_vNormalScript.size();
+			tTInfo.pScript = new wstring[m_vNormalScript.size()];
+
+			for (_int i = 0; i < m_vNormalScript.size(); ++i)
+				tTInfo.pScript[i] = m_vNormalScript[i];
+
+			tTInfo.iQuestIndex = 1;
+			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+			tTInfo.iNumQuest = 4;
+
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+				return;
+		}
+		if (m_tFrame.iFrameStart != 3)
+			Move_Frame(fTimeDelta);
+		m_tInfo.bDead = false;
+		Safe_Release(pInstance);
+		return;
+	}
+
 	if (!m_bSkill && !m_bDead)
 		Chase(fTimeDelta);
 
@@ -105,7 +132,7 @@ void CSkyDragon::Tick(_float fTimeDelta)
 	}
 
 	Safe_Release(pInstance);
-	//m_tInfo.bDead = false;
+	m_tInfo.bDead = false;
 }
 
 void CSkyDragon::Late_Tick(_float fTimeDelta)
@@ -409,7 +436,7 @@ void CSkyDragon::Motion_Change()
 			break;
 		case DEAD:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 4;
+			m_tFrame.iFrameEnd = 3;
 			m_tFrame.fFrameSpeed = 0.3f;
 			m_bDead = true;
 			break;
@@ -462,6 +489,15 @@ void CSkyDragon::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+		if (nullptr == pQuestManager)
+			return;
+
+		Safe_AddRef(pQuestManager);
+
+		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
+
+		Safe_Release(pQuestManager);
 	}
 }
 void CSkyDragon::Use_Skill(_float fTimeDelta)
@@ -596,4 +632,11 @@ void CSkyDragon::CheckColl()
 
 
 	Safe_Release(pInstance);
+}
+void CSkyDragon::Ready_Script(void)
+{
+
+	m_vNormalScript.push_back(TEXT("필요 한게 있나? 마을을 나서려면 단단히 준비하고 가라고!"));
+	m_vNormalScript.push_back(TEXT("상점을 이용하시겠습니까?"));
+
 }

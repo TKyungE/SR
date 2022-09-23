@@ -139,6 +139,13 @@ void CQuestUI::Tick(_float fTimeDelta)
 					case MON_ZOMBIE:
 						wQuest += TEXT("좀비 : ");
 						break;
+					case MON_WYVERN:
+						wQuest += TEXT("와이번 : ");
+						break;
+					case MON_SKYDRAGON:
+						wQuest += TEXT("뽜이어드래곤 : ");
+
+						break;
 					}
 
 					wQuest += to_wstring(dynamic_cast<CHuntQuest*>(Pair.second)->Get_Count()[i]);
