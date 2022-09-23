@@ -13,6 +13,7 @@
 #include "Layer.h"
 #include "Portal.h"
 #include "Transparent_Wall.h"
+#include "SkyDragon.h"
 
 CSkyField::CSkyField(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -36,7 +37,7 @@ HRESULT CSkyField::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_SkyBoss"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
@@ -44,9 +45,8 @@ HRESULT CSkyField::Initialize()
 
 
 	fSound = fSOUND;
-	/*CSoundMgr::Get_Instance()->BGM_Pause();
-	CSoundMgr::Get_Instance()->PlayBGM(L"Stage1_Sound.wav", fSOUND);*/
-	CSoundMgr::Get_Instance()->PlayBGM(L"Boss_Sound1.wav", fSOUND);
+	CSoundMgr::Get_Instance()->BGM_Stop();
+	CSoundMgr::Get_Instance()->PlayBGM(L"SKY.wav", fSOUND);
 
 
 	return S_OK;
@@ -112,11 +112,11 @@ HRESULT CSkyField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_SKY, pLayerTag, &tInfo)))
 		return E_FAIL;
 	
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 300; ++i)
 	{
-		_float iSour = rand() % 30000 * 0.001f;
-		_float iTemp = rand() % 20000 * 0.001f;
-		_float iDest = rand() % 20000 * 0.001f;
+		_float iSour = rand() % 50000 * 0.001f;
+		_float iTemp = rand() % 40000 * 0.001f;
+		_float iDest = rand() % 50000 * 0.001f;
 
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;
@@ -167,7 +167,7 @@ HRESULT CSkyField::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 
-	tInfo.vPos = {10.f,10.f,30.f};
+	tInfo.vPos = {10.f,10.f,40.f};
 	tInfo.iLevelIndex = LEVEL_SKY;
 	tInfo.pTarget = Info.pTarget;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyDragon"), LEVEL_SKY, pLayerTag, &tInfo)))
@@ -249,9 +249,9 @@ void CSkyField::Create_Monster(_float fTimeDelta)
 	{
 		fRainTime = 0.f;
 		
-		_float iSour = rand() % 30000 * 0.001f;
-		_float iTemp = rand() % 20000 * 0.001f;
-		_float iDest = rand() % 20000 * 0.001f;
+		_float iSour = rand() % 50000 * 0.001f;
+		_float iTemp = rand() % 30000 * 0.001f;
+		_float iDest = rand() % 50000 * 0.001f;
 			
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;
@@ -273,19 +273,19 @@ void CSkyField::Open_Level(void)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (nullptr != pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Portal")))
+	if (nullptr != pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss")))
 	{
-		for (auto& iter : pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Portal"))->Get_Objects())
+		if (pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss"))->Get_Objects().empty())
 		{
-			if (dynamic_cast<CPortal*>(iter)->Get_Level())
-			{
-				pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
-				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
-				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
-					return;
-			}
+			if (!g_bFirst)
+				g_bFirst = true;
+			
+			pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
+			if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN2))))
+				return;
 		}
 	}
+
 	Safe_Release(pGameInstance);
 }
 

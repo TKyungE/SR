@@ -47,7 +47,7 @@ void CBackGroundRect::Tick(_float fTimeDelta)
 
 	//OnTerrain();
 
-	if (m_IndexPos.iIndex == 5 || m_IndexPos.iIndex == 6)
+	if (m_IndexPos.iIndex == 5 || m_IndexPos.iIndex == 6 )
 	{
 		_float4x4 WorldMatrix;
 		WorldMatrix = m_pTransformCom->Get_WorldMatrix();
@@ -85,16 +85,16 @@ void CBackGroundRect::Late_Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (m_iCheck == 12)		//파리
+	if (m_IndexPos.iIndex == 12)		//파리
 	{
 		m_fTime += fTimeDelta;
 		if (m_fTime > 1.f / 30.f)
 		{
-			++m_IndexPos.iIndex;
+			++m_iCheck;
 			m_fTime = 0.f;
-			if (m_IndexPos.iIndex >= 12)
+			if (m_iCheck >= 12)
 			{
-				m_IndexPos.iIndex = 0;
+				m_iCheck = 0;
 			}
 		}
 	}
@@ -113,19 +113,28 @@ HRESULT CBackGroundRect::Render(void)
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 	
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
+	_float4x4 WorldMatrix, ViewMatrix, ProjMatrix;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_IndexPos.iIndex)))
-		return E_FAIL;
+	WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+	m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
+
+	if (m_IndexPos.iIndex == 12)
+		m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_iCheck));
+	else
+		m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_IndexPos.iIndex));
 	
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
 	
+	m_pShaderCom->Begin(9);
+
 	m_pVIBuffer->Render();
 
-	if (FAILED(Release_RenderState()))
-		return E_FAIL;
+	m_pShaderCom->End();
 
 	if (g_bCollider)
 		m_pColliderCom->Render();
@@ -145,8 +154,6 @@ HRESULT CBackGroundRect::SetUp_Components(void)
 	{
 		if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_BackGroundFly"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
-		m_iCheck = m_IndexPos.iIndex;
-		m_IndexPos.iIndex = 0;
 		m_IndexPos.vPos.y += 0.5f;
 	}
 	else
@@ -162,8 +169,10 @@ HRESULT CBackGroundRect::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -173,7 +182,7 @@ HRESULT CBackGroundRect::SetUp_RenderState(void)
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
-
+	
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -270,6 +279,8 @@ _float4x4 CBackGroundRect::Get_World(void)
 void CBackGroundRect::Free(void)
 {
 	__super::Free();
+	Safe_Release(m_pShaderCom);
+
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);

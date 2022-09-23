@@ -171,6 +171,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\public\AirShip.h" />
     <ClInclude Include="..\public\Alligator.h" />
     <ClInclude Include="..\Public\AlphaUI.h" />
     <ClInclude Include="..\public\Angry.h" />
@@ -221,6 +222,7 @@
     <ClInclude Include="..\Public\Level_MidBoss.h" />
     <ClInclude Include="..\Public\Level_Town2.h" />
     <ClInclude Include="..\public\Loading.h" />
+    <ClInclude Include="..\public\LogoUI.h" />
     <ClInclude Include="..\public\Maiden.h" />
     <ClInclude Include="..\Public\Minorous.h" />
     <ClInclude Include="..\public\Fire.h" />
@@ -259,8 +261,13 @@
     <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\public\SkyDragon.h" />
+    <ClInclude Include="..\public\SkyDragonSkill.h" />
     <ClInclude Include="..\public\SkyField.h" />
     <ClInclude Include="..\public\SkyFireBall.h" />
+    <ClInclude Include="..\public\SkyLoading.h" />
+    <ClInclude Include="..\public\SkyMeteor.h" />
+    <ClInclude Include="..\public\SkyNPC.h" />
+    <ClInclude Include="..\public\SkyTarget.h" />
     <ClInclude Include="..\public\SkyThunder.h" />
     <ClInclude Include="..\public\SlotGacha.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
@@ -297,6 +304,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\private\AirShip.cpp" />
     <ClCompile Include="..\private\Alligator.cpp" />
     <ClCompile Include="..\Private\AlphaUI.cpp" />
     <ClCompile Include="..\private\Angry.cpp" />
@@ -346,6 +354,7 @@
     <ClCompile Include="..\Private\Level_MidBoss.cpp" />
     <ClCompile Include="..\Private\Level_Town2.cpp" />
     <ClCompile Include="..\private\Loading.cpp" />
+    <ClCompile Include="..\private\LogoUI.cpp" />
     <ClCompile Include="..\private\Maiden.cpp" />
     <ClCompile Include="..\Private\Minorous.cpp" />
     <ClCompile Include="..\private\Fire.cpp" />
@@ -384,8 +393,13 @@
     <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\private\SkyDragon.cpp" />
+    <ClCompile Include="..\private\SkyDragonSkill.cpp" />
     <ClCompile Include="..\private\SkyField.cpp" />
     <ClCompile Include="..\private\SkyFireBall.cpp" />
+    <ClCompile Include="..\private\SkyLoading.cpp" />
+    <ClCompile Include="..\private\SkyMeteor.cpp" />
+    <ClCompile Include="..\private\SkyNPC.cpp" />
+    <ClCompile Include="..\private\SkyTarget.cpp" />
     <ClCompile Include="..\private\SkyThunder.cpp" />
     <ClCompile Include="..\private\SlotGacha.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />

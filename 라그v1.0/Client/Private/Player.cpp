@@ -81,6 +81,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 			return E_FAIL;
 	}
 	
+	m_tInfo.bHit = false;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -159,8 +161,11 @@ void CPlayer::Tick(_float fTimeDelta)
 
 			Player_Move(fTimeDelta);
 			Move_Frame(fTimeDelta);		
-			Get_PickingPoint();
 		}
+		if (m_tInfo.iLevelIndex != LEVEL_SKY)
+			Get_PickingPoint();
+		
+		
 	}
 	else
 	{
@@ -245,6 +250,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 			pCom->Set_State(CTransform::STATE_RIGHT, m_pTransformCom->Get_State(CTransform::STATE_RIGHT));
 
 			Safe_Release(pInstance);
+
 		}
 		Safe_Release(pGameInstance);
 	}
@@ -257,7 +263,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	if(pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
 	{	
 		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 	}
 
 	Safe_Release(pInstance);
@@ -1240,7 +1246,7 @@ void CPlayer::Check_Stat()
 	if (m_tInfo.iMp < 0)
 		m_tInfo.iMp = 0;
 
-	if (m_StatInfo != nullptr && !m_bPoring && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Poring())
+	if (m_StatInfo != nullptr && !m_bPoring && dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Poring() && m_tInfo.iLevelIndex != LEVEL_SKY)
 	{
 		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 		if (nullptr == pGameInstance)
@@ -1272,6 +1278,7 @@ void CPlayer::Check_Hit()
 		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), m_tInfo.iLevelIndex, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);

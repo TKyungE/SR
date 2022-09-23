@@ -46,9 +46,8 @@ HRESULT CLEVEL_GamePlay::Initialize()
 		return E_FAIL;
 
 	fSound = fSOUND;
-	/*CSoundMgr::Get_Instance()->BGM_Pause();
-	CSoundMgr::Get_Instance()->PlayBGM(L"Stage1_Sound.wav", fSOUND);*/
-	CSoundMgr::Get_Instance()->PlayBGM(L"Boss_Sound1.wav", fSOUND);
+	CSoundMgr::Get_Instance()->BGM_Stop();
+	CSoundMgr::Get_Instance()->PlayBGM(L"GAMEPLAY.wav", fSOUND);
 
 	
 	return S_OK;

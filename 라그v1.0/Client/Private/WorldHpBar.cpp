@@ -50,11 +50,42 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 	vPos.y += 0.5f;
 
-	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
-
+	if (m_tInfo.iMonsterType == MON_BIGFOOT)
+	{
+		vPos.y += 0.5f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+	}
+	else if (m_tInfo.iMonsterType == MON_TOTEM)
+	{
+		vPos.y += 2.1f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+	}
+	else if (m_tInfo.iMonsterType == MON_BAPHOMET)
+	{
+		vPos.y += 0.2f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+	}
+	else if (m_tInfo.iMonsterType == MON_MINOROUS)
+	{
+		vPos.y += 0.3f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+	}
+	else if (m_tInfo.iMonsterType == MON_WRAITH)
+	{
+		vPos.y += 1.5f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+	}
+	else
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+	}
 	
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	
 
 

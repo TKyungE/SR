@@ -8,7 +8,6 @@
 #include "QuestManager.h"
 #include "HuntQuest1.h"
 #include "CollectQuest.h"
-
 //test
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())

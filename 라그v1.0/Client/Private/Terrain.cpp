@@ -49,6 +49,8 @@ HRESULT CTerrain::Initialize(void* pArg)
 		m_tInfo.iMp = 81;
 	else if (m_tInfo.iLevelIndex == LEVEL_DESERT1)
 		m_tInfo.iMp = 123;
+	else if (m_tInfo.iLevelIndex == LEVEL_MAZE)
+		m_tInfo.iMp = 46;
 	else
 		m_tInfo.iMp = 111;
 	
@@ -305,8 +307,8 @@ HRESULT CTerrain::SetUp_ShaderResource()
 	if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_tInfo.iMp))))
 		return E_FAIL;
 
-	_float	fMin = 1.f;
-	_float	fMax = 4.f;
+	_float	fMin = 3.f;
+	_float	fMax = 6.f;
 	
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))

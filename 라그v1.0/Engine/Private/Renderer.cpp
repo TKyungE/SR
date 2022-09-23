@@ -49,6 +49,8 @@ HRESULT CRenderer::Render_GameObjects()
 		return E_FAIL;
 	if (FAILED(Render_UI()))
 		return E_FAIL;
+	if (FAILED(Render_Button()))
+		return E_FAIL;
 	if (FAILED(Render_Mouse()))
 		return E_FAIL;
 
@@ -121,6 +123,20 @@ HRESULT CRenderer::Render_UI()
 	}
 
 	m_GameObjects[RENDER_UI].clear();
+	return S_OK;
+}
+HRESULT CRenderer::Render_Button()
+{
+	for (auto& pGameObject : m_GameObjects[RENDER_BUTTON])
+	{
+		if (nullptr != pGameObject)
+		{
+			pGameObject->Render();
+			Safe_Release(pGameObject);
+		}
+	}
+
+	m_GameObjects[RENDER_BUTTON].clear();
 	return S_OK;
 }
 HRESULT CRenderer::Render_Mouse()

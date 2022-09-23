@@ -41,6 +41,7 @@ HRESULT CPowerTotem::Initialize(void * pArg)
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,2.6f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.iMonsterType = MON_TOTEM;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_MIDBOSS, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 1.8f,1.8f,1.8f };
 
