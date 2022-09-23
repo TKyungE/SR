@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\BossSkillTarget.h"
 #include "GameInstance.h"
+#include "SoundMgr.h"
 
 CBossSkillTarget::CBossSkillTarget(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -58,6 +59,7 @@ void CBossSkillTarget::Tick(_float fTimeDelta)
 		tInfo.vPos = vPos;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BlueFire"), LEVEL_MIDBOSS, TEXT("Layer_MonsterSkill"), &tInfo)))
 			return;
+		CSoundMgr::Get_Instance()->PlayEffect(L"BlueFire.wav", fSOUND);
 		Safe_Release(pGameInstance);
 		Set_Dead();
 	}

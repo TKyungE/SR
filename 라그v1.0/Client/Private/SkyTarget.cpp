@@ -2,6 +2,7 @@
 #include "..\Public\SkyTarget.h"
 #include "GameInstance.h"
 #include "Layer.h"
+#include "SoundMgr.h"
 
 CSkyTarget::CSkyTarget(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -67,7 +68,7 @@ void CSkyTarget::Tick(_float fTimeDelta)
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyMeteor"), LEVEL_SKY, TEXT("Layer_MonsterSkill"), &tInfo)))
 			return;
-
+		CSoundMgr::Get_Instance()->PlayEffect(L"SkyMeteor.wav", fSOUND);
 		Safe_Release(pGameInstance);
 
 

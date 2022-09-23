@@ -64,7 +64,7 @@ HRESULT CSkyDragon::Initialize(void * pArg)
 
 	Safe_Release(pGameInstance);
 
-
+	Ready_Script();
 	return S_OK;
 }
 
@@ -85,10 +85,8 @@ void CSkyDragon::Tick(_float fTimeDelta)
 
 	if (m_eCurState == DEAD)
 	{
-		if (m_tFrame.iFrameStart == 3)
+		if (m_tFrame.iFrameStart == 3 && !m_True)
 		{
-			g_iCut = 4;
-
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vNormalScript.size();
 			tTInfo.pScript = new wstring[m_vNormalScript.size()];
@@ -96,13 +94,33 @@ void CSkyDragon::Tick(_float fTimeDelta)
 			for (_int i = 0; i < m_vNormalScript.size(); ++i)
 				tTInfo.pScript[i] = m_vNormalScript[i];
 
-			tTInfo.iQuestIndex = 1;
+			tTInfo.iQuestIndex = 2;
 			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
-			tTInfo.iNumQuest = 4;
-
+			tTInfo.iNumQuest = 8;
+			CSoundMgr::Get_Instance()->PlayEffect(L"complete.wav", fSOUND + 0.5f);
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
+			m_True = true;
 		}
+		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+		if (nullptr == pQuestManager)
+			return;
+		Safe_AddRef(pQuestManager);
+		if (8 == g_iReward && pQuestManager->Find_Active(TEXT("Quest_HuntQuestSky"))->Get_Clear())
+		{
+			if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_HuntQuestSky"))))
+				return;
+
+			m_tInfo.pTarget->Set_Exp(50);
+
+			g_iQuest = 0;
+			g_iReward = 0;
+			m_tInfo.bDead = true;;
+			Safe_Release(pQuestManager);
+			Safe_Release(pInstance);
+			return;
+		}
+		Safe_Release(pQuestManager);
 		if (m_tFrame.iFrameStart != 3)
 			Move_Frame(fTimeDelta);
 		m_tInfo.bDead = false;
@@ -413,7 +431,7 @@ HRESULT CSkyDragon::Skill_PoisonArrow(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyDragonSkill"), LEVEL_SKY, pLayerTag, &tInfo)))
 		return E_FAIL;
-
+	CSoundMgr::Get_Instance()->PlayEffect(L"SkyDragon_Attack.wav", fSOUND);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -489,6 +507,7 @@ void CSkyDragon::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+		CSoundMgr::Get_Instance()->PlayEffect(L"SkyDragon_Die.wav", fSOUND);
 		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
 		if (nullptr == pQuestManager)
 			return;
@@ -532,6 +551,7 @@ HRESULT CSkyDragon::Use_Meteor()
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyTarget"), LEVEL_SKY, TEXT("Layer_MonsterSkill"), &tInfo)))
 			return E_FAIL;
 	}
+	CSoundMgr::Get_Instance()->PlayEffect(L"SkyDragon_Skill.wav", fSOUND);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -636,7 +656,7 @@ void CSkyDragon::CheckColl()
 void CSkyDragon::Ready_Script(void)
 {
 
-	m_vNormalScript.push_back(TEXT("필요 한게 있나? 마을을 나서려면 단단히 준비하고 가라고!"));
-	m_vNormalScript.push_back(TEXT("상점을 이용하시겠습니까?"));
-
+	m_vNormalScript.push_back(TEXT("뽜이어드래곤 : 꾸웱..."));
+	m_vNormalScript.push_back(TEXT("(후... 겨우 이겼네... 이놈들 나만 버리고 가버리다니...나중에 만나기만 해봐라.)"));
+	m_vNormalScript.push_back(TEXT("긴급 퀘스트 클리어! \n \n   경험치를 획득 하셨습니다."));
 }

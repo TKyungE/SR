@@ -605,7 +605,7 @@ HRESULT CWraith::Skill_DefaultAttack(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DefaultAttack"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 		return E_FAIL;
-
+	CSoundMgr::Get_Instance()->PlayEffect(L"Wraith_Attack.wav", fSOUND + 0.2f);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -697,6 +697,7 @@ void CWraith::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+		CSoundMgr::Get_Instance()->PlayEffect(L"Wraith_Die.wav", fSOUND + 0.1f);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && !m_bRun)
 	{

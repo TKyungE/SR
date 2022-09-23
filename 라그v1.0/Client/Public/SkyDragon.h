@@ -71,6 +71,7 @@ private:
 	_bool				m_bDead = false;
 	_bool				m_bIDLE = false;
 	_bool				m_bRight = false;
+	_bool				m_True = false;
 	vector<wstring> m_vNormalScript;
 public:
 	static CSkyDragon* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);

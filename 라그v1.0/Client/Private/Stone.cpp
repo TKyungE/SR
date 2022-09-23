@@ -81,7 +81,10 @@ void CStone::Tick(_float fTimeDelta)
 
 	Safe_Release(pInstance);
 	if (m_tInfo.bDead)
+	{
 		m_tInfo.pTerrain->Set_Mp(-1);
+		CSoundMgr::Get_Instance()->PlayEffect(L"Totem_Die.wav", fSOUND);
+	}
 }
 
 void CStone::Late_Tick(_float fTimeDelta)

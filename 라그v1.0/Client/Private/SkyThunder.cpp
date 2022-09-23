@@ -305,7 +305,7 @@ void CSkyThunder::CheckColl()
 }
 void CSkyThunder::Set_vPos()
 {
-	_float3 vScale = { 0.5f,0.5f,1.f };
+	_float3 vScale = { 1.5f,1.5f,1.5f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom2->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);

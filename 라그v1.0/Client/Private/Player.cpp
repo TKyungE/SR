@@ -607,6 +607,7 @@ void CPlayer::Use_Skill(_int iIndex)
 
 			pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 			Skill_Thunder(TEXT("Layer_Skill"), m_fPickPoint);
+			CSoundMgr::Get_Instance()->PlayEffect(L"Thunder.wav", fSOUND);
 			m_bUseSkill = false;
 			m_bThunder = false;
 			m_eCurState = SKILL;
@@ -619,6 +620,7 @@ void CPlayer::Use_Skill(_int iIndex)
 
 			pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 			Skill_Tornado(TEXT("Layer_Skill"), m_fPickPoint);
+			CSoundMgr::Get_Instance()->PlayEffect(L"Tornado.wav", fSOUND);
 			m_bUseSkill = false;
 			m_bTornado = false;
 			m_eCurState = SKILL;
@@ -631,6 +633,7 @@ void CPlayer::Use_Skill(_int iIndex)
 
 			pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 			Skill_FireBall(TEXT("Layer_Skill"), m_fPickPoint);
+			CSoundMgr::Get_Instance()->PlayEffect(L"FireBall.wav", fSOUND);
 			m_bUseSkill = false;
 			m_bFireBall = false;
 			m_eCurState = SKILL;
@@ -656,6 +659,7 @@ void CPlayer::Use_Skill(_int iIndex)
 			tInfo.pTarget = this;
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyFireBall"), LEVEL_SKY, TEXT("Layer_Skill"), &tInfo)))
 				return;
+			CSoundMgr::Get_Instance()->PlayEffect(L"SkyFireBall.wav", fSOUND);
 			break;
 		case 2:
 			tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -667,6 +671,7 @@ void CPlayer::Use_Skill(_int iIndex)
 			tInfo.iMp = 0;
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderTarget"), LEVEL_SKY, TEXT("Layer_Skill"), &tInfo)))
 				return;
+			CSoundMgr::Get_Instance()->PlayEffect(L"SkyDragon_Skill.wav", fSOUND);
 			break;
 		default:
 			break;

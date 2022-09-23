@@ -567,7 +567,7 @@ HRESULT CBloodymurderer::Skill_DefaultAttack(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SwordSlice"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
-
+	CSoundMgr::Get_Instance()->PlayEffect(L"Bloody_murderer_Attack.wav", fSOUND);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -659,6 +659,7 @@ void CBloodymurderer::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+		CSoundMgr::Get_Instance()->PlayEffect(L"Bloody_murderer_Die.wav", fSOUND);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
 	{
