@@ -16,7 +16,8 @@ BEGIN(Client)
 class CWraith final : public CGameObject
 {
 public:
-	enum STATE { IDLE, DEAD, SKILL, MOVE, STATE_END };
+	enum STATE { IDLE, DEAD, SKILL, MOVE,BACK_ATTACK, STATE_END };
+
 private:
 	CWraith(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	CWraith(const CWraith& rhs);
@@ -57,6 +58,7 @@ private:
 	void Chase(_float fTimeDelta);
 	void Chase2(_float fTimeDelta);
 	void Chase3(_float fTimeDelta);
+	void Chase4(_float fTimeDelta);
 	void Motion_Change();
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
@@ -80,11 +82,14 @@ private:
 	_bool				m_bMove = false;
 	_bool				m_bDead = false;
 	_bool				m_bRun = false;
-	_bool				m_bAngry = false;
+	_bool				m_bCheck = false;
 	_bool				m_bIDLE = false;
 	_bool				m_bRespawn = false;
+	_bool				m_bCheck2 = false;
+	_bool				m_bCheck3 = false;
 	_float				m_fAlpha = 0.f;
 	_float				m_fTimeDelta = 0.f;
+
 public:
 	static CWraith* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

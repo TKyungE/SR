@@ -24,15 +24,15 @@ HRESULT CWraith::Initialize_Prototype(void)
 
 HRESULT CWraith::Initialize(void * pArg)
 {
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-
 	//m_tInfo.vPos.y += 0.f;
-	_float3 vScale = { 1.5f,1.5f,1.f };
+	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -73,71 +73,78 @@ HRESULT CWraith::Initialize(void * pArg)
 void CWraith::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	if (!m_bRespawn)
+
+	m_fSkillCool += fTimeDelta;
+
+	OnTerrain();
+
+	if (!m_bDead)
+		Check_Front();
+	if (m_eCurState == DEAD)
 	{
-		m_fSkillCool += fTimeDelta;
-		
-		OnTerrain();
-
-		if (!m_bDead)
-			Check_Front();
-		
-		if (m_tInfo.iMp == 1)
+		if (m_tFrame.iFrameStart == 1)
 		{
-			if (!m_bSkill && !m_bDead && !m_bRun)
-				Chase(fTimeDelta);
-
-			if (m_bRun)
-				Chase2(fTimeDelta);
+			m_fDeadTime += fTimeDelta;
+			if (m_fDeadTime > 1.f)
+			{
+				m_tInfo.bDead = true;
+				return;
+			}
 		}
-		else if (!m_bSkill && !m_bDead)
-			Chase3(fTimeDelta);
+		if (m_tFrame.iFrameStart != 1)
+			Move_Frame(fTimeDelta);
 
-		if (m_tInfo.iMp == 1 && !m_bIDLE)
-		{
-			MonsterMove(fTimeDelta);
-		}
-
-
-		Move_Frame(fTimeDelta);
-		if (m_eCurState == SKILL)
-			Use_Skill(fTimeDelta);
-
-		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
-
-		CGameInstance* pInstance = CGameInstance::Get_Instance();
-		if (nullptr == pInstance)
-			return;
-
-		Safe_AddRef(pInstance);
-
-		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTER, this)))
-		{
-			ERR_MSG(TEXT("Failed to Add CollisionGroup : CWraith"));
-			return;
-		}
-
-		Safe_Release(pInstance);
+		m_tInfo.bDead = false;
+		return;
 	}
-	else
+
+
+	if (m_tInfo.iMp == 1)
 	{
-		m_fRespawnTime += fTimeDelta;
-		if (m_fRespawnTime > 10.f)
-		{
-			RespawnMonster();
-			m_fRespawnTime = 0.f;
-			m_bRespawn = false;
-		}
+		if (!m_bSkill && !m_bDead && !m_bRun)
+			Chase(fTimeDelta);
+
+		if (m_bRun)
+			Chase2(fTimeDelta);
 	}
+	else if (!m_bSkill && !m_bDead)
+		Chase3(fTimeDelta);
+
+	if (m_tInfo.iMp == 1 && !m_bIDLE)
+	{
+		MonsterMove(fTimeDelta);
+	}
+
+
+	Move_Frame(fTimeDelta);
+	if (m_eCurState == SKILL)
+		Use_Skill(fTimeDelta);
+
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTER, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CWraith"));
+		return;
+	}
+
+	Safe_Release(pInstance);
+
+
 
 	m_tInfo.bDead = false;
-
-
 }
 
 void CWraith::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+
 	if (!m_bRespawn)
 	{
 		if (!m_bDead)
@@ -192,17 +199,16 @@ HRESULT CWraith::Render(void)
 			return E_FAIL;
 
 
-			if (m_tInfo.iLevelIndex == LEVEL_MAZE)
+		if (m_tInfo.iLevelIndex == LEVEL_MAZE)
 		{
-				_float	fMin = 1.f;
-				_float	fMax = 4.f;
+			_float	fMin = 3.f;
+			_float	fMax = 6.f;
 
 			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
 				return E_FAIL;
 
 			if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
 				return E_FAIL;
-
 		}
 		else
 		{
@@ -227,7 +233,7 @@ HRESULT CWraith::Render(void)
 		m_pVIBufferCom->Render();
 
 		m_pShaderCom->End();
-		
+
 
 		//On_SamplerState();
 		if (g_bCollider)
@@ -305,6 +311,7 @@ void CWraith::Check_Hit()
 		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), m_tInfo.iLevelIndex, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
@@ -323,7 +330,7 @@ void CWraith::Chase(_float fTimeDelta)
 		m_bIDLE = true;
 	if (1.f >= Distance)
 	{
-		if (m_fSkillCool >	0.4f)
+		if (m_fSkillCool > 0.4f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -363,40 +370,51 @@ void CWraith::Chase(_float fTimeDelta)
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
+
 }
 void CWraith::Chase2(_float fTimeDelta)
 {
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (m_eCurState == BACK_ATTACK && (m_tFrame.iFrameStart == m_tFrame.iFrameEnd))
+	{
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 
-	Safe_AddRef(pGameInstance);
+		Safe_AddRef(pGameInstance);
 
-	CTransform* pTransform = (CTransform*)pGameInstance->Get_Component(m_tInfo.iLevelIndex,TEXT("Layer_Player"),TEXT("Com_Transform"));
+		CTransform* pTransform = (CTransform*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_Player"), TEXT("Com_Transform"));
 
-	if (nullptr == pTransform)
-		return;
+		if (nullptr == pTransform)
+			return;
 
-	_float3 vLook = pTransform->Get_State(CTransform::STATE_LOOK);
+		_float3 vLook = pTransform->Get_State(CTransform::STATE_LOOK);
 
-	D3DXVec3Normalize(&vLook, &vLook);
+		D3DXVec3Normalize(&vLook, &vLook);
 
-	vLook *= -2.f;
+		vLook *= -2.f;
 
-	_float3 vPos = pTransform->Get_State(CTransform::STATE_POSITION);
+		_float3 vPos = pTransform->Get_State(CTransform::STATE_POSITION);
 
-	vPos += vLook;
+		vPos += vLook;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
-	m_bRun = false;
+		m_bRun = false;
+		m_bCheck = true;
 
-	Safe_Release(pGameInstance);
+
+		m_eCurState = IDLE;
+
+		Safe_Release(pGameInstance);
+	}
+
+
+
 }
 void CWraith::Chase3(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 	if (1.f >= Distance)
 	{
-		if (m_fSkillCool >	0.3f)
+		if (m_fSkillCool > 0.3f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -431,9 +449,15 @@ void CWraith::Chase3(_float fTimeDelta)
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-		//	vPosition.y = vTargetPos.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	}
+}
+void CWraith::Chase4(_float fTimeDelta)
+{
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && m_bRun && !m_bCheck)
+	{
+		m_bRun = true;
+		m_eCurState = BACK_ATTACK;
 	}
 }
 void CWraith::OnTerrain()
@@ -452,7 +476,7 @@ void CWraith::OnTerrain()
 
 	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 1.f);
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
@@ -579,6 +603,11 @@ void CWraith::Motion_Change()
 			m_tFrame.iFrameEnd = 3;
 			m_tFrame.fFrameSpeed = 0.25f;
 			break;
+		case BACK_ATTACK:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 1;
+			m_tFrame.fFrameSpeed = 0.4f;
+			break;
 		}
 
 		m_ePreState = m_eCurState;
@@ -613,6 +642,13 @@ void CWraith::Move_Frame(_float fTimeDelta)
 		else
 			m_tFrame.iFrameStart = m_pTextureComAttack_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		break;
+	case BACK_ATTACK:
+		if (m_bFront)
+			m_tFrame.iFrameStart = m_pTextureComDead_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+		else
+			m_tFrame.iFrameStart = m_pTextureComDead_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+		break;
+
 	default:
 		break;
 	}
@@ -631,6 +667,11 @@ void CWraith::Check_Front()
 	if (vTargetPos.x <= vPos.x)
 		m_bRight = false;
 
+	if (m_tInfo.iHp <= 0)
+	{
+		m_tInfo.bDead = true;
+	}
+
 	if (m_tInfo.bDead && m_eCurState != DEAD)
 	{
 		DropItem();
@@ -640,10 +681,28 @@ void CWraith::Check_Front()
 		m_bDead = true;
 		Motion_Change();
 	}
-	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && !m_bRun)
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.75f) && !m_bRun && !m_bCheck)
 	{
 		m_bRun = true;
+		m_eCurState = BACK_ATTACK;
 	}
+	else if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && m_bCheck && !m_bCheck2)
+	{
+		_uint iRandom = rand() % 2;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos2[iRandom]);
+
+		m_bCheck2 = true;
+	}
+	else if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.2f) && m_bCheck2 && !m_bCheck3)
+	{
+		_uint iRandom = rand() % 2;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos2[iRandom]);
+
+		m_bCheck3 = true;
+	}
+
 }
 void CWraith::Use_Skill(_float fTimeDelta)
 {
@@ -723,6 +782,22 @@ HRESULT CWraith::TextureRender()
 			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComAttack_Back->Get_Texture(m_tFrame.iFrameStart));
 
 			/*	if (FAILED(m_pTextureComAttack_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
+		}
+		break;
+	case BACK_ATTACK:
+		if (m_bFront)
+		{
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComDead_Front->Get_Texture(m_tFrame.iFrameStart));
+
+			/*	if (FAILED(m_pTextureComDead_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;*/
+		}
+		else
+		{
+			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComDead_Back->Get_Texture(m_tFrame.iFrameStart));
+
+			/*if (FAILED(m_pTextureComDead_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
 			return E_FAIL;*/
 		}
 		break;
@@ -817,7 +892,7 @@ HRESULT CWraith::RespawnMonster()
 	m_bRun = false;
 	m_bIDLE = false;
 	m_bRespawn = false;
-	m_bAngry = false;
+	m_bCheck = false;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -910,14 +985,14 @@ void CWraith::OnBillboard()
 
 	if (m_bRight && m_bFront || m_bRight && !m_bFront)
 	{
-		m_pTransformCom->Set_Scaled(_float3(-1.5f, 1.5f, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(-1.f, 1.f, 1.f));
 		vRight.x = -1;
 	}
 	else if (!m_bRight && !m_bFront || !m_bRight && m_bFront)
-		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
+	//	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 void CWraith::DropItem()
