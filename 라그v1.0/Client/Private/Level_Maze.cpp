@@ -14,6 +14,7 @@
 #include "Transparent_Wall.h"
 #include "House3.h"
 #include "House6.h"
+#include "Wraith.h"
 
 
 //bool g_bCollider = false;
@@ -195,7 +196,7 @@ HRESULT CLevel_Maze::Ready_Layer_Player(const _tchar * pLayerTag)
 	{
 		CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 		memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
-		
+
 		if (Info.iLevelIndex == LEVEL_DESERT1)
 		{
 			Info.vPos = m_vPlayerPos;
@@ -228,27 +229,48 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
+
 	Info.iLevelIndex = LEVEL_MAZE;
 
-	auto iter = m_vMonsterPos1.begin();
-
-	_uint iCount = 0;
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
+	_uint i = 0;
+	for (auto& iter : m_vMonsterPos1)
 	{
-		if (iCount >= 1)
+		if (_float3(0.f, 0.f, 0.f) == Info.vPos2[i] && Info.vPos2[i] != iter)
 		{
-			iCount = 0;
-			break;
+			if (i > 0)
+			{
+				if (Info.vPos2[i - 1] != iter)
+				{
+					Info.vPos2[i] = iter;
+					++i;
+				}
+			}
+			else
+			{
+				Info.vPos2[i] = iter;
+				++i;
+			}
 		}
+	}
 
-		Info.vPos = (*iter);
+	_float3 vSavePos = _float3(0.f, 0.f, 0.f);
 
+	for (auto& iter : m_vMonsterPos1)
+	{
+		if (vSavePos == iter)
+			continue;
+		
+		vSavePos = iter;
+		Info.vPos = iter;
+		
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
 			return E_FAIL;
-
-		++iCount;
 	}
+
+
+	
+
+
 
 	/*for (; iter != m_vMonsterPos1.end(); ++iter)
 	{
@@ -625,7 +647,7 @@ void CLevel_Maze::LoadData()
 	_float3 vPos1, vPos2;
 	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize, iWallSize;
 	_tchar str1[MAX_PATH];
-	
+
 
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];

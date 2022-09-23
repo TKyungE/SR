@@ -76,7 +76,7 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 	}
 	else if (m_tInfo.iMonsterType == MON_WRAITH)
 	{
-		vPos.y += 1.5f;
+		vPos.y += 0.3f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
 	}

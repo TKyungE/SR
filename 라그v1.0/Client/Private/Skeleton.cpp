@@ -216,8 +216,8 @@ HRESULT CSkeleton::Render(void)
 
 		if (m_tInfo.iLevelIndex == LEVEL_MAZE)
 		{
-			_float	fMin = 1.f;
-			_float	fMax = 4.f;
+			_float	fMin = 3.f;
+			_float	fMax = 6.f;
 
 
 			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
