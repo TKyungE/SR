@@ -65,6 +65,7 @@ HRESULT CWraith::Initialize(void * pArg)
 
 	Safe_Release(pGameInstance);
 
+	m_fAlpha = 0.5f;
 
 	return S_OK;
 }
@@ -77,6 +78,7 @@ void CWraith::Tick(_float fTimeDelta)
 		m_fSkillCool += fTimeDelta;
 		
 		OnTerrain();
+
 		if (!m_bDead)
 			Check_Front();
 		
@@ -180,14 +182,13 @@ HRESULT CWraith::Render(void)
 
 		Safe_Release(pInstance);
 
-		_float fAlpha = 0.5f;
 
 		m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4));
 		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
 		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
 		if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 			return E_FAIL;
-		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
 			return E_FAIL;
 
 
@@ -330,123 +331,64 @@ void CWraith::Chase(_float fTimeDelta)
 		}
 		if (m_eCurState != SKILL)
 			m_eCurState = IDLE;
+
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-		//	vPosition.y = vTargetPos.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 	else if (1.f < Distance && 5.f > Distance)
 	{
 		if (!m_bSkill)
 			m_eCurState = MOVE;
+
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 
 		vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-		//	vPosition.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 	else
 	{
 		if (!m_bSkill)
 			m_eCurState = IDLE;
+
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-		//	vPosition.y = vTargetPos.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 }
 void CWraith::Chase2(_float fTimeDelta)
 {
-	_float MinDist = 100000.f;
-	_float3 MinTarget;
-	_float HelpDistance = 0.f;
-	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Monster")) != nullptr)
-	{
-		for (auto& iter : pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Monster"))->Get_Objects())
-		{
-			_float3 Target = *(_float3*)&iter->Get_World().m[3][0];
-			if (iter->Get_Info().iHp <= 0)
-				continue;
-			HelpDistance = D3DXVec3Length(&(Target - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-			if (HelpDistance <= 0.f)
-				continue;
-			if (HelpDistance <= 2.f)
-			{
-				iter->Set_Mp(1);
-				m_tInfo.iMp = 2;
-			}
-			if (MinDist > HelpDistance)
-			{
-				MinDist = HelpDistance;
-				MinTarget = *(_float3*)&iter->Get_World().m[3][0];
-			}
-		}
+	CTransform* pTransform = (CTransform*)pGameInstance->Get_Component(m_tInfo.iLevelIndex,TEXT("Layer_Player"),TEXT("Com_Transform"));
 
-		if (2.f <= MinDist)
-		{
-			if (!m_bSkill)
-				m_eCurState = MOVE;
-			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+	if (nullptr == pTransform)
+		return;
 
+	_float3 vLook = pTransform->Get_State(CTransform::STATE_LOOK);
 
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	D3DXVec3Normalize(&vLook, &vLook);
 
-			vPosition += *D3DXVec3Normalize(&MinTarget, &(MinTarget - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-			//	vPosition.y += 2.f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-		else
-		{
-			if (!m_bSkill)
-				m_eCurState = IDLE;
-			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-			//	vPosition.y = vTargetPos.y += 2.f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-	}
-	else
-	{
-		if (10.f > Distance)
-		{
-			if (!m_bSkill)
-				m_eCurState = MOVE;
-			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+	vLook *= -2.f;
 
+	_float3 vPos = pTransform->Get_State(CTransform::STATE_POSITION);
 
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-			vPosition -= *D3DXVec3Normalize(&MinTarget, &(MinTarget - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-			//	vPosition.y += 2.f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-		else
-		{
-			if (!m_bSkill)
-				m_eCurState = IDLE;
-			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-			//	vPosition.y = vTargetPos.y += 2.f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-	}
+	vPos += vLook;
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_bRun = false;
+
 	Safe_Release(pGameInstance);
 }
 void CWraith::Chase3(_float fTimeDelta)

@@ -83,6 +83,8 @@ private:
 	_bool				m_bAngry = false;
 	_bool				m_bIDLE = false;
 	_bool				m_bRespawn = false;
+	_float				m_fAlpha = 0.f;
+	_float				m_fTimeDelta = 0.f;
 public:
 	static CWraith* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
