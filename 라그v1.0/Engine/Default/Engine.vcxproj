@@ -188,6 +188,7 @@
     <ClInclude Include="..\Public\VIBuffer_Cube.h" />
     <ClInclude Include="..\public\VIBuffer_Rect.h" />
     <ClInclude Include="..\Public\VIBuffer_Rect2.h" />
+    <ClInclude Include="..\Public\VIBuffer_Rect3.h" />
     <ClInclude Include="..\public\VIBuffer_RectLeft.h" />
     <ClInclude Include="..\Public\VIBuffer_Terrain.h" />
     <ClInclude Include="..\public\VIBuffer_WingRect.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="..\Private\VIBuffer_Cube.cpp" />
     <ClCompile Include="..\private\VIBuffer_Rect.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Rect2.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_Rect3.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectLeft.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Terrain.cpp" />
     <ClCompile Include="..\private\VIBuffer_WingRect.cpp" />

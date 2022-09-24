@@ -51,8 +51,6 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vTexUV = In.vTexUV;
 	Out.vWorldPos = mul(float4(In.vPosition, 1.f), g_WorldMatrix).xyz;
 
-
-
 	return Out;
 }
 

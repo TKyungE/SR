@@ -109,6 +109,7 @@
 #include "SkyNPC.h"
 #include "SkyLoading.h"
 #include "LogoUI.h"
+#include "Door.h"
 
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -954,6 +955,11 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/ShopNPC/%d.png"), 2))))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Door"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Door/%d.png"), 1))))
+		return E_FAIL;
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -1317,6 +1323,11 @@ HRESULT CLoader::Loading_Prototype()
 
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlphaUI"),
 		CAlphaUI::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	// Door
+
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Door"),
+		CDoor::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

@@ -21,14 +21,14 @@ public:
 	HRESULT Render(void);
 	_float3 Find_MinPoint(void);
 	_float3 Find_MaxPoint(void);
-
+	void Turn(_float3 vAxis, _float fTimeDelta);
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);
 	HRESULT Release_RenderState(void);
 	HRESULT Add_Components(const _tchar* pComponentTag, _uint iLevelIndex, const _tchar* pPrototypeTag, class CComponent** ppOut, void* pArg = nullptr);
 	CComponent* Find_Component(const _tchar* pComponentTag);
-
+	
 private:
 	CVIBuffer_Cube* m_pVIBufferCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;

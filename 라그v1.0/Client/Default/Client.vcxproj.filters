@@ -424,6 +424,9 @@
     <Filter Include="02.GameObject\Quest\CollectQuest">
       <UniqueIdentifier>{19d3bec9-7d13-4750-baed-9f937d3938c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Door">
+      <UniqueIdentifier>{b5378c24-777b-432d-9c12-1cffe089ab6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -822,6 +825,9 @@
     <ClInclude Include="..\public\LogoUI.h">
       <Filter>02.GameObject\Loading\LogoUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Door.h">
+      <Filter>02.GameObject\BackGroundObj\Door</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1207,6 +1213,9 @@
     </ClCompile>
     <ClCompile Include="..\private\LogoUI.cpp">
       <Filter>02.GameObject\Loading\LogoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Door.cpp">
+      <Filter>02.GameObject\BackGroundObj\Door</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

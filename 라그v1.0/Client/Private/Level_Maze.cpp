@@ -15,6 +15,7 @@
 #include "House3.h"
 #include "House6.h"
 #include "Wraith.h"
+#include "Door.h"
 
 
 //bool g_bCollider = false;
@@ -181,6 +182,15 @@ HRESULT CLevel_Maze::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Transparent_Wall"), LEVEL_MAZE, pLayerTag, &Wall)))
 			return E_FAIL;
 	}
+
+	CDoor::INDEXPOS Index;
+	ZeroMemory(&Index, sizeof(CDoor::INDEXPOS));
+	Index.vPos = _float3(34.f, 0.f, 10.f);
+	Index.iLevelIndex = LEVEL_MAZE;			
+	Index.iIndex = 0;					//Index 가 0 이면 열쇠문 1이면 막는 문.
+					
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Door"), LEVEL_MAZE, pLayerTag, &Index)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
@@ -492,7 +502,10 @@ HRESULT CLevel_Maze::Ready_Layer_UI(const _tchar * pLayerTag)
 	tInfo.bDead = false;
 	tInfo.pTarget = Info.pTarget;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_MAZE, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SpaceUI"), LEVEL_MAZE, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -636,7 +649,7 @@ void CLevel_Maze::Open_Level(void)
 
 void CLevel_Maze::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/MazePos2.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/MazePos3.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;

@@ -198,6 +198,7 @@
     <ClInclude Include="..\public\DefaultAttack.h" />
     <ClInclude Include="..\public\Default_NPC.h" />
     <ClInclude Include="..\public\DmgFont.h" />
+    <ClInclude Include="..\Public\Door.h" />
     <ClInclude Include="..\public\Drain.h" />
     <ClInclude Include="..\public\ElderWilow.h" />
     <ClInclude Include="..\public\Engineer.h" />
@@ -330,6 +331,7 @@
     <ClCompile Include="..\private\DefaultAttack.cpp" />
     <ClCompile Include="..\private\Default_NPC.cpp" />
     <ClCompile Include="..\private\DmgFont.cpp" />
+    <ClCompile Include="..\Private\Door.cpp" />
     <ClCompile Include="..\private\Drain.cpp" />
     <ClCompile Include="..\private\ElderWilow.cpp" />
     <ClCompile Include="..\private\Engineer.cpp" />
