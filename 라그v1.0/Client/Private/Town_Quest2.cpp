@@ -157,7 +157,7 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 			for (_int i = 0; i < m_vClearScript.size(); ++i)
 				tTInfo.pScript[i] = m_vClearScript[i];
 
-			tTInfo.iQuestIndex = 1;
+			tTInfo.iQuestIndex = 2;
 			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
 			tTInfo.iNumQuest = 7;
 
@@ -192,17 +192,13 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 	if (7 == g_iQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_TownQuest2")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_TownQuest2")))
 	{
 		CCollectQuest::QINFO_DERIVED tQInfo;
-		tQInfo.iCount = 3;
+		tQInfo.iCount = 1;
 
 		tQInfo.pCollectGoal = new _uint[tQInfo.iCount];
-		tQInfo.pCollectGoal[0] = 2;
-		tQInfo.pCollectGoal[1] = 2;
-		tQInfo.pCollectGoal[2] = 1;
+		tQInfo.pCollectGoal[0] = 1;
 
 		tQInfo.pItemType = new CStatInfo::EITEM[tQInfo.iCount];
-		tQInfo.pItemType[0] = CStatInfo::MON10;
-		tQInfo.pItemType[1] = CStatInfo::MON12;
-		tQInfo.pItemType[2] = CStatInfo::MON11;
+		tQInfo.pItemType[0] = CStatInfo::MON11;
 
 		tQInfo.tQInfo.eType = CClientQuest::QUEST_COLLECT;
 
@@ -221,30 +217,19 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_TownQuest2"))))
 			return;
 
-		m_tInfo.pTarget->Set_Money(1000);
+		m_tInfo.pTarget->Set_Money(2000);
 
 		CStatInfo* pStat = (CStatInfo*)pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 
 		for (_int i = 0; i < 24; ++i)
 		{
-			if (pStat->Get_Item(i).eItemNum == CStatInfo::MON2)
-			{
-				pStat->Set_UseItemCount(-2, i);
-				if (pStat->Get_Item(i).iCount <= 0)
-					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
-			}
-			else if (pStat->Get_Item(i).eItemNum == CStatInfo::MON1)
-			{
-				pStat->Set_UseItemCount(-2, i);
-				if (pStat->Get_Item(i).iCount <= 0)
-					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
-			}
-			else if (pStat->Get_Item(i).eItemNum == CStatInfo::MON3)
+			if (pStat->Get_Item(i).eItemNum == CStatInfo::MON11)
 			{
 				pStat->Set_UseItemCount(-1, i);
 				if (pStat->Get_Item(i).iCount <= 0)
 					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
 			}
+			
 		}
 
 		g_iQuest = 0;
@@ -493,17 +478,18 @@ void CTown_Quest2::OnBillboard()
 
 void CTown_Quest2::Ready_Script(void)
 {
-	m_vQuestScript.push_back(TEXT(""));
-	m_vQuestScript.push_back(TEXT(""));
-	m_vQuestScript.push_back(TEXT(""));
-	m_vQuestScript.push_back(TEXT(""));
+	m_vQuestScript.push_back(TEXT("안녕하세요. 모험가님. 저는 이 세계를 떠도는 음유시인입니다."));
+	m_vQuestScript.push_back(TEXT("제가 모험가님이 흥미로워 할만한 이야기를 아는데 들려드릴까요?"));
+	m_vQuestScript.push_back(TEXT("사막을 건너면 절대 통과할 수 없는 미로가 있습니다. 게다가 미로에는 레이스까지 나와 매우 위험한 곳이죠."));
+	m_vQuestScript.push_back(TEXT("어떻습니까? 모험가님은 미로에 있는 레이스를 물리치고 미로를 통과하실 수 있으십니까?"));
 
-	m_vNotClearScript.push_back(TEXT(""));
+	m_vNotClearScript.push_back(TEXT("제 이야기가 허풍이 아니라는 것을 알게 되실겁니다. 후훗."));
 
-	m_vNormalScript.push_back(TEXT(""));
+	m_vNormalScript.push_back(TEXT("안녕하세요? 저는 떠돌이 음유시인이랍니다."));
 
-	m_vClearScript.push_back(TEXT(""));
-	m_vClearScript.push_back(TEXT(" \n\n보상 : 골드 1000"));
+	m_vClearScript.push_back(TEXT("세상에.. 정말 미로를 통과하고 오셨군요! 게다가 이 이빨은.."));
+	m_vClearScript.push_back(TEXT("레이스까지 물리치고 오셨다니.. 모험가님은 정말 대단하시군요!"));
+	m_vClearScript.push_back(TEXT("이건 미로를 통과하고 오신 모험가님께 드리는 제 선물입니다. 받아주세요. \n\n보상 : 골드 2000"));
 }
 
 CTown_Quest2 * CTown_Quest2::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)

@@ -36,10 +36,10 @@ HRESULT CTown_Quest3::Initialize(void * pArg)
 
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = 400.f;
-	m_fSizeY = 400.f;
+	m_fSizeX = 600.f;
+	m_fSizeY = 600.f;
 	m_fX = 250.f;
-	m_fY = 370.f;
+	m_fY = 250.f;
 
 	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
@@ -99,78 +99,104 @@ void CTown_Quest3::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pQuestManager);
 
-	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")))
+	if (nullptr != pQuestManager->Find_Finish(TEXT("Quest_TownQuest1")) && nullptr != pQuestManager->Find_Finish(TEXT("Quest_TownQuest2")))
 	{
-		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
+		m_bQuestRender = true;
+
+		if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuestFinal")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuestFinal")))
 		{
-			g_iCut = 9;
+			if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
+			{
+				g_iCut = 10;
 
-			CTextBox::TINFO tTInfo;
-			tTInfo.iScriptSize = (_int)m_vQuestScript.size();
+				CTextBox::TINFO tTInfo;
+				tTInfo.iScriptSize = (_int)m_vQuestScript.size();
 
-			tTInfo.pScript = new wstring[m_vQuestScript.size()];
-			for (_int i = 0; i < m_vQuestScript.size(); ++i)
-				tTInfo.pScript[i] = m_vQuestScript[i];
+				tTInfo.pScript = new wstring[m_vQuestScript.size()];
+				for (_int i = 0; i < m_vQuestScript.size(); ++i)
+					tTInfo.pScript[i] = m_vQuestScript[i];
 
-			tTInfo.iQuestIndex = 3;
-			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
-			tTInfo.iNumQuest = 1;
+				tTInfo.iQuestIndex = 3;
+				tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+				tTInfo.iNumQuest = 10;
 
-			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
-				return;
+				if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+					return;
+			}
+			else
+				m_iQuestTex = 0;
+		}
+		else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuestFinal")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuestFinal")) && !pQuestManager->Find_Active(TEXT("Quest_HuntQuestFinal"))->Get_Clear())
+		{
+			if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
+			{
+				g_iCut = 10;
+
+				CTextBox::TINFO tTInfo;
+				tTInfo.iScriptSize = (_int)m_vNotClearScript.size();
+				tTInfo.pScript = new wstring[m_vNotClearScript.size()];
+
+				for (_int i = 0; i < m_vNotClearScript.size(); ++i)
+					tTInfo.pScript[i] = m_vNotClearScript[i];
+
+				tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+
+				if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+					return;
+			}
+			else
+				m_iQuestTex = 2;
+		}
+		else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuestFinal")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuestFinal")) && pQuestManager->Find_Active(TEXT("Quest_HuntQuestFinal"))->Get_Clear())
+		{
+			if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
+			{
+				g_iCut = 10;
+
+				CTextBox::TINFO tTInfo;
+				tTInfo.iScriptSize = (_int)m_vClearScript.size();
+
+				tTInfo.pScript = new wstring[m_vClearScript.size()];
+				for (_int i = 0; i < m_vClearScript.size(); ++i)
+					tTInfo.pScript[i] = m_vClearScript[i];
+
+				tTInfo.iQuestIndex = 1;
+				tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+				tTInfo.iNumQuest = 10;
+
+				if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+					return;
+			}
+			else
+				m_iQuestTex = 1;
 		}
 		else
-			m_iQuestTex = 0;
-	}
-	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")) && !pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
-	{
-		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
-			g_iCut = 9;
+			if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
+			{
+				g_iCut = 10;
 
-			CTextBox::TINFO tTInfo;
-			tTInfo.iScriptSize = (_int)m_vNotClearScript.size();
-			tTInfo.pScript = new wstring[m_vNotClearScript.size()];
+				CTextBox::TINFO tTInfo;
+				tTInfo.iScriptSize = (_int)m_vNormalScript.size();
 
-			for (_int i = 0; i < m_vNotClearScript.size(); ++i)
-				tTInfo.pScript[i] = m_vNotClearScript[i];
+				tTInfo.pScript = new wstring[m_vNormalScript.size()];
+				for (_int i = 0; i < m_vNormalScript.size(); ++i)
+					tTInfo.pScript[i] = m_vNormalScript[i];
 
-			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+				tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
 
-			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
-				return;
+				if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+					return;
+			}
+			else
+				m_bQuestRender = false;
 		}
-		else
-			m_iQuestTex = 2;
-	}
-	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")) && pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
-	{
-		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
-		{
-			g_iCut = 9;
-
-			CTextBox::TINFO tTInfo;
-			tTInfo.iScriptSize = (_int)m_vClearScript.size();
-
-			tTInfo.pScript = new wstring[m_vClearScript.size()];
-			for (_int i = 0; i < m_vClearScript.size(); ++i)
-				tTInfo.pScript[i] = m_vClearScript[i];
-
-			tTInfo.iQuestIndex = 1;
-			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
-			tTInfo.iNumQuest = 1;
-
-			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
-				return;
-		}
-		else
-			m_iQuestTex = 1;
 	}
 	else
 	{
 		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
-			g_iCut = 9;
+			g_iCut = 10;
 
 			CTextBox::TINFO tTInfo;
 			tTInfo.iScriptSize = (_int)m_vNormalScript.size();
@@ -188,25 +214,21 @@ void CTown_Quest3::Tick(_float fTimeDelta)
 			m_bQuestRender = false;
 	}
 
-	if (9 == g_iQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuest1")))
+	if (10 == g_iQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuestFinal")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuestFinal")))
 	{
 		CHuntQuest::QINFO_DERIVED tQInfo;
-		tQInfo.iCount = 3;
+		tQInfo.iCount = 1;
 		tQInfo.pHuntGoal = new _uint[tQInfo.iCount];
-		tQInfo.pHuntGoal[0] = 3;
-		tQInfo.pHuntGoal[1] = 3;
-		tQInfo.pHuntGoal[2] = 2;
-
+		tQInfo.pHuntGoal[0] = 1;
+		
 		tQInfo.pMonType = new MONSTERTYPE[tQInfo.iCount];
 		tQInfo.pMonType[0] = MON_DANDELION;
-		tQInfo.pMonType[1] = MON_BYORGUE;
-		tQInfo.pMonType[2] = MON_BLOODYMURDERER;
-
+		
 		tQInfo.tQInfo.eType = CClientQuest::QUEST_HUNT;
 
-		if (FAILED(pQuestManager->Add_Quest(TEXT("Prototype_Quest_HuntQuest1"), TEXT("Quest_HuntQuest1"), &tQInfo)))
+		if (FAILED(pQuestManager->Add_Quest(TEXT("Prototype_Quest_HuntQuest1"), TEXT("Quest_HuntQuestFinal"), &tQInfo)))
 		{
-			ERR_MSG(TEXT("Failed to Add Quest : HuntQuest1"));
+			ERR_MSG(TEXT("Failed to Add Quest : HuntQuestFinal"));
 			return;
 		}
 
@@ -214,12 +236,12 @@ void CTown_Quest3::Tick(_float fTimeDelta)
 		g_iReward = 0;
 	}
 
-	if (9 == g_iReward && pQuestManager->Find_Active(TEXT("Quest_HuntQuest1"))->Get_Clear())
+	if (10 == g_iReward && pQuestManager->Find_Active(TEXT("Quest_HuntQuestFinal"))->Get_Clear())
 	{
-		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_HuntQuest1"))))
+		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_HuntQuestFinal"))))
 			return;
 
-		m_tInfo.pTarget->Set_Exp(50);
+		m_tInfo.pTarget->Set_Exp(5000);
 
 		g_iQuest = 0;
 		g_iReward = 0;
@@ -229,7 +251,7 @@ void CTown_Quest3::Tick(_float fTimeDelta)
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
 	{
-		ERR_MSG(TEXT("Failed to Add CollisionGroup : CVillage_Quest1"));
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CTown_Quest3"));
 		return;
 	}
 
@@ -261,12 +283,12 @@ void CTown_Quest3::Late_Tick(_float fTimeDelta)
 	if (pInstance->Collision(this, TEXT("Com_QuestCollider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 	{
 		m_bTalk = true;
-		g_iTalk = 9;
+		g_iTalk = 10;
 	}
 	else
 	{
 		m_bTalk = false;
-		if (9 == g_iTalk)
+		if (10 == g_iTalk)
 			g_iTalk = 0;
 	}
 
@@ -378,7 +400,7 @@ HRESULT CTown_Quest3::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Quest1"), (CComponent**)&m_pCharTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_TownQuest3"), (CComponent**)&m_pCharTextureCom)))
 		return E_FAIL;
 
 
@@ -468,17 +490,17 @@ void CTown_Quest3::OnBillboard()
 
 void CTown_Quest3::Ready_Script(void)
 {
-	m_vQuestScript.push_back(TEXT(""));
-	m_vQuestScript.push_back(TEXT(""));
-	m_vQuestScript.push_back(TEXT(""));
-	m_vQuestScript.push_back(TEXT(""));
+	m_vQuestScript.push_back(TEXT("큰일이야! 파이어 드래곤이 왕국을 향하고 있어!"));
+	m_vQuestScript.push_back(TEXT("파이어 드래곤의 힘이라면 왕국은 물론이고 이 세계가 위험해!"));
+	m_vQuestScript.push_back(TEXT("미로 너머에 파이어 드래곤이 자리를 잡은걸 확인했어."));
+	m_vQuestScript.push_back(TEXT("부탁이야.. 파이어 드래곤을 막아줘!"));
 
-	m_vNotClearScript.push_back(TEXT(""));
+	m_vNotClearScript.push_back(TEXT("허비할 시간이 없어!"));
 
-	m_vNormalScript.push_back(TEXT(""));
+	m_vNormalScript.push_back(TEXT("나는 이 왕국의 왕자. 왕국에서 소란은 벌이지 말아줬음 좋겠어."));
 
-	m_vClearScript.push_back(TEXT(""));
-	m_vClearScript.push_back(TEXT("이건 약소하지만 우리 마을을 도와준 보상일세. \n\n보상 : 경험치 50"));
+	m_vClearScript.push_back(TEXT("정말.. 그 파이어 드래곤을 물리친거야..?"));
+	m_vClearScript.push_back(TEXT("넌 우리 왕국 뿐만 아니라 이 세계의 영웅이야! 모두를 대신해서 정말 고마워! \n\n보상 : 경험치 5000"));
 }
 
 CTown_Quest3 * CTown_Quest3::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
