@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "TextBox.h"
 #include "Layer.h"
+#include "SoundMgr.h"
 
 CDoor::CDoor(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -36,14 +37,14 @@ HRESULT CDoor::Initialize(void * pArg)
 	m_tInfo.iLevelIndex = m_IndexPos.iLevelIndex;
 
 
-	m_pTransformCom->Set_Scaled(_float3(2.f,3.f,0.5f));
+	m_pTransformCom->Set_Scaled(_float3(3.f,3.f,0.5f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
 	if (m_IndexPos.iIndex == 1)
 	{
 		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), 1.f);
-		m_pColliderCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_UP), 1.f);
-		m_pQuestColliderCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_UP), 1.f);
+	/*	m_pColliderCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_UP), 1.f);
+		m_pQuestColliderCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_UP), 1.f);*/
 
 	}
 
@@ -62,7 +63,7 @@ void CDoor::Tick(_float fTimeDelta)
 	{
 		_float4x4 WorldMatrix;
 		WorldMatrix = m_pTransformCom->Get_WorldMatrix();
-		WorldMatrix.m[3][0] += 0.5f;
+		WorldMatrix.m[3][0] += 1.5f;
 		WorldMatrix.m[3][1] += 0.5f * 3.f;
 
 		m_pQuestColliderCom->Set_Transform(WorldMatrix, 2.f);
@@ -107,6 +108,7 @@ void CDoor::Tick(_float fTimeDelta)
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_DoorText"), &tTInfo)))
 				return;
 
+			g_bCheck = true;
 			m_bTalk = false;
 		}
 
@@ -114,15 +116,48 @@ void CDoor::Tick(_float fTimeDelta)
 		// 50 
 		if (g_iQuest == 50 && m_iCount < 99 && m_bCheck)
 		{
+			g_iTalk = 0;
 			m_pColliderCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), 0.01f);
 			m_pTransformCom->Turn(_float3(1.f, 0.f, 0.f), 0.01f);
+
+			if (m_iCount == 0)
+				CSoundMgr::Get_Instance()->PlayEffect(L"Door_Crack.wav", fSOUND + 0.1f);
+			
 
 			++m_iCount;
 		}
 
+		if (m_iCount  >= 99 && m_iDustCount < 30)
+		{
+			CGameObject::INFO Info2;
+			ZeroMemory(&Info2, sizeof(CGameObject::INFO));
+
+			Info2.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION); 
+			Info2.vPos.x += 0.5f;
+
+			_uint iX = rand() % 30;
+			_uint iY = rand() % 3;
+			_uint iZ = rand() % 30;
+			
+			Info2.vPos.x += (_float)iX * 0.1;
+			Info2.vPos.y += (_float)iY * 0.1;
+			Info2.vPos.z += (_float)iZ * 0.1;
+
+
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Dust"), m_tInfo.iLevelIndex, TEXT("Layer_Dust"), &Info2)))
+				return;
+
+			if (m_iDustCount == 0)
+				CSoundMgr::Get_Instance()->PlayEffect(L"Door_Effect.wav", fSOUND + 0.1f);
+			
+
+
+			++m_iDustCount;
+		}
+
 		if (m_iCount < 1)	//회전 시 충돌 안할 것.
 		{
-			if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
+			if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_OBJECT, this)))
 			{
 				ERR_MSG(TEXT("Failed to Add CollisionGroup : CDoor"));
 				return;
@@ -136,39 +171,83 @@ void CDoor::Tick(_float fTimeDelta)
 	{
 		_float4x4 WorldMatrix;
 		WorldMatrix = m_pTransformCom->Get_WorldMatrix();
-		WorldMatrix.m[3][0] += 0.5f;
+		WorldMatrix.m[0][0] = 0.2f;
+		WorldMatrix.m[1][1] += 1.f;
+		WorldMatrix.m[2][2] = 4.f;
 		WorldMatrix.m[3][1] += 0.5f * 3.f;
+		WorldMatrix.m[3][2] -= 1.5f;
+		m_pColliderCom->Set_Transform(WorldMatrix, 0.5f);
 
-		m_pColliderCom->Set_Transform(WorldMatrix, 1.f);
 
-		WorldMatrix.m[3][1] = 0.5f;
-		m_pQuestColliderCom->Set_Transform(WorldMatrix, 1.f);
+		_float4x4 WorldMatrix2;
+		WorldMatrix2 = m_pTransformCom->Get_WorldMatrix();
+
+		WorldMatrix2.m[0][0] = 5.f;
+		WorldMatrix2.m[1][1] = 15.f;
+		WorldMatrix2.m[2][2] = 15.f;
+		WorldMatrix2.m[3][0] += 1.5f;
+		WorldMatrix2.m[3][1] = 0.5f;
+		WorldMatrix2.m[3][2] -= 1.5f;
+
+		m_pQuestColliderCom->Set_Transform(WorldMatrix2, 0.1f);
 
 		CGameInstance*	pInstance = CGameInstance::Get_Instance();
 
 		Safe_AddRef(pInstance);
 
-	
-
-		
-
-		
-		
-
-
-
-
-
-
-
-
-		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
+		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_OBJECT, this)))
 		{
 			ERR_MSG(TEXT("Failed to Add CollisionGroup : CDoor"));
 			return;
 		}
 
 		Safe_Release(pInstance);
+	}
+
+	if (m_IndexPos.iIndex == 1 && m_bTalk && m_iCount < 1)
+	{
+		_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vPos.y -= fTimeDelta * 1.5f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+		if (vPos.y <= 0.f)
+		{
+			m_iCount = 2;
+		}
+	}
+
+	if (m_IndexPos.iIndex == 1 && m_iCount == 2 && m_iDustCount < 20)
+	{
+		CGameObject::INFO Info2;
+		ZeroMemory(&Info2, sizeof(CGameObject::INFO));
+
+		Info2.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		Info2.vPos.x += 0.5f;
+		Info2.vPos.z -= 3.5f;
+
+		_uint iX = rand() % 2;
+		_uint iY = rand() % 3;
+		_uint iZ = rand() % 30;
+
+		Info2.vPos.x += (_float)iX * 0.1;
+		Info2.vPos.y += (_float)iY * 0.1;
+		Info2.vPos.z += (_float)iZ * 0.1;
+
+		CGameInstance*	pInstance = CGameInstance::Get_Instance();
+
+		Safe_AddRef(pInstance);
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Dust"), m_tInfo.iLevelIndex, TEXT("Layer_Dust"), &Info2)))
+			return;
+
+		if (m_iDustCount == 0)
+			CSoundMgr::Get_Instance()->PlayEffect(L"Door_Effect.wav", fSOUND + 0.1f);
+		
+		++m_iDustCount;
+
+		Safe_Release(pInstance);
+		
 	}
 }
 
@@ -201,11 +280,12 @@ void CDoor::Late_Tick(_float fTimeDelta)
 			m_bTalk = true;
 		}
 	}
-	else if (m_IndexPos.iIndex == 1)
+	else if (m_IndexPos.iIndex == 1 && !m_bTalk)
 	{
 		if (pInstance->Collision(this, TEXT("Com_QuestCollider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 		{
 			m_bTalk = true;
+			g_iCut = 50;
 		}
 	}
 
@@ -268,10 +348,9 @@ HRESULT CDoor::Render(void)
 
 	m_pShaderCom->End();
 
-	m_pColliderCom->Render();
-
 	if (g_bCollider)
 	{
+		m_pColliderCom->Render();
 		m_pQuestColliderCom->Render();
 	}
 

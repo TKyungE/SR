@@ -53,8 +53,9 @@ private:
 	vector<wstring>			m_vNormalScript;
 	vector<wstring>			m_vFindScript;
 	_bool		m_bCheck = false;
-	_uint		m_iCount = 0.f;
+	_uint		m_iCount = 0;
 	_bool		m_bLine = false;
+	_uint		m_iDustCount = 0;
 private:
 	HRESULT SetUp_Components(void);
 	void Ready_Script(void);

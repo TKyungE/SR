@@ -20,6 +20,7 @@ private:
 	CGameObject::INFO Info;
 private:		// 파일입출력 라인
 	void LoadData();
+	void LoadData2();
 
 	typedef struct tagIndexPos		// 백그라운드 정보 읽기
 	{
@@ -40,7 +41,8 @@ private:		// 파일입출력 라인
 	_float3	m_vPlayerPos;
 	_float3 m_vBackPos;
 	vector<_float3> m_vMonsterPos1;
-
+	vector<_float3> m_vMonsterPos2;
+	_bool	m_bCheck = false;
 private:
 	bool m_bNextLevel = false;
 

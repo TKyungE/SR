@@ -427,6 +427,9 @@
     <Filter Include="02.GameObject\BackGroundObj\Door">
       <UniqueIdentifier>{b5378c24-777b-432d-9c12-1cffe089ab6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Dust">
+      <UniqueIdentifier>{a3c31746-64a6-4a1f-a296-395583a78648}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -828,6 +831,9 @@
     <ClInclude Include="..\Public\Door.h">
       <Filter>02.GameObject\BackGroundObj\Door</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Dust.h">
+      <Filter>02.GameObject\BackGroundObj\Dust</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1216,6 +1222,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Door.cpp">
       <Filter>02.GameObject\BackGroundObj\Door</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Dust.cpp">
+      <Filter>02.GameObject\BackGroundObj\Dust</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

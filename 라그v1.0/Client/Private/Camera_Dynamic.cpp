@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "Player.h"
 #include "KeyMgr.h"
+#include "Layer.h"
 
 CCamera_Dynamic::CCamera_Dynamic(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CCamera(pGraphic_Device)
@@ -142,7 +143,7 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 		m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 		m_bTest = false;
 	}
-	else if (!g_bFirst && 0 == g_iCut)
+	else if (!g_bFirst && 0 == g_iCut && !g_bCheck)
 	{
 		if (m_CameraDesc.Info.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
 		{
@@ -260,7 +261,68 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
+	// ±èÅÂ°æÀÌ ¸¸µë ¹®ÀÇ ÇÏ¼¼¿ä
 
+	if (g_iCut == 50)			// ¹® ´ÝÈú¶§ ÄÆ½Å
+	{
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _float3(42.f,0.5f,10.f));
+
+		CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+		Safe_AddRef(pInstance);
+	
+		CLayer* pLayer = pInstance->Find_Layer(LEVEL_MAZE,TEXT("Layer_Door2"));
+
+		_float3 vPos = *(_float3*)&pLayer->Get_Objects().front()->Get_World().m[3][0];
+		
+		vPos.y += 0.5f * 2.f;
+		vPos.z -= 0.5f * 3.f;
+
+		m_pTransform->LookAt(vPos);
+
+		Safe_Release(pInstance);
+
+		_float3 vPos2 = *(_float3*)&pLayer->Get_Objects().front()->Get_World().m[3][0];
+
+
+		if (vPos2.y <= 0.f)
+		{
+			_float3 vPos3 = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+
+			m_fTimeDelta2 += fTimeDelta;
+			m_fTimeDelta += fTimeDelta;
+
+			if (m_fTimeDelta2 > 0.05f && m_fTimeDelta < 0.7f)
+			{
+				m_fTimeDelta2 = 0.f;
+				if (!m_bMove)
+				{
+					vPos3.x += 0.1f;
+					vPos3.y += 0.05f;
+					vPos3.z += 0.1f;
+					m_bMove = true;
+				}
+				else if (m_bMove)
+				{
+					vPos3.x -= 0.1f;
+					vPos3.y -= 0.05f;
+					vPos3.z -= 0.1f;
+
+					m_bMove = false;
+				}
+				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos3);
+			}
+		
+
+			
+			
+			if (m_fTimeDelta > 2.f)
+			{
+				g_iCut = 0;
+			}
+		}
+	}
 
 }
 

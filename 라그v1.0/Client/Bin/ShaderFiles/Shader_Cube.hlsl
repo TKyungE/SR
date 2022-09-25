@@ -85,9 +85,9 @@ PS_OUT PS_MAIN_SKYBOX2(PS_IN In)
 
 	Out.vColor = texCUBE(TextureSampler, In.vTexUV);
 
-	//Out.vColor.r = (Out.vColor.r * 0.5f) + (0.9725f * 0.8f);
-	//Out.vColor.g = (Out.vColor.g * 0.5f) + (0.4745f * 0.75f);
-	//Out.vColor.b = (Out.vColor.b * 0.5f) + (0.054f * 0.75f);
+	Out.vColor.r = (Out.vColor.r * 0.5f) + (0.9725f * 0.8f);
+	Out.vColor.g = (Out.vColor.g * 0.5f) + (0.4745f * 0.75f);
+	Out.vColor.b = (Out.vColor.b * 0.5f) + (0.054f * 0.75f);
 
 	return Out;
 }

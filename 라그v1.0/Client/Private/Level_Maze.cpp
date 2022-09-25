@@ -56,6 +56,13 @@ HRESULT CLevel_Maze::Initialize()
 	if (FAILED(Ready_Layer_Portal(TEXT("Layer_Portal"))))
 		return E_FAIL;
 
+	CSoundMgr::Get_Instance()->BGM_Stop();
+	CSoundMgr::Get_Instance()->PlayBGM(L"Maze.wav", fSOUND);
+
+	g_bFirst = false;
+
+	LoadData2();
+
 	return S_OK;
 }
 
@@ -185,12 +192,23 @@ HRESULT CLevel_Maze::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	CDoor::INDEXPOS Index;
 	ZeroMemory(&Index, sizeof(CDoor::INDEXPOS));
-	Index.vPos = _float3(34.f, 0.f, 10.f);
-	Index.iLevelIndex = LEVEL_MAZE;			
+	Index.vPos = _float3(33.5f, 0.f, 10.f);
+	Index.iLevelIndex = LEVEL_MAZE;
 	Index.iIndex = 0;					//Index 가 0 이면 열쇠문 1이면 막는 문.
-					
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Door"), LEVEL_MAZE, pLayerTag, &Index)))
 		return E_FAIL;
+
+
+	CDoor::INDEXPOS Index2;
+	ZeroMemory(&Index2, sizeof(CDoor::INDEXPOS));
+	Index2.vPos = _float3(39.f, 5.f, 13.5f);
+	Index2.iLevelIndex = LEVEL_MAZE;
+	Index2.iIndex = 1;					//Index 가 0 이면 열쇠문 1이면 막는 문.
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Door"), LEVEL_MAZE, TEXT("Layer_Door2"), &Index2)))
+		return E_FAIL;
+
 
 	Safe_Release(pGameInstance);
 
@@ -269,174 +287,35 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 	{
 		if (vSavePos == iter)
 			continue;
-		
+
 		vSavePos = iter;
 		Info.vPos = iter;
-		
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-	}
-
-
-	
-
-
-
-	/*for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-		++iCount;
-	}
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-
-		++iCount;
-	}
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-		++iCount;
-	}
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-
-		++iCount;
-	}
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-		++iCount;
-	}
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-
-		++iCount;
-	}
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-		++iCount;
-	}
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-
-		++iCount;
-	}
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
-		++iCount;
-	}
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
 			return E_FAIL;
+	}
 
+
+	auto iter = m_vMonsterPos2.begin();
+
+
+	_uint iCount = 0;
+	for (; iter != m_vMonsterPos2.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		Info.vPos.y = 0.f;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+			return E_FAIL;
 		++iCount;
 	}
 
-	for (; iter != m_vMonsterPos1.end(); ++iter)
+	for (; iter != m_vMonsterPos2.end(); ++iter)
 	{
 		if (iCount >= 1)
 		{
@@ -446,11 +325,87 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
 			return E_FAIL;
-
 		++iCount;
-	}*/
+	}
+
+	for (; iter != m_vMonsterPos2.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+			return E_FAIL;
+		++iCount;
+	}
+
+
+	for (; iter != m_vMonsterPos2.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+			return E_FAIL;
+		++iCount;
+	}
+
+
+	for (; iter != m_vMonsterPos2.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+			return E_FAIL;
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos2.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+			return E_FAIL;
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos2.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+			return E_FAIL;
+		++iCount;
+	}
 
 	Safe_Release(pGameInstance);
 	return S_OK;
@@ -888,6 +843,249 @@ void CLevel_Maze::LoadData()
 	}
 
 	CloseHandle(hFile);
+}
+void CLevel_Maze::LoadData2()
+{
+	HANDLE hFile = CreateFile(TEXT("../../Data/MazePos4.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+		return;
+
+	DWORD	dwByte = 0;
+
+
+	_float3 vPos1, vPos2;
+	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize, iWallSize;
+	_tchar str1[MAX_PATH];
+
+
+	_tchar str2[MAX_PATH];
+	_tchar str3[MAX_PATH];
+	_tchar str4[MAX_PATH];
+	_tchar str5[MAX_PATH];
+	_tchar str6[MAX_PATH];
+	_tchar str7[MAX_PATH];
+	_tchar str8[MAX_PATH];
+
+	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
+	m_vPlayerPos = vPos1;
+
+	ReadFile(hFile, vPos2, sizeof(_float3), &dwByte, nullptr);
+	m_vBackPos = vPos2;
+
+	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str5, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str6, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str7, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str8, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+
+
+	iMSize = stoi(str1);
+	iIndexSize = stoi(str2);
+	iTreeSize = stoi(str3);
+	iHouseSize = stoi(str4);
+	iHouse2Size = stoi(str5);
+	iPortalSize = stoi(str6);
+	iNPCSize = stoi(str7);
+	iWallSize = stoi(str8);
+
+
+
+	while (true)
+	{
+		for (_uint i = 0; i < iMSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 Pos;
+
+			ReadFile(hFile, &Pos, sizeof(_float3), &dwByte, nullptr);
+
+			_float3 vPos;
+
+			vPos = Pos;
+
+			m_vMonsterPos2.push_back(vPos);
+		}
+
+		for (_uint i = 0; i < iIndexSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+
+			INDEXPOS IndexPos;
+
+			IndexPos.BackGroundPos = BackPos;
+			IndexPos.vScale = Scale;
+			IndexPos.iIndex = Index;
+
+			m_vecIndex.push_back(IndexPos);
+		}
+
+		for (_uint i = 0; i < iTreeSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+
+			INDEXPOS TreePos;
+
+			TreePos.BackGroundPos = BackPos;
+			TreePos.vScale = Scale;
+			TreePos.iIndex = Index;
+
+			m_vecTree.push_back(TreePos);
+		}
+
+		for (_uint i = 0; i < iHouseSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_tchar str4[MAX_PATH];
+			_uint Index, turn;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+			ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			turn = stoi(str4);
+
+			INDEXPOS HousePos;
+
+			HousePos.BackGroundPos = BackPos;
+			HousePos.vScale = Scale;
+			HousePos.iIndex = Index;
+			HousePos.iTrun = turn;
+			m_vecHouse.push_back(HousePos);
+		}
+
+		for (_uint i = 0; i < iHouse2Size; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_tchar str4[MAX_PATH];
+			_uint Index, turn;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+			ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			turn = stoi(str4);
+
+			INDEXPOS HousePos;
+
+			HousePos.BackGroundPos = BackPos;
+			HousePos.vScale = Scale;
+			HousePos.iIndex = Index;
+			HousePos.iTrun = turn;
+			m_vecHouse2.push_back(HousePos);
+		}
+
+		for (_uint i = 0; i < iPortalSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_tchar str4[MAX_PATH];
+			_uint Index, turn;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+			ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			turn = stoi(str4);
+
+			INDEXPOS PortalPos;
+
+			PortalPos.BackGroundPos = BackPos;
+			PortalPos.vScale = Scale;
+			PortalPos.iIndex = Index;
+			PortalPos.iTrun = turn;
+			m_vecPortal.push_back(PortalPos);
+		}
+
+		for (_uint i = 0; i < iNPCSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+			_float3 BackPos;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			INDEXPOS NPCPos;
+
+			NPCPos.BackGroundPos = BackPos;
+			NPCPos.iIndex = Index;
+
+			m_vecNPC.push_back(NPCPos);
+		}
+
+		for (_uint i = 0; i < iWallSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+			_float3 BackPos, Scale;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+
+			INDEXPOS WallPos;
+
+
+			WallPos.BackGroundPos = BackPos;
+			WallPos.vScale = Scale;
+
+			m_vecWall.push_back(WallPos);
+		}
+
+		if (0 == dwByte)
+			break;
+	}
+
+	CloseHandle(hFile);
+
 }
 CLevel_Maze * CLevel_Maze::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {

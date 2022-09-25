@@ -200,6 +200,7 @@
     <ClInclude Include="..\public\DmgFont.h" />
     <ClInclude Include="..\Public\Door.h" />
     <ClInclude Include="..\public\Drain.h" />
+    <ClInclude Include="..\Public\Dust.h" />
     <ClInclude Include="..\public\ElderWilow.h" />
     <ClInclude Include="..\public\Engineer.h" />
     <ClInclude Include="..\public\Equip.h" />
@@ -333,6 +334,7 @@
     <ClCompile Include="..\private\DmgFont.cpp" />
     <ClCompile Include="..\Private\Door.cpp" />
     <ClCompile Include="..\private\Drain.cpp" />
+    <ClCompile Include="..\Private\Dust.cpp" />
     <ClCompile Include="..\private\ElderWilow.cpp" />
     <ClCompile Include="..\private\Engineer.cpp" />
     <ClCompile Include="..\private\Equip.cpp" />

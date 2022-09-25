@@ -33,6 +33,12 @@ extern int g_iQuest;
 extern int g_iReward;
 extern bool g_bSky;
 
+
+
+// ¿©±â ´Ù ±èÅÂ°æÀÌ ¸¸µë
+extern bool g_bCheck; // ±èÅÂ°æÀÌ ¸¸µë
+extern bool g_bMazeCut; // ¹® ´İÈú ¶§ ÄÆ½Å.
+
 //extern int g_iFrame;
 
 #define     fSOUND  0.1f

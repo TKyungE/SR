@@ -21,6 +21,8 @@ bool g_bFirst = true;
 int g_iQuest = 0;
 int g_iReward = 0;
 bool g_bSky = false;
+bool g_bCheck = false;
+bool g_bMazeCut = false;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -182,17 +184,6 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Transparent_Wall"), LEVEL_TOWN, pLayerTag, &Wall)))
 			return E_FAIL;
 	}
-
-	
-	CDoor::INDEXPOS Index;
-	ZeroMemory(&Index, sizeof(CDoor::INDEXPOS));
-	Index.vPos = _float3(15.f, 3.f, 10.f);
-	Index.iLevelIndex = LEVEL_TOWN;
-	Index.iIndex = 1;					//Index 가 0 이면 열쇠문 1이면 막는 문.
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Door"), LEVEL_TOWN, pLayerTag, &Index)))
-		return E_FAIL;
-
 
 	Safe_Release(pGameInstance);
 

@@ -13,7 +13,6 @@
 #include "Collider.h"
 #include "Shader.h"
 #include "VIBuffer_Rect3.h"
-#include "VIBuffer_Cube2.h"
 
 BEGIN(Engine)
 
