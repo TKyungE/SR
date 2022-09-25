@@ -69,10 +69,18 @@ _bool CCollisionMgr::Can_Collision(CGameObject * pGameObject, CGameObject * pCol
 	CTransform* pGameTransform = (CTransform*)(pGameObject->Find_Component(TEXT("Com_Transform")));
 	CTransform* pCollTransform = (CTransform*)(pCollObject->Find_Component(TEXT("Com_Transform")));
 
+	_float3 vCollLength = pCollTransform->Get_Scale();
+	_float vCollMax = 0.f;
+
+	if (vCollMax < vCollLength.x)
+		vCollMax = vCollLength.x;
+	if (vCollMax < vCollLength.z)
+		vCollMax = vCollLength.z;
+
 	_float3 vGamePos = pGameTransform->Get_State(CTransform::STATE_POSITION);
 	_float3 vCollPos = pCollTransform->Get_State(CTransform::STATE_POSITION);
 
-	if (5.f > D3DXVec3Length(&(vGamePos - vCollPos)))
+	if (vCollMax > D3DXVec3Length(&(vGamePos - vCollPos)))
 		return true;
 
 	return false;
