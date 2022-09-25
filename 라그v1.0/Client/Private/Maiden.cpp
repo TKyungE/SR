@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "Layer.h"
+#include "TextBox.h"
 
 CMaiden::CMaiden(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -26,10 +27,11 @@ HRESULT CMaiden::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
+
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
 
 	//m_tInfo.vPos.y += 0.f;
 	_float3 vScale = { 1.f,1.f,1.f };
@@ -63,6 +65,19 @@ HRESULT CMaiden::Initialize(void * pArg)
 
 	Safe_Release(pGameInstance);
 
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
+
+	m_fSizeX = 400.f;
+	m_fSizeY = 400.f;
+	m_fCharX = g_iWinSizeX * 0.5f;
+	m_fCharY = g_iWinSizeY * 0.5f;
+
+	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
+	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fCharX - g_iWinSizeX * 0.5f, -m_fCharY + g_iWinSizeY * 0.5f, 0.f));
+
+	Ready_Script();
+
+	g_iCut = 40;
 
 	return S_OK;
 }
@@ -71,7 +86,52 @@ void CMaiden::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 	
-		OnTerrain();
+	OnTerrain();
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (40 == g_iCut && !m_bTalk)
+	{
+		m_bTalk = true; 
+
+		CTextBox::TINFO tTInfo;
+		tTInfo.iScriptSize = (_int)m_vScript.size();
+
+		tTInfo.pScript = new wstring[m_vScript.size()];
+		for (_int i = 0; i < m_vScript.size(); ++i)
+			tTInfo.pScript[i] = m_vScript[i];
+
+		tTInfo.iQuestIndex = 3;
+		tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		tTInfo.iNumQuest = 40;
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+			return;
+
+		if (40 == g_iReward)
+		{
+			g_iQuest = 0;
+			g_iReward = 0;
+		}
+
+		m_fAlpha += 0.006f;
+
+		if (1.f < m_fTalkFrame)
+		{
+			++m_iTalkFrame;
+			m_fTalkFrame = 0.f;
+
+			if (8 < m_iTalkFrame)
+				m_iTalkFrame = 0;
+		}
+		m_fTalkFrame += fTimeDelta;
+	}
+	else
+	{
 		if (!m_bDead)
 		{
 			Check_Front();
@@ -84,7 +144,7 @@ void CMaiden::Tick(_float fTimeDelta)
 			{
 				Set_Dead();
 				return;
-				
+
 			}
 			if (m_tFrame.iFrameStart != 4)
 				Move_Frame(fTimeDelta);
@@ -96,7 +156,7 @@ void CMaiden::Tick(_float fTimeDelta)
 			m_fSkillCool += fTimeDelta;
 			if (!m_bSkill && !m_bDead && !m_bSkill2)
 				Chase(fTimeDelta);
-			if(!m_bSkill)
+			if (!m_bSkill)
 				m_fSkillCool2 += fTimeDelta;
 
 			if (m_fSkillCool2 > 13.f)
@@ -110,17 +170,11 @@ void CMaiden::Tick(_float fTimeDelta)
 		Move_Frame(fTimeDelta);
 		if (m_eCurState == SKILL && !m_bSkill2)
 			Use_Skill(fTimeDelta);
-		
-		if(m_bSkill2 && m_bStart && !m_bSkill)
+
+		if (m_bSkill2 && m_bStart && !m_bSkill)
 			Use_Skill2(fTimeDelta);
 
 		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
-
-		CGameInstance* pInstance = CGameInstance::Get_Instance();
-		if (nullptr == pInstance)
-			return;
-
-		Safe_AddRef(pInstance);
 
 		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_BOSS, this)))
 		{
@@ -128,11 +182,10 @@ void CMaiden::Tick(_float fTimeDelta)
 			return;
 		}
 
-		Safe_Release(pInstance);
-	
+		m_tInfo.bDead = false;
+	}
 
-
-	m_tInfo.bDead = false;
+	Safe_Release(pInstance);
 }
 
 void CMaiden::Late_Tick(_float fTimeDelta)
@@ -161,25 +214,67 @@ void CMaiden::Late_Tick(_float fTimeDelta)
 
 HRESULT CMaiden::Render(void)
 {
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
-		if (FAILED(__super::Render()))
+	Off_SamplerState();
+
+	if (FAILED(SetUp_RenderState()))
+		return E_FAIL;
+
+	if (0 != g_iCut && m_bTalk)
+	{
+		if (FAILED(m_pCharTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
-		Off_SamplerState();
 
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
-		TextureRender();
+		_float4x4	WorldMatrix, ViewMatrix;
 
-		if (FAILED(SetUp_RenderState()))
-			return E_FAIL;
+		WorldMatrix = *D3DXMatrixTranspose(&WorldMatrix, &m_pCharTransformCom->Get_WorldMatrix());
 
-		m_pVIBufferCom->Render();
+		D3DXMatrixIdentity(&ViewMatrix);
 
-		if (FAILED(Release_RenderState()))
-			return E_FAIL;
-		On_SamplerState();
-		if (g_bCollider)
-			m_pColliderCom->Render();
+		_float4x4 SaveViewMatrix, SaveProjVatrix;
+
+		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &SaveViewMatrix);
+		m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
+
+		/*	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);*/
+
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", &WorldMatrix, sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&m_ProjMatrix, &m_ProjMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float));
+
+		m_pShaderCom->Set_Texture("g_Texture", m_pCharTextureCom->Get_Texture(m_iTalkFrame));
+
+		/*if (FAILED(m_pCharTextureCom->Bind_OnGraphicDev(0)))
+		return E_FAIL;*/
+
+		m_pShaderCom->Begin(1);
+
+		m_pCharVIBufferCom->Render();
+
+		m_pShaderCom->End();
+
+		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &SaveViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
+	}
+
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	TextureRender();
+
+	m_pVIBufferCom->Render();
+
+	if (FAILED(Release_RenderState()))
+		return E_FAIL;
+
+	On_SamplerState();
+
+	if (g_bCollider)
+		m_pColliderCom->Render();
 	
 	return S_OK;
 }
@@ -209,6 +304,16 @@ HRESULT CMaiden::SetUp_Components(void)
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_Talk"), (CComponent**)&m_pCharTextureCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
@@ -218,7 +323,8 @@ HRESULT CMaiden::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTransform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pCharTransformCom, &TransformDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -237,8 +343,12 @@ HRESULT CMaiden::SetUp_RenderState(void)
 
 HRESULT CMaiden::Release_RenderState(void)
 {
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
+
 	return S_OK;
 }
 
@@ -385,6 +495,10 @@ void CMaiden::Free(void)
 	Safe_Release(m_pTextureComAttack_Back);
 	Safe_Release(m_pTextureComDead_Front);
 	Safe_Release(m_pTextureComDead_Back);
+	Safe_Release(m_pCharVIBufferCom);
+	Safe_Release(m_pCharTransformCom);
+	Safe_Release(m_pCharTextureCom);
+	Safe_Release(m_pShaderCom);
 }
 
 
@@ -925,4 +1039,12 @@ void CMaiden::DropItem()
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Item"), &tInfo);
 
 	Safe_Release(pGameInstance);
+}
+
+void CMaiden::Ready_Script(void)
+{
+	m_vScript.push_back(TEXT("엔진을 찾으러 왔나? 어리석군..."));
+	m_vScript.push_back(TEXT("어차피 곧 이 세계는 멸망하게 될 것이다.."));
+	m_vScript.push_back(TEXT("네놈이 운명을 이길 수 있을 것 같으냐?"));
+	m_vScript.push_back(TEXT("할 수 있으면 가져가 보아라!"));
 }

@@ -973,6 +973,11 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Town_Quest3/TQuest0%d.png"), 4))))
 		return E_FAIL;
 
+	// Boss ´ëÈ­=====================================================
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Maiden_Talk"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/BOSS/Maiden/Illust/wish_maiden0%d.bmp"), 9))))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;

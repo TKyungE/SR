@@ -271,6 +271,8 @@ HRESULT CLevel_MidBoss::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuestUI"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LetterBox"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
