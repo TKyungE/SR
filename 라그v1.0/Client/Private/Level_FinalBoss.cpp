@@ -8,6 +8,7 @@
 #include "Layer.h"
 #include "Portal.h"
 #include "Level_Loading.h"
+#include "QuestManager.h"
 
 CLevel_FinalBoss::CLevel_FinalBoss(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -37,8 +38,8 @@ HRESULT CLevel_FinalBoss::Initialize(void)
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Portal(TEXT("Layer_Portal"))))
-		return E_FAIL;
+	/*if (FAILED(Ready_Layer_Portal(TEXT("Layer_Portal"))))
+		return E_FAIL;*/
 
 	fSound = fSOUND;
 	CSoundMgr::Get_Instance()->BGM_Stop();
@@ -81,6 +82,22 @@ void CLevel_FinalBoss::Tick(_float fTimeDelta)
 	}
 
 	//Create_Rain(fTimeDelta);
+
+	CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+	if (nullptr == pQuestManager)
+		return;
+	
+	Safe_AddRef(pQuestManager);
+
+	if (nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuestFinal")) && (pQuestManager->Find_Active(TEXT("Quest_HuntQuestFinal"))->Get_Clear() && !m_bPortal))
+	{
+		if (FAILED(Ready_Layer_Portal(TEXT("Layer_Portal"))))
+			return;
+
+		m_bPortal = true;
+	}
+
+	Safe_Release(pQuestManager);
 
 	Safe_Release(pGameInstance);
 }
@@ -141,7 +158,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 
 	memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
-	if (Info.iLevelIndex == LEVEL_MAZE)
+	if (Info.iLevelIndex == LEVEL_TOWN)
 		Info.vPos = m_vPlayerPos;
 	else
 		Info.vPos = m_vBackPos;
@@ -347,7 +364,7 @@ void CLevel_FinalBoss::LoadData(void)
 	ReadFile(hFile, str5, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str6, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str7, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
-	//ReadFile(hFile, str8, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str8, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 
 
@@ -358,7 +375,7 @@ void CLevel_FinalBoss::LoadData(void)
 	iHouse2Size = stoi(str5);
 	iPortalSize = stoi(str6);
 	iNPCSize = stoi(str7);
-	//iWallSize = stoi(str8);
+	iWallSize = stoi(str8);
 
 
 
@@ -530,7 +547,7 @@ void CLevel_FinalBoss::LoadData(void)
 			m_vecNPC.push_back(NPCPos);
 		}
 
-		/*for (_uint i = 0; i < iWallSize; ++i)
+		for (_uint i = 0; i < iWallSize; ++i)
 		{
 		if (0 == dwByte)
 		break;
@@ -546,7 +563,7 @@ void CLevel_FinalBoss::LoadData(void)
 		WallPos.vScale = Scale;
 
 		m_vecWall.push_back(WallPos);
-		}*/
+		}
 
 		if (0 == dwByte)
 			break;

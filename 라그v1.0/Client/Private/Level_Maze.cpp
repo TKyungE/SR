@@ -293,8 +293,8 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 		vSavePos = iter;
 		Info.vPos = iter;
 
-		/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;*/
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
 	}
 
 
