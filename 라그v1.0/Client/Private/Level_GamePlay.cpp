@@ -439,6 +439,14 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 		++iCount;
 	}
 
+
+	Info.vPos = {20.f,1.f,15.f};
+	Info.iMonsterType = (_int)MON_ELDERWILOW;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rich"), LEVEL_GAMEPLAY, TEXT("Layer_Boss"), &Info)))
+		return E_FAIL;
+
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;

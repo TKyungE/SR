@@ -441,6 +441,14 @@
     </Filter>
     <Filter Include="01.Levels\FinalBoss">
       <UniqueIdentifier>{cac5b76e-c361-4b64-861f-be4d4168d812}</UniqueIdentifier>
+    <Filter Include="02.GameObject\Boss\Rich">
+      <UniqueIdentifier>{c8198c1c-97ae-47f8-b1cf-2595aa75846f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Boss\Rich\RichClone">
+      <UniqueIdentifier>{bb24a0f1-c761-41f5-aa79-70719094907f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\16.RichAttack">
+      <UniqueIdentifier>{a669064c-59e6-461a-abd9-5dec6cd1b70b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -857,6 +865,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\Level_FinalBoss.h">
       <Filter>01.Levels\FinalBoss</Filter>
+ </ClInclude>
+    <ClInclude Include="..\public\Rich.h">
+      <Filter>02.GameObject\Boss\Rich</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\RichClone.h">
+      <Filter>02.GameObject\Boss\Rich\RichClone</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\RichAttack.h">
+      <Filter>03.Effect\Skill\16.RichAttack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1261,6 +1278,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_FinalBoss.cpp">
       <Filter>01.Levels\FinalBoss</Filter>
+</ClCompile>
+    <ClCompile Include="..\private\RichClone.cpp">
+      <Filter>02.GameObject\Boss\Rich\RichClone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Rich.cpp">
+      <Filter>02.GameObject\Boss\Rich</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\RichAttack.cpp">
+      <Filter>03.Effect\Skill\16.RichAttack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

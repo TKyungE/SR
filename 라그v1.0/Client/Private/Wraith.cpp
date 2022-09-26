@@ -126,7 +126,7 @@ void CWraith::Tick(_float fTimeDelta)
 		Use_Skill(fTimeDelta);
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
-
+	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
 		return;

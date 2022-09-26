@@ -64,7 +64,7 @@ void CTornado::Tick(_float fTimeDelta)
 	if (m_fDeadTime > 3.f)
 		Set_Dead();
 
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.4f);
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
@@ -322,7 +322,6 @@ void CTornado::CheckColl()
 	{
 		if (pTarget->Get_Info().iMp == 0)
 		{
-
 			_float fCri = _float(rand() % 100 + 1);
 			_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
 

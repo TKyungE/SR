@@ -256,6 +256,9 @@
     <ClInclude Include="..\Public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\House2.h" />
+    <ClInclude Include="..\public\Rich.h" />
+    <ClInclude Include="..\public\RichAttack.h" />
+    <ClInclude Include="..\public\RichClone.h" />
     <ClInclude Include="..\public\Shadow.h" />
     <ClInclude Include="..\public\ShadowBall.h" />
     <ClInclude Include="..\public\Shop.h" />
@@ -394,6 +397,9 @@
     <ClCompile Include="..\Private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\House2.cpp" />
+    <ClCompile Include="..\Private\Rich.cpp" />
+    <ClCompile Include="..\private\RichAttack.cpp" />
+    <ClCompile Include="..\private\RichClone.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
     <ClCompile Include="..\private\ShadowBall.cpp" />
     <ClCompile Include="..\private\Shop.cpp" />
