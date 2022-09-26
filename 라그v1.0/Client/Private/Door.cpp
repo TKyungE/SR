@@ -121,7 +121,7 @@ void CDoor::Tick(_float fTimeDelta)
 			m_pTransformCom->Turn(_float3(1.f, 0.f, 0.f), 0.01f);
 
 			if (m_iCount == 0)
-				CSoundMgr::Get_Instance()->PlayEffect(L"Door_Crack.wav", fSOUND + 0.1f);
+				CSoundMgr::Get_Instance()->PlayEffect(L"Door_Crack.wav", fSOUND + 0.2f);
 			
 
 			++m_iCount;

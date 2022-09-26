@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "Layer.h"
+#include "Camera_Dynamic.h"
+#include "QuestManager.h"
 
 CSkeleton::CSkeleton(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -44,25 +46,27 @@ HRESULT CSkeleton::Initialize(void * pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 9999;
+	m_tInfo.iMaxHp = 50000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_tInfo.iExp = 30;
+	m_tInfo.iMonsterType = (_int)MON_SKELETON;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
-	tInfo.vPos = { 1.f,0.5f,1.f };
+	tInfo.vPos = { 1.f,0.8f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-	tInfo.iMonsterType = MON_WRAITH;
+	tInfo.iMonsterType = (_int)MON_WRAITH;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
 
 	tInfo.vPos = { 1.f,1.f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-
+	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
 
 
@@ -72,11 +76,12 @@ HRESULT CSkeleton::Initialize(void * pArg)
 void CSkeleton::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	if (m_bCheck)
+	if (m_bPlay)
 	{
 		if (!m_bRespawn)
 		{
 			m_fSkillCool += fTimeDelta;
+			m_fCollTime += fTimeDelta;
 			if (m_tInfo.iMp == 2 && !m_bAngry)
 			{
 				CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
@@ -87,12 +92,7 @@ void CSkeleton::Tick(_float fTimeDelta)
 				Safe_Release(pGameInstance);
 				m_bAngry = true;
 			}
-			//OnTerrain();
-
-			_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			vPos.y += 0.5f * 1.5f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-
+			OnTerrain();
 			if (!m_bDead)
 				Check_Front();
 			if (m_eCurState == DEAD)
@@ -161,29 +161,26 @@ void CSkeleton::Tick(_float fTimeDelta)
 				m_bRespawn = false;
 			}
 		}
-
+	}
 		m_tInfo.bDead = false;
-	}
 
-	if (g_iCut == 50)
-		m_bPlay = true;
-
-	if (m_bPlay)
-	{
-		m_fTimeDelta += fTimeDelta;
-		if (m_fTimeDelta > 1.f)
-		{
+		if (g_iCut == 50)
 			m_bCheck = true;
-			m_bPlay = false;
-		}
-
-	}
+		if (m_bCheck)
+		{
+			m_fTimeDelta += fTimeDelta;
+			if (m_fTimeDelta > 2.f)
+			{
+				m_bPlay = true;
+			}
+		}	
+	
 }
 
 void CSkeleton::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	if (m_bCheck)
+	if (m_bPlay)
 	{
 		if (!m_bRespawn)
 		{
@@ -202,92 +199,74 @@ void CSkeleton::Late_Tick(_float fTimeDelta)
 
 HRESULT CSkeleton::Render(void)
 {
-	/*if (m_bCheck)
-	{*/
-		//if (!m_bRespawn)
-		//{
-			if (FAILED(__super::Render()))
+	if (!m_bRespawn)
+	{
+		if (FAILED(__super::Render()))
+			return E_FAIL;
+	//	Off_SamplerState();
+
+		_float4x4	WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
+		_float4			vCamPosition;
+
+		WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+
+		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+		CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+		Safe_AddRef(pInstance);
+
+		CLayer* pLayer = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"));
+
+		list<class CGameObject*> GameObject = pLayer->Get_Objects();
+
+		PlayerWorldMatrix = GameObject.front()->Get_World();
+
+		memcpy(&vCamPosition, &PlayerWorldMatrix.m[3][0], sizeof(_float4));
+
+		Safe_Release(pInstance);
+
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
+		if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
+			return E_FAIL;
+		
+		_float fAlpha = 1.f;
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
+			return E_FAIL;
+
+		if (m_tInfo.iLevelIndex == LEVEL_MAZE)
+		{
+			_float	fMin = 3.f;
+			_float	fMax = 6.f;
+
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
 				return E_FAIL;
-			//	Off_SamplerState();
 
-			_float4x4	WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
-			_float4			vCamPosition;
-
-			WorldMatrix = m_pTransformCom->Get_WorldMatrix();
-
-			m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-			m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
-
-			CGameInstance* pInstance = CGameInstance::Get_Instance();
-
-			Safe_AddRef(pInstance);
-
-			CLayer* pLayer = pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"));
-
-			list<class CGameObject*> GameObject = pLayer->Get_Objects();
-
-			PlayerWorldMatrix = GameObject.front()->Get_World();
-
-			memcpy(&vCamPosition, &PlayerWorldMatrix.m[3][0], sizeof(_float4));
-
-			Safe_Release(pInstance);
-
-			m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4));
-			m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
-			m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
-			if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
+			if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
 				return E_FAIL;
+		}
 
-			_float fAlpha = 1.f;
-			if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
-				return E_FAIL;
+		TextureRender();
 
-			if (m_tInfo.iLevelIndex == LEVEL_MAZE)
-			{
-				_float	fMin = 3.f;
-				_float	fMax = 6.f;
+		/*if (FAILED(SetUp_RenderState()))
+			return E_FAIL;*/
 
+		m_pShaderCom->Begin(3);
 
-				if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
-					return E_FAIL;
+		m_pVIBufferCom->Render();
 
-				if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
-					return E_FAIL;
+		m_pShaderCom->End();
+		/*if (FAILED(Release_RenderState()))
+			return E_FAIL;*/
 
-			}
-			else
-			{
-				_float	fMin = 100.f;
-				_float	fMax = 100.f;
+		//On_SamplerState();
 
-
-				if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
-					return E_FAIL;
-
-				if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
-					return E_FAIL;
-			}
-
-
-			TextureRender();
-
-			/*if (FAILED(SetUp_RenderState()))
-				return E_FAIL;*/
-
-			m_pShaderCom->Begin(3);
-
-			m_pVIBufferCom->Render();
-
-			m_pShaderCom->End();
-			/*if (FAILED(Release_RenderState()))
-				return E_FAIL;*/
-
-				//On_SamplerState();
-
-			if (g_bCollider)
-				m_pColliderCom->Render();
-		//}
-	//}
+		if (g_bCollider)
+			m_pColliderCom->Render();
+	}
 	return S_OK;
 }
 HRESULT CSkeleton::SetUp_Components(void)
@@ -360,6 +339,7 @@ void CSkeleton::Check_Hit()
 		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), m_tInfo.iLevelIndex, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
@@ -391,7 +371,7 @@ void CSkeleton::Chase(_float fTimeDelta)
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 		//	vPosition.y = vTargetPos.y += 2.f;
-		//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 	else if (1.f < Distance && 5.f > Distance)
 	{
@@ -415,7 +395,7 @@ void CSkeleton::Chase(_float fTimeDelta)
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 		//	vPosition.y = vTargetPos.y += 2.f;
-		//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 }
 void CSkeleton::Chase2(_float fTimeDelta)
@@ -472,7 +452,7 @@ void CSkeleton::Chase2(_float fTimeDelta)
 			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 			//	vPosition.y = vTargetPos.y += 2.f;
-			//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 		}
 	}
 	else
@@ -500,7 +480,7 @@ void CSkeleton::Chase2(_float fTimeDelta)
 			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 			//	vPosition.y = vTargetPos.y += 2.f;
-			//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 		}
 	}
 	Safe_Release(pGameInstance);
@@ -523,7 +503,7 @@ void CSkeleton::Chase3(_float fTimeDelta)
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 		//	vPosition.y = vTargetPos.y += 2.f;
-		//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 	else if (1.f < Distance && 10000.f > Distance)
 	{
@@ -547,7 +527,7 @@ void CSkeleton::Chase3(_float fTimeDelta)
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 		//	vPosition.y = vTargetPos.y += 2.f;
-		//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 }
 void CSkeleton::OnTerrain()
@@ -753,6 +733,17 @@ void CSkeleton::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+
+		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+		if (nullptr == pQuestManager)
+			return;
+
+		Safe_AddRef(pQuestManager);
+
+		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
+
+		Safe_Release(pQuestManager);
+
 		CSoundMgr::Get_Instance()->PlayEffect(L"Skelton_Die.wav", fSOUND);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
@@ -911,6 +902,10 @@ void CSkeleton::MonsterMove(_float fTimeDelta)
 	default:
 		break;
 	}
+
+
+
+
 }
 HRESULT CSkeleton::RespawnMonster()
 {
@@ -957,7 +952,7 @@ void CSkeleton::CheckColl()
 
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
-	/*if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -993,9 +988,9 @@ void CSkeleton::CheckColl()
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}*/
+	}
 
-	/*if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -1011,7 +1006,35 @@ void CSkeleton::CheckColl()
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}*/
+	}
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYERSKILL2, TEXT("Com_ColliderTORNADO"), &pTarget) && m_fCollTime > 0.1f)
+	{
+		_float fCri = _float(rand() % 100 + 1);
+		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
+
+		if (fCri <= fLUK)
+		{
+			Set_Hp(pTarget->Get_Info().iDmg * 2);
+			Set_Hit(pTarget->Get_Info().iDmg * 2, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = this;
+			tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit2"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			dynamic_cast<CCamera_Dynamic*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Camera"))->Get_Objects().front())->CriHit();
+		}
+		else
+		{
+			Set_Hp(pTarget->Get_Info().iDmg);
+			Set_Hit(pTarget->Get_Info().iDmg, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		}
+		if (m_tInfo.iHp <= 0)
+			Set_Dead();
+
+		m_fCollTime = 0.f;
+	}
 	Safe_Release(pInstance);
 }
 void CSkeleton::OnBillboard()

@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "Layer.h"
+#include "Camera_Dynamic.h"
+#include "QuestManager.h"
 
 CZombie::CZombie(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -44,10 +46,12 @@ HRESULT CZombie::Initialize(void * pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 9999;
+	m_tInfo.iMaxHp = 50000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_tInfo.iExp = 50;
+	m_tInfo.iMonsterType = (_int)MON_ZOMBIE;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -56,27 +60,28 @@ HRESULT CZombie::Initialize(void * pArg)
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.8f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-	tInfo.iMonsterType = MON_WRAITH;
+	tInfo.iMonsterType = (_int)MON_WRAITH;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
 
 	tInfo.vPos = { 1.f,1.f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-
+	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
 
-	m_bCheck = true;
+
 	return S_OK;
 }
 
 void CZombie::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	if (m_bCheck)
+	if (m_bPlay)
 	{
 		if (!m_bRespawn)
 		{
 			m_fSkillCool += fTimeDelta;
+			m_fCollTime += fTimeDelta;
 			if (m_tInfo.iMp == 2 && !m_bAngry)
 			{
 				CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
@@ -87,11 +92,7 @@ void CZombie::Tick(_float fTimeDelta)
 				Safe_Release(pGameInstance);
 				m_bAngry = true;
 			}
-			//OnTerrain();
-			_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			vPos.y += 0.5f * 1.5f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-
+			OnTerrain();
 			if (!m_bDead)
 				Check_Front();
 			if (m_eCurState == DEAD)
@@ -160,29 +161,25 @@ void CZombie::Tick(_float fTimeDelta)
 				m_bRespawn = false;
 			}
 		}
-
-		m_tInfo.bDead = false;
 	}
+	m_tInfo.bDead = false;
 
 	if (g_iCut == 50)
-		m_bPlay = true;
-		
-	if (m_bPlay)
+		m_bCheck = true;
+	if (m_bCheck)
 	{
 		m_fTimeDelta += fTimeDelta;
-		if (m_fTimeDelta > 1.f)
+		if (m_fTimeDelta > 2.f)
 		{
-			m_bCheck = true;
-			m_bPlay = false;
+			m_bPlay = true;
 		}
-
 	}
 }
 
 void CZombie::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	if (m_bCheck)
+	if (m_bPlay)
 	{
 		if (!m_bRespawn)
 		{
@@ -737,6 +734,17 @@ void CZombie::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+
+		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+		if (nullptr == pQuestManager)
+			return;
+
+		Safe_AddRef(pQuestManager);
+
+		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
+
+		Safe_Release(pQuestManager);
+
 		CSoundMgr::Get_Instance()->PlayEffect(L"Zombie_Die.wav", fSOUND);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
@@ -999,6 +1007,34 @@ void CZombie::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
+	//if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYERSKILL2, TEXT("Com_ColliderTORNADO"), &pTarget) && m_fCollTime > 0.1f)
+	//{
+	//	_float fCri = _float(rand() % 100 + 1);
+	//	_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
+
+	//	if (fCri <= fLUK)
+	//	{
+	//		Set_Hp(pTarget->Get_Info().iDmg * 2);
+	//		Set_Hit(pTarget->Get_Info().iDmg * 2, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//		CGameObject::INFO tInfo;
+	//		tInfo.pTarget = this;
+	//		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	//		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+	//			return;
+	//		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit2"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+	//			return;
+	//		dynamic_cast<CCamera_Dynamic*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Camera"))->Get_Objects().front())->CriHit();
+	//	}
+	//	else
+	//	{
+	//		Set_Hp(pTarget->Get_Info().iDmg);
+	//		Set_Hit(pTarget->Get_Info().iDmg, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	}
+	//	if (m_tInfo.iHp <= 0)
+	//		Set_Dead();
+
+	//	m_fCollTime = 0.f;
+	//}
 	Safe_Release(pInstance);
 }
 void CZombie::OnBillboard()

@@ -312,7 +312,7 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
 			return E_FAIL;
 		++iCount;
 	}
@@ -327,7 +327,7 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
 			return E_FAIL;
 		++iCount;
 	}
@@ -342,23 +342,7 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
-			return E_FAIL;
-		++iCount;
-	}
-
-
-	for (; iter != m_vMonsterPos2.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
 			return E_FAIL;
 		++iCount;
 	}
@@ -374,7 +358,23 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;
+		++iCount;
+	}
+
+
+	for (; iter != m_vMonsterPos2.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
 			return E_FAIL;
 		++iCount;
 	}
@@ -389,7 +389,7 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, pLayerTag, &Info)))
 			return E_FAIL;
 		++iCount;
 	}
@@ -404,7 +404,7 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_MAZE, pLayerTag, &Info)))
 			return E_FAIL;
 		++iCount;
 	}
