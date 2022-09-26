@@ -91,6 +91,7 @@ void CDoor::Tick(_float fTimeDelta)
 				return;
 
 			m_bTalk = false;
+			m_bFirst = true;
 		}
 		else if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut && m_bCheck)	//¿­¼è ÀÖÀ¸¸é
 		{
@@ -110,6 +111,7 @@ void CDoor::Tick(_float fTimeDelta)
 
 			g_bCheck = true;
 			m_bTalk = false;
+			m_bFirst = true;
 		}
 
 
@@ -267,23 +269,25 @@ void CDoor::Late_Tick(_float fTimeDelta)
 
 	CGameObject* pTarget = nullptr;
 
-	if (m_iCount < 1 && m_IndexPos.iIndex == 0)
+	if (m_iCount < 1 && m_IndexPos.iIndex == 0 && !m_bFirst)
 	{
 		if (pInstance->Collision(this, TEXT("Com_QuestCollider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 		{
 			g_iTalk = 50;
-			if (m_iCount <= 1)
-			{
-				m_bTalk = true;
-			}
-			
+			m_bTalk = true;
 		}
 		else
 		{
 			if (50 == g_iTalk)
 				g_iTalk = 0;
 			m_bTalk = false;
+			m_bFirst = false;
 		}
+	}
+	else if (m_bFirst)
+	{
+		g_iTalk = 0;
+		m_bTalk = false;
 	}
 	else if (m_IndexPos.iIndex == 1 && !m_bTalk)
 	{
@@ -293,6 +297,7 @@ void CDoor::Late_Tick(_float fTimeDelta)
 			g_iCut = 50;
 		}
 	}
+	
 
 	Safe_Release(pInstance);
 }

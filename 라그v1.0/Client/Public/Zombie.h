@@ -62,7 +62,6 @@ private:
 	void Use_Skill(_float fTimeDelta);
 	HRESULT TextureRender();
 	void MonsterMove(_float fTimeDelta);
-	HRESULT RespawnMonster();
 	void CheckColl();
 	void	DropItem();
 private:

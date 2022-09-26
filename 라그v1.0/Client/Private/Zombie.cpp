@@ -67,7 +67,7 @@ HRESULT CZombie::Initialize(void * pArg)
 
 	tInfo.vPos = { 1.f,1.f,1.f };
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+	//	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
 
@@ -78,15 +78,11 @@ HRESULT CZombie::Initialize(void * pArg)
 void CZombie::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
-	if (!m_bRespawn)
-		m_fSkillCool += fTimeDelta;
-	m_fCollTime += fTimeDelta;
-	if (m_tInfo.iMp == 2 && !m_bAngry)
-
+	if (m_bPlay)
 	{
 		m_fSkillCool += fTimeDelta;
 		m_fCollTime += fTimeDelta;
+
 		if (m_tInfo.iMp == 2 && !m_bAngry)
 		{
 			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
@@ -97,9 +93,12 @@ void CZombie::Tick(_float fTimeDelta)
 			Safe_Release(pGameInstance);
 			m_bAngry = true;
 		}
+
 		OnTerrain();
+
 		if (!m_bDead)
 			Check_Front();
+
 		if (m_eCurState == DEAD)
 		{
 			if (m_tFrame.iFrameStart == 3)
@@ -107,15 +106,13 @@ void CZombie::Tick(_float fTimeDelta)
 				m_fDeadTime += fTimeDelta;
 				if (m_fDeadTime > 3.f)
 				{
-					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
-					m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);
-					m_pTransformCom->Bind_OnGraphicDev();
-					m_bRespawn = true;
+					m_tInfo.bDead = true;
 					return;
 				}
 			}
 			if (m_tFrame.iFrameStart != 3)
 				Move_Frame(fTimeDelta);
+
 			m_tInfo.bDead = false;
 			return;
 		}
@@ -155,41 +152,46 @@ void CZombie::Tick(_float fTimeDelta)
 		}
 
 		Safe_Release(pInstance);
+
+		
 	}
-	else
-	{
-		m_fRespawnTime += fTimeDelta;
-		if (m_fRespawnTime > 10.f)
-		{
-			RespawnMonster();
-			m_fRespawnTime = 0.f;
-			m_bRespawn = false;
-		}
-	}
+
 	m_tInfo.bDead = false;
 
 	if (g_iCut == 50)
 		m_bCheck = true;
+
+	if (m_bCheck)
+	{
+		m_fTimeDelta += fTimeDelta;
+
+		if (m_fTimeDelta > 7.f)
+		{
+			m_bCheck = false;
+			m_bPlay = true;
+		}
+	}
 }
 
 
 void CZombie::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
-	if (!m_bRespawn)
+	if (m_bPlay)
 	{
-		if (!m_bDead)
+		if (!m_bRespawn)
 		{
-			Check_Hit();
-			Motion_Change();
-			CheckColl();
+			if (!m_bDead)
+			{
+				Check_Hit();
+				Motion_Change();
+				CheckColl();
+			}
+			OnBillboard();
+			if (nullptr != m_pRendererCom)
+				m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 		}
-		OnBillboard();
-		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 	}
-
 }
 
 HRESULT CZombie::Render(void)
@@ -299,8 +301,6 @@ HRESULT CZombie::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
-
-
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
@@ -899,48 +899,8 @@ void CZombie::MonsterMove(_float fTimeDelta)
 	default:
 		break;
 	}
-
-
-
-
 }
-HRESULT CZombie::RespawnMonster()
-{
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
-	m_ePreState = STATE_END;
-	m_eCurState = IDLE;
-	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 3;
-	m_tFrame.fFrameSpeed = 0.25f;
-	m_tInfo.iHp = m_tInfo.iMaxHp;
-	m_tInfo.iMp = 1;
-	m_bFront = false;
-	m_fSkillCool = 0.f;
-	m_fRespawnTime = 0.f;
-	m_fDeadTime = 0.f;
-	m_fMove = 0.f;
-	m_irand = 0;
-	m_bSkill = false;
-	m_bMove = false;
-	m_bDead = false;
-	m_bRun = false;
-	m_bIDLE = false;
-	m_bRespawn = false;
-	m_bAngry = false;
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
-	Safe_AddRef(pGameInstance);
-	CGameObject::INFO tInfo;
-	tInfo.pTarget = this;
-	tInfo.vPos = { 1.f,0.8f,1.f };
-	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 1.f,1.f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-	Safe_Release(pGameInstance);
-	return S_OK;
-}
+
 void CZombie::CheckColl()
 {
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
