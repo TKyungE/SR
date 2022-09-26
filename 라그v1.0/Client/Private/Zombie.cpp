@@ -171,7 +171,7 @@ void CZombie::Tick(_float fTimeDelta)
 			tInfo.pTarget = this;
 			tInfo.vPos = { 1.f,0.8f,1.f };
 			tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-			tInfo.iMonsterType = (_int)MON_WRAITH;
+			tInfo.iMonsterType = (_int)MON_ZOMBIE;
 			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
 
 			tInfo.vPos = { 1.f,1.f,1.f };

@@ -439,6 +439,15 @@
     <Filter Include="02.GameObject\BackGroundObj\Dust">
       <UniqueIdentifier>{126e849b-fa02-4008-be27-5456c6c6907b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Boss\Rich">
+      <UniqueIdentifier>{c8198c1c-97ae-47f8-b1cf-2595aa75846f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Boss\Rich\RichClone">
+      <UniqueIdentifier>{bb24a0f1-c761-41f5-aa79-70719094907f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\16.RichAttack">
+      <UniqueIdentifier>{a669064c-59e6-461a-abd9-5dec6cd1b70b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -852,6 +861,15 @@
     <ClInclude Include="..\Public\Dust.h">
       <Filter>02.GameObject\BackGroundObj\Dust</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Rich.h">
+      <Filter>02.GameObject\Boss\Rich</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\RichClone.h">
+      <Filter>02.GameObject\Boss\Rich\RichClone</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\RichAttack.h">
+      <Filter>03.Effect\Skill\16.RichAttack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1252,6 +1270,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Dust.cpp">
       <Filter>02.GameObject\BackGroundObj\Dust</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\RichClone.cpp">
+      <Filter>02.GameObject\Boss\Rich\RichClone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Rich.cpp">
+      <Filter>02.GameObject\Boss\Rich</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\RichAttack.cpp">
+      <Filter>03.Effect\Skill\16.RichAttack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
