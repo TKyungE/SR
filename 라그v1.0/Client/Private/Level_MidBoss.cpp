@@ -244,6 +244,7 @@ HRESULT CLevel_MidBoss::Ready_Layer_Camera(const _tchar * pLayerTag)
 	CameraDesc.CameraDesc.TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
 
 	CameraDesc.CameraDesc.Info.pTarget = Info.pTarget;
+	CameraDesc.CameraDesc.Info.iLevelIndex = LEVEL_MIDBOSS;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Camera_Dynamic"), LEVEL_MIDBOSS, pLayerTag, &CameraDesc)))
 		return E_FAIL;
@@ -271,6 +272,8 @@ HRESULT CLevel_MidBoss::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuestUI"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LetterBox"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

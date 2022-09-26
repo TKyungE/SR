@@ -37,10 +37,10 @@ HRESULT CTown_Quest1::Initialize(void * pArg)
 
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = 400.f;
-	m_fSizeY = 400.f;
+	m_fSizeX = 600.f;
+	m_fSizeY = 600.f;
 	m_fX = 250.f;
-	m_fY = 370.f;
+	m_fY = 200.f;
 
 	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
@@ -100,7 +100,7 @@ void CTown_Quest1::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pQuestManager);
 
-	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest2")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuest2")))
+	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_TownQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_TownQuest1")))
 	{
 		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
@@ -123,7 +123,7 @@ void CTown_Quest1::Tick(_float fTimeDelta)
 		else
 			m_iQuestTex = 0;
 	}
-	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest2")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest2")) && !pQuestManager->Find_Active(TEXT("Quest_HuntQuest2"))->Get_Clear())
+	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_TownQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_TownQuest1")) && !pQuestManager->Find_Active(TEXT("Quest_TownQuest1"))->Get_Clear())
 	{
 		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
@@ -144,7 +144,7 @@ void CTown_Quest1::Tick(_float fTimeDelta)
 		else
 			m_iQuestTex = 2;
 	}
-	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest2")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_HuntQuest2")) && pQuestManager->Find_Active(TEXT("Quest_HuntQuest2"))->Get_Clear())
+	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_TownQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_TownQuest1")) && pQuestManager->Find_Active(TEXT("Quest_TownQuest1"))->Get_Clear())
 	{
 		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
@@ -189,25 +189,25 @@ void CTown_Quest1::Tick(_float fTimeDelta)
 			m_bQuestRender = false;
 	}
 
-	if (6 == g_iQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuest2")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuest2")))
+	if (6 == g_iQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_TownQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_TownQuest1")))
 	{
 		CHuntQuest::QINFO_DERIVED tQInfo;
 		tQInfo.iCount = 3;
 		tQInfo.pHuntGoal = new _uint[tQInfo.iCount];
 		tQInfo.pHuntGoal[0] = 3;
 		tQInfo.pHuntGoal[1] = 3;
-		tQInfo.pHuntGoal[2] = 2;
+		tQInfo.pHuntGoal[2] = 3;
 
 		tQInfo.pMonType = new MONSTERTYPE[tQInfo.iCount];
-		tQInfo.pMonType[0] = MON_DANDELION;
-		tQInfo.pMonType[1] = MON_BYORGUE;
-		tQInfo.pMonType[2] = MON_BLOODYMURDERER;
+		tQInfo.pMonType[0] = MON_ATROS;
+		tQInfo.pMonType[1] = MON_BAPHOMET;
+		tQInfo.pMonType[2] = MON_MINOROUS;
 
 		tQInfo.tQInfo.eType = CClientQuest::QUEST_HUNT;
 
-		if (FAILED(pQuestManager->Add_Quest(TEXT("Prototype_Quest_HuntQuest2"), TEXT("Quest_HuntQuest2"), &tQInfo)))
+		if (FAILED(pQuestManager->Add_Quest(TEXT("Prototype_Quest_HuntQuest1"), TEXT("Quest_TownQuest1"), &tQInfo)))
 		{
-			ERR_MSG(TEXT("Failed to Add Quest : HuntQuest2"));
+			ERR_MSG(TEXT("Failed to Add Quest : TownQuest1"));
 			return;
 		}
 
@@ -215,12 +215,12 @@ void CTown_Quest1::Tick(_float fTimeDelta)
 		g_iReward = 0;
 	}
 
-	if (6 == g_iReward && pQuestManager->Find_Active(TEXT("Quest_HuntQuest2"))->Get_Clear())
+	if (6 == g_iReward && pQuestManager->Find_Active(TEXT("Quest_TownQuest1"))->Get_Clear())
 	{
-		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_HuntQuest2"))))
+		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_TownQuest1"))))
 			return;
 
-
+		m_tInfo.pTarget->Set_Exp(50);
 
 		g_iQuest = 0;
 		g_iReward = 0;
@@ -308,7 +308,7 @@ HRESULT CTown_Quest1::Render(void)
 		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&m_ProjMatrix, &m_ProjMatrix), sizeof(_float4x4));
 		m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float));
 
-		m_pShaderCom->Set_Texture("g_Texture", m_pCharTextureCom->Get_Texture(0));
+		m_pShaderCom->Set_Texture("g_Texture", m_pCharTextureCom->Get_Texture(2));
 
 		/*if (FAILED(m_pCharTextureCom->Bind_OnGraphicDev(0)))
 		return E_FAIL;*/
@@ -379,7 +379,7 @@ HRESULT CTown_Quest1::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Quest1"), (CComponent**)&m_pCharTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_TownQuest1"), (CComponent**)&m_pCharTextureCom)))
 		return E_FAIL;
 
 
@@ -469,17 +469,17 @@ void CTown_Quest1::OnBillboard()
 
 void CTown_Quest1::Ready_Script(void)
 {
-	m_vQuestScript.push_back(TEXT(""));
-	m_vQuestScript.push_back(TEXT(""));
-	m_vQuestScript.push_back(TEXT(""));
-	m_vQuestScript.push_back(TEXT(""));
+	m_vQuestScript.push_back(TEXT("저..저기요...! 혹시 저랑 둘이서 파티 사냥 하실래요?"));
+	m_vQuestScript.push_back(TEXT("당연히 뻥이죠! 제가 왜 당신같은 허~졉이랑 파티 사냥을 하겠어요?"));
+	m_vQuestScript.push_back(TEXT("허접이 아니라구요? 그럼 증명해보세요!"));
+	m_vQuestScript.push_back(TEXT("사막에서 아트로스 3마리, 바포메트 3마리, 미노로스 3마리씩 잡아오면 인정해드릴게요."));
 
-	m_vNotClearScript.push_back(TEXT(""));
+	m_vNotClearScript.push_back(TEXT("왜 아직도 안가셨어요? 허졉이라 '못' 잡는거에요?"));
 
-	m_vNormalScript.push_back(TEXT(""));
+	m_vNormalScript.push_back(TEXT("저와 파티 사냥을 하시려면 실력을 증명하셔야 할 거에요~"));
 
-	m_vClearScript.push_back(TEXT(""));
-	m_vClearScript.push_back(TEXT("이건 약소하지만 우리 마을을 도와준 보상일세. \n\n보상 : 경험치 50"));
+	m_vClearScript.push_back(TEXT("세..세상에..! 벌써 다 잡아왔다고요?! 그럴 리가..?"));
+	m_vClearScript.push_back(TEXT("저도 못잡은 몬스터들을 잡아왔다니..! 인정할 수 없어요! \n\n보상 : 경험치 100"));
 }
 
 CTown_Quest1 * CTown_Quest1::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)

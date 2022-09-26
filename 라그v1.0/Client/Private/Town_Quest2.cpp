@@ -37,10 +37,10 @@ HRESULT CTown_Quest2::Initialize(void * pArg)
 
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = 600.f;
-	m_fSizeY = 600.f;
+	m_fSizeX = 300.f;
+	m_fSizeY = 300.f;
 	m_fX = 280.f;
-	m_fY = 250.f;
+	m_fY = 330.f;
 
 	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
@@ -100,7 +100,7 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pQuestManager);
 
-	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_CollectQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_CollectQuest1")))
+	if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_TownQuest2")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_TownQuest2")))
 	{
 		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
@@ -115,7 +115,7 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 
 			tTInfo.iQuestIndex = 3;
 			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
-			tTInfo.iNumQuest = 3;
+			tTInfo.iNumQuest = 7;
 
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
@@ -123,7 +123,7 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 		else
 			m_iQuestTex = 0;
 	}
-	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_CollectQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_CollectQuest1")) && !pQuestManager->Find_Active(TEXT("Quest_CollectQuest1"))->Get_Clear())
+	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_TownQuest2")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_TownQuest2")) && !pQuestManager->Find_Active(TEXT("Quest_TownQuest2"))->Get_Clear())
 	{
 		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
@@ -144,7 +144,7 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 		else
 			m_iQuestTex = 2;
 	}
-	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_CollectQuest1")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_CollectQuest1")) && pQuestManager->Find_Active(TEXT("Quest_CollectQuest1"))->Get_Clear())
+	else if (nullptr == pQuestManager->Find_Finish(TEXT("Quest_TownQuest2")) && nullptr != pQuestManager->Find_Active(TEXT("Quest_TownQuest2")) && pQuestManager->Find_Active(TEXT("Quest_TownQuest2"))->Get_Clear())
 	{
 		if ((GetKeyState(VK_SPACE) < 0) && m_bTalk && 0 == g_iCut)
 		{
@@ -157,9 +157,9 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 			for (_int i = 0; i < m_vClearScript.size(); ++i)
 				tTInfo.pScript[i] = m_vClearScript[i];
 
-			tTInfo.iQuestIndex = 1;
+			tTInfo.iQuestIndex = 2;
 			tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
-			tTInfo.iNumQuest = 3;
+			tTInfo.iNumQuest = 7;
 
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 				return;
@@ -189,26 +189,22 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 			m_bQuestRender = false;
 	}
 
-	if (7 == g_iQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_CollectQuest1")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_CollectQuest1")))
+	if (7 == g_iQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_TownQuest2")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_TownQuest2")))
 	{
 		CCollectQuest::QINFO_DERIVED tQInfo;
-		tQInfo.iCount = 3;
+		tQInfo.iCount = 1;
 
 		tQInfo.pCollectGoal = new _uint[tQInfo.iCount];
-		tQInfo.pCollectGoal[0] = 2;
-		tQInfo.pCollectGoal[1] = 2;
-		tQInfo.pCollectGoal[2] = 1;
+		tQInfo.pCollectGoal[0] = 1;
 
 		tQInfo.pItemType = new CStatInfo::EITEM[tQInfo.iCount];
-		tQInfo.pItemType[0] = CStatInfo::MON2;
-		tQInfo.pItemType[1] = CStatInfo::MON1;
-		tQInfo.pItemType[2] = CStatInfo::MON3;
+		tQInfo.pItemType[0] = CStatInfo::MON11;
 
 		tQInfo.tQInfo.eType = CClientQuest::QUEST_COLLECT;
 
-		if (FAILED(pQuestManager->Add_Quest(TEXT("Prototype_Quest_CollectQuest1"), TEXT("Quest_CollectQuest1"), &tQInfo)))
+		if (FAILED(pQuestManager->Add_Quest(TEXT("Prototype_Quest_CollectQuest1"), TEXT("Quest_TownQuest2"), &tQInfo)))
 		{
-			ERR_MSG(TEXT("Failed to Add Quest : CollectQuest1"));
+			ERR_MSG(TEXT("Failed to Add Quest : TownQuest2"));
 			return;
 		}
 
@@ -216,35 +212,24 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 		g_iReward = 0;
 	}
 
-	if (7 == g_iReward && pQuestManager->Find_Active(TEXT("Quest_CollectQuest1"))->Get_Clear())
+	if (7 == g_iReward && pQuestManager->Find_Active(TEXT("Quest_TownQuest2"))->Get_Clear())
 	{
-		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_CollectQuest1"))))
+		if (FAILED(pQuestManager->Clear_Quest(TEXT("Quest_TownQuest2"))))
 			return;
 
-		m_tInfo.pTarget->Set_Money(1000);
+		m_tInfo.pTarget->Set_Money(2000);
 
 		CStatInfo* pStat = (CStatInfo*)pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 
 		for (_int i = 0; i < 24; ++i)
 		{
-			if (pStat->Get_Item(i).eItemNum == CStatInfo::MON2)
-			{
-				pStat->Set_UseItemCount(-2, i);
-				if (pStat->Get_Item(i).iCount <= 0)
-					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
-			}
-			else if (pStat->Get_Item(i).eItemNum == CStatInfo::MON1)
-			{
-				pStat->Set_UseItemCount(-2, i);
-				if (pStat->Get_Item(i).iCount <= 0)
-					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
-			}
-			else if (pStat->Get_Item(i).eItemNum == CStatInfo::MON3)
+			if (pStat->Get_Item(i).eItemNum == CStatInfo::MON11)
 			{
 				pStat->Set_UseItemCount(-1, i);
 				if (pStat->Get_Item(i).iCount <= 0)
 					pStat->Set_ItemNum(CStatInfo::EITEM_END, i);
 			}
+			
 		}
 
 		g_iQuest = 0;
@@ -255,7 +240,7 @@ void CTown_Quest2::Tick(_float fTimeDelta)
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
 	{
-		ERR_MSG(TEXT("Failed to Add CollisionGroup : CVillage_Quest2"));
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : TownQuest2"));
 		return;
 	}
 
@@ -405,7 +390,7 @@ HRESULT CTown_Quest2::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Engineer"), (CComponent**)&m_pCharTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_TownQuest2"), (CComponent**)&m_pCharTextureCom)))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
@@ -493,17 +478,18 @@ void CTown_Quest2::OnBillboard()
 
 void CTown_Quest2::Ready_Script(void)
 {
-	m_vQuestScript.push_back(TEXT("반갑네. 자네는 모험가인가?"));
-	m_vQuestScript.push_back(TEXT("마침 잘됐군. 자네 내 부탁 좀 들어주겠나?"));
-	m_vQuestScript.push_back(TEXT("이번에 내린 큰 비로 집을 보수해야 하는데 마침 재료가 전부 떨어졌지 뭔가"));
-	m_vQuestScript.push_back(TEXT("저쪽의 포탈을 타고 나가 엘더 윌로우의 몸통 2개와 엘리게이터의 독 2개, 빅풋의 발바닥 1개를 모아주면 사례하겠네."));
+	m_vQuestScript.push_back(TEXT("안녕하세요. 모험가님. 저는 이 세계를 떠도는 음유시인입니다."));
+	m_vQuestScript.push_back(TEXT("제가 모험가님이 흥미로워 할만한 이야기를 아는데 들려드릴까요?"));
+	m_vQuestScript.push_back(TEXT("사막을 건너면 절대 통과할 수 없는 미로가 있습니다. 게다가 미로에는 레이스까지 나와 매우 위험한 곳이죠."));
+	m_vQuestScript.push_back(TEXT("어떻습니까? 모험가님은 미로에 있는 레이스를 물리치고 미로를 통과하실 수 있으십니까?"));
 
-	m_vNotClearScript.push_back(TEXT("다음에도 이런 비가 온다면 버티지 못할거야.."));
+	m_vNotClearScript.push_back(TEXT("제 이야기가 허풍이 아니라는 것을 알게 되실겁니다. 후훗."));
 
-	m_vNormalScript.push_back(TEXT("안녕하신가."));
+	m_vNormalScript.push_back(TEXT("안녕하세요? 저는 떠돌이 음유시인이랍니다."));
 
-	m_vClearScript.push_back(TEXT("벌써 가져왔나? 정말 고맙네!"));
-	m_vClearScript.push_back(TEXT("이건 나를 도와준 보상이네. 다시 한 번 정말 고맙네. \n\n보상 : 골드 1000"));
+	m_vClearScript.push_back(TEXT("세상에.. 정말 미로를 통과하고 오셨군요! 게다가 이 이빨은.."));
+	m_vClearScript.push_back(TEXT("레이스까지 물리치고 오셨다니.. 모험가님은 정말 대단하시군요!"));
+	m_vClearScript.push_back(TEXT("이건 미로를 통과하고 오신 모험가님께 드리는 제 선물입니다. 받아주세요. \n\n보상 : 골드 2000"));
 }
 
 CTown_Quest2 * CTown_Quest2::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)

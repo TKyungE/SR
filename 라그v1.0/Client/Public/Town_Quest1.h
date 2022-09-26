@@ -58,7 +58,7 @@ private:
 
 	_bool m_bTalk = false;
 	_bool m_bOnce = false;
-	_bool m_bQuestRender = false;
+	_bool m_bQuestRender = true;
 
 	vector<wstring> m_vNormalScript;
 	vector<wstring> m_vQuestScript;
