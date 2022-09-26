@@ -139,9 +139,9 @@ void CDoor::Tick(_float fTimeDelta)
 			_uint iY = rand() % 3;
 			_uint iZ = rand() % 30;
 			
-			Info2.vPos.x += (_float)iX * 0.1;
-			Info2.vPos.y += (_float)iY * 0.1;
-			Info2.vPos.z += (_float)iZ * 0.1;
+			Info2.vPos.x += (_float)iX * 0.1f;
+			Info2.vPos.y += (_float)iY * 0.1f;
+			Info2.vPos.z += (_float)iZ * 0.1f;
 
 
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_Dust"), m_tInfo.iLevelIndex, TEXT("Layer_Dust"), &Info2)))
@@ -272,12 +272,17 @@ void CDoor::Late_Tick(_float fTimeDelta)
 		if (pInstance->Collision(this, TEXT("Com_QuestCollider"), COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 		{
 			g_iTalk = 50;
+			if (m_iCount <= 1)
+			{
+				m_bTalk = true;
+			}
+			
 		}
 		else
 		{
 			if (50 == g_iTalk)
 				g_iTalk = 0;
-			m_bTalk = true;
+			m_bTalk = false;
 		}
 	}
 	else if (m_IndexPos.iIndex == 1 && !m_bTalk)

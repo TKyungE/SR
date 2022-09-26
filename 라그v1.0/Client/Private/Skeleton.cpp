@@ -52,22 +52,7 @@ HRESULT CSkeleton::Initialize(void * pArg)
 	m_tInfo.iExp = 30;
 	m_tInfo.iMonsterType = (_int)MON_SKELETON;
 
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
-	Safe_AddRef(pGameInstance);
-	CGameObject::INFO tInfo;
-	tInfo.pTarget = this;
-	tInfo.vPos = { 1.f,0.8f,1.f };
-	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-	tInfo.iMonsterType = (_int)MON_WRAITH;
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
-
-	tInfo.vPos = { 1.f,1.f,1.f };
-
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
-	Safe_Release(pGameInstance);
+	
 
 
 	return S_OK;
@@ -174,7 +159,25 @@ void CSkeleton::Tick(_float fTimeDelta)
 			m_fTimeDelta += fTimeDelta;
 			if (m_fTimeDelta > 2.f)
 			{
+				m_bCheck = false;
 				m_bPlay = true;
+
+				CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+				if (nullptr == pGameInstance)
+					return;
+				Safe_AddRef(pGameInstance);
+				CGameObject::INFO tInfo;
+				tInfo.pTarget = this;
+				tInfo.vPos = { 1.f,0.8f,1.f };
+				tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+				tInfo.iMonsterType = (_int)MON_WRAITH;
+				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
+
+				tInfo.vPos = { 1.f,1.f,1.f };
+
+				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+				m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
+				Safe_Release(pGameInstance);
 			}
 		}	
 	
