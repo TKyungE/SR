@@ -56,7 +56,7 @@ private:		// 파일입출력 라인
 	_bool	m_bCheck = false;
 private:
 	bool m_bNextLevel = false;
-
+	_bool m_bFade = false;
 public:
 	HRESULT Ready_Layer_BackGround(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Player(const _tchar* pLayerTag);

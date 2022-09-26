@@ -39,7 +39,6 @@ private:
 	_float					m_fAlpha = 0.f;
 	_float					m_fTimeDelta = 0.f;
 	_bool					m_bCheck = false;
-	_float					m_fTime = 0.f;
 
 private:
 	HRESULT SetUp_Components();

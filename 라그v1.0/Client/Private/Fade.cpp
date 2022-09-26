@@ -30,12 +30,10 @@ HRESULT CFade::Initialize(void* pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.bHit = false;
 
-	m_tInfo.iMp = 0;		// 이걸로 계속 중첩으로 맞았는지 검사할 거임
-
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_fTime = 0.1f;
+	m_bCheck = (_bool)m_tInfo.iMp;
 
 	m_fSizeX = (_float)g_iWinSizeX * 2.f;
 	m_fSizeY = (_float)g_iWinSizeY * 2.f;
@@ -45,7 +43,10 @@ HRESULT CFade::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 
-	m_fAlpha = 0.f;
+	if (!m_bCheck)
+		m_fAlpha = 0.f;
+	else
+		m_fAlpha = 1.f;
 
 	return S_OK;
 }
@@ -62,52 +63,26 @@ void CFade::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (!m_bCheck)
+	if (!m_bCheck && m_tInfo.iMaxMp != 1)
 	{
-		m_fAlpha += fTimeDelta;
+		m_fAlpha += fTimeDelta * 1.2f;
 
 		if (m_fAlpha >= 1.f)
+		{
 			m_bCheck = true;
+			m_tInfo.iMaxMp = 1;
+		}
 	}
-	else if (m_bCheck)
+	else if (m_bCheck && m_tInfo.iMaxMp != 1)
 	{
 		m_fAlpha -= fTimeDelta;
 
-		if (m_fAlpha <= 0.f)
-			m_bCheck = false;
-	}
-
-
-	/*m_fTimeDelta += fTimeDelta;
-
-
-
-	if (m_fTimeDelta > m_fTime && !m_bCheck)
-	{
-		m_fAlpha += 0.01f;
-		m_fTimeDelta = 0.f;
-		m_fTime -= 0.05f;
-		if (m_fAlpha >= 1.f)
+		if (m_fAlpha <= -1.f)
 		{
-			m_fTime = 0.1f;
-			m_fAlpha = 0.f;
-			m_bCheck = true;
+			m_bCheck = false;
+			m_tInfo.iMaxMp = 1;
 		}
 	}
-	else if (m_fTimeDelta > m_fTime && m_bCheck)
-	{
-		m_fAlpha -= 0.1f;
-		m_fTimeDelta = 0.f;
-		m_fTime -= 0.1f;
-		if (m_fAlpha <= 0.f)
-		{
-			m_fTime = 0.1f;
-			m_fAlpha = 0.f;
-			m_bCheck = false;
-		}
-	}*/
-
-
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_MOUSE, this);
@@ -135,8 +110,6 @@ HRESULT CFade::Render()
 
 	m_pShaderCom->End();
 
-
-
 	return S_OK;
 }
 
@@ -153,7 +126,6 @@ HRESULT CFade::SetUp_Components()
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_WingRect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
