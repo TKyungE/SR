@@ -241,6 +241,8 @@ void CTextBox::Running_TextBox(void)
 				if (m_tTInfo.iNumQuest == 4)
 					g_iReward = 0;
 
+				g_bCheck = false;
+
 				break;
 			}
 			case CMyButton::BUTTON_BACK:
@@ -287,6 +289,8 @@ void CTextBox::Running_TextBox(void)
 				if (0 != g_iCut)
 					g_iCut = 0;
 
+				g_bCheck = false;
+				
 				break;
 			}
 			}

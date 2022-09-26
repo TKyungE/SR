@@ -112,6 +112,8 @@
 #include "Town_Quest1.h"
 #include "Town_Quest2.h"
 #include "Town_Quest3.h"
+#include "Door.h"
+#include "Dust.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -379,7 +381,7 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Angry/%d.png"), 3))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Wind"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Wind/%d.bmp"), 5))))
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Wind/%d.png"), 5))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Hit"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Skill/Hit/Effect%d.png"), 3))))
@@ -978,6 +980,10 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/BOSS/Maiden/Illust/wish_maiden0%d.png"), 9))))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Door"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Door/%d.png"), 1))))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -1162,6 +1168,10 @@ HRESULT CLoader::Loading_Prototype()
 
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ItemBox"),
 		CItemBox::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Dust"),
+		CDust::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	//sky °´Ã¼
@@ -1351,6 +1361,11 @@ HRESULT CLoader::Loading_Prototype()
 
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlphaUI"),
 		CAlphaUI::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	// Door
+
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Door"),
+		CDoor::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

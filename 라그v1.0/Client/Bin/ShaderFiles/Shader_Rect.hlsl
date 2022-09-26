@@ -159,6 +159,15 @@ PS_OUT PS_MAIN_HPBAR(PS_IN In)
 
 	Out.vColor = tex2D(NoneSampler, In.vTexUV);
 
+	float4		vFogColor = vector(1.f, 1.f, 1.f, 1.f);
+
+	float		fDistance = length(g_vCamPosition - vector(In.vWorldPos, 1.f));
+
+	float		fFogPower = max(fDistance - g_fMinRange, 0.f) / (g_fMaxRange - g_fMinRange);
+
+	Out.vColor -= (vFogColor * fFogPower);
+	Out.vColor.a = Out.vColor.a * g_fAlpha;
+
 	if (In.vTexUV.x > g_fHPBar)
 	{
 		if (Out.vColor.r > 0.9f)
@@ -167,7 +176,11 @@ PS_OUT PS_MAIN_HPBAR(PS_IN In)
 			Out.vColor.g = 0.3607f;
 			Out.vColor.b = 0.5019f;
 		}
-			
+	}
+
+	if (Out.vColor.a == 0.f)
+	{
+		discard;
 	}
 
 	return Out;
@@ -194,7 +207,7 @@ PS_OUT PS_MAIN_Rect(PS_IN In)
 
 technique DefaultTechnique
 {
-	pass DefaultPass
+	pass DefaultPass			//0
 	{
 		/*AlphablendEnable = true;
 		SrcBlend = SrcAlpha;
@@ -208,7 +221,7 @@ technique DefaultTechnique
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN();
 	}
-	pass NpcCharPass
+	pass NpcCharPass		//1
 	{
 		AlphablendEnable = true;
 		SrcBlend = SrcAlpha;
@@ -222,12 +235,12 @@ technique DefaultTechnique
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_NPC();
 	}
-	pass Terrain
+	pass Terrain		//2
 	{
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_TERRAIN();
 	}
-	pass Monster
+	pass Monster		//3
 	{
 		AlphaTestEnable = true;
 		AlphaFunc = GREATER;
@@ -236,7 +249,7 @@ technique DefaultTechnique
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_MONSTER();
 	}
-	pass Shadow
+	pass Shadow		//4
 	{
 		AlphablendEnable = true;
 		SrcBlend = SrcAlpha;
@@ -247,7 +260,7 @@ technique DefaultTechnique
 		PixelShader = compile ps_3_0 PS_MAIN_MONSTER();
 	}
 
-	pass UI
+	pass UI			//5
 	{
 		AlphablendEnable = true;
 		SrcBlend = SrcAlpha;
@@ -257,7 +270,7 @@ technique DefaultTechnique
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_UI();
 	}
-	pass AlphaMonster
+	pass AlphaMonster			//6
 	{
 		AlphablendEnable = true;
 		SrcBlend = SrcAlpha;
@@ -267,17 +280,18 @@ technique DefaultTechnique
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_MONSTER();
 	}
-	pass HpBar
+	pass HpBar			//7
 	{
-		AlphaTestEnable = true;
-		AlphaFunc = GREATER;
-		AlphaRef = 100;
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_HPBAR();
 	}
 
-	pass QuestUI
+	pass QuestUI			//8
 	{
 		AlphablendEnable = true;
 		SrcBlend = SrcAlpha;
@@ -288,7 +302,7 @@ technique DefaultTechnique
 		PixelShader = compile ps_3_0 PS_MAIN_QUESTUI();
 	}
 
-	pass Rect
+	pass Rect			//9
 	{
 		AlphaTestEnable = true;
 		AlphaFunc = GREATER;

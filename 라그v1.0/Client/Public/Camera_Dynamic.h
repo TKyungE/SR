@@ -43,6 +43,9 @@ private:
 	_bool	m_bCri = false;
 	_float m_fCriFovy = 0.f;
 	_float m_fCriTime = 0.f;
+	_float m_fTimeDelta = 0.f;
+	_float m_fTimeDelta2 = 0.f;
+	_bool	m_bMove = false;
 public:
 	void CriHit();
 public:

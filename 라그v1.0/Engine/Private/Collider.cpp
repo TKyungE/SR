@@ -98,7 +98,7 @@ HRESULT CCollider::SetUp_Components(void)
 
 	TransformDesc.fSpeedPerSec = 5.f;
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
-
+	
 	if (FAILED(Add_Components(TEXT("Com_Transform"), m_iLevelIndex, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
@@ -150,6 +150,24 @@ CComponent * CCollider::Find_Component(const _tchar * pComponentTag)
 		return nullptr;
 	
 	return iter->second;
+}
+
+void CCollider::Turn(_float3 vAxis, _float fTimeDelta)
+{
+	_float3	vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	_float3	vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+	_float3	vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+	_float4x4	RotationMatrix;
+	D3DXMatrixRotationAxis(&RotationMatrix, &vAxis, m_pTransformCom->Get_TransformDesc().fRotationPerSec * fTimeDelta);
+
+	D3DXVec3TransformNormal(&vRight, &vRight, &RotationMatrix);
+	D3DXVec3TransformNormal(&vUp, &vUp, &RotationMatrix);
+	D3DXVec3TransformNormal(&vLook, &vLook, &RotationMatrix);
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
 }
 
 CCollider * CCollider::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

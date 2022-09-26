@@ -60,6 +60,7 @@ HRESULT CZombie::Initialize(void * pArg)
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.8f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.iMonsterType = (_int)MON_WRAITH;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
 
 	tInfo.vPos = { 1.f,1.f,1.f };
@@ -75,107 +76,127 @@ HRESULT CZombie::Initialize(void * pArg)
 void CZombie::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	if (!m_bRespawn)
+	if (m_bPlay)
 	{
+		if (!m_bRespawn)
 		m_fSkillCool += fTimeDelta;
 		m_fCollTime += fTimeDelta;
 		if (m_tInfo.iMp == 2 && !m_bAngry)
+
 		{
-			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-			Safe_AddRef(pGameInstance);
-			CGameObject::INFO tInfo;
-			tInfo.pTarget = this;
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-			Safe_Release(pGameInstance);
-			m_bAngry = true;
-		}
-		OnTerrain();
-		if (!m_bDead)
-			Check_Front();
-		if (m_eCurState == DEAD)
-		{
-			if (m_tFrame.iFrameStart == 3)
+			m_fSkillCool += fTimeDelta;
+			m_fCollTime += fTimeDelta;
+			if (m_tInfo.iMp == 2 && !m_bAngry)
 			{
-				m_fDeadTime += fTimeDelta;
-				if (m_fDeadTime > 3.f)
-				{
-					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
-					m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);
-					m_pTransformCom->Bind_OnGraphicDev();
-					m_bRespawn = true;
-					return;
-				}
+				CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+				Safe_AddRef(pGameInstance);
+				CGameObject::INFO tInfo;
+				tInfo.pTarget = this;
+				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+				Safe_Release(pGameInstance);
+				m_bAngry = true;
 			}
-			if (m_tFrame.iFrameStart != 3)
-				Move_Frame(fTimeDelta);
-			m_tInfo.bDead = false;
-			return;
+			OnTerrain();
+			if (!m_bDead)
+				Check_Front();
+			if (m_eCurState == DEAD)
+			{
+				if (m_tFrame.iFrameStart == 3)
+				{
+					m_fDeadTime += fTimeDelta;
+					if (m_fDeadTime > 3.f)
+					{
+						_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
+						m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);
+						m_pTransformCom->Bind_OnGraphicDev();
+						m_bRespawn = true;
+						return;
+					}
+				}
+				if (m_tFrame.iFrameStart != 3)
+					Move_Frame(fTimeDelta);
+				m_tInfo.bDead = false;
+				return;
+			}
+			if (m_tInfo.iMp == 1)
+			{
+				if (!m_bSkill && !m_bDead && !m_bRun)
+					Chase(fTimeDelta);
+
+				if (m_bRun)
+					Chase2(fTimeDelta);
+			}
+			else if (!m_bSkill && !m_bDead)
+				Chase3(fTimeDelta);
+
+			if (m_tInfo.iMp == 1 && !m_bIDLE)
+			{
+				MonsterMove(fTimeDelta);
+			}
+
+
+			Move_Frame(fTimeDelta);
+			if (m_eCurState == SKILL)
+				Use_Skill(fTimeDelta);
+
+			m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+			CGameInstance* pInstance = CGameInstance::Get_Instance();
+			if (nullptr == pInstance)
+				return;
+
+			Safe_AddRef(pInstance);
+
+			if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTER, this)))
+			{
+				ERR_MSG(TEXT("Failed to Add CollisionGroup : CZombie"));
+				return;
+			}
+
+			Safe_Release(pInstance);
 		}
-		if (m_tInfo.iMp == 1)
+		else
 		{
-			if (!m_bSkill && !m_bDead && !m_bRun)
-				Chase(fTimeDelta);
-
-			if (m_bRun)
-				Chase2(fTimeDelta);
+			m_fRespawnTime += fTimeDelta;
+			if (m_fRespawnTime > 10.f)
+			{
+				RespawnMonster();
+				m_fRespawnTime = 0.f;
+				m_bRespawn = false;
+			}
 		}
-		else if (!m_bSkill && !m_bDead)
-			Chase3(fTimeDelta);
-
-		if (m_tInfo.iMp == 1 && !m_bIDLE)
-		{
-			MonsterMove(fTimeDelta);
-		}
-
-
-		Move_Frame(fTimeDelta);
-		if (m_eCurState == SKILL)
-			Use_Skill(fTimeDelta);
-
-		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
-
-		CGameInstance* pInstance = CGameInstance::Get_Instance();
-		if (nullptr == pInstance)
-			return;
-
-		Safe_AddRef(pInstance);
-
-		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTER, this)))
-		{
-			ERR_MSG(TEXT("Failed to Add CollisionGroup : CZombie"));
-			return;
-		}
-
-		Safe_Release(pInstance);
 	}
-	else
-	{
-		m_fRespawnTime += fTimeDelta;
-		if (m_fRespawnTime > 10.f)
-		{
-			RespawnMonster();
-			m_fRespawnTime = 0.f;
-			m_bRespawn = false;
-		}
-	}
-
 	m_tInfo.bDead = false;
+
+	if (g_iCut == 50)
+		m_bCheck = true;
+	if (m_bCheck)
+	{
+		m_fTimeDelta += fTimeDelta;
+		if (m_fTimeDelta > 2.f)
+		{
+			m_bPlay = true;
+		}
+	}
 }
 
 void CZombie::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	if (!m_bRespawn)
+	if (m_bPlay)
 	{
-		if (!m_bDead)
+		if (!m_bRespawn)
 		{
-			Check_Hit();
-			Motion_Change();
-			CheckColl();
+			if (!m_bDead)
+			{
+				Check_Hit();
+				Motion_Change();
+				CheckColl();
+			}
+			OnBillboard();
+			if (nullptr != m_pRendererCom)
+				m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 		}
-		OnBillboard();
-		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 	}
 }
 
@@ -1018,6 +1039,7 @@ void CZombie::CheckColl()
 
 		m_fCollTime = 0.f;
 	}
+
 	Safe_Release(pInstance);
 }
 void CZombie::OnBillboard()

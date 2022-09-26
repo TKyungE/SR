@@ -12,6 +12,7 @@
 #include "Layer.h"
 #include "Portal.h"
 #include "Transparent_Wall.h"
+#include "Door.h"
 
 bool g_bCollider = false;
 int g_iTalk = 0;
@@ -20,6 +21,8 @@ bool g_bFirst = true;
 int g_iQuest = 0;
 int g_iReward = 0;
 bool g_bSky = false;
+bool g_bCheck = false;
+bool g_bMazeCut = false;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -181,7 +184,6 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Transparent_Wall"), LEVEL_TOWN, pLayerTag, &Wall)))
 			return E_FAIL;
 	}
-
 
 	Safe_Release(pGameInstance);
 

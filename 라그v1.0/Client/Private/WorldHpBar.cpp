@@ -96,7 +96,7 @@ void CWorldHpBar::Late_Tick(_float fTimeDelta)
 	OnBillboard();
 
 	if (nullptr != m_pRendererCom && 0 == g_iCut)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CWorldHpBar::Render()
@@ -137,16 +137,16 @@ HRESULT CWorldHpBar::Render()
 	
 	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
 	{
-		_float fMin = 3.f;
-		_float fMax = 6.f;
+		_float fMin = 100.f;
+		_float fMax = 100.f;
 		m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float));
 		m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float));
 
 	}
 	else
 	{
-		_float	fMin = 1.f;
-		_float	fMax = 4.f;
+		_float	fMin = 3.f;
+		_float	fMax = 6.f;
 
 
 			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
@@ -158,8 +158,8 @@ HRESULT CWorldHpBar::Render()
 
 	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(2));
 
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
+	/*if (FAILED(SetUp_RenderState()))
+		return E_FAIL;*/
 
 	m_pShaderCom->Begin(7);
 

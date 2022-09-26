@@ -12,6 +12,7 @@
 #include "VIBuffer_RectLeft.h"
 #include "Collider.h"
 #include "Shader.h"
+#include "VIBuffer_Rect3.h"
 
 BEGIN(Engine)
 

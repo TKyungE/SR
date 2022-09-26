@@ -140,7 +140,7 @@ void CPlayer::Tick(_float fTimeDelta)
 		Safe_Release(pInstance);
 	}
 
-	if (!g_bFirst && 0 == g_iCut)
+	if (!g_bFirst && 0 == g_iCut && !g_bCheck)
 	{
 		if (GetKeyState('W') < 0)
 		{
@@ -170,7 +170,7 @@ void CPlayer::Tick(_float fTimeDelta)
 		OnTerrain();
 	if (m_tInfo.iLevelIndex == LEVEL_SKY)
 		Move_Frame(fTimeDelta);
-	if (0 == g_iCut)
+	if (0 == g_iCut && !g_bCheck)
 	{
 		if (g_bFirst)
 		{
