@@ -326,7 +326,7 @@ void CFireBall::CheckColl()
 	CGameObject* pTarget;
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
 	{
-		_float fCri = _float(rand() % 100 + 1);
+		/*_float fCri = _float(rand() % 100 + 1);
 		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
 
 		if (fCri <= fLUK)
@@ -348,7 +348,7 @@ void CFireBall::CheckColl()
 			pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
 		}
 		if (pTarget->Get_Info().iHp <= 0)
-			pTarget->Set_Dead();
+			pTarget->Set_Dead();*/
 		Set_Dead();
 	}
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
@@ -384,29 +384,29 @@ void CFireBall::CheckColl()
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
 	{
 
-		_float fCri = _float(rand() % 100 + 1);
-		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
+		//_float fCri = _float(rand() % 100 + 1);
+		//_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
 
-		if (fCri <= fLUK)
-		{
-			pTarget->Set_Hp(m_tInfo.iDmg * 2);
-			pTarget->Set_Hit(m_tInfo.iDmg * 2, *(_float3*)&pTarget->Get_World().m[3][0]);
-			CGameObject::INFO tInfo;
-			tInfo.pTarget = pTarget;
-			tInfo.vPos = *(_float3*)&pTarget->Get_World().m[3][0];
-			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
-				return;
-			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit2"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
-				return;
-			dynamic_cast<CCamera_Dynamic*>(pInstance->Find_Layer(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Camera"))->Get_Objects().front())->CriHit();
-		}
-		else
-		{
-			pTarget->Set_Hp(m_tInfo.iDmg);
-			pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
-		}
-		if (pTarget->Get_Info().iHp <= 0)
-			pTarget->Set_Dead();
+		//if (fCri <= fLUK)
+		//{
+		//	pTarget->Set_Hp(m_tInfo.iDmg * 2);
+		//	pTarget->Set_Hit(m_tInfo.iDmg * 2, *(_float3*)&pTarget->Get_World().m[3][0]);
+		//	CGameObject::INFO tInfo;
+		//	tInfo.pTarget = pTarget;
+		//	tInfo.vPos = *(_float3*)&pTarget->Get_World().m[3][0];
+		//	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+		//		return;
+		//	if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit2"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+		//		return;
+		//	dynamic_cast<CCamera_Dynamic*>(pInstance->Find_Layer(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Camera"))->Get_Objects().front())->CriHit();
+		//}
+		//else
+		//{
+		//	pTarget->Set_Hp(m_tInfo.iDmg);
+		//	pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+		//}
+		//if (pTarget->Get_Info().iHp <= 0)
+		//	pTarget->Set_Dead();
 		Set_Dead();
 	}
 	Safe_Release(pInstance);

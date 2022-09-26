@@ -184,7 +184,7 @@ void CThunderSword::CheckColl()
 
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
+	/*if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
 	{
 		_float fCri = _float(rand() % 100 + 1);
 		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
@@ -210,7 +210,7 @@ void CThunderSword::CheckColl()
 		if (pTarget->Get_Info().iHp <= 0)
 			pTarget->Set_Dead();
 		Set_Dead();
-	}
+	}*/
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
 	{
 		if (pTarget->Get_Info().iMp == 0)
@@ -241,7 +241,7 @@ void CThunderSword::CheckColl()
 			Set_Dead();
 		}
 	}
-	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
+	/*if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
 	{
 
 		_float fCri = _float(rand() % 100 + 1);
@@ -268,7 +268,7 @@ void CThunderSword::CheckColl()
 		if (pTarget->Get_Info().iHp <= 0)
 			pTarget->Set_Dead();
 		Set_Dead();
-	}
+	}*/
 	Safe_Release(pInstance);
 }
 _float3 CThunderSword::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)

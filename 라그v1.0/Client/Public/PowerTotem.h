@@ -46,6 +46,8 @@ private:
 private:
 	_float		m_fHitTime = 0.f;
 	_float		m_fDrainTime = 0.f;
+	_float		m_fCollTime = 0.f;
+	CGameObject*			m_StatInfo;
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);

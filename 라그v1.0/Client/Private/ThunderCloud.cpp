@@ -62,8 +62,6 @@ void CThunderCloud::Tick(_float fTimeDelta)
 		Create_Sword(TEXT("Layer_Skill"));
 		m_fDelay = 0.f;
 	}
-
-
 }
 
 void CThunderCloud::Late_Tick(_float fTimeDelta)
