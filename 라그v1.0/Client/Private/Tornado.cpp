@@ -33,7 +33,7 @@ HRESULT CTornado::Initialize(void* pArg)
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_tInfo.vPos.y += 0.7f;
-	_float3 vScale = { 3.5f,4.f,1.f };
+	_float3 vScale = { 3.5f,4.f,3.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
@@ -217,7 +217,7 @@ HRESULT CTornado::SetUp_Components()
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_ColliderTORNADO"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
 
 	/* For.Com_Transform */
@@ -240,10 +240,10 @@ void CTornado::OnBillboard()
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 3.5f,4.f,1.f };
+	_float3 vScale = { 3.5f,4.f,3.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0] * vScale.z);
 }
 
 HRESULT CTornado::SetUp_RenderState()
@@ -317,33 +317,7 @@ void CTornado::CheckColl()
 
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_MONSTER, TEXT("Com_Collider"), &pTarget))
-	{
-		_float fCri = _float(rand() % 100 + 1);
-		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
 
-		if (fCri <= fLUK)
-		{
-			pTarget->Set_Hp(m_tInfo.iDmg * 2);
-			pTarget->Set_Hit(m_tInfo.iDmg * 2, *(_float3*)&pTarget->Get_World().m[3][0]);
-			CGameObject::INFO tInfo;
-			tInfo.pTarget = pTarget;
-			tInfo.vPos = *(_float3*)&pTarget->Get_World().m[3][0];
-			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"),m_tInfo.pTarget->Get_Info().iLevelIndex , TEXT("Layer_Effect"), &tInfo)))
-				return;
-			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit2"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
-				return;
-			dynamic_cast<CCamera_Dynamic*>(pInstance->Find_Layer(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Camera"))->Get_Objects().front())->CriHit();
-		}
-		else
-		{
-			pTarget->Set_Hp(m_tInfo.iDmg);
-			pTarget->Set_Hit(m_tInfo.iDmg, *(_float3*)&pTarget->Get_World().m[3][0]);
-		}
-		if (pTarget->Get_Info().iHp <= 0)
-			pTarget->Set_Dead();
-		Set_Dead();
-	}
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
 	{
 		if (pTarget->Get_Info().iMp == 0)
