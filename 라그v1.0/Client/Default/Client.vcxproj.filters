@@ -439,8 +439,6 @@
     <Filter Include="02.GameObject\BackGroundObj\Dust">
       <UniqueIdentifier>{126e849b-fa02-4008-be27-5456c6c6907b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\FinalBoss">
-      <UniqueIdentifier>{cac5b76e-c361-4b64-861f-be4d4168d812}</UniqueIdentifier>
     <Filter Include="02.GameObject\Boss\Rich">
       <UniqueIdentifier>{c8198c1c-97ae-47f8-b1cf-2595aa75846f}</UniqueIdentifier>
     </Filter>
@@ -863,9 +861,6 @@
     <ClInclude Include="..\Public\Dust.h">
       <Filter>02.GameObject\BackGroundObj\Dust</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Level_FinalBoss.h">
-      <Filter>01.Levels\FinalBoss</Filter>
- </ClInclude>
     <ClInclude Include="..\public\Rich.h">
       <Filter>02.GameObject\Boss\Rich</Filter>
     </ClInclude>
@@ -1276,9 +1271,6 @@
     <ClCompile Include="..\Private\Dust.cpp">
       <Filter>02.GameObject\BackGroundObj\Dust</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Level_FinalBoss.cpp">
-      <Filter>01.Levels\FinalBoss</Filter>
-</ClCompile>
     <ClCompile Include="..\private\RichClone.cpp">
       <Filter>02.GameObject\Boss\Rich\RichClone</Filter>
     </ClCompile>
