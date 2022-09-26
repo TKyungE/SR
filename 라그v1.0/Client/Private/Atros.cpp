@@ -4,7 +4,8 @@
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "Layer.h"
-
+#include "Camera_Dynamic.h"
+#include "QuestManager.h"
 CAtros::CAtros(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
 {
@@ -61,7 +62,7 @@ HRESULT CAtros::Initialize(void * pArg)
 	tInfo.vPos = { 1.f,1.f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-
+	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
 
 
@@ -74,6 +75,7 @@ void CAtros::Tick(_float fTimeDelta)
 	if (!m_bRespawn)
 	{
 		m_fSkillCool += fTimeDelta;
+		m_fCollTime += fTimeDelta;
 		if (m_tInfo.iMp == 2 && !m_bAngry)
 		{
 			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
@@ -906,6 +908,34 @@ void CAtros::CheckColl()
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYERSKILL2, TEXT("Com_ColliderTORNADO"), &pTarget) && m_fCollTime > 0.1f)
+	{
+		_float fCri = _float(rand() % 100 + 1);
+		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
+
+		if (fCri <= fLUK)
+		{
+			Set_Hp(pTarget->Get_Info().iDmg * 2);
+			Set_Hit(pTarget->Get_Info().iDmg * 2, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = this;
+			tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_CriHit2"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			dynamic_cast<CCamera_Dynamic*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Camera"))->Get_Objects().front())->CriHit();
+		}
+		else
+		{
+			Set_Hp(pTarget->Get_Info().iDmg);
+			Set_Hit(pTarget->Get_Info().iDmg, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		}
+		if (m_tInfo.iHp <= 0)
+			Set_Dead();
+
+		m_fCollTime = 0.f;
 	}
 	Safe_Release(pInstance);
 }

@@ -73,6 +73,7 @@ private:
 	_float				m_fSkillCool = 0.f;
 	_float				m_fRespawnTime = 0.f;
 	_float				m_fDeadTime = 0.f;
+	_float				m_fCollTime = 0.f;
 	_float				m_fMove = 0.f;
 	_int				m_irand = 0;
 	_bool				m_bSkill = false;
@@ -82,6 +83,7 @@ private:
 	_bool				m_bAngry = false;
 	_bool				m_bIDLE = false;
 	_bool				m_bRespawn = false;
+	CGameObject*			m_StatInfo;
 public:
 	static CSkeleton* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

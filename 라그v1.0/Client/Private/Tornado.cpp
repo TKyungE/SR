@@ -72,7 +72,7 @@ void CTornado::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_PLAYERSKILL, this)))
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_PLAYERSKILL2, this)))
 	{
 		ERR_MSG(TEXT("Failed to Add CollisionGroup : CThunderSword"));
 		return;

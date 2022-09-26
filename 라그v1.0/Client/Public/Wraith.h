@@ -76,6 +76,7 @@ private:
 	_float				m_fSkillCool = 0.f;
 	_float				m_fRespawnTime = 0.f;
 	_float				m_fDeadTime = 0.f;
+	_float				m_fCollTime = 0.f;
 	_float				m_fMove = 0.f;
 	_int				m_irand = 0;
 	_bool				m_bSkill = false;
@@ -89,7 +90,7 @@ private:
 	_bool				m_bCheck3 = false;
 	_float				m_fAlpha = 0.f;
 	_float				m_fTimeDelta = 0.f;
-
+	CGameObject*			m_StatInfo;
 public:
 	static CWraith* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
