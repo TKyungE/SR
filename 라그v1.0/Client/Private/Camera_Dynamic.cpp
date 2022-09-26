@@ -288,7 +288,6 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 		{
 			_float3 vPos3 = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
-
 			m_fTimeDelta2 += fTimeDelta;
 			m_fTimeDelta += fTimeDelta;
 
@@ -313,16 +312,21 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos3);
 			}
 		
-
-			
-			
 			if (m_fTimeDelta > 2.f)
 			{
 				g_iCut = 0;
+				g_bMazeCut = true;
 			}
 		}
 	}
 
+
+	if (g_bMazeCut)  // 김태경이 만듬, 문 닫히고 카메라 시점 고정 하는 것.
+	{
+		_float3 vPos = _float3(45.f, 4.f, 12.f);
+		m_pTransform->LookAt(_float3(47.f, 0.f, 14.f));
+		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+	}
 }
 
 HRESULT CCamera_Dynamic::Render()
