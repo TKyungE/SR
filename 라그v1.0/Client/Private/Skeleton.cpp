@@ -219,8 +219,8 @@ HRESULT CSkeleton::Render(void)
 
 		if (m_tInfo.iLevelIndex == LEVEL_MAZE)
 		{
-			_float	fMin = 1.f;
-			_float	fMax = 4.f;
+			_float	fMin = 3.f;
+			_float	fMax = 6.f;
 
 
 			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
@@ -623,7 +623,7 @@ HRESULT CSkeleton::Skill_DefaultAttack(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sword"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 		return E_FAIL;
-
+	CSoundMgr::Get_Instance()->PlayEffect(L"Skelton_Attack.wav", fSOUND);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -725,6 +725,8 @@ void CSkeleton::Check_Front()
 		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
 
 		Safe_Release(pQuestManager);
+
+		CSoundMgr::Get_Instance()->PlayEffect(L"Skelton_Die.wav", fSOUND);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
 	{

@@ -570,7 +570,7 @@ HRESULT CByorgue::Skill_DefaultAttack(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
-
+	CSoundMgr::Get_Instance()->PlayEffect(L"Byorgue_Attack.wav", fSOUND);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -672,6 +672,8 @@ void CByorgue::Check_Front()
 		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
 
 		Safe_Release(pQuestManager);
+
+		CSoundMgr::Get_Instance()->PlayEffect(L"Byorgue_Die.wav", fSOUND);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
 	{

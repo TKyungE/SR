@@ -81,7 +81,10 @@ void CPowerTotem::Tick(_float fTimeDelta)
 
 	Safe_Release(pInstance);
 	if (m_tInfo.bDead)
+	{
 		m_tInfo.pTerrain->Set_Mp(-1);
+		CSoundMgr::Get_Instance()->PlayEffect(L"Totem_Die.wav", fSOUND);
+	}
 }
 
 void CPowerTotem::Late_Tick(_float fTimeDelta)
@@ -262,6 +265,7 @@ HRESULT CPowerTotem::CreateDrain(_float fTimeDelta)
 			vDist += 0.1f;
 			vSpeed += 0.01f;
 		}
+		CSoundMgr::Get_Instance()->PlayEffect(L"SkyDragon_Skill.wav", fSOUND);
 		Safe_Release(pGameInstance);
 		m_fDrainTime = 0.f;
 	}

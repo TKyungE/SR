@@ -47,6 +47,7 @@ public:
 		_int		 iLevelIndex;
 		_int		 iNextLevel;
 		_int		 iMonsterType;	//퀘스트용 몬스터 구분 변수
+		_float3		 vPos2[3];		// 힘들어서 만듬
 	}INFO;
 	typedef struct tagFrameInfo
 	{

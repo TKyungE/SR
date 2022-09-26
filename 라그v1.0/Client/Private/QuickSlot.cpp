@@ -251,6 +251,20 @@ HRESULT CQuickSlot::Render()
 			return E_FAIL;
 		m_pMouseBuffer->Render();
 	}
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex == LEVEL_SKY && nullptr != pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss")))
+	{
+		if (pGameInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss"))->Get_Objects().front()->Get_Info().iHp <= 0)
+		{
+			if (FAILED(m_pMouseTransformCom->Bind_OnGraphicDev()))
+				return E_FAIL;
+			if (FAILED(m_pMouseTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+				return E_FAIL;
+			m_pMouseBuffer->Render();
+		}
+	}
+	Safe_Release(pGameInstance);
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 

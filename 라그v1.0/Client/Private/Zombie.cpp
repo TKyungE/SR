@@ -623,7 +623,7 @@ HRESULT CZombie::Skill_DefaultAttack(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DefaultAttack"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 		return E_FAIL;
-
+	CSoundMgr::Get_Instance()->PlayEffect(L"Zombie_Attack.wav", fSOUND);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -725,6 +725,8 @@ void CZombie::Check_Front()
 		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
 
 		Safe_Release(pQuestManager);
+
+		CSoundMgr::Get_Instance()->PlayEffect(L"Zombie_Die.wav", fSOUND);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
 	{

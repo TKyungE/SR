@@ -346,9 +346,6 @@
     <Filter Include="04.UI\QuestUI">
       <UniqueIdentifier>{be3f6a86-88ee-4e52-a7ff-4fbff6056a26}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Quest\CollectQuest">
-      <UniqueIdentifier>{19d3bec9-7d13-4750-baed-9f937d3938c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\NPC\05.SlotGacha">
       <UniqueIdentifier>{99e816dc-ac0b-45b5-94fb-e77241e7f4b5}</UniqueIdentifier>
     </Filter>
@@ -423,6 +420,9 @@
     </Filter>
     <Filter Include="02.GameObject\Camera">
       <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Quest\CollectQuest">
+      <UniqueIdentifier>{19d3bec9-7d13-4750-baed-9f937d3938c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 #include "..\Public\ThunderTarget.h"
 #include "GameInstance.h"
 #include "Layer.h"
+#include "SoundMgr.h"
 
 CThunderTarget::CThunderTarget(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -98,6 +99,7 @@ void CThunderTarget::Late_Tick(_float fTimeDelta)
 		tInfo.iLevelIndex = LEVEL_SKY;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkyThunder"), LEVEL_SKY, TEXT("Layer_Skill"), &tInfo)))
 			return;
+		CSoundMgr::Get_Instance()->PlayEffect(L"SkyThunder.wav", fSOUND);
 		Safe_Release(pGameInstance);
 		m_fSkillCool = 0.f;
 	}

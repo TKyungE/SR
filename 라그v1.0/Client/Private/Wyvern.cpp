@@ -47,7 +47,10 @@ HRESULT CWyvern::Initialize(void * pArg)
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_tInfo.iExp = 40;
+
 	m_tInfo.iMonsterType = (_int)MON_WYVERN;
+
+	m_tInfo.iMonsterType = MON_WYVERN;
 
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -112,10 +115,18 @@ void CWyvern::Tick(_float fTimeDelta)
 			return;
 		}
 
-		Safe_Release(pInstance);
-	
-
 	m_tInfo.bDead = false;
+	if (nullptr != pInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss")))
+	{
+		if (pInstance->Find_Layer(LEVEL_SKY, TEXT("Layer_SkyBoss"))->Get_Objects().front()->Get_Info().iHp <= 0)
+		{
+			m_tInfo.iHp = -1;
+			if(m_bDead)
+				m_tInfo.bDead = true;
+			m_bDead = true;
+		}
+	}
+	Safe_Release(pInstance);
 }
 
 void CWyvern::Late_Tick(_float fTimeDelta)
@@ -396,7 +407,7 @@ HRESULT CWyvern::Skill_PoisonArrow(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ShadowBall"), LEVEL_SKY, pLayerTag, &tInfo)))
 		return E_FAIL;
-
+	CSoundMgr::Get_Instance()->PlayEffect(L"Wyvern_Attack.wav", fSOUND);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -472,6 +483,8 @@ void CWyvern::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+
+		CSoundMgr::Get_Instance()->PlayEffect(L"Wyvern_Die.wav", fSOUND );
 
 		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
 		if (nullptr == pQuestManager)

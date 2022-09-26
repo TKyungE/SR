@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Layer.h"
 #include "SoundMgr.h"
+#include "QuestManager.h"
+
 
 CSkyNPC::CSkyNPC(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -88,7 +90,8 @@ void CSkyNPC::Tick(_float fTimeDelta)
 
 		tTInfo.iQuestIndex = 7;
 		tTInfo.iLevelIndex = LEVEL_LOADING;
-		tTInfo.iNumQuest = 44; 
+		tTInfo.iNumQuest = 8; 
+
 		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pGameInstance);
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), LEVEL_LOADING, TEXT("Layer_SkyText"), &tTInfo)))
@@ -96,10 +99,42 @@ void CSkyNPC::Tick(_float fTimeDelta)
 		Safe_Release(pGameInstance);
 		m_bTrue = true;
 	}
-	
+
+	CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+	if (nullptr == pQuestManager)
+		return;
+
+	Safe_AddRef(pQuestManager);
+
+	if (8 == g_iQuest && nullptr == pQuestManager->Find_Finish(TEXT("Quest_HuntQuestSky")) && nullptr == pQuestManager->Find_Active(TEXT("Quest_HuntQuestSky")))
+	{
+		CHuntQuest::QINFO_DERIVED tQInfo;
+		tQInfo.iCount = 2;
+
+		tQInfo.pHuntGoal = new _uint[tQInfo.iCount];
+		tQInfo.pHuntGoal[0] = 10;
+		tQInfo.pHuntGoal[1] = 1;
+
+		tQInfo.pMonType = new MONSTERTYPE[tQInfo.iCount];
+		tQInfo.pMonType[0] = MON_WYVERN;
+		tQInfo.pMonType[1] = MON_SKYDRAGON;
+
+		tQInfo.tQInfo.eType = CClientQuest::QUEST_HUNT;
+
+		if (FAILED(pQuestManager->Add_Quest(TEXT("Prototype_Quest_HuntQuest1"), TEXT("Quest_HuntQuestSky"), &tQInfo)))
+		{
+			ERR_MSG(TEXT("Failed to Add Quest : HuntQuestSky"));
+			return;
+		}
+		if (!g_bSky)
+			g_bSky = true;
+		g_iQuest = 0;
+		g_iReward = 0;
+	}
+
+	Safe_Release(pQuestManager);
 	
 	Check_Index();
-
 }
 
 void CSkyNPC::Late_Tick(_float fTimeDelta)

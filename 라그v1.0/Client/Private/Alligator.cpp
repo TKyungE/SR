@@ -622,7 +622,7 @@ HRESULT CAlligator::Skill_PoisonArrow(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PoisonArrow"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;
-	
+	CSoundMgr::Get_Instance()->PlayEffect(L"Alligator_Attack.wav", fSOUND);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -714,7 +714,7 @@ void CAlligator::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
-
+		CSoundMgr::Get_Instance()->PlayEffect(L"Alligator_Die.wav", fSOUND);
 		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
 		if (nullptr == pQuestManager)
 			return;

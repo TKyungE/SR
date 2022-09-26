@@ -281,8 +281,7 @@ void CTextBox::Running_TextBox(void)
 					iterator->Set_Dead();
 
 				m_vButtonArray.clear();
-				if (!g_bSky)
-					g_bSky = true;
+			
 				Set_Dead();
 
 				if (0 != g_iCut)

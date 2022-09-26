@@ -616,7 +616,7 @@ HRESULT CBigfoot::Skill_DefaultAttack(const _tchar * pLayerTag)
 		tInfo.iDmg = 40;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DefaultAttack"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
-
+	CSoundMgr::Get_Instance()->PlayEffect(L"Bigfoot_Attack.wav", fSOUND);
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -719,7 +719,7 @@ void CBigfoot::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
-
+		CSoundMgr::Get_Instance()->PlayEffect(L"Bigfoot_Die.wav", fSOUND);
 		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
 		if (nullptr == pQuestManager)
 			return;
