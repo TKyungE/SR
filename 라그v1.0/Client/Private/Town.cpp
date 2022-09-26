@@ -286,6 +286,14 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuestUI"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
+
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Fade"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;

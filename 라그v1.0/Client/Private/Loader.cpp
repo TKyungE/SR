@@ -114,7 +114,7 @@
 #include "Town_Quest3.h"
 #include "Door.h"
 #include "Dust.h"
-
+#include "Fade.h"
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
 {
@@ -1362,6 +1362,10 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlphaUI"),
 		CAlphaUI::Create(m_pGraphic_Device))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Fade"),
+		CFade::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	
 	// Door
 
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Door"),

@@ -287,7 +287,6 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 		{
 			_float3 vPos3 = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
-
 			m_fTimeDelta2 += fTimeDelta;
 			m_fTimeDelta += fTimeDelta;
 
@@ -312,9 +311,6 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos3);
 			}
 		
-
-			
-			
 			if (m_fTimeDelta > 2.f)
 			{
 				g_iCut = 0;

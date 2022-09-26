@@ -439,6 +439,9 @@
     <Filter Include="02.GameObject\BackGroundObj\Dust">
       <UniqueIdentifier>{126e849b-fa02-4008-be27-5456c6c6907b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\Fade">
+      <UniqueIdentifier>{8df8594c-fc6e-436c-8245-96878c6e12cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -852,6 +855,9 @@
     <ClInclude Include="..\Public\Dust.h">
       <Filter>02.GameObject\BackGroundObj\Dust</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Fade.h">
+      <Filter>04.UI\Fade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1252,6 +1258,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Dust.cpp">
       <Filter>02.GameObject\BackGroundObj\Dust</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Fade.cpp">
+      <Filter>04.UI\Fade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

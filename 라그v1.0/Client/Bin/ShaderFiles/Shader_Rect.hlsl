@@ -186,6 +186,7 @@ PS_OUT PS_MAIN_HPBAR(PS_IN In)
 	return Out;
 }
 
+
 PS_OUT PS_MAIN_QUESTUI(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT)0;
@@ -204,6 +205,25 @@ PS_OUT PS_MAIN_Rect(PS_IN In)
 	
 	return Out;
 }
+
+
+
+PS_OUT PS_MAIN_FADE(PS_IN In)
+{
+	PS_OUT			Out = (PS_OUT)0;
+
+	Out.vColor = tex2D(TextureSampler, In.vTexUV);
+
+	Out.vColor.rgb = 0.f;
+
+	Out.vColor.a = min(( 1.f - Out.vColor.a) + g_fAlpha,1.f);
+	
+	return Out;
+}
+
+
+
+
 
 technique DefaultTechnique
 {
@@ -311,5 +331,14 @@ technique DefaultTechnique
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_Rect();
 	}
+	pass Fade			//10
+	{
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
 
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_FADE();
+	}
 }
