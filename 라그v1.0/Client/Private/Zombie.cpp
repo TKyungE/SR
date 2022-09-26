@@ -52,9 +52,6 @@ HRESULT CZombie::Initialize(void * pArg)
 	m_tInfo.iExp = 50;
 	m_tInfo.iMonsterType = (_int)MON_ZOMBIE;
 
-
-
-
 	return S_OK;
 }
 
@@ -64,23 +61,18 @@ void CZombie::Tick(_float fTimeDelta)
 	if (m_bPlay)
 	{
 		if (!m_bRespawn)
-		m_fSkillCool += fTimeDelta;
+			m_fSkillCool += fTimeDelta;
 		m_fCollTime += fTimeDelta;
 		if (m_tInfo.iMp == 2 && !m_bAngry)
-
 		{
-			m_fSkillCool += fTimeDelta;
-			m_fCollTime += fTimeDelta;
-			if (m_tInfo.iMp == 2 && !m_bAngry)
-			{
-				CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-				Safe_AddRef(pGameInstance);
-				CGameObject::INFO tInfo;
-				tInfo.pTarget = this;
-				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-				Safe_Release(pGameInstance);
-				m_bAngry = true;
-			}
+			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+			Safe_AddRef(pGameInstance);
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = this;
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+			Safe_Release(pGameInstance);
+			m_bAngry = true;
+
 			OnTerrain();
 			if (!m_bDead)
 				Check_Front();
@@ -367,7 +359,7 @@ void CZombie::Chase(_float fTimeDelta)
 		m_bIDLE = true;
 	if (1.f >= Distance)
 	{
-		if (m_fSkillCool >	3.f)
+		if (m_fSkillCool > 3.f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -499,7 +491,7 @@ void CZombie::Chase3(_float fTimeDelta)
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 	if (1.f >= Distance)
 	{
-		if (m_fSkillCool >	0.3f)
+		if (m_fSkillCool > 0.3f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
