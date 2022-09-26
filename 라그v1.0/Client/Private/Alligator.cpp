@@ -916,6 +916,7 @@ HRESULT CAlligator::RespawnMonster()
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.5f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.iMonsterType = (_uint)MON_ALLIGATOR;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo)))
 		return E_FAIL;
 	
