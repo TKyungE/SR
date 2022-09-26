@@ -31,7 +31,7 @@ HRESULT CPowerTotem::Initialize(void * pArg)
 		return E_FAIL;
 
 	Set_vPos();
-	m_tInfo.iMaxHp = 9999;
+	m_tInfo.iMaxHp = 20000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
