@@ -47,7 +47,11 @@ HRESULT CWyvern::Initialize(void * pArg)
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_tInfo.iExp = 40;
+
+	m_tInfo.iMonsterType = (_int)MON_WYVERN;
+
 	m_tInfo.iMonsterType = MON_WYVERN;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -479,7 +483,9 @@ void CWyvern::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+
 		CSoundMgr::Get_Instance()->PlayEffect(L"Wyvern_Die.wav", fSOUND );
+
 		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
 		if (nullptr == pQuestManager)
 			return;

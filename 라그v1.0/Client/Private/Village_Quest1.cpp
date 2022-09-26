@@ -45,12 +45,11 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 
 	m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
-	m_pQuestTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
+	m_pQuestTransformCom->Set_Scaled(_float3(0.6f, 0.6f, 1.f));
 
 	m_tInfo.vPos.y += 0.5f;
 	_float3 vQuestPos = m_tInfo.vPos;
-	vQuestPos.y += 0.7f;
-
+	vQuestPos.y += 0.5f;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_pQuestTransformCom->Set_State(CTransform::STATE_POSITION, vQuestPos);
@@ -196,12 +195,12 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 		tQInfo.pHuntGoal = new _uint[tQInfo.iCount];
 		tQInfo.pHuntGoal[0] = 3;
 		tQInfo.pHuntGoal[1] = 3;
-		tQInfo.pHuntGoal[2] = 1;
+		tQInfo.pHuntGoal[2] = 2;
 		
 		tQInfo.pMonType = new MONSTERTYPE[tQInfo.iCount];
-		tQInfo.pMonType[0] = MON_ALLIGATOR;
-		tQInfo.pMonType[1] = MON_ELDERWILOW;
-		tQInfo.pMonType[2] = MON_BIGFOOT;
+		tQInfo.pMonType[0] = MON_DANDELION;
+		tQInfo.pMonType[1] = MON_BYORGUE;
+		tQInfo.pMonType[2] = MON_BLOODYMURDERER;
 
 		tQInfo.tQInfo.eType = CClientQuest::QUEST_HUNT;
 
@@ -225,6 +224,8 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 		g_iQuest = 0;
 		g_iReward = 0;
 	}
+
+	m_pQuestTransformCom->Turn(m_pQuestTransformCom->Get_State(CTransform::STATE_UP), fTimeDelta * 2.f);
 
 	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_NPC, this)))
 	{
@@ -462,25 +463,20 @@ void CVillage_Quest1::OnBillboard()
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
 	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
-	
-	_float3 vScale = m_pQuestTransformCom->Get_Scale();
-
-	m_pQuestTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pQuestTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0] * vScale.z);
 }
 
 void CVillage_Quest1::Ready_Script(void)
 {
-	m_vQuestScript.push_back(TEXT("우리 마을에 온 것을 환영하네. 나는 이 마을의 촌장일세."));
-	m_vQuestScript.push_back(TEXT("음? 성으로 가고싶다고? 안타깝지만 자네의 레벨이 너무 낮네. 이 마을을 벗어나는 것도 위험할걸세."));
-	m_vQuestScript.push_back(TEXT("레벨을 올리기 위해 퀘스트를 주겠네. 경험이 오를게야."));
-	m_vQuestScript.push_back(TEXT("저쪽의 포탈을 타고 나가 악어와 엘더 윌로우를 각각 3마리씩, 그리고 빅풋 한 마리를 잡아오게."));
+	m_vQuestScript.push_back(TEXT("큰일이야! 마을에 위험이 닥쳤어!"));
+	m_vQuestScript.push_back(TEXT("도적단이 마을 근처의 동굴을 점거했다네. 이 마을을 벗어나는 유일한 길이 위험해졌어."));
+	m_vQuestScript.push_back(TEXT("도적단을 물리쳐주면 내 사례하겠네. 제발 우리를 도와주게나."));
+	m_vQuestScript.push_back(TEXT("저쪽의 포탈을 타고 나가 동굴에 자리잡은 도적단을 퇴치해주게."));
 
-	m_vNotClearScript.push_back(TEXT("이렇게 시간을 버리다간 성은 커녕 이 마을에서 나가지도 못할걸세. 빨리 가서 잡아오게!"));
+	m_vNotClearScript.push_back(TEXT("이렇게 시간을 버리다간 마을이 위험해질걸세. 빨리 가서 잡아오게!"));
 	
-	m_vNormalScript.push_back(TEXT("안녕하신가. 나는 이 마을의 촌장이라네. 새로운 모험가는 언제나 환영일세."));
+	m_vNormalScript.push_back(TEXT("안녕하신가. 나는 이 마을의 촌장이라네. 우리 마을에 온 것을 환영하네. 새로운 모험가는 언제나 환영이야."));
 
-	m_vClearScript.push_back(TEXT("오오! 정말로 잡아온 것인가? 마을의 골칫덩이들을 잡아줘서 고맙네."));
+	m_vClearScript.push_back(TEXT("오오! 정말로 도적단을 퇴치한 것인가? 마을의 골칫덩이들을 혼내줘서 고맙네."));
 	m_vClearScript.push_back(TEXT("이건 약소하지만 우리 마을을 도와준 보상일세. \n\n보상 : 경험치 50"));
 }
 
@@ -512,7 +508,7 @@ CGameObject * CVillage_Quest1::Clone(void * pArg)
 
 _float4x4 CVillage_Quest1::Get_World(void)
 {
-	return m_pTransformCom->Get_WorldMatrix();;
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CVillage_Quest1::Free(void)

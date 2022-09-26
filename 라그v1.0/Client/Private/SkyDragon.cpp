@@ -49,7 +49,9 @@ HRESULT CSkyDragon::Initialize(void * pArg)
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_tInfo.iExp = 300;
-	m_tInfo.iMonsterType = MON_SKYDRAGON;
+
+	m_tInfo.iMonsterType = (_int)MON_SKYDRAGON;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -507,7 +509,9 @@ void CSkyDragon::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+
 		CSoundMgr::Get_Instance()->PlayEffect(L"SkyDragon_Die.wav", fSOUND);
+
 		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
 		if (nullptr == pQuestManager)
 			return;

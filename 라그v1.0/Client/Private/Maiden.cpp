@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "Layer.h"
+#include "TextBox.h"
 
 CMaiden::CMaiden(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -26,10 +27,11 @@ HRESULT CMaiden::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
+
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
 
 	//m_tInfo.vPos.y += 0.f;
 	_float3 vScale = { 1.f,1.f,1.f };
@@ -47,7 +49,7 @@ HRESULT CMaiden::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 200000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 0;
-	
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -63,6 +65,19 @@ HRESULT CMaiden::Initialize(void * pArg)
 
 	Safe_Release(pGameInstance);
 
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f);
+
+	m_fSizeX = 600.f;
+	m_fSizeY = 600.f;
+	m_fCharX = g_iWinSizeX * 0.5f;
+	m_fCharY = g_iWinSizeY * 0.5f;
+
+	m_pCharTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
+	m_pCharTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fCharX - g_iWinSizeX * 0.5f, -m_fCharY + g_iWinSizeY * 0.5f, 0.f));
+
+	Ready_Script();
+
+	g_iCut = 40;
 
 	return S_OK;
 }
@@ -70,118 +85,199 @@ HRESULT CMaiden::Initialize(void * pArg)
 void CMaiden::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	
-		OnTerrain();
-		if (!m_bDead)
-		{
-			Check_Front();
-			if (m_bBlueFire)
-				Create_BlueFire(fTimeDelta);
-		}
-		if (m_eCurState == DEAD)
-		{
-			if (m_tFrame.iFrameStart == 4)
-			{
-				Set_Dead();
-				return;
-				
-			}
-			if (m_tFrame.iFrameStart != 4)
-				Move_Frame(fTimeDelta);
-			m_tInfo.bDead = false;
-			return;
-		}
-		if (!m_bLastHeal)
-		{
-			m_fSkillCool += fTimeDelta;
-			if (!m_bSkill && !m_bDead && !m_bSkill2)
-				Chase(fTimeDelta);
-			if(!m_bSkill)
-				m_fSkillCool2 += fTimeDelta;
 
-			if (m_fSkillCool2 > 13.f)
-			{
-				m_bSkill2 = true;
-				m_fSkillCool2 = 0;
-				m_fSkillCool = 0;
-				CSoundMgr::Get_Instance()->PlayEffect(L"Maiden_Skill.wav", fSOUND);
-			}
+	OnTerrain();
 
-		}
-		Move_Frame(fTimeDelta);
-		if (m_eCurState == SKILL && !m_bSkill2)
-			Use_Skill(fTimeDelta);
-		
-		if(m_bSkill2 && m_bStart && !m_bSkill)
-			Use_Skill2(fTimeDelta);
-		
-		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
 
-		CGameInstance* pInstance = CGameInstance::Get_Instance();
-		if (nullptr == pInstance)
+	Safe_AddRef(pInstance);
+
+
+	if (40 == g_iCut && !m_bTalk)
+	{
+		m_bTalk = true;
+
+		CTextBox::TINFO tTInfo;
+		tTInfo.iScriptSize = (_int)m_vScript.size();
+
+		tTInfo.pScript = new wstring[m_vScript.size()];
+		for (_int i = 0; i < m_vScript.size(); ++i)
+			tTInfo.pScript[i] = m_vScript[i];
+
+		tTInfo.iQuestIndex = 3;
+		tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		tTInfo.iNumQuest = 40;
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
 			return;
 
-		Safe_AddRef(pInstance);
-
-		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_BOSS, this)))
+		if (40 == g_iReward)
 		{
-			ERR_MSG(TEXT("Failed to Add CollisionGroup : CMaiden"));
+			g_iQuest = 0;
+			g_iReward = 0;
+		}
+	}
+
+	if (!m_bDead)
+	{
+		Check_Front();
+		if (m_bBlueFire)
+			Create_BlueFire(fTimeDelta);
+	}
+	if (m_eCurState == DEAD)
+	{
+		if (m_tFrame.iFrameStart == 4)
+		{
+			Set_Dead();
 			return;
+
+		}
+		if (m_tFrame.iFrameStart != 4)
+			Move_Frame(fTimeDelta);
+		m_tInfo.bDead = false;
+		return;
+	}
+	if (!m_bLastHeal)
+	{
+		m_fSkillCool += fTimeDelta;
+		if (!m_bSkill && !m_bDead && !m_bSkill2)
+			Chase(fTimeDelta);
+		if (!m_bSkill)
+			m_fSkillCool2 += fTimeDelta;
+
+		if (m_fSkillCool2 > 13.f)
+		{
+			m_bSkill2 = true;
+			m_fSkillCool2 = 0;
+			m_fSkillCool = 0;
+			CSoundMgr::Get_Instance()->PlayEffect(L"Maiden_Skill.wav", fSOUND);
 		}
 
-		Safe_Release(pInstance);
-	
+	}
+	Move_Frame(fTimeDelta);
+	if (m_eCurState == SKILL && !m_bSkill2)
+		Use_Skill(fTimeDelta);
 
+	if (m_bSkill2 && m_bStart && !m_bSkill)
+		Use_Skill2(fTimeDelta);
+
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_BOSS, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CMaiden"));
+		return;
+	}
 
 	m_tInfo.bDead = false;
+
+	m_fAlpha += 0.006f;
+
+	if (0.2f < m_fTalkFrame)
+	{
+		++m_iTalkFrame;
+		m_fTalkFrame = 0.f;
+
+		if (8 < m_iTalkFrame)
+			m_iTalkFrame = 0;
+	}
+	m_fTalkFrame += fTimeDelta;
+
+	Safe_Release(pInstance);
 }
 
 void CMaiden::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	
-		if (!m_bDead)
+
+	if (!m_bDead)
+	{
+		Check_Hit();
+		Motion_Change();
+		if (m_bSkill2)
 		{
-			Check_Hit();
-			Motion_Change();
-			if (m_bSkill2)
+			m_CollTime += fTimeDelta;
+			if (m_CollTime > 0.04f)
 			{
-				m_CollTime += fTimeDelta;
-				if (m_CollTime > 0.04f)
-				{
-					CheckColl();
-					m_CollTime = 0.f;
-				}
+				CheckColl();
+				m_CollTime = 0.f;
 			}
 		}
-		OnBillboard();
-		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-	
+	}
+	OnBillboard();
+
+	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	if (nullptr != m_pRendererCom)
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CMaiden::Render(void)
 {
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
-		if (FAILED(__super::Render()))
-			return E_FAIL;
-		Off_SamplerState();
+	Off_SamplerState();
 
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
-		TextureRender();
-
-		if (FAILED(SetUp_RenderState()))
+	if (0 != g_iCut && m_bTalk)
+	{
+		if (FAILED(m_pCharTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
 
-		m_pVIBufferCom->Render();
+		_float4x4	WorldMatrix, ViewMatrix;
 
-		if (FAILED(Release_RenderState()))
-			return E_FAIL;
-		On_SamplerState();
-		if (g_bCollider)
-			m_pColliderCom->Render();
-	
+		WorldMatrix = *D3DXMatrixTranspose(&WorldMatrix, &m_pCharTransformCom->Get_WorldMatrix());
+
+		D3DXMatrixIdentity(&ViewMatrix);
+
+		_float4x4 SaveViewMatrix, SaveProjVatrix;
+
+		m_pGraphic_Device->GetTransform(D3DTS_VIEW, &SaveViewMatrix);
+		m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
+
+		/*	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);*/
+
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", &WorldMatrix, sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&m_ProjMatrix, &m_ProjMatrix), sizeof(_float4x4));
+		m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float));
+
+		m_pShaderCom->Set_Texture("g_Texture", m_pCharTextureCom->Get_Texture(m_iTalkFrame));
+
+		/*if (FAILED(m_pCharTextureCom->Bind_OnGraphicDev(0)))
+		return E_FAIL;*/
+
+		m_pShaderCom->Begin(1);
+
+		m_pCharVIBufferCom->Render();
+
+		m_pShaderCom->End();
+
+		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &SaveViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
+	}
+
+	if (FAILED(SetUp_RenderState()))
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	TextureRender();
+
+	m_pVIBufferCom->Render();
+
+	if (FAILED(Release_RenderState()))
+		return E_FAIL;
+
+	On_SamplerState();
+
+	if (g_bCollider)
+		m_pColliderCom->Render();
+
 	return S_OK;
 }
 HRESULT CMaiden::SetUp_Components(void)
@@ -210,6 +306,16 @@ HRESULT CMaiden::SetUp_Components(void)
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_CharVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pCharVIBufferCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_Talk"), (CComponent**)&m_pCharTextureCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
@@ -219,7 +325,8 @@ HRESULT CMaiden::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-
+	if (FAILED(__super::Add_Components(TEXT("Com_CharTransform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pCharTransformCom, &TransformDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -238,8 +345,12 @@ HRESULT CMaiden::SetUp_RenderState(void)
 
 HRESULT CMaiden::Release_RenderState(void)
 {
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
+
 	return S_OK;
 }
 
@@ -276,8 +387,8 @@ void CMaiden::Chase(_float fTimeDelta)
 			m_eCurState = SKILL;
 			m_tFrame.iFrameStart = 0;
 		}
-		
-		if (0.5f < Distance)
+
+		if (3.f < Distance)
 		{
 			if (m_eCurState != SKILL)
 				m_eCurState = MOVE;
@@ -328,11 +439,11 @@ void CMaiden::OnTerrain()
 	}
 	else if (m_eCurState == SKILL && m_tFrame.iFrameStart < 8 && m_tFrame.iFrameStart > 4)
 	{
-	
+
 	}
 	else
 	{
-		if(!m_bLastHeal)
+		if (!m_bLastHeal)
 			m_fY = 0.f;
 		vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.7f + m_fY);
 	}
@@ -386,6 +497,10 @@ void CMaiden::Free(void)
 	Safe_Release(m_pTextureComAttack_Back);
 	Safe_Release(m_pTextureComDead_Front);
 	Safe_Release(m_pTextureComDead_Back);
+	Safe_Release(m_pCharVIBufferCom);
+	Safe_Release(m_pCharTransformCom);
+	Safe_Release(m_pCharTextureCom);
+	Safe_Release(m_pShaderCom);
 }
 
 
@@ -602,7 +717,7 @@ void CMaiden::Check_Front()
 		m_fSkillCool2 = 0;
 		m_fSkillCool = 0;
 	}
-	
+
 }
 void CMaiden::Use_Skill(_float fTimeDelta)
 {
@@ -620,11 +735,11 @@ void CMaiden::Use_Skill(_float fTimeDelta)
 		Skill_DefaultAttack(TEXT("Layer_MonsterSkill"));
 		m_bSkill = false;
 	}
-	if(m_tFrame.iFrameStart < 8 && m_tFrame.iFrameStart > 3 && Distance > 0.5f)
+	if (m_tFrame.iFrameStart < 8 && m_tFrame.iFrameStart > 3 && Distance > 0.5f)
 	{
 		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3		vLook = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		
+
 		vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 0.5f;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -643,10 +758,10 @@ void CMaiden::Use_Skill2(_float fTimeDelta)
 		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		return;
 	}
-	if (m_iSkillMove < 22 )
+	if (m_iSkillMove < 22)
 	{
 		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		
+
 		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -663,13 +778,13 @@ void CMaiden::Use_Skill2(_float fTimeDelta)
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 		vTargetPos.x -= 2.5f;
 		vTargetPos.z += 2.5f;
-		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION); 
+		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		return;
 	}
 	if (m_iSkillMove > 22 && m_iSkillMove < 34)
 	{
 		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	
+
 		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -690,7 +805,7 @@ void CMaiden::Use_Skill2(_float fTimeDelta)
 	if (m_iSkillMove > 34 && m_iSkillMove < 46)
 	{
 		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		
+
 		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -713,7 +828,7 @@ void CMaiden::Use_Skill2(_float fTimeDelta)
 	if (m_iSkillMove > 46 && m_iSkillMove < 58)
 	{
 		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	
+
 		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -730,13 +845,13 @@ void CMaiden::Use_Skill2(_float fTimeDelta)
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 		vTargetPos.x += 2.5f;
 		vTargetPos.z -= 2.5f;
-		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION); 
+		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		return;
 	}
 	if (m_iSkillMove > 58 && m_iSkillMove < 78)
 	{
 		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		
+
 		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -870,21 +985,21 @@ void CMaiden::Create_BlueFire(_float fTimeDelta)
 		CGameObject::INFO tInfo;
 		_float3 vPos = { 0.f,0.3f,0.f };
 
-		
-
 		_float fDest = rand() % 40000 * 0.001f;
 		_float fSour = rand() % 40000 * 0.001f;
-		
+
 		tInfo.pTarget = m_tInfo.pTarget;
 		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-		
+
 		vPos.x = fDest;
 		vPos.z = fSour;
 		tInfo.vPos = vPos;
 		tInfo.fX = 1.f;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BossSkillTarget"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo)))
 			return;
+
 		Safe_Release(pGameInstance);
+
 		m_bBlueFireTime = 0.f;
 	}
 }
@@ -926,4 +1041,12 @@ void CMaiden::DropItem()
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Item"), &tInfo);
 
 	Safe_Release(pGameInstance);
+}
+
+void CMaiden::Ready_Script(void)
+{
+	m_vScript.push_back(TEXT("엔진을 찾으러 왔나? 어리석군..."));
+	m_vScript.push_back(TEXT("어차피 곧 이 세계는 멸망하게 될 것이다.."));
+	m_vScript.push_back(TEXT("네놈이 운명을 이길 수 있을 것 같으냐?"));
+	m_vScript.push_back(TEXT("할 수 있으면 가져가 보아라!"));
 }

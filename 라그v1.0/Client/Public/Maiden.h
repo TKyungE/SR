@@ -8,6 +8,7 @@ class CTransform;
 class CVIBuffer_Rect;
 class CTexture;
 class CCollider;
+class CShader;
 END
 
 BEGIN(Client)
@@ -40,7 +41,14 @@ private:
 	CTexture* m_pTextureComAttack_Back = nullptr;
 	CTexture* m_pTextureComDead_Front = nullptr;
 	CTexture* m_pTextureComDead_Back = nullptr;
-	CCollider*				m_pColliderCom = nullptr;
+	CCollider* m_pColliderCom = nullptr;
+
+	CVIBuffer_Rect* m_pCharVIBufferCom = nullptr;
+	CTransform* m_pCharTransformCom = nullptr;
+	CTexture* m_pCharTextureCom = nullptr;
+
+	CShader* m_pShaderCom = nullptr;
+
 private:
 	void OnTerrain();
 	void	OnBillboard();
@@ -61,6 +69,8 @@ private:
 	void CheckColl();
 	void Create_BlueFire(_float fTimeDelta);
 	void	DropItem();
+	void Ready_Script(void);
+
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
@@ -88,6 +98,21 @@ private:
 	_int				m_iSkillMove = 0;
 	_float				m_CollTime = 0.f;
 	_float3				m_vTargetLook;
+
+	vector<wstring> m_vScript;
+
+	_float4x4	m_ProjMatrix;
+	_float		m_fSizeX = 0.f;
+	_float		m_fSizeY = 0.f;
+	_float		m_fCharX = 0.f;
+	_float		m_fCharY = 0.f;
+
+	_float		m_fAlpha = 0.f;
+	_int m_iQuestTex = 0;
+	_bool m_bTalk = false;
+	_float m_fTalkFrame = 0.f;
+	_int m_iTalkFrame = 0;
+
 public:
 	static CMaiden* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

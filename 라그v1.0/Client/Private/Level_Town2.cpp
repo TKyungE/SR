@@ -15,7 +15,6 @@
 #include "House3.h"
 #include "House6.h"
 
-
 //bool g_bCollider = false;
 //bool g_bTalk = false;
 //bool g_bCut = false;
@@ -309,6 +308,12 @@ HRESULT CLevel_Town2::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SpaceUI"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LetterBox"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuestUI"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -329,46 +334,62 @@ HRESULT CLevel_Town2::Ready_Layer_NPC(const _tchar * pLayerTag)
 	tInfo.iHp = 1;
 	for (auto& iter : m_vecNPC)
 	{
-		if (iter.iIndex <= 3)
-		{
-			tInfo.vPos = iter.BackGroundPos;
-			tInfo.iMp = iter.iIndex;						// 인덱스 인데 인포구조체에 인덱스 없어서 MP로 대체 함
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Default_NPC"), LEVEL_TOWN2, pLayerTag, &tInfo)))
-				return E_FAIL;
-		}
-		else if (iter.iIndex == 4)
-		{
-			tInfo.vPos = iter.BackGroundPos;
-			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN2, pLayerTag, &tInfo)))
-				return E_FAIL;
-		}
-		else if (iter.iIndex == 5)
+		if (iter.iIndex == 0)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;
 			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Chief"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
-		else if (iter.iIndex == 6)
-		{
-			tInfo.vPos = iter.BackGroundPos;
-			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest1"), LEVEL_TOWN2, pLayerTag, &tInfo)))
-				return E_FAIL;
-		}
-		else if (iter.iIndex == 7)
-		{
-			tInfo.vPos = iter.BackGroundPos;
-			tInfo.iMp = iter.iIndex;
-			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN2, pLayerTag, &tInfo)))
-				return E_FAIL;
-		}
-		else if (iter.iIndex > 7)
+
+		else if (iter.iIndex == 8)
 		{
 			tInfo.vPos = iter.BackGroundPos;
 			tInfo.iMp = iter.iIndex;						// 인덱스 인데 인포구조체에 인덱스 없어서 MP로 대체 함
 			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Default_NPC"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+
+		else if (iter.iIndex == 9)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;						// 인덱스 인데 인포구조체에 인덱스 없어서 MP로 대체 함
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Default_NPC"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+
+		else if (iter.iIndex == 10)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ShopNPC"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+
+		else if (iter.iIndex == 11)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;
+			tInfo.pTarget = Info.pTarget;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Town_Quest1"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+
+		else if (iter.iIndex == 12)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;
+			tInfo.pTarget = Info.pTarget;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Town_Quest2"), LEVEL_TOWN2, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+
+		else if (iter.iIndex == 13)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;
+			tInfo.pTarget = Info.pTarget;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Town_Quest3"), LEVEL_TOWN2, pLayerTag, &tInfo)))
 				return E_FAIL;
 		}
 	}

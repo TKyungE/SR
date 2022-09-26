@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "Player.h"
 #include "KeyMgr.h"
+#include "Layer.h"
 
 CCamera_Dynamic::CCamera_Dynamic(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CCamera(pGraphic_Device)
@@ -242,7 +243,11 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	else if (0 == g_iCut && !m_bWheelMove && m_CameraDesc.fFovy < D3DXToRadian(60.f))
 		m_CameraDesc.fFovy += D3DXToRadian(0.25f);
 
-
+	if (g_iCut == 40)
+	{
+		_float3 MonPos = *(_float3*)&pGameInstance->Find_Layer(m_CameraDesc.Info.iLevelIndex, TEXT("Layer_Monster"))->Get_Objects().front()->Get_World().m[3][0];
+		m_pTransform->LookAt(MonPos);
+	}
 
 	Safe_Release(pGameInstance);
 

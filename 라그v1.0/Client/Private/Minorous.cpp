@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "Layer.h"
+#include "QuestManager.h"
 
 CMinorous::CMinorous(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -48,6 +49,8 @@ HRESULT CMinorous::Initialize(void * pArg)
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_tInfo.iExp = 40;
+	m_tInfo.iMonsterType = (_int)MON_MINOROUS;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -660,6 +663,17 @@ void CMinorous::Check_Front()
 		m_tFrame.iFrameStart = 0;
 		m_bDead = true;
 		Motion_Change();
+
+		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+		if (nullptr == pQuestManager)
+			return;
+
+		Safe_AddRef(pQuestManager);
+
+		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
+
+		Safe_Release(pQuestManager);
+
 		CSoundMgr::Get_Instance()->PlayEffect(L"Minorous_Die.wav", fSOUND);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)

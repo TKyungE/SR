@@ -286,6 +286,9 @@
     <ClInclude Include="..\public\ThunderTarget.h" />
     <ClInclude Include="..\Public\Tornado.h" />
     <ClInclude Include="..\public\Town.h" />
+    <ClInclude Include="..\Public\Town_Quest1.h" />
+    <ClInclude Include="..\Public\Town_Quest2.h" />
+    <ClInclude Include="..\Public\Town_Quest3.h" />
     <ClInclude Include="..\Public\Transparent_Wall.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\public\UseSkill.h" />
@@ -418,6 +421,9 @@
     <ClCompile Include="..\private\ThunderTarget.cpp" />
     <ClCompile Include="..\Private\Tornado.cpp" />
     <ClCompile Include="..\private\Town.cpp" />
+    <ClCompile Include="..\Private\Town_Quest1.cpp" />
+    <ClCompile Include="..\Private\Town_Quest2.cpp" />
+    <ClCompile Include="..\Private\Town_Quest3.cpp" />
     <ClCompile Include="..\Private\Transparent_Wall.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\private\UseSkill.cpp" />
