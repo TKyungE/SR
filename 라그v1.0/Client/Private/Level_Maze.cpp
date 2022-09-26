@@ -34,6 +34,8 @@ HRESULT CLevel_Maze::Initialize()
 		return E_FAIL;
 
 	LoadData();
+	LoadData2();
+
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
@@ -61,7 +63,7 @@ HRESULT CLevel_Maze::Initialize()
 
 	g_bFirst = false;
 
-	LoadData2();
+	
 
 	return S_OK;
 }
@@ -291,8 +293,8 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 		vSavePos = iter;
 		Info.vPos = iter;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
-			return E_FAIL;
+		/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_MAZE, pLayerTag, &Info)))
+			return E_FAIL;*/
 	}
 
 
@@ -309,7 +311,7 @@ HRESULT CLevel_Maze::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 
 		Info.vPos = (*iter);
-		Info.vPos.y = 0.f;
+
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_MAZE, TEXT("Layer_Monster"), &Info)))
 			return E_FAIL;
 		++iCount;
@@ -868,10 +870,10 @@ void CLevel_Maze::LoadData2()
 	_tchar str8[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
-	m_vPlayerPos = vPos1;
+	m_vPlayerPos1 = vPos1;
 
 	ReadFile(hFile, vPos2, sizeof(_float3), &dwByte, nullptr);
-	m_vBackPos = vPos2;
+	m_vBackPos1 = vPos2;
 
 	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
@@ -934,7 +936,7 @@ void CLevel_Maze::LoadData2()
 			IndexPos.vScale = Scale;
 			IndexPos.iIndex = Index;
 
-			m_vecIndex.push_back(IndexPos);
+			m_vecIndex1.push_back(IndexPos);
 		}
 
 		for (_uint i = 0; i < iTreeSize; ++i)
@@ -958,7 +960,7 @@ void CLevel_Maze::LoadData2()
 			TreePos.vScale = Scale;
 			TreePos.iIndex = Index;
 
-			m_vecTree.push_back(TreePos);
+			m_vecTree1.push_back(TreePos);
 		}
 
 		for (_uint i = 0; i < iHouseSize; ++i)
@@ -985,7 +987,7 @@ void CLevel_Maze::LoadData2()
 			HousePos.vScale = Scale;
 			HousePos.iIndex = Index;
 			HousePos.iTrun = turn;
-			m_vecHouse.push_back(HousePos);
+			m_vecHouse1.push_back(HousePos);
 		}
 
 		for (_uint i = 0; i < iHouse2Size; ++i)
@@ -1012,7 +1014,7 @@ void CLevel_Maze::LoadData2()
 			HousePos.vScale = Scale;
 			HousePos.iIndex = Index;
 			HousePos.iTrun = turn;
-			m_vecHouse2.push_back(HousePos);
+			m_vecHouse21.push_back(HousePos);
 		}
 
 		for (_uint i = 0; i < iPortalSize; ++i)
@@ -1039,7 +1041,7 @@ void CLevel_Maze::LoadData2()
 			PortalPos.vScale = Scale;
 			PortalPos.iIndex = Index;
 			PortalPos.iTrun = turn;
-			m_vecPortal.push_back(PortalPos);
+			m_vecPortal1.push_back(PortalPos);
 		}
 
 		for (_uint i = 0; i < iNPCSize; ++i)
@@ -1059,7 +1061,7 @@ void CLevel_Maze::LoadData2()
 			NPCPos.BackGroundPos = BackPos;
 			NPCPos.iIndex = Index;
 
-			m_vecNPC.push_back(NPCPos);
+			m_vecNPC1.push_back(NPCPos);
 		}
 
 		for (_uint i = 0; i < iWallSize; ++i)
@@ -1077,7 +1079,7 @@ void CLevel_Maze::LoadData2()
 			WallPos.BackGroundPos = BackPos;
 			WallPos.vScale = Scale;
 
-			m_vecWall.push_back(WallPos);
+			m_vecWall1.push_back(WallPos);
 		}
 
 		if (0 == dwByte)

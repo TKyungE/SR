@@ -65,7 +65,7 @@ HRESULT CZombie::Initialize(void * pArg)
 
 	Safe_Release(pGameInstance);
 
-
+	m_bCheck = true;
 	return S_OK;
 }
 
@@ -87,7 +87,11 @@ void CZombie::Tick(_float fTimeDelta)
 				Safe_Release(pGameInstance);
 				m_bAngry = true;
 			}
-			OnTerrain();
+			//OnTerrain();
+			_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			vPos.y += 0.5f * 1.5f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
 			if (!m_bDead)
 				Check_Front();
 			if (m_eCurState == DEAD)

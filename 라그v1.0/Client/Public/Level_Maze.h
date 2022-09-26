@@ -38,6 +38,17 @@ private:		// 파일입출력 라인
 	vector<INDEXPOS>	m_vecNPC;
 	vector<INDEXPOS>	m_vecWall;
 
+	vector<INDEXPOS>	m_vecTree1;
+	vector<INDEXPOS>	m_vecIndex1;
+	vector<INDEXPOS>	m_vecHouse1;
+	vector<INDEXPOS>	m_vecHouse21;
+	vector<INDEXPOS>	m_vecPortal1;
+	vector<INDEXPOS>	m_vecNPC1;
+	vector<INDEXPOS>	m_vecWall1;
+
+	_float3	m_vPlayerPos1;
+	_float3 m_vBackPos1;
+
 	_float3	m_vPlayerPos;
 	_float3 m_vBackPos;
 	vector<_float3> m_vMonsterPos1;

@@ -443,6 +443,16 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 		++iCount;
 	}
 
+	Info.vPos = _float3(10.f, 1.f, 10.f);
+	Info.iMonsterType = (_int)MON_WRAITH;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		return E_FAIL;
+
+	Info.vPos = _float3(12.f, 1.f, 10.f);
+	Info.iMonsterType = (_int)MON_WRAITH;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
