@@ -377,7 +377,7 @@ void CMaiden::Check_Hit()
 void CMaiden::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	if (Distance < 1.f)
+	if (Distance < 5.f)
 		m_bStart = true;
 	if (m_bStart)
 	{
@@ -388,7 +388,7 @@ void CMaiden::Chase(_float fTimeDelta)
 			m_tFrame.iFrameStart = 0;
 		}
 
-		if (3.f < Distance)
+		if (0.5f < Distance)
 		{
 			if (m_eCurState != SKILL)
 				m_eCurState = MOVE;

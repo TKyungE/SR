@@ -51,7 +51,7 @@ HRESULT CLevel_Town2::Initialize()
 		return E_FAIL;
 
 	CSoundMgr::Get_Instance()->BGM_Stop();
-	CSoundMgr::Get_Instance()->PlayBGM(L"TOWN2.wav", fSOUND);
+	CSoundMgr::Get_Instance()->PlayBGM(L"TOWN2.wav", fSOUND+0.1f);
 
 	return S_OK;
 }

@@ -318,7 +318,7 @@ void CTornado::CheckColl()
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
 
-	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_ColliderTORNADO"), COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
 	{
 		if (pTarget->Get_Info().iMp == 0)
 		{
@@ -349,7 +349,7 @@ void CTornado::CheckColl()
 			Set_Dead();
 		}
 	}
-	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_ColliderTORNADO"), COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
 	{
 		
 		_float fCri = _float(rand() % 100 + 1);

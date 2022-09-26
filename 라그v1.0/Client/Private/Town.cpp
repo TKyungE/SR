@@ -53,7 +53,7 @@ HRESULT CTown::Initialize()
 		return E_FAIL;
 
 	CSoundMgr::Get_Instance()->BGM_Stop();
-	CSoundMgr::Get_Instance()->PlayBGM(L"TOWN.wav", fSOUND);
+	CSoundMgr::Get_Instance()->PlayBGM(L"TOWN.wav", fSOUND+0.1f);
 
 	return S_OK;
 }

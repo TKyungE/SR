@@ -65,7 +65,7 @@ void CStone::Tick(_float fTimeDelta)
 
 
 
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.7f);
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 1.f);
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
