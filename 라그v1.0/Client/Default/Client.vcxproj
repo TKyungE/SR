@@ -195,6 +195,10 @@
     <ClInclude Include="..\public\CriHitUI.h" />
     <ClInclude Include="..\public\Dandelion.h" />
     <ClInclude Include="..\public\DandelionAttack.h" />
+    <ClInclude Include="..\public\DarkBall.h" />
+    <ClInclude Include="..\public\DarkShield.h" />
+    <ClInclude Include="..\public\DarkShield2.h" />
+    <ClInclude Include="..\public\DarkShield3.h" />
     <ClInclude Include="..\public\DefaultAttack.h" />
     <ClInclude Include="..\public\Default_NPC.h" />
     <ClInclude Include="..\public\DmgFont.h" />
@@ -336,6 +340,10 @@
     <ClCompile Include="..\private\CriHitUI.cpp" />
     <ClCompile Include="..\private\Dandelion.cpp" />
     <ClCompile Include="..\private\DandelionAttack.cpp" />
+    <ClCompile Include="..\private\DarkBall.cpp" />
+    <ClCompile Include="..\private\DarkShield.cpp" />
+    <ClCompile Include="..\private\DarkShield2.cpp" />
+    <ClCompile Include="..\private\DarkShield3.cpp" />
     <ClCompile Include="..\private\DefaultAttack.cpp" />
     <ClCompile Include="..\private\Default_NPC.cpp" />
     <ClCompile Include="..\private\DmgFont.cpp" />

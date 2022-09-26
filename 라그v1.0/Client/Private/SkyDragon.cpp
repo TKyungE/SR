@@ -510,7 +510,7 @@ void CSkyDragon::Check_Front()
 		m_bDead = true;
 		Motion_Change();
 
-		CSoundMgr::Get_Instance()->PlayEffect(L"SkyDragon_Die.wav", fSOUND);
+		CSoundMgr::Get_Instance()->PlayEffect(L"SkyDragon_Die.wav", fSOUND + 0.1f);
 
 		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
 		if (nullptr == pQuestManager)

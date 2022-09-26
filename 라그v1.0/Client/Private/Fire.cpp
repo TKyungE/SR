@@ -41,7 +41,7 @@ HRESULT CFire::Initialize(void* pArg)
 	m_tFrame.fFrameSpeed = 0.1f;
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iDmg = 4;
+	m_tInfo.iDmg = 119;
 	m_tInfo.iMoney = 33;
 	return S_OK;
 }

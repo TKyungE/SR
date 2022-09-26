@@ -448,6 +448,21 @@
     <Filter Include="03.Effect\Skill\16.RichAttack">
       <UniqueIdentifier>{a669064c-59e6-461a-abd9-5dec6cd1b70b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Skill\17.DarkShield">
+      <UniqueIdentifier>{77f7363c-cdb7-400f-b5c5-1185b600c109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Level_FinalBoss">
+      <UniqueIdentifier>{53f15bda-0fd5-4f6c-8c46-1cd8158216e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\17.DarkShield\DarkShield2">
+      <UniqueIdentifier>{b23494f7-65c7-4165-96cc-5c59ca75496a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\17.DarkShield\DarkShield3">
+      <UniqueIdentifier>{2fd52a0a-a536-40dc-82ab-b3dc0443fe6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\18.DarkBall">
+      <UniqueIdentifier>{d128853e-dfa8-4785-988e-88dc00d94529}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -870,6 +885,21 @@
     <ClInclude Include="..\public\RichAttack.h">
       <Filter>03.Effect\Skill\16.RichAttack</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\DarkShield.h">
+      <Filter>03.Effect\Skill\17.DarkShield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_FinalBoss.h">
+      <Filter>01.Levels\Level_FinalBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DarkShield2.h">
+      <Filter>03.Effect\Skill\17.DarkShield\DarkShield2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DarkShield3.h">
+      <Filter>03.Effect\Skill\17.DarkShield\DarkShield3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DarkBall.h">
+      <Filter>03.Effect\Skill\18.DarkBall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1279,6 +1309,21 @@
     </ClCompile>
     <ClCompile Include="..\private\RichAttack.cpp">
       <Filter>03.Effect\Skill\16.RichAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DarkShield.cpp">
+      <Filter>03.Effect\Skill\17.DarkShield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_FinalBoss.cpp">
+      <Filter>01.Levels\Level_FinalBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DarkShield2.cpp">
+      <Filter>03.Effect\Skill\17.DarkShield\DarkShield2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DarkShield3.cpp">
+      <Filter>03.Effect\Skill\17.DarkShield\DarkShield3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DarkBall.cpp">
+      <Filter>03.Effect\Skill\18.DarkBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

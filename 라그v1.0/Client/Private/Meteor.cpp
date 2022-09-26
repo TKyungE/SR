@@ -43,7 +43,7 @@ HRESULT CMeteor::Initialize(void* pArg)
 	m_tFrame.fFrameSpeed = 0.05f;
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iDmg = 789;
+	m_tInfo.iDmg = 1289;
 	m_tInfo.iMoney = 11;
 
 	return S_OK;

@@ -33,7 +33,7 @@ HRESULT CRich::Initialize(void * pArg)
 		return E_FAIL;
 
 
-	_float3 vScale = { 2.f,2.f,1.f };
+	_float3 vScale = { 4.f,4.f,2.5f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -45,7 +45,7 @@ HRESULT CRich::Initialize(void * pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 10000;
+	m_tInfo.iMaxHp = 20000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 0;
 	m_tInfo.iExp = 50;
@@ -60,6 +60,8 @@ HRESULT CRich::Initialize(void * pArg)
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	tInfo.iMonsterType = MON_WRAITH;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
+	tInfo.vPos = { 1.f,1.f,1.f };
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 
 	Safe_Release(pGameInstance);
 	return S_OK;
@@ -68,7 +70,7 @@ HRESULT CRich::Initialize(void * pArg)
 void CRich::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	m_fFireSpearCool += fTimeDelta;
 	m_fSkillCool += fTimeDelta;
 	m_fCloneCool += fTimeDelta;
 	OnTerrain();
@@ -107,10 +109,26 @@ void CRich::Tick(_float fTimeDelta)
 
 		if (m_eCurState == SKILL)
 			Use_Skill(fTimeDelta);
+
+		if (m_fFireSpearCool > 10.f)
+		{
+			if (!m_bMeteor)
+			{
+				Create_FireSpear();
+				CSoundMgr::Get_Instance()->PlayEffect(L"Fire.wav", fSOUND);
+			}
+			else
+			{
+				Create_Meteor();
+				CSoundMgr::Get_Instance()->PlayEffect(L"SkyMeteor.wav", fSOUND);
+			}
+
+			m_fFireSpearCool = 0.f;
+		}
 	}
 	
 	Move_Frame(fTimeDelta);
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.3f);
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
@@ -287,7 +305,7 @@ void CRich::Check_Hit()
 void CRich::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	if (Distance >= 5.f)
+	if (Distance >= 20.f)
 		m_bIDLE = false;
 	else
 		m_bIDLE = true;
@@ -308,7 +326,7 @@ void CRich::Chase(_float fTimeDelta)
 		//	vPosition.y = vTargetPos.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
-	else if (1.f < Distance && 5.f > Distance)
+	else if (1.f < Distance)
 	{
 		if (!m_bSkill)
 			m_eCurState = MOVE;
@@ -350,7 +368,7 @@ void CRich::OnTerrain()
 
 	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 1.f);
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 1.3f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
@@ -405,8 +423,6 @@ void CRich::Free(void)
 	Safe_Release(m_pTextureComDead_Front);
 	Safe_Release(m_pTextureComDead_Back);
 }
-
-
 
 HRESULT CRich::On_SamplerState()
 {
@@ -544,8 +560,25 @@ void CRich::Check_Front()
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && !m_bClone)
 	{
+		m_bMeteor = true;
 		m_bClone = true;
 		m_fCloneCool = 0.f;
+	}
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.75f) && !m_bDarkBall)
+	{
+		m_bDarkBall = true;
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.pTarget = this;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		tInfo.pTerrain = m_tInfo.pTarget;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DarkShield"), m_tInfo.iLevelIndex, TEXT("Layer_MonsterSkkill"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DarkShield2"), m_tInfo.iLevelIndex, TEXT("Layer_MonsterSkkill"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DarkShield3"), m_tInfo.iLevelIndex, TEXT("Layer_MonsterSkkill"), &tInfo);
+
+		Safe_Release(pGameInstance);
 	}
 }
 void CRich::Use_Skill(_float fTimeDelta)
@@ -749,6 +782,53 @@ void CRich::Create_Clone()
 		return;
 	}
 }
+HRESULT CRich::Create_FireSpear()
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+
+	for (int i = 0; i < 20; ++i)
+	{
+		_float iSour = rand() % 13000 * 0.001f;
+		_float iTemp = rand() % 13000 * 0.001f;
+		_float3 vPos = { 0.f,0.f,0.f };
+		tInfo.vPos.x = vPos.x + iSour;
+		tInfo.vPos.y = vPos.y;
+		tInfo.vPos.z = vPos.z + iTemp;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireSpear"), m_tInfo.iLevelIndex, TEXT("Layer_MonsterSkill"), &tInfo)))
+			return E_FAIL;
+	}
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+HRESULT CRich::Create_Meteor()
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+	for (int i = 0; i < 20; ++i)
+	{
+		_float iSour = rand() % 13000 * 0.001f;
+		_float iTemp = rand() % 13000 * 0.001f;
+
+		_float3 vPos = { 0.f,0.f,0.f };
+		tInfo.vPos.x = vPos.x + iSour;
+		tInfo.vPos.y = vPos.y;
+		tInfo.vPos.z = vPos.z + iTemp;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Meteor"), m_tInfo.iLevelIndex, TEXT("Layer_MonsterSkill"), &tInfo)))
+			return E_FAIL;
+	}
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
 void CRich::OnBillboard()
 {
 	_float4x4		ViewMatrix;
@@ -762,11 +842,11 @@ void CRich::OnBillboard()
 
 	if (m_bRight && m_bFront || m_bRight && !m_bFront)
 	{
-		m_pTransformCom->Set_Scaled(_float3(-2.f, 2.f, 1.5f));
+		m_pTransformCom->Set_Scaled(_float3(-4.f, 4.f, 2.5f));
 		vRight.x = -1;
 	}
 	else if (!m_bRight && !m_bFront || !m_bRight && m_bFront)
-		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 1.5f));
+		m_pTransformCom->Set_Scaled(_float3(4.f, 4.f, 2.5f));
 
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);

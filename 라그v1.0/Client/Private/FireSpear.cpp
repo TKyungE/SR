@@ -37,7 +37,7 @@ HRESULT CFireSpear::Initialize(void* pArg)
 	m_tFrame.fFrameSpeed = 0.08f;
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 1.f;
-	m_tInfo.iDmg = 66;
+	m_tInfo.iDmg = 666;
 	m_tInfo.iMoney = 33;
 	Set_vPos();
 	return S_OK;
@@ -133,7 +133,7 @@ HRESULT CFireSpear::Create_Fire(const _tchar * pLayerTag)
 	tInfo.vPos.y += 0.5f;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Fire"), LEVEL_STATIC, pLayerTag, &tInfo)))
 		return E_FAIL;
-
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;

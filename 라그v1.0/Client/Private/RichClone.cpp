@@ -33,7 +33,7 @@ HRESULT CRichClone::Initialize(void * pArg)
 		return E_FAIL;
 
 
-	_float3 vScale = { 2.f,2.f,1.f };
+	_float3 vScale = { 4.f,4.f,2.5f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -48,7 +48,7 @@ HRESULT CRichClone::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 10000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 0;
-	m_tInfo.iExp = 50;
+	m_tInfo.iExp = 0;
 
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -60,6 +60,9 @@ HRESULT CRichClone::Initialize(void * pArg)
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	tInfo.iMonsterType = MON_WRAITH;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
+	tInfo.vPos = { 1.f,1.f,1.f };
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+
 	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
 	return S_OK;
@@ -99,7 +102,7 @@ void CRichClone::Tick(_float fTimeDelta)
 	if (m_eCurState == SKILL)
 		Use_Skill(fTimeDelta);
 
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.3f);
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
@@ -276,10 +279,7 @@ void CRichClone::Check_Hit()
 void CRichClone::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	if (Distance >= 5.f)
-		m_bIDLE = false;
-	else
-		m_bIDLE = true;
+
 	if (1.5f >= Distance)
 	{
 		if (m_fSkillCool >	3.f)
@@ -297,7 +297,7 @@ void CRichClone::Chase(_float fTimeDelta)
 		//	vPosition.y = vTargetPos.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
-	else if (1.5f < Distance && 5.f > Distance)
+	else if (1.5f < Distance)
 	{
 		if (!m_bSkill)
 			m_eCurState = MOVE;
@@ -712,11 +712,11 @@ void CRichClone::OnBillboard()
 
 	if (m_bRight && m_bFront || m_bRight && !m_bFront)
 	{
-		m_pTransformCom->Set_Scaled(_float3(-2.f, 2.f, 1.5f));
+		m_pTransformCom->Set_Scaled(_float3(-4.f, 4.f, 2.5f));
 		vRight.x = -1;
 	}
 	else if (!m_bRight && !m_bFront || !m_bRight && m_bFront)
-		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 1.5f));
+		m_pTransformCom->Set_Scaled(_float3(4.f, 4.f, 2.5f));
 
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
