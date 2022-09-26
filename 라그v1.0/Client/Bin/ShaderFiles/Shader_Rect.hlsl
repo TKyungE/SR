@@ -1,7 +1,4 @@
 
-
-
-
 float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture g_Texture;
 
@@ -50,8 +47,6 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vPosition = mul(float4(In.vPosition, 1.f), matWVP);
 	Out.vTexUV = In.vTexUV;
 	Out.vWorldPos = mul(float4(In.vPosition, 1.f), g_WorldMatrix).xyz;
-
-
 
 	return Out;
 }
