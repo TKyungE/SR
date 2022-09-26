@@ -72,7 +72,7 @@ void CTornado::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_PLAYERSKILL2, this)))
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_PLAYERSKILL, this)))
 	{
 		ERR_MSG(TEXT("Failed to Add CollisionGroup : CThunderSword"));
 		return;
@@ -217,7 +217,7 @@ HRESULT CTornado::SetUp_Components()
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_ColliderTORNADO"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
 
 	/* For.Com_Transform */
@@ -318,7 +318,7 @@ void CTornado::CheckColl()
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
 
-	if (pInstance->Collision(this, TEXT("Com_ColliderTORNADO"), COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
 	{
 		if (pTarget->Get_Info().iMp == 0)
 		{
@@ -349,9 +349,8 @@ void CTornado::CheckColl()
 			Set_Dead();
 		}
 	}
-	if (pInstance->Collision(this, TEXT("Com_ColliderTORNADO"), COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
+	/*if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_TOTEM, TEXT("Com_Collider"), &pTarget))
 	{
-		
 		_float fCri = _float(rand() % 100 + 1);
 		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;
 
@@ -376,6 +375,6 @@ void CTornado::CheckColl()
 		if (pTarget->Get_Info().iHp <= 0)
 			pTarget->Set_Dead();
 		Set_Dead();
-	}
+	}*/
 	Safe_Release(pInstance);
 }

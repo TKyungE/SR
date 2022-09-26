@@ -424,6 +424,15 @@
     <Filter Include="02.GameObject\Quest\CollectQuest">
       <UniqueIdentifier>{19d3bec9-7d13-4750-baed-9f937d3938c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\NPC\09. Town_Quest1">
+      <UniqueIdentifier>{e57c1c69-b2d1-4433-b571-97c7c28a3dd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\10. Town_Quest2">
+      <UniqueIdentifier>{7ded03da-ef2f-4dcd-a7fe-7d1ca1e435ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\11. Town_Quest3">
+      <UniqueIdentifier>{8cd3f6f8-1d21-4605-9716-a7b84f05ac90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -822,6 +831,15 @@
     <ClInclude Include="..\public\LogoUI.h">
       <Filter>02.GameObject\Loading\LogoUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Town_Quest1.h">
+      <Filter>02.GameObject\NPC\09. Town_Quest1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Town_Quest2.h">
+      <Filter>02.GameObject\NPC\10. Town_Quest2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Town_Quest3.h">
+      <Filter>02.GameObject\NPC\11. Town_Quest3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1207,6 +1225,15 @@
     </ClCompile>
     <ClCompile Include="..\private\LogoUI.cpp">
       <Filter>02.GameObject\Loading\LogoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Town_Quest1.cpp">
+      <Filter>02.GameObject\NPC\09. Town_Quest1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Town_Quest2.cpp">
+      <Filter>02.GameObject\NPC\10. Town_Quest2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Town_Quest3.cpp">
+      <Filter>02.GameObject\NPC\11. Town_Quest3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

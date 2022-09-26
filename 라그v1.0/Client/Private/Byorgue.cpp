@@ -948,7 +948,7 @@ void CByorgue::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYERSKILL2, TEXT("Com_ColliderTORNADO"), &pTarget) && m_fCollTime > 0.1f)
+	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYERSKILL, TEXT("Com_Collider"), &pTarget) && m_fCollTime > 0.1f)
 	{
 		_float fCri = _float(rand() % 100 + 1);
 		_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;

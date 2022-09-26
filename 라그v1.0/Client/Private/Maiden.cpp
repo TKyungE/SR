@@ -199,7 +199,7 @@ void CMaiden::Late_Tick(_float fTimeDelta)
 		if (m_bSkill2)
 		{
 			m_CollTime += fTimeDelta;
-			if (m_CollTime > 0.04f)
+			if (m_CollTime > 0.02f)
 			{
 				CheckColl();
 				m_CollTime = 0.f;
@@ -972,6 +972,7 @@ void CMaiden::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
+
 	Safe_Release(pInstance);
 }
 
