@@ -54,8 +54,8 @@ private:
 	vector<wstring>			m_vFindScript;
 	_bool		m_bCheck = false;
 	_uint		m_iCount = 0;
-	_bool		m_bLine = false;
 	_uint		m_iDustCount = 0;
+	_bool		m_bFirst = false;
 private:
 	HRESULT SetUp_Components(void);
 	void Ready_Script(void);

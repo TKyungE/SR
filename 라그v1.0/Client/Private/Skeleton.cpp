@@ -52,8 +52,25 @@ HRESULT CSkeleton::Initialize(void * pArg)
 	m_tInfo.iExp = 30;
 	m_tInfo.iMonsterType = (_int)MON_SKELETON;
 
-	
 
+
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	tInfo.vPos = { 1.f,0.8f,1.f };
+	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.iMonsterType = (_int)MON_WRAITH;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
+
+	tInfo.vPos = { 1.f,1.f,1.f };
+
+	//pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -61,127 +78,102 @@ HRESULT CSkeleton::Initialize(void * pArg)
 void CSkeleton::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
 	if (m_bPlay)
 	{
 		m_fSkillCool += fTimeDelta;
 		m_fCollTime += fTimeDelta;
 		if (m_tInfo.iMp == 2 && !m_bAngry)
-		if (!m_bRespawn)
 		{
-			m_fSkillCool += fTimeDelta;
-			m_fCollTime += fTimeDelta;
-			if (m_tInfo.iMp == 2 && !m_bAngry)
-			{
-				CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-				Safe_AddRef(pGameInstance);
-				CGameObject::INFO tInfo;
-				tInfo.pTarget = this;
-				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-				Safe_Release(pGameInstance);
-				m_bAngry = true;
-			}
-			OnTerrain();
-			if (!m_bDead)
-				Check_Front();
-			if (m_eCurState == DEAD)
-			{
-				if (m_tFrame.iFrameStart == 4)
-				{
-					m_fDeadTime += fTimeDelta;
-					if (m_fDeadTime > 3.f)
-					{
-						_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
-						m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);
-						m_pTransformCom->Bind_OnGraphicDev();
-						m_bRespawn = true;
-						return;
-					}
-				}
-				if (m_tFrame.iFrameStart != 4)
-					Move_Frame(fTimeDelta);
-				m_tInfo.bDead = false;
-				return;
-			}
-			if (m_tInfo.iMp == 1)
-			{
-				if (!m_bSkill && !m_bDead && !m_bRun)
-					Chase(fTimeDelta);
-
-				if (m_bRun)
-					Chase2(fTimeDelta);
-			}
-			else if (!m_bSkill && !m_bDead)
-				Chase3(fTimeDelta);
-
-			if (m_tInfo.iMp == 1 && !m_bIDLE)
-			{
-				MonsterMove(fTimeDelta);
-			}
-
-
-			Move_Frame(fTimeDelta);
-			if (m_eCurState == SKILL)
-				Use_Skill(fTimeDelta);
-
-			m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
-
-			CGameInstance* pInstance = CGameInstance::Get_Instance();
-			if (nullptr == pInstance)
-				return;
-
-			Safe_AddRef(pInstance);
-
-			if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTER, this)))
-			{
-				ERR_MSG(TEXT("Failed to Add CollisionGroup : CSkeleton"));
-				return;
-			}
-
-			Safe_Release(pInstance);
+			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+			Safe_AddRef(pGameInstance);
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = this;
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+			Safe_Release(pGameInstance);
+			m_bAngry = true;
 		}
-		else
+
+		OnTerrain();
+
+		if (!m_bDead)
+			Check_Front();
+
+		if (m_eCurState == DEAD)
 		{
-			m_fRespawnTime += fTimeDelta;
-			if (m_fRespawnTime > 10.f)
+			if (m_tFrame.iFrameStart == 4)
 			{
-				RespawnMonster();
-				m_fRespawnTime = 0.f;
-				m_bRespawn = false;
+				m_fDeadTime += fTimeDelta;
+				if (m_fDeadTime > 3.f)
+				{
+					m_tInfo.bDead = true;
+					return;
+				}
 			}
+			if (m_tFrame.iFrameStart != 4)
+				Move_Frame(fTimeDelta);
+
+			m_tInfo.bDead = false;
+			return;
+		}
+		if (m_tInfo.iMp == 1)
+		{
+			if (!m_bSkill && !m_bDead && !m_bRun)
+				Chase(fTimeDelta);
+
+			if (m_bRun)
+				Chase2(fTimeDelta);
+		}
+		else if (!m_bSkill && !m_bDead)
+			Chase3(fTimeDelta);
+
+		if (m_tInfo.iMp == 1 && !m_bIDLE)
+		{
+			MonsterMove(fTimeDelta);
+		}
+
+
+		Move_Frame(fTimeDelta);
+
+		if (m_eCurState == SKILL)
+			Use_Skill(fTimeDelta);
+
+		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+		CGameInstance* pInstance = CGameInstance::Get_Instance();
+		if (nullptr == pInstance)
+			return;
+
+		Safe_AddRef(pInstance);
+
+		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTER, this)))
+		{
+			ERR_MSG(TEXT("Failed to Add CollisionGroup : CSkeleton"));
+			return;
+		}
+
+		Safe_Release(pInstance);
+	}
+	m_tInfo.bDead = false;
+
+	if (g_iCut == 50)
+		m_bCheck = true;
+
+	if (m_bCheck)
+	{
+		m_fTimeDelta += fTimeDelta;
+
+		if (m_fTimeDelta > 7.f)
+		{
+			m_bCheck = false;
+			m_bPlay = true;
 		}
 	}
-		m_tInfo.bDead = false;
-
-		if (g_iCut == 50)
-			m_bCheck = true;
-		if (m_bCheck)
-		{
-			m_fTimeDelta += fTimeDelta;
-			if (m_fTimeDelta > 2.f)
-			{
-				m_bCheck = false;
-				m_bPlay = true;
-
-				CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-				if (nullptr == pGameInstance)
-					return;
-				Safe_AddRef(pGameInstance);
-				CGameObject::INFO tInfo;
-				tInfo.pTarget = this;
-				tInfo.vPos = { 1.f,0.8f,1.f };
-				tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-				tInfo.iMonsterType = (_int)MON_WRAITH;
-				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
-
-				tInfo.vPos = { 1.f,1.f,1.f };
-
-				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-				m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
-				Safe_Release(pGameInstance);
-			}
-		}	
-	
 }
+
+
+
+
 
 void CSkeleton::Late_Tick(_float fTimeDelta)
 {
@@ -209,7 +201,7 @@ HRESULT CSkeleton::Render(void)
 	{
 		if (FAILED(__super::Render()))
 			return E_FAIL;
-	//	Off_SamplerState();
+		//	Off_SamplerState();
 
 		_float4x4	WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
 		_float4			vCamPosition;
@@ -238,7 +230,7 @@ HRESULT CSkeleton::Render(void)
 		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4));
 		if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 			return E_FAIL;
-		
+
 		_float fAlpha = 1.f;
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
 			return E_FAIL;
@@ -268,7 +260,7 @@ HRESULT CSkeleton::Render(void)
 		/*if (FAILED(Release_RenderState()))
 			return E_FAIL;*/
 
-		//On_SamplerState();
+			//On_SamplerState();
 
 		if (g_bCollider)
 			m_pColliderCom->Render();
@@ -364,7 +356,7 @@ void CSkeleton::Chase(_float fTimeDelta)
 		m_bIDLE = true;
 	if (1.f >= Distance)
 	{
-		if (m_fSkillCool >	0.4f)
+		if (m_fSkillCool > 0.4f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -496,7 +488,7 @@ void CSkeleton::Chase3(_float fTimeDelta)
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 	if (1.f >= Distance)
 	{
-		if (m_fSkillCool >	0.3f)
+		if (m_fSkillCool > 0.3f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -792,8 +784,8 @@ HRESULT CSkeleton::TextureRender()
 		{
 			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComIDLE_Back->Get_Texture(m_tFrame.iFrameStart));
 
-		/*	if (FAILED(m_pTextureComIDLE_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;*/
+			/*	if (FAILED(m_pTextureComIDLE_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;*/
 		}
 		break;
 	case MOVE:
@@ -817,8 +809,8 @@ HRESULT CSkeleton::TextureRender()
 		{
 			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComDead_Front->Get_Texture(m_tFrame.iFrameStart));
 
-		/*	if (FAILED(m_pTextureComDead_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;*/
+			/*	if (FAILED(m_pTextureComDead_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;*/
 		}
 		else
 		{
@@ -840,8 +832,8 @@ HRESULT CSkeleton::TextureRender()
 		{
 			m_pShaderCom->Set_Texture("g_Texture", m_pTextureComAttack_Back->Get_Texture(m_tFrame.iFrameStart));
 
-		/*	if (FAILED(m_pTextureComAttack_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;*/
+			/*	if (FAILED(m_pTextureComAttack_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;*/
 		}
 		break;
 	default:
@@ -908,48 +900,8 @@ void CSkeleton::MonsterMove(_float fTimeDelta)
 	default:
 		break;
 	}
-
-
-
-
 }
-HRESULT CSkeleton::RespawnMonster()
-{
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
-	m_ePreState = STATE_END;
-	m_eCurState = IDLE;
-	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 7;
-	m_tFrame.fFrameSpeed = 0.15f;
-	m_tInfo.iHp = m_tInfo.iMaxHp;
-	m_tInfo.iMp = 1;
-	m_bFront = false;
-	m_fSkillCool = 0.f;
-	m_fRespawnTime = 0.f;
-	m_fDeadTime = 0.f;
-	m_fMove = 0.f;
-	m_irand = 0;
-	m_bSkill = false;
-	m_bMove = false;
-	m_bDead = false;
-	m_bRun = false;
-	m_bIDLE = false;
-	m_bRespawn = false;
-	m_bAngry = false;
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
-	Safe_AddRef(pGameInstance);
-	CGameObject::INFO tInfo;
-	tInfo.pTarget = this;
-	tInfo.vPos = { 1.f,0.8f,1.f };
-	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 1.f,1.f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-	Safe_Release(pGameInstance);
-	return S_OK;
-}
+
 void CSkeleton::CheckColl()
 {
 	CGameInstance* pInstance = CGameInstance::Get_Instance();

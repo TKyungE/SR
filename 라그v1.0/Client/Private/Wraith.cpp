@@ -121,6 +121,7 @@ void CWraith::Tick(_float fTimeDelta)
 
 
 	Move_Frame(fTimeDelta);
+
 	if (m_eCurState == SKILL)
 		Use_Skill(fTimeDelta);
 
@@ -139,8 +140,6 @@ void CWraith::Tick(_float fTimeDelta)
 	}
 
 	Safe_Release(pInstance);
-
-
 
 	m_tInfo.bDead = false;
 }
