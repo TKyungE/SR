@@ -46,7 +46,7 @@ HRESULT CSkyField::Initialize()
 
 	fSound = fSOUND;
 	CSoundMgr::Get_Instance()->BGM_Stop();
-	CSoundMgr::Get_Instance()->PlayBGM(L"SKY.wav", fSOUND);
+	CSoundMgr::Get_Instance()->PlayBGM(L"SKY.wav", fSOUND+0.1f);
 
 
 	return S_OK;

@@ -25,7 +25,7 @@ void CSoundMgr::Initialize()
 		return;
 	else printf("FMOD version %08x\n", Version);
 	
-	Result = m_System->init(32, FMOD_INIT_NORMAL, extradriverdata);  // 시스템 초기화 : chaneel 32개까지 사용하겠다.
+	Result = m_System->init(100, FMOD_INIT_NORMAL, extradriverdata);  // 시스템 초기화 : chaneel 32개까지 사용하겠다.
 	if (Result != FMOD_OK)
 		return;
 
