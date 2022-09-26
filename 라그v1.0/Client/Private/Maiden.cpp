@@ -221,6 +221,16 @@ HRESULT CMaiden::Render(void)
 
 	Off_SamplerState();
 
+	if (FAILED(SetUp_RenderState()))
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	TextureRender();
+
+	m_pVIBufferCom->Render();
+
 	if (0 != g_iCut && m_bTalk)
 	{
 		if (FAILED(m_pCharTransformCom->Bind_OnGraphicDev()))
@@ -259,16 +269,6 @@ HRESULT CMaiden::Render(void)
 		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &SaveViewMatrix);
 		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &SaveProjVatrix);
 	}
-
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
-
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
-
-	TextureRender();
-
-	m_pVIBufferCom->Render();
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;

@@ -246,6 +246,7 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	if (g_iCut == 40)
 	{
 		_float3 MonPos = *(_float3*)&pGameInstance->Find_Layer(m_CameraDesc.Info.iLevelIndex, TEXT("Layer_Monster"))->Get_Objects().front()->Get_World().m[3][0];
+		
 		m_pTransform->LookAt(MonPos);
 	}
 
