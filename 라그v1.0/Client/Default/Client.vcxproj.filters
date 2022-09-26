@@ -433,6 +433,12 @@
     <Filter Include="02.GameObject\NPC\11. Town_Quest3">
       <UniqueIdentifier>{8cd3f6f8-1d21-4605-9716-a7b84f05ac90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Door">
+      <UniqueIdentifier>{0bd4f468-3813-4922-83ea-8bb3deedf42d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Dust">
+      <UniqueIdentifier>{126e849b-fa02-4008-be27-5456c6c6907b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -840,6 +846,12 @@
     <ClInclude Include="..\Public\Town_Quest3.h">
       <Filter>02.GameObject\NPC\11. Town_Quest3</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Door.h">
+      <Filter>02.GameObject\BackGroundObj\Door</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Dust.h">
+      <Filter>02.GameObject\BackGroundObj\Dust</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1234,6 +1246,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Town_Quest3.cpp">
       <Filter>02.GameObject\NPC\11. Town_Quest3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Door.cpp">
+      <Filter>02.GameObject\BackGroundObj\Door</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Dust.cpp">
+      <Filter>02.GameObject\BackGroundObj\Dust</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
