@@ -98,7 +98,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
-		return;
+		return E_FAIL;
 
 	Safe_AddRef(pGameInstance);
 
@@ -134,7 +134,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
-		return;
+		return E_FAIL;
 
 	Safe_AddRef(pGameInstance);
 
@@ -160,7 +160,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
-		return;
+		return E_FAIL;
 
 	Safe_AddRef(pGameInstance);
 
@@ -178,7 +178,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Camera(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
-		return;
+		return E_FAIL;
 
 	Safe_AddRef(pGameInstance);
 
@@ -213,7 +213,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_UI(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
-		return;
+		return E_FAIL;
 
 	Safe_AddRef(pGameInstance);
 
@@ -242,7 +242,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Portal(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
-		return;
+		return E_FAIL;
 
 	Safe_AddRef(pGameInstance);
 
