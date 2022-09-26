@@ -118,60 +118,58 @@ void CMaiden::Tick(_float fTimeDelta)
 			g_iReward = 0;
 		}
 	}
-	else
+
+	if (!m_bDead)
 	{
-		if (!m_bDead)
-		{
-			Check_Front();
-			if (m_bBlueFire)
-				Create_BlueFire(fTimeDelta);
-		}
-		if (m_eCurState == DEAD)
-		{
-			if (m_tFrame.iFrameStart == 4)
-			{
-				Set_Dead();
-				return;
-
-			}
-			if (m_tFrame.iFrameStart != 4)
-				Move_Frame(fTimeDelta);
-			m_tInfo.bDead = false;
-			return;
-		}
-		if (!m_bLastHeal)
-		{
-			m_fSkillCool += fTimeDelta;
-			if (!m_bSkill && !m_bDead && !m_bSkill2)
-				Chase(fTimeDelta);
-			if (!m_bSkill)
-				m_fSkillCool2 += fTimeDelta;
-
-			if (m_fSkillCool2 > 13.f)
-			{
-				m_bSkill2 = true;
-				m_fSkillCool2 = 0;
-				m_fSkillCool = 0;
-			}
-
-		}
-		Move_Frame(fTimeDelta);
-		if (m_eCurState == SKILL && !m_bSkill2)
-			Use_Skill(fTimeDelta);
-
-		if (m_bSkill2 && m_bStart && !m_bSkill)
-			Use_Skill2(fTimeDelta);
-
-		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
-
-		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_BOSS, this)))
-		{
-			ERR_MSG(TEXT("Failed to Add CollisionGroup : CMaiden"));
-			return;
-		}
-
-		m_tInfo.bDead = false;
+		Check_Front();
+		if (m_bBlueFire)
+			Create_BlueFire(fTimeDelta);
 	}
+	if (m_eCurState == DEAD)
+	{
+		if (m_tFrame.iFrameStart == 4)
+		{
+			Set_Dead();
+			return;
+
+		}
+		if (m_tFrame.iFrameStart != 4)
+			Move_Frame(fTimeDelta);
+		m_tInfo.bDead = false;
+		return;
+	}
+	if (!m_bLastHeal)
+	{
+		m_fSkillCool += fTimeDelta;
+		if (!m_bSkill && !m_bDead && !m_bSkill2)
+			Chase(fTimeDelta);
+		if (!m_bSkill)
+			m_fSkillCool2 += fTimeDelta;
+
+		if (m_fSkillCool2 > 13.f)
+		{
+			m_bSkill2 = true;
+			m_fSkillCool2 = 0;
+			m_fSkillCool = 0;
+		}
+
+	}
+	Move_Frame(fTimeDelta);
+	if (m_eCurState == SKILL && !m_bSkill2)
+		Use_Skill(fTimeDelta);
+
+	if (m_bSkill2 && m_bStart && !m_bSkill)
+		Use_Skill2(fTimeDelta);
+
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_BOSS, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CMaiden"));
+		return;
+	}
+
+	m_tInfo.bDead = false;
 
 	m_fAlpha += 0.006f;
 
@@ -207,9 +205,11 @@ void CMaiden::Late_Tick(_float fTimeDelta)
 		}
 	}
 	OnBillboard();
+
+	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
-
 }
 
 HRESULT CMaiden::Render(void)
@@ -386,7 +386,7 @@ void CMaiden::Chase(_float fTimeDelta)
 			m_tFrame.iFrameStart = 0;
 		}
 
-		if (0.5f < Distance)
+		if (3.f < Distance)
 		{
 			if (m_eCurState != SKILL)
 				m_eCurState = MOVE;
