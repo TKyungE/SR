@@ -490,16 +490,16 @@ void CTown_Quest3::OnBillboard()
 
 void CTown_Quest3::Ready_Script(void)
 {
-	m_vQuestScript.push_back(TEXT("큰일이야! 이 왕국을 향하고 있어!"));
-	m_vQuestScript.push_back(TEXT("의 힘이라면 왕국은 물론이고 이 세계가 위험해!"));
-	m_vQuestScript.push_back(TEXT("미로 너머에 이 자리를 잡은걸 확인했어."));
-	m_vQuestScript.push_back(TEXT("부탁이야.. 을 막아줘!"));
+	m_vQuestScript.push_back(TEXT("큰일이야! 리치킹이 왕국을 향하고 있어!"));
+	m_vQuestScript.push_back(TEXT("리치킹의 힘이라면 왕국은 물론이고 이 세계가 위험해!"));
+	m_vQuestScript.push_back(TEXT("미로 너머에 리치킹이 자리를 잡은걸 확인했어."));
+	m_vQuestScript.push_back(TEXT("부탁이야.. 리치킹을 막아줘!"));
 
 	m_vNotClearScript.push_back(TEXT("허비할 시간이 없어!"));
 
 	m_vNormalScript.push_back(TEXT("나는 이 왕국의 왕자. 왕국에서 소란은 벌이지 말아줬음 좋겠어."));
 
-	m_vClearScript.push_back(TEXT("정말.. 그 을 물리친거야..?"));
+	m_vClearScript.push_back(TEXT("정말.. 그 리치킹을 물리친거야..?"));
 	m_vClearScript.push_back(TEXT("넌 우리 왕국 뿐만 아니라 이 세계의 영웅이야! 모두를 대신해서 정말 고마워! \n\n보상 : 경험치 5000"));
 }
 
