@@ -84,17 +84,7 @@ void CSkeleton::Tick(_float fTimeDelta)
 		m_fSkillCool += fTimeDelta;
 		m_fCollTime += fTimeDelta;
 		
-		/*if (m_tInfo.iMp == 2 && !m_bAngry)
-		{
-			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-			Safe_AddRef(pGameInstance);
-			CGameObject::INFO tInfo;
-			tInfo.pTarget = this;
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-			Safe_Release(pGameInstance);
-			m_bAngry = true;
-		}*/
-	
+
 		if (!m_bFirst)
 		{
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
@@ -102,21 +92,6 @@ void CSkeleton::Tick(_float fTimeDelta)
 		}
 
 		OnTerrain();
-
-
-		_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-
-		if (0.25 < Distance)
-		{
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-
-			vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-
-
 
 		if (!m_bDead)
 			Check_Front();
@@ -126,7 +101,7 @@ void CSkeleton::Tick(_float fTimeDelta)
 			if (m_tFrame.iFrameStart == 4)
 			{
 				m_fDeadTime += fTimeDelta;
-				if (m_fDeadTime > 3.f)
+				if (m_fDeadTime > 2.f)
 				{
 					++g_iCount;
 					m_tInfo.bDead = true;
@@ -139,22 +114,18 @@ void CSkeleton::Tick(_float fTimeDelta)
 			m_tInfo.bDead = false;
 			return;
 		}
-		/*	if (m_tInfo.iMp == 1)
-			{
-				if (!m_bSkill && !m_bDead && !m_bRun)
-					Chase(fTimeDelta);
 
-				if (m_bRun)
-					Chase2(fTimeDelta);
-			}
-			else if (!m_bSkill && !m_bDead)
-				Chase3(fTimeDelta);
+		_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 
-			if (m_tInfo.iMp == 1 && !m_bIDLE)
-			{
-				MonsterMove(fTimeDelta);
-			}*/
+		if (0.25 < Distance)
+		{
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 
+			vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
 
 		Move_Frame(fTimeDelta);
 

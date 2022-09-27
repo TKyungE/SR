@@ -100,20 +100,6 @@ void CZombie::Tick(_float fTimeDelta)
 
 		OnTerrain();
 
-
-		_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-
-		if (0.25f < Distance)
-		{
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-
-			vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-
-
 		if (!m_bDead)
 			Check_Front();
 
@@ -122,7 +108,7 @@ void CZombie::Tick(_float fTimeDelta)
 			if (m_tFrame.iFrameStart == 3)
 			{
 				m_fDeadTime += fTimeDelta;
-				if (m_fDeadTime > 3.f)
+				if (m_fDeadTime > 2.f)
 				{
 					++g_iCount;
 					m_tInfo.bDead = true;
@@ -136,22 +122,17 @@ void CZombie::Tick(_float fTimeDelta)
 			return;
 		}
 
-		/*if (m_tInfo.iMp == 1)
-		{
-			if (!m_bSkill && !m_bDead && !m_bRun)
-				Chase(fTimeDelta);
+		_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 
-			if (m_bRun)
-				Chase2(fTimeDelta);
+		if (0.25f < Distance)
+		{
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+
+			vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 		}
-		else if (!m_bSkill && !m_bDead)
-			Chase3(fTimeDelta);
-
-		if (m_tInfo.iMp == 1 && !m_bIDLE)
-		{
-			MonsterMove(fTimeDelta);
-		}*/
-
 
 		Move_Frame(fTimeDelta);
 
