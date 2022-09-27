@@ -164,6 +164,9 @@ unsigned int APIENTRY Thread_Main(void* pArg)
 	case LEVEL_SKY:
 		pLoader->Loading_ForMaze();
 		break;
+	case LEVEL_FINALBOSS:
+		pLoader->Loading_ForFinalBoss();
+		break;
 	}
 
 	LeaveCriticalSection(&pLoader->Get_CriticalSection());
@@ -252,6 +255,13 @@ HRESULT CLoader::Loading_ForDesert1()
 }
 
 HRESULT CLoader::Loading_ForMaze()
+{
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_ForFinalBoss()
 {
 	m_isFinished = true;
 

@@ -55,6 +55,8 @@ private:
 	_float3 m_vBackPos;
 	vector<_float3> m_vMonsterPos1;
 
+	_bool m_bPortal = false;
+
 private:
 	void Create_Rain(_float fTimeDelta);
 

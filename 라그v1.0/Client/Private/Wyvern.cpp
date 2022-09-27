@@ -421,7 +421,7 @@ void CWyvern::Motion_Change()
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 7;
-			m_tFrame.fFrameSpeed = 0.15;
+			m_tFrame.fFrameSpeed = 0.15f;
 			break;
 		case MOVE:
 			m_tFrame.iFrameStart = 0;
