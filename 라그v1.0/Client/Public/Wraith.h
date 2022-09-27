@@ -91,6 +91,7 @@ private:
 	_float				m_fAlpha = 0.f;
 	_float				m_fTimeDelta = 0.f;
 	CGameObject*			m_StatInfo;
+	
 public:
 	static CWraith* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

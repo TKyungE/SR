@@ -40,7 +40,7 @@ _bool CCollisionMgr::Collision(CGameObject * pGameObject, const _tchar* szDestCo
 
 	for (auto& iter : m_GameObjects[iCollisionGroup])
 	{
-		if (Can_Collision(pGameObject, iter) && Collision_AABB(pGameObject, szDestColliderName, iter, szSourColliderName))
+		if (/*Can_Collision(pGameObject, iter) && */Collision_AABB(pGameObject, szDestColliderName, iter, szSourColliderName))
 		{
 			*pTarget = iter;
 			return true;

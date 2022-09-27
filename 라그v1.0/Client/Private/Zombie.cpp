@@ -78,21 +78,41 @@ void CZombie::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 	if (m_bPlay)
 	{
-		m_fSkillCool += fTimeDelta;
-		m_fCollTime += fTimeDelta;
+			m_fSkillCool += fTimeDelta;
+			m_fCollTime += fTimeDelta;
 
-		if (m_tInfo.iMp == 2 && !m_bAngry)
+			/*if (m_tInfo.iMp == 2 && !m_bAngry)
+			{
+				CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+				Safe_AddRef(pGameInstance);
+				CGameObject::INFO tInfo;
+				tInfo.pTarget = this;
+				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+				Safe_Release(pGameInstance);
+				m_bAngry = true;
+			}*/
+
+		if (!m_bFirst)
 		{
-			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-			Safe_AddRef(pGameInstance);
-			CGameObject::INFO tInfo;
-			tInfo.pTarget = this;
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-			Safe_Release(pGameInstance);
-			m_bAngry = true;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+			m_bFirst = true;
 		}
 
 		OnTerrain();
+
+
+		_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+
+		if (0.25f < Distance)
+		{
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+
+			vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+
 
 		if (!m_bDead)
 			Check_Front();
@@ -114,7 +134,8 @@ void CZombie::Tick(_float fTimeDelta)
 			m_tInfo.bDead = false;
 			return;
 		}
-		if (m_tInfo.iMp == 1)
+
+		/*if (m_tInfo.iMp == 1)
 		{
 			if (!m_bSkill && !m_bDead && !m_bRun)
 				Chase(fTimeDelta);
@@ -128,10 +149,11 @@ void CZombie::Tick(_float fTimeDelta)
 		if (m_tInfo.iMp == 1 && !m_bIDLE)
 		{
 			MonsterMove(fTimeDelta);
-		}
+		}*/
 
 
 		Move_Frame(fTimeDelta);
+
 		if (m_eCurState == SKILL)
 			Use_Skill(fTimeDelta);
 
@@ -151,9 +173,8 @@ void CZombie::Tick(_float fTimeDelta)
 
 		Safe_Release(pInstance);
 
-		
-	}
 
+	}
 	m_tInfo.bDead = false;
 
 	if (g_iCut == 50)
@@ -163,28 +184,10 @@ void CZombie::Tick(_float fTimeDelta)
 	{
 		m_fTimeDelta += fTimeDelta;
 
-		if (m_fTimeDelta > 7.f)
+		if (m_fTimeDelta > 5.f)
 		{
 			m_bCheck = false;
 			m_bPlay = true;
-
-			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-			if (nullptr == pGameInstance)
-				return;
-			Safe_AddRef(pGameInstance);
-			CGameObject::INFO tInfo;
-			tInfo.pTarget = this;
-			tInfo.vPos = { 1.f,0.8f,1.f };
-			tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-			tInfo.iMonsterType = (_int)MON_ZOMBIE;
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
-
-			tInfo.vPos = { 1.f,1.f,1.f };
-
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-			m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
-			Safe_Release(pGameInstance);
-
 		}
 	}
 }
@@ -195,19 +198,17 @@ void CZombie::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 	if (m_bPlay)
 	{
-		if (!m_bRespawn)
+		if (!m_bDead)
 		{
-			if (!m_bDead)
-			{
-				Check_Hit();
-				Motion_Change();
-				CheckColl();
-			}
-			OnBillboard();
-			if (nullptr != m_pRendererCom)
-				m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+			Check_Hit();
+			Motion_Change();
+			CheckColl();
 		}
+		OnBillboard();
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 	}
+
 }
 
 HRESULT CZombie::Render(void)
@@ -274,10 +275,12 @@ HRESULT CZombie::Render(void)
 		m_pVIBufferCom->Render();
 
 		m_pShaderCom->End();
+
 		/*if (FAILED(Release_RenderState()))
 		return E_FAIL;*/
 
 		//On_SamplerState();
+
 		if (g_bCollider)
 			m_pColliderCom->Render();
 	}
@@ -978,6 +981,8 @@ void CZombie::CheckColl()
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, m_pTransformCom->Get_State(CTransform::STATE_LOOK) * -1.f);
 	}
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYERSKILL, TEXT("Com_Collider"), &pTarget) && m_fCollTime > 0.1f)
 	{

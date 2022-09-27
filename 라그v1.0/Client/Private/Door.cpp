@@ -339,6 +339,11 @@ HRESULT CDoor::Render(void)
 	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 		return E_FAIL;
 
+	_float fAlpha = 1.f;
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float))))
+		return E_FAIL;
+
 	if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(0))))
 		return E_FAIL;
 
@@ -360,8 +365,8 @@ HRESULT CDoor::Render(void)
 
 	if (g_bCollider)
 	{
-		m_pColliderCom->Render();
 		m_pQuestColliderCom->Render();
+		m_pColliderCom->Render();
 	}
 
 	return S_OK;
