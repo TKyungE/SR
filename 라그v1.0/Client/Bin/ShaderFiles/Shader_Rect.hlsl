@@ -221,8 +221,19 @@ PS_OUT PS_MAIN_FADE(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_TERRAINRECT(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
 
+	Out.vColor = tex2D(TextureSampler, In.vTexUV);
 
+	if (Out.vColor.r == 84 || Out.vColor.g == 52 || Out.vColor.b == 20)
+		Out.vColor.a = 0.f;
+	else
+		Out.vColor.a = 1.f;
+
+	return Out;
+}
 
 
 technique DefaultTechnique
@@ -340,5 +351,15 @@ technique DefaultTechnique
 
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN_FADE();
+	}
+	pass TerrainRect		//11
+	{
+		AlphablendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
+
+		VertexShader = compile vs_3_0 VS_MAIN();
+		PixelShader = compile ps_3_0 PS_MAIN_TERRAINRECT();
 	}
 }

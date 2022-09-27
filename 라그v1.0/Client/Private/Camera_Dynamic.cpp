@@ -158,6 +158,7 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 			_float3 vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
 			vPos.y += 0.3f;
 			m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+			m_CameraDesc.fFovy = D3DXToRadian(85.f);
 
 			_long			MouseMove = 0;
 
