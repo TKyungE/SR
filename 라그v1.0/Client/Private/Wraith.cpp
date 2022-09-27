@@ -83,7 +83,6 @@ void CWraith::Tick(_float fTimeDelta)
 
 	OnTerrain();
 
-
 	if (!m_bDead)
 		Check_Front();
 	if (m_eCurState == DEAD)
@@ -333,7 +332,7 @@ void CWraith::Chase(_float fTimeDelta)
 		m_bIDLE = false;
 	else
 		m_bIDLE = true;
-	if (1.f >= Distance)
+	if (1.5f >= Distance)
 	{
 		if (m_fSkillCool > 0.4f)
 		{
@@ -350,7 +349,7 @@ void CWraith::Chase(_float fTimeDelta)
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
-	else if (1.f < Distance && 5.f > Distance)
+	else if (1.5f < Distance && 5.f > Distance)
 	{
 		if (!m_bSkill)
 			m_eCurState = MOVE;

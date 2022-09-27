@@ -308,7 +308,7 @@
     <ClInclude Include="..\public\Village_Quest2.h" />
     <ClInclude Include="..\Public\Wind.h" />
     <ClInclude Include="..\public\Wing.h" />
-    <ClInclude Include="..\public\WorldHpBar.h" />
+    <ClInclude Include="..\Public\WorldHpBar.h" />
     <ClInclude Include="..\Public\Wraith.h" />
     <ClInclude Include="..\public\Wyvern.h" />
     <ClInclude Include="..\Public\Zombie.h" />
@@ -454,7 +454,7 @@
     <ClCompile Include="..\private\Village_Quest2.cpp" />
     <ClCompile Include="..\Private\Wind.cpp" />
     <ClCompile Include="..\private\Wing.cpp" />
-    <ClCompile Include="..\private\WorldHpBar.cpp" />
+    <ClCompile Include="..\Private\WorldHpBar.cpp" />
     <ClCompile Include="..\Private\Wraith.cpp" />
     <ClCompile Include="..\private\Wyvern.cpp" />
     <ClCompile Include="..\Private\Zombie.cpp" />

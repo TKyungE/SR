@@ -134,22 +134,21 @@ HRESULT CWorldHpBar::Render()
 	_float fHpBar = (m_tInfo.pTarget->Get_Info().iHp / (float)m_tInfo.pTarget->Get_Info().iMaxHp);
 
 	m_pShaderCom->Set_RawValue("g_fHPBar", &fHpBar, sizeof(_float));
-
 	_float fAlpha = 1.f;
 
 	m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float));
 	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
 	{
-		_float fMin = 100.f;
-		_float fMax = 100.f;
+		_float fMin = 113.f;
+		_float fMax = 116.f;
 		m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float));
 		m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float));
 
 	}
 	else
 	{
-		_float	fMin = 3.f;
-		_float	fMax = 6.f;
+		_float	fMin = 1.f;
+		_float	fMax = 4.f;
 
 
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
@@ -161,8 +160,8 @@ HRESULT CWorldHpBar::Render()
 
 	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(2));
 
-	/*if (FAILED(SetUp_RenderState()))
-		return E_FAIL;*/
+	if (FAILED(SetUp_RenderState()))
+		return E_FAIL;
 
 	m_pShaderCom->Begin(7);
 

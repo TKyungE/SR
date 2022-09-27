@@ -561,9 +561,6 @@
     <ClInclude Include="..\Public\Wind.h">
       <Filter>03.Effect\Default\05.Wind</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\WorldHpBar.h">
-      <Filter>04.UI\WorldHpBar</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Shadow.h">
       <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClInclude>
@@ -906,6 +903,9 @@
     <ClInclude Include="..\Public\Fade.h">
       <Filter>04.UI\Fade</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\WorldHpBar.h">
+      <Filter>04.UI\WorldHpBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -988,9 +988,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Wind.cpp">
       <Filter>03.Effect\Default\05.Wind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\WorldHpBar.cpp">
-      <Filter>04.UI\WorldHpBar</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Shadow.cpp">
       <Filter>03.Effect\Default\06.Shadow</Filter>
@@ -1333,6 +1330,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Fade.cpp">
       <Filter>04.UI\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WorldHpBar.cpp">
+      <Filter>04.UI\WorldHpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
