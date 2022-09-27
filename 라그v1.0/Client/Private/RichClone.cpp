@@ -45,7 +45,7 @@ HRESULT CRichClone::Initialize(void * pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 10000;
+	m_tInfo.iMaxHp = 30000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 0;
 	m_tInfo.iExp = 0;
