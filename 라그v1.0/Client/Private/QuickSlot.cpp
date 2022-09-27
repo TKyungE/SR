@@ -243,7 +243,15 @@ HRESULT CQuickSlot::Render()
 		Safe_Release(pGameInstance);
 	}
 
-	if (m_tInfo.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex != LEVEL_SKY && m_tInfo.pTarget->Get_Info().iLevelIndex != LEVEL_MAZE)
+	{
+		if (FAILED(m_pMouseTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
+		if (FAILED(m_pMouseTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;
+		m_pMouseBuffer->Render();
+	}
+	if (m_tInfo.pTarget->Get_Info().iLevelIndex == LEVEL_MAZE && (g_bFirst || g_bCheck))
 	{
 		if (FAILED(m_pMouseTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;

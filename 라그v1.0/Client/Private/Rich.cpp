@@ -73,6 +73,12 @@ void CRich::Tick(_float fTimeDelta)
 	m_fFireSpearCool += fTimeDelta;
 	m_fSkillCool += fTimeDelta;
 	m_fCloneCool += fTimeDelta;
+	m_fMonster += fTimeDelta;
+	if (g_iCount == 8)
+	{
+		m_tInfo.iDmg = 66;
+		m_bCreateMonster = false;
+	}
 	OnTerrain();
 	if (!m_bDead)
 		Check_Front();
@@ -102,7 +108,16 @@ void CRich::Tick(_float fTimeDelta)
 			m_fCloneCool = 0.f;
 		}
 	}
-	if (!m_bCreateClone)
+	if (m_bMonster && m_iMonster != 99)
+	{
+		m_bCreateMonster = true;
+		if (m_fMonster > 0.15f)
+		{
+			Create_Monster();
+			m_fMonster = 0.f;
+		}
+	}
+	if (!m_bCreateClone && !m_bCreateMonster)
 	{
 		if (!m_bSkill && !m_bDead)
 			Chase(fTimeDelta);
@@ -367,9 +382,10 @@ void CRich::OnTerrain()
 		return;
 
 	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 1.3f);
-
+	if(!m_bCreateMonster)
+		vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 1.3f);
+	else if(m_bCreateMonster)
+		vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 2.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
 }
@@ -580,6 +596,24 @@ void CRich::Check_Front()
 
 		Safe_Release(pGameInstance);
 	}
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.25f) && !m_bMonster)
+	{
+		m_tInfo.iDmg = 666;
+		m_bMonster = true;
+		m_fMonster = 0.f;
+		_float3 vPos = { 7.f,1.f,9.f };
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.vPos = { 7.f,3.5f,9.f };
+		
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BigBang"), m_tInfo.iLevelIndex, TEXT("Layer_MonsterSkill"), &tInfo)))
+			return;
+		Safe_Release(pGameInstance);
+	}
 }
 void CRich::Use_Skill(_float fTimeDelta)
 {
@@ -778,6 +812,122 @@ void CRich::Create_Clone()
 		Safe_Release(pGameInstance);
 		m_iClone = 99;
 		m_bCreateClone = false;
+		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Skill.wav", fSOUND + 0.1f);
+		return;
+	}
+}
+void CRich::Create_Monster()
+{
+	_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = m_tInfo.pTarget;
+	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	if (m_iMonster == 0)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+
+		vTargetPos.z += 3.f;
+		tInfo.vPos = vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), m_tInfo.iLevelIndex, TEXT("Layer_Monster"), &tInfo);
+		Safe_Release(pGameInstance);
+		++m_iMonster;
+		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Skill.wav", fSOUND + 0.1f);
+		return;
+	}
+	if (m_iMonster == 1)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+
+		vTargetPos.z += 2.f;
+		vTargetPos.x += 2.f;
+		tInfo.vPos = vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), m_tInfo.iLevelIndex, TEXT("Layer_Monster"), &tInfo);
+		Safe_Release(pGameInstance);
+		++m_iMonster;
+		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Skill.wav", fSOUND + 0.1f);
+		return;
+	}
+	if (m_iMonster == 2)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+
+		vTargetPos.x += 3.f;
+		tInfo.vPos = vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), m_tInfo.iLevelIndex, TEXT("Layer_Monster"), &tInfo);
+		Safe_Release(pGameInstance);
+		++m_iMonster;
+		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Skill.wav", fSOUND + 0.1f);
+		return;
+	}
+	if (m_iMonster == 3)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+
+		vTargetPos.z -= 2.f;
+		vTargetPos.x += 2.f;
+		tInfo.vPos = vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), m_tInfo.iLevelIndex, TEXT("Layer_Monster"), &tInfo);
+		Safe_Release(pGameInstance);
+		++m_iMonster;
+		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Skill.wav", fSOUND + 0.1f);
+		return;
+	}
+	if (m_iMonster == 4)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+
+		vTargetPos.z -= 3.f;
+		tInfo.vPos = vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), m_tInfo.iLevelIndex, TEXT("Layer_Monster"), &tInfo);
+		Safe_Release(pGameInstance);
+		++m_iMonster;
+		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Skill.wav", fSOUND + 0.1f);
+		return;
+	}
+	if (m_iMonster == 5)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+
+		vTargetPos.z -= 2.f;
+		vTargetPos.x -= 2.f;
+		tInfo.vPos = vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), m_tInfo.iLevelIndex, TEXT("Layer_Monster"), &tInfo);
+		Safe_Release(pGameInstance);
+		++m_iMonster;
+		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Skill.wav", fSOUND + 0.1f);
+		return;
+	}
+	if (m_iMonster == 6)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+
+		vTargetPos.x -= 3.f;
+		tInfo.vPos = vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Skeleton"), m_tInfo.iLevelIndex, TEXT("Layer_Monster"), &tInfo);
+		Safe_Release(pGameInstance);
+		++m_iMonster;
+		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Skill.wav", fSOUND + 0.1f);
+		return;
+	}
+
+	if (m_iMonster == 7)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+
+		vTargetPos.x -= 2.f;
+		vTargetPos.z += 2.f;
+		tInfo.vPos = vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Zombie"), m_tInfo.iLevelIndex, TEXT("Layer_Monster"), &tInfo);
+		Safe_Release(pGameInstance);
+		m_iMonster = 99;
 		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Skill.wav", fSOUND + 0.1f);
 		return;
 	}

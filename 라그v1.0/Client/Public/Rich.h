@@ -61,8 +61,10 @@ private:
 	HRESULT TextureRender();
 	void CheckColl();
 	void Create_Clone();
+	void Create_Monster();
 	HRESULT Create_FireSpear();
 	HRESULT Create_Meteor();
+
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
@@ -70,16 +72,20 @@ private:
 	_bool				m_bRight = false;
 	_float				m_fSkillCool = 0.f;
 	_float				m_fCloneCool = 0.f;
+	_float				m_fMonster = 0.f;
 	_float				m_fFireSpearCool = 0.f;
 	_float				m_fDeadTime = 0.f;
 	_float				m_fMove = 0.f;
 	_int				m_iClone = 0;
+	_int				m_iMonster = 0;
 	_bool				m_bSkill = false;
 	_bool				m_bMove = false;
 	_bool				m_bDead = false;
 	_bool				m_bIDLE = false;
 	_bool				m_bClone = false;
 	_bool				m_bCreateClone = false;
+	_bool				m_bMonster = false;
+	_bool				m_bCreateMonster = false;
 	_bool				m_bMeteor = false;
 	_bool				m_bDarkBall = false;
 	CGameObject*			m_StatInfo;
