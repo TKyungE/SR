@@ -107,6 +107,8 @@ void CLevel_Maze::Tick(_float fTimeDelta)
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_MAZE, TEXT("Layer_Portal"), &tInfo)))
 			return;
+
+		g_iCount = 0;
 	}
 
 	Safe_Release(pGameInstance);

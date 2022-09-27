@@ -37,7 +37,7 @@ HRESULT CWraith::Initialize(void * pArg)
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
-
+	
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
@@ -113,9 +113,9 @@ void CWraith::Tick(_float fTimeDelta)
 		if (m_bRun)
 			Chase2(fTimeDelta);
 	}
-	else if (!m_bSkill && !m_bDead)
+	/*else if (!m_bSkill && !m_bDead)
 		Chase3(fTimeDelta);
-
+*/
 	/*if (m_tInfo.iMp == 1 && !m_bIDLE)
 	{
 		MonsterMove(fTimeDelta);

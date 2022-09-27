@@ -31,7 +31,7 @@ HRESULT CWorldHpBar::Initialize(void * pArg)
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 
 	m_tInfo.bDead = false;
-	
+
 	m_pTransformCom->Set_Scaled(_float3(1.f, 2.f, 1.f));
 	m_pTransformCom2->Set_Scaled(_float3(1.f, 1.f, 1.f));
 
@@ -46,7 +46,7 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 	{
 		Set_Dead();
 	}
-	
+
 	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 	vPos.y += 0.5f;
 
@@ -85,8 +85,8 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
 	}
-	
-	
+
+
 
 
 }
@@ -136,6 +136,7 @@ HRESULT CWorldHpBar::Render()
 	m_pShaderCom->Set_RawValue("g_fHPBar", &fHpBar, sizeof(_float));
 
 	_float fAlpha = 1.f;
+
 	m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float));
 	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
 	{
@@ -151,11 +152,11 @@ HRESULT CWorldHpBar::Render()
 		_float	fMax = 6.f;
 
 
-			if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
-				return E_FAIL;
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
+			return E_FAIL;
 
-			if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
-				return E_FAIL;
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fMaxRange", &fMax, sizeof(_float))))
+			return E_FAIL;
 	}
 
 	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(2));
@@ -233,9 +234,9 @@ void CWorldHpBar::OnBillboard()
 
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
-	
+
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	
+
 	m_pTransformCom2->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
 
 	//m_pTransformCom2->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
