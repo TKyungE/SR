@@ -144,7 +144,9 @@ void CQuestUI::Tick(_float fTimeDelta)
 						break;
 					case MON_SKYDRAGON:
 						wQuest += TEXT("–ØÀÌ¾îµå·¡°ï : ");
-
+						break;
+					case MON_RICH:
+						wQuest += TEXT("¸®Ä¡¿Õ : ");
 						break;
 					}
 

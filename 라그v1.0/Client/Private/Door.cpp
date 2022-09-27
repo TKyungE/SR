@@ -5,6 +5,7 @@
 #include "TextBox.h"
 #include "Layer.h"
 #include "SoundMgr.h"
+#include "QuestManager.h"
 
 CDoor::CDoor(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -50,7 +51,7 @@ HRESULT CDoor::Initialize(void * pArg)
 
 	Ready_Script();
 
-	m_bCheck = true;		//  << 이걸로 열쇠 유무 확인 할 생각임.
+			//  << 이걸로 열쇠 유무 확인 할 생각임.
 
 	return S_OK;
 }
@@ -58,6 +59,19 @@ HRESULT CDoor::Initialize(void * pArg)
 void CDoor::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+	if (nullptr == pQuestManager)
+		return;
+
+	Safe_AddRef(pQuestManager);
+
+	if (nullptr != pQuestManager->Find_Finish(TEXT("Quest_TownQuest2")))
+		m_bCheck = true;
+	
+
+	Safe_Release(pQuestManager);
+
 
 	if (m_IndexPos.iIndex == 0)
 	{

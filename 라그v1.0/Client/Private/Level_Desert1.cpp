@@ -54,9 +54,10 @@ HRESULT CLevel_Desert1::Initialize()
 	if (FAILED(Ready_Layer_Portal(TEXT("Layer_Portal"))))
 		return E_FAIL;
 
-
 	CSoundMgr::Get_Instance()->BGM_Stop();
 	CSoundMgr::Get_Instance()->PlayBGM(L"DESERT.wav", fSOUND+0.1f);
+
+	g_bFirst = true;
 
 	return S_OK;
 }

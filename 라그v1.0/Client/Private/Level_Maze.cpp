@@ -16,6 +16,7 @@
 #include "House6.h"
 #include "Wraith.h"
 #include "Door.h"
+#include "QuestManager.h"
 
 
 //bool g_bCollider = false;
@@ -94,6 +95,18 @@ void CLevel_Maze::Tick(_float fTimeDelta)
 		{
 			g_bCollider = false;
 		}
+	}
+
+	if (g_iCount == 7)
+	{
+		CGameObject::INFO tInfo;
+		tInfo.iLevelIndex = LEVEL_MAZE;
+		tInfo.vPos = _float3(47.f, 0.f, 13.5f);
+		tInfo.vScale = _float3(1.5f, 1.5f, 1.5f);
+		tInfo.iNextLevel = LEVEL_FINALBOSS;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_MAZE, TEXT("Layer_Portal"), &tInfo)))
+			return;
 	}
 
 	Safe_Release(pGameInstance);

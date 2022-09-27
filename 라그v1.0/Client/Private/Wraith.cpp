@@ -65,7 +65,7 @@ HRESULT CWraith::Initialize(void * pArg)
 
 	tInfo.vPos = { 1.f,1.f,1.f };
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+	//pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
 
@@ -80,7 +80,9 @@ void CWraith::Tick(_float fTimeDelta)
 
 	m_fSkillCool += fTimeDelta;
 	m_fCollTime += fTimeDelta;
+
 	OnTerrain();
+
 
 	if (!m_bDead)
 		Check_Front();

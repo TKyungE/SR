@@ -40,6 +40,7 @@ extern bool g_bSky;
 // ¿©±â ´Ù ±èÅÂ°æÀÌ ¸¸µë
 extern bool g_bCheck; // ±èÅÂ°æÀÌ ¸¸µë
 extern bool g_bMazeCut; // ¹® ´İÈú ¶§ ÄÆ½Å.
+extern int g_iCount;
 
 //extern int g_iFrame;
 

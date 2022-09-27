@@ -124,6 +124,7 @@ void CZombie::Tick(_float fTimeDelta)
 				m_fDeadTime += fTimeDelta;
 				if (m_fDeadTime > 3.f)
 				{
+					++g_iCount;
 					m_tInfo.bDead = true;
 					return;
 				}
@@ -184,7 +185,7 @@ void CZombie::Tick(_float fTimeDelta)
 	{
 		m_fTimeDelta += fTimeDelta;
 
-		if (m_fTimeDelta > 5.f)
+		if (m_fTimeDelta > 7.f)
 		{
 			m_bCheck = false;
 			m_bPlay = true;

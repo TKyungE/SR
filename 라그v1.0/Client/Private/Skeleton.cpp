@@ -128,6 +128,7 @@ void CSkeleton::Tick(_float fTimeDelta)
 				m_fDeadTime += fTimeDelta;
 				if (m_fDeadTime > 3.f)
 				{
+					++g_iCount;
 					m_tInfo.bDead = true;
 					return;
 				}
@@ -191,21 +192,6 @@ void CSkeleton::Tick(_float fTimeDelta)
 			m_bPlay = true;
 		}
 	}
-	m_tInfo.bDead = false;
-
-	if (g_iCut == 50)
-		m_bCheck = true;
-
-	if (m_bCheck)
-	{
-		m_fTimeDelta += fTimeDelta;
-		if (m_fTimeDelta > 5.f)
-		{
-			m_bCheck = false;
-			m_bPlay = true;
-		}
-	}
-
 }
 
 

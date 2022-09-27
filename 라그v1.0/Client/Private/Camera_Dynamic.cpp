@@ -316,6 +316,7 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 			{
 				g_iCut = 0;
 				g_bMazeCut = true;
+				g_bFirst = true;
 			}
 		}
 	}
