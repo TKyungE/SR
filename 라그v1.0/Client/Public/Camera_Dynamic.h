@@ -46,6 +46,7 @@ private:
 	_float m_fTimeDelta = 0.f;
 	_float m_fTimeDelta2 = 0.f;
 	_bool	m_bMove = false;
+	_bool	m_bEnd = false;
 public:
 	void CriHit();
 public:

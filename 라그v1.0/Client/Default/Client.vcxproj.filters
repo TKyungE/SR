@@ -466,6 +466,12 @@
     <Filter Include="04.UI\Fade">
       <UniqueIdentifier>{accbda90-886b-4f47-8c11-1e54464eff1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Ending">
+      <UniqueIdentifier>{af2be5a8-ba1e-4a04-be8d-6fd1d71835ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\End">
+      <UniqueIdentifier>{29acaf0b-f7a7-442a-805a-51262f301462}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -906,6 +912,12 @@
     <ClInclude Include="..\Public\WorldHpBar.h">
       <Filter>04.UI\WorldHpBar</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Ending.h">
+      <Filter>02.GameObject\BackGroundObj\Ending</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_End.h">
+      <Filter>01.Levels\End</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1333,6 +1345,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\WorldHpBar.cpp">
       <Filter>04.UI\WorldHpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Ending.cpp">
+      <Filter>02.GameObject\BackGroundObj\Ending</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_End.cpp">
+      <Filter>01.Levels\End</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

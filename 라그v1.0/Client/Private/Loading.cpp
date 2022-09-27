@@ -25,6 +25,8 @@ HRESULT CLoading::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
+	memcpy(&m_tInfo, pArg,sizeof(INFO));
+
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = g_iWinSizeX;
@@ -72,8 +74,14 @@ HRESULT CLoading::Render()
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
+	_uint iIndex = 0;
+
+	if (m_tInfo.iLevelIndex == LEVEL_ENDING)
+		iIndex = 1;
+	else
+		iIndex = 0;
 	
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(iIndex)))
 	return E_FAIL;
 	
 	

@@ -33,7 +33,12 @@ HRESULT CFade::Initialize(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_bCheck = (_bool)m_tInfo.iMp;
+	if (m_tInfo.iMp == 0)
+		m_bCheck = false;
+	
+	else
+		m_bCheck = true;
+	
 
 	m_fSizeX = (_float)g_iWinSizeX * 2.f;
 	m_fSizeY = (_float)g_iWinSizeY * 2.f;

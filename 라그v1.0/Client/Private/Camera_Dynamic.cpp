@@ -35,226 +35,240 @@ HRESULT CCamera_Dynamic::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(&((CAMERADESC_DERIVED*)pArg)->CameraDesc)))
 		return E_FAIL;
-	
-	m_vecCameraNormal = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0] * -1.f;
-	D3DXVec3Normalize(&m_vecCameraNormal, &m_vecCameraNormal);
 
+	if (nullptr != m_CameraDesc.Info.pTarget)
+	{
+		m_vecCameraNormal = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0] * -1.f;
+		D3DXVec3Normalize(&m_vecCameraNormal, &m_vecCameraNormal);
+	}
 	return S_OK;
 }
 
 void CCamera_Dynamic::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	if (m_bCri)
+	if (!g_bEnd)
 	{
-		m_fCriTime += fTimeDelta;
-		if (m_fCriTime > 0.1f)
+		if (m_bCri)
 		{
-			m_CameraDesc.fFovy = m_fCriFovy;
-			m_bCri = false;
-			m_fCriTime = 0.f;
+			m_fCriTime += fTimeDelta;
+			if (m_fCriTime > 0.1f)
+			{
+				m_CameraDesc.fFovy = m_fCriFovy;
+				m_bCri = false;
+				m_fCriTime = 0.f;
+			}
 		}
-	}
-	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
+		CGameInstance* pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
 
-	_long MouseMove = 0;
+		_long MouseMove = 0;
 
-	if (g_bFirst)
-	{
-		if (GetKeyState(VK_LEFT) < 0)
-			CameraRotationX(fTimeDelta, -10.f);
-		if (GetKeyState(VK_RIGHT) < 0)
-			CameraRotationX(fTimeDelta, 10.f);
-
-		//	if ((GetKeyState(VK_LSHIFT)& 8000) &&  (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y)))
-		//		CameraRotationY(fTimeDelta, MouseMove);
-
-		if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_WHEEL))
+		if (g_bFirst)
 		{
-			if ((1.7f <= m_CameraDesc.fFovy) && (0 < D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
-				m_CameraDesc.fFovy = 1.7f;
+			if (GetKeyState(VK_LEFT) < 0)
+				CameraRotationX(fTimeDelta, -10.f);
+			if (GetKeyState(VK_RIGHT) < 0)
+				CameraRotationX(fTimeDelta, 10.f);
 
-			else if ((0.4f >= m_CameraDesc.fFovy) && (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
-				m_CameraDesc.fFovy = 0.4f;
+			//	if ((GetKeyState(VK_LSHIFT)& 8000) &&  (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y)))
+			//		CameraRotationY(fTimeDelta, MouseMove);
+
+			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_WHEEL))
+			{
+				if ((1.7f <= m_CameraDesc.fFovy) && (0 < D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
+					m_CameraDesc.fFovy = 1.7f;
+
+				else if ((0.4f >= m_CameraDesc.fFovy) && (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
+					m_CameraDesc.fFovy = 0.4f;
+				else
+				{
+					m_CameraDesc.fFovy += D3DXToRadian(fTimeDelta * MouseMove * -1.f);
+					if (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f))
+					{
+						m_YfAngle -= 1.f;
+						if (m_YfAngle < 30.f)
+							m_YfAngle = 30.f;
+					}
+					else if (0 < D3DXToRadian(fTimeDelta * MouseMove * -1.f))
+					{
+						m_YfAngle += 1.f;
+						if (m_YfAngle > 50.f)
+							m_YfAngle = 50.f;
+					}
+				}
+
+				m_bWheelMove = true;
+			}
+
+
+			_float4x4 CameraRotationMatrix, CameraMatrix;
+			D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(45.f));
+
+			_float3 Camera;
+			CameraMatrix = m_matRotX * CameraRotationMatrix;
+			D3DXVec3TransformNormal(&Camera, &m_vecCameraNormal, &CameraMatrix);
+
+			if (CKeyMgr::Get_Instance()->Key_Pressing('B'))
+			{
+				m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * -5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
+				if (!m_bTrue)
+				{
+					dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Camera(true);
+					if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Front())
+						dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(false);
+					else
+						dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(true);
+					m_bTrue = true;
+				}
+			}
 			else
 			{
-				m_CameraDesc.fFovy += D3DXToRadian(fTimeDelta * MouseMove * -1.f);
-				if (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f))
+				m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * 5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
+				if (m_bTrue)
 				{
-					m_YfAngle -= 1.f;
-					if (m_YfAngle < 30.f)
-						m_YfAngle = 30.f;
-				}
-				else if (0 < D3DXToRadian(fTimeDelta * MouseMove * -1.f))
-				{
-					m_YfAngle += 1.f;
-					if (m_YfAngle > 50.f)
-						m_YfAngle = 50.f;
+					dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Camera(false);
+					if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Front())
+						dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(false);
+					else
+						dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(true);
+					m_bTrue = false;
 				}
 			}
-
-			m_bWheelMove = true;
-		}
-
-
-		_float4x4 CameraRotationMatrix, CameraMatrix;
-		D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(45.f));
-
-		_float3 Camera;
-		CameraMatrix = m_matRotX * CameraRotationMatrix;
-		D3DXVec3TransformNormal(&Camera, &m_vecCameraNormal, &CameraMatrix);
-
-		if (CKeyMgr::Get_Instance()->Key_Pressing('B'))
-		{
-			m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * -5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
-			if (!m_bTrue)
+			if (m_tInfo.bHit)
 			{
-				dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Camera(true);
-				if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Front())
-					dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(false);
-				else
-					dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(true);
-				m_bTrue = true;
-			}
-		}
-		else
-		{
-			m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * 5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
-			if (m_bTrue)
-			{
-				dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Camera(false);
-				if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Front())
-					dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(false);
-				else
-					dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(true);
-				m_bTrue = false;
-			}
-		}
-		if (m_tInfo.bHit)
-		{
-			_float3 vPos = (Camera * 5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
-			vPos.x -= 0.5f;
-			m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-			m_tInfo.bHit = false;
-		}
-
-
-		m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
-		m_bTest = false;
-	}
-	else if (!g_bFirst && 0 == g_iCut && !g_bCheck)
-	{
-		if (m_CameraDesc.Info.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
-		{
-			if (!m_bTest)
-			{
-				m_pTransform->Set_State(CTransform::STATE_RIGHT, _float3(1.f, 0.f, 0.f));
-				m_pTransform->Set_State(CTransform::STATE_UP, _float3(0.f, 1.f, 0.f));
-				m_pTransform->Set_State(CTransform::STATE_LOOK, _float3(0.f, 0.f, 1.f));
-			
-				m_bTest = true;
-			}
-			_float3 vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
-			vPos.y += 0.3f;
-			m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-
-			_long			MouseMove = 0;
-
-			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
-			{
-				m_pTransform->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.1f);
-			}
-
-			if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
-			{
-				m_pTransform->Turn(m_pTransform->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
-			}
-		}
-
-		else
-		{
-			_float3 vTargetPos, vPos,vTargetUp, vTargetLook, vTargetRight, vRight;
-			vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
-			vTargetPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
-			vTargetLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
-			vTargetUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
-			vTargetRight = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[0][0];
-			D3DXVec3Normalize(&vTargetPos, &vTargetPos);
-			D3DXVec3Normalize(&vTargetUp, &vTargetUp);
-			D3DXVec3Normalize(&vTargetLook, &vTargetLook);
-			D3DXVec3Normalize(&vTargetRight, &vTargetRight);
-			if (!dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Shot())
-			{
-				vTargetPos *= -2.f; 
-				vPos += vTargetPos;
-				vPos += vTargetUp * 1.5f;
-
+				_float3 vPos = (Camera * 5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+				vPos.x -= 0.5f;
 				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-
-				_float3 vLook, vRealRight, vUp;
-				vLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0] - *(_float3*)&m_pTransform->Get_WorldMatrix().m[3][0];
-				vUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
-				D3DXVec3Cross(&vRealRight, &vUp, &vLook);
-
-				D3DXVec3Normalize(&vLook, &vLook);
-				D3DXVec3Normalize(&vUp, &vUp);
-				D3DXVec3Normalize(&vRealRight, &vRealRight);
-
-				m_pTransform->Set_State(CTransform::STATE_RIGHT, vRealRight);
-				m_pTransform->Set_State(CTransform::STATE_UP, vUp);
-				m_pTransform->Set_State(CTransform::STATE_LOOK, vLook);
+				m_tInfo.bHit = false;
 			}
-			else if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Shot())
+
+
+			m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
+			m_bTest = false;
+		}
+		else if (!g_bFirst && 0 == g_iCut && !g_bCheck)
+		{
+			if (m_CameraDesc.Info.pTarget->Get_Info().iLevelIndex != LEVEL_SKY)
 			{
-				vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+				if (!m_bTest)
+				{
+					m_pTransform->Set_State(CTransform::STATE_RIGHT, _float3(1.f, 0.f, 0.f));
+					m_pTransform->Set_State(CTransform::STATE_UP, _float3(0.f, 1.f, 0.f));
+					m_pTransform->Set_State(CTransform::STATE_LOOK, _float3(0.f, 0.f, 1.f));
+
+					m_bTest = true;
+				}
+				_float3 vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
 				vPos.y += 0.3f;
-				vPos.z += 0.3f;
 				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-				
-				vTargetPos *= 2.f;
-				vPos += vTargetPos;
-				vPos += vTargetUp * +1.5f;
-				D3DXVec3Cross(&vRight, &vTargetUp, &vTargetLook);
-				m_pTransform->Set_State(CTransform::STATE_RIGHT, vRight);
-				m_pTransform->Set_State(CTransform::STATE_UP, vTargetUp);
-				m_pTransform->Set_State(CTransform::STATE_LOOK, vTargetLook);
-				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-				m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 
 				_long			MouseMove = 0;
 
 				if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
 				{
-					m_pTransform->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.04f);
+					m_pTransform->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.1f);
 				}
 
 				if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
 				{
-					m_pTransform->Turn(m_pTransform->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.04f);
+					m_pTransform->Turn(m_pTransform->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
+				}
+			}
+
+			else
+			{
+				_float3 vTargetPos, vPos, vTargetUp, vTargetLook, vTargetRight, vRight;
+				vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+				vTargetPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
+				vTargetLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0];
+				vTargetUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
+				vTargetRight = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[0][0];
+				D3DXVec3Normalize(&vTargetPos, &vTargetPos);
+				D3DXVec3Normalize(&vTargetUp, &vTargetUp);
+				D3DXVec3Normalize(&vTargetLook, &vTargetLook);
+				D3DXVec3Normalize(&vTargetRight, &vTargetRight);
+				if (!dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Shot())
+				{
+					vTargetPos *= -2.f;
+					vPos += vTargetPos;
+					vPos += vTargetUp * 1.5f;
+
+					m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+					_float3 vLook, vRealRight, vUp;
+					vLook = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0] - *(_float3*)&m_pTransform->Get_WorldMatrix().m[3][0];
+					vUp = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[1][0];
+					D3DXVec3Cross(&vRealRight, &vUp, &vLook);
+
+					D3DXVec3Normalize(&vLook, &vLook);
+					D3DXVec3Normalize(&vUp, &vUp);
+					D3DXVec3Normalize(&vRealRight, &vRealRight);
+
+					m_pTransform->Set_State(CTransform::STATE_RIGHT, vRealRight);
+					m_pTransform->Set_State(CTransform::STATE_UP, vUp);
+					m_pTransform->Set_State(CTransform::STATE_LOOK, vLook);
+				}
+				else if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Shot())
+				{
+					vPos = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0];
+					vPos.y += 0.3f;
+					vPos.z += 0.3f;
+					m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+					vTargetPos *= 2.f;
+					vPos += vTargetPos;
+					vPos += vTargetUp * +1.5f;
+					D3DXVec3Cross(&vRight, &vTargetUp, &vTargetLook);
+					m_pTransform->Set_State(CTransform::STATE_RIGHT, vRight);
+					m_pTransform->Set_State(CTransform::STATE_UP, vTargetUp);
+					m_pTransform->Set_State(CTransform::STATE_LOOK, vTargetLook);
+					m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+					m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
+
+					_long			MouseMove = 0;
+
+					if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
+					{
+						m_pTransform->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * MouseMove * 0.04f);
+					}
+
+					if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
+					{
+						m_pTransform->Turn(m_pTransform->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.04f);
+					}
 				}
 			}
 		}
+
+		if (0 != g_iCut && m_CameraDesc.fFovy > D3DXToRadian(40.f))
+			m_CameraDesc.fFovy -= D3DXToRadian(0.25f);
+
+		else if (0 == g_iCut && !m_bWheelMove && m_CameraDesc.fFovy < D3DXToRadian(60.f))
+			m_CameraDesc.fFovy += D3DXToRadian(0.25f);
+
+		if (g_iCut == 40)
+		{
+			_float3 MonPos = *(_float3*)&pGameInstance->Find_Layer(m_CameraDesc.Info.iLevelIndex, TEXT("Layer_Monster"))->Get_Objects().front()->Get_World().m[3][0];
+
+			m_pTransform->LookAt(MonPos);
+		}
+
+		Safe_Release(pGameInstance);
+
+		if (FAILED(Bind_OnGraphicDev()))
+			return;
 	}
-
-	if (0 != g_iCut && m_CameraDesc.fFovy > D3DXToRadian(40.f))
-		m_CameraDesc.fFovy -= D3DXToRadian(0.25f);
-
-	else if (0 == g_iCut && !m_bWheelMove && m_CameraDesc.fFovy < D3DXToRadian(60.f))
-		m_CameraDesc.fFovy += D3DXToRadian(0.25f);
-
-	if (g_iCut == 40)
+	else if (g_bEnd)
 	{
-		_float3 MonPos = *(_float3*)&pGameInstance->Find_Layer(m_CameraDesc.Info.iLevelIndex, TEXT("Layer_Monster"))->Get_Objects().front()->Get_World().m[3][0];
-		
-		m_pTransform->LookAt(MonPos);
+		m_pTransform->Set_State(CTransform::STATE_RIGHT, _float3(1.f, 0.f, 0.f));
+		m_pTransform->Set_State(CTransform::STATE_UP, _float3(0.f, 1.f, 0.f));
+		m_pTransform->Set_State(CTransform::STATE_LOOK, _float3(0.f, 0.f, 1.f));
+
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _float3(0.f,0.f,0.f));
 	}
-
-	Safe_Release(pGameInstance);
-
-	if (FAILED(Bind_OnGraphicDev()))
-		return;
 }
+
 
 void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 {
@@ -264,16 +278,16 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 
 	if (g_iCut == 50)			// ¹® ´ÝÈú¶§ ÄÆ½Å
 	{
-		m_pTransform->Set_State(CTransform::STATE_POSITION, _float3(42.f,0.5f,10.f));
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _float3(42.f, 0.5f, 10.f));
 
 		CGameInstance* pInstance = CGameInstance::Get_Instance();
 
 		Safe_AddRef(pInstance);
-	
-		CLayer* pLayer = pInstance->Find_Layer(LEVEL_MAZE,TEXT("Layer_Door2"));
+
+		CLayer* pLayer = pInstance->Find_Layer(LEVEL_MAZE, TEXT("Layer_Door2"));
 
 		_float3 vPos = *(_float3*)&pLayer->Get_Objects().front()->Get_World().m[3][0];
-		
+
 		vPos.y += 0.5f * 2.f;
 		vPos.z -= 0.5f * 3.f;
 
@@ -311,7 +325,7 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 				}
 				m_pTransform->Set_State(CTransform::STATE_POSITION, vPos3);
 			}
-		
+
 			if (m_fTimeDelta > 2.f)
 			{
 				g_iCut = 0;
@@ -320,6 +334,8 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 			}
 		}
 	}
+
+
 
 
 	//if (g_bMazeCut)  // ±èÅÂ°æÀÌ ¸¸µë, ¹® ´ÝÈ÷°í Ä«¸Þ¶ó ½ÃÁ¡ °íÁ¤ ÇÏ´Â °Í.

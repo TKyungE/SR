@@ -14,6 +14,7 @@
 #include "Level_Maze.h"
 #include "SkyField.h"
 #include "Level_FinalBoss.h"
+#include "Level_End.h"
 
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -39,9 +40,18 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevel)
 	if (m_eNextLevel != LEVEL_SKY)
 	{
 		if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Texture_Loading"),
-			CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Loading/%d.jpg"), 1))))
+			CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Loading/%d.jpg"), 2))))
 			return E_FAIL;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Loading"), LEVEL_LOADING, TEXT("Layer_UI"))))
+
+		CGameObject::INFO Info;	
+		ZeroMemory(&Info, sizeof(CGameObject::INFO));
+
+		if (m_eNextLevel == LEVEL_ENDING)
+			Info.iLevelIndex = LEVEL_ENDING;
+		else
+			Info.iLevelIndex = LEVEL_TOWN;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Loading"), LEVEL_LOADING, TEXT("Layer_UI"),&Info)))
 			return E_FAIL;
 	}
 	else
@@ -98,6 +108,9 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 				break;
 			case LEVEL_FINALBOSS:
 				pNewLevel = CLevel_FinalBoss::Create(m_pGraphic_Device);
+				break;
+			case LEVEL_ENDING:
+				pNewLevel = CLevel_End::Create(m_pGraphic_Device);
 				break;
 			}
 		

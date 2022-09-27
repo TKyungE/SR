@@ -37,7 +37,7 @@ HRESULT CSky::Initialize(void* pArg)
 	{
 		m_tInfo.iMp = 2;
 	}
-	else if (m_tInfo.iLevelIndex == LEVEL_FINALBOSS)
+	else if (m_tInfo.iLevelIndex == LEVEL_FINALBOSS || m_tInfo.iLevelIndex == LEVEL_ENDING)
 	{
 		m_tInfo.iMp = 1;
 	}
@@ -90,7 +90,7 @@ HRESULT CSky::Render()
 	{
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
-
+		
 		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
 			return E_FAIL;
 
