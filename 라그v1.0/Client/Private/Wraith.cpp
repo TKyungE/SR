@@ -114,10 +114,10 @@ void CWraith::Tick(_float fTimeDelta)
 	else if (!m_bSkill && !m_bDead)
 		Chase3(fTimeDelta);
 
-	if (m_tInfo.iMp == 1 && !m_bIDLE)
+	/*if (m_tInfo.iMp == 1 && !m_bIDLE)
 	{
 		MonsterMove(fTimeDelta);
-	}
+	}*/
 
 
 	Move_Frame(fTimeDelta);

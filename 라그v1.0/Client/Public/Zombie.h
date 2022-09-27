@@ -87,6 +87,7 @@ private:
 	_bool				m_bCheck = false;
 	_bool				m_bPlay = false;
 	_float				m_fTimeDelta = 0.f;
+	_bool				m_bFirst = false;
 public:
 	static CZombie* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
