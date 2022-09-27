@@ -45,7 +45,7 @@ HRESULT CRich::Initialize(void * pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 100000;
+	m_tInfo.iMaxHp = 250000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 0;
 	m_tInfo.iExp = 50;
@@ -608,10 +608,11 @@ void CRich::Check_Front()
 		Safe_AddRef(pGameInstance);
 		CGameObject::INFO tInfo;
 		tInfo.vPos = { 7.f,3.5f,9.f };
-		
+		tInfo.pTarget = this;
 		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BigBang"), m_tInfo.iLevelIndex, TEXT("Layer_MonsterSkill"), &tInfo)))
-			return;
+			return; 
+		CSoundMgr::Get_Instance()->PlayEffect(L"Boss_Skill.wav", fSOUND + 0.2f);
 		Safe_Release(pGameInstance);
 	}
 }

@@ -57,19 +57,7 @@ void CDark::Tick(_float fTimeDelta)
 	Move_Frame(fTimeDelta);
 	m_fDeadTime += fTimeDelta;
 
-	_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_float3 vLook = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	
-	vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 5.f * fTimeDelta;
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-
-	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	if (Distance < 0.1f)
-	{
-		m_tInfo.pTarget->Set_fX(0.02f);
-		Set_Dead();
-	}
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 1.f);
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
@@ -88,6 +76,36 @@ void CDark::Tick(_float fTimeDelta)
 void CDark::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+
+	if (m_tInfo.pTarget->Get_Info().iHp <= 0)
+	{
+		Set_Dead();
+		return;
+	}
+	_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_float3 vLook = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 5.f * fTimeDelta;
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+	if (Distance < 0.1f)
+	{
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+
+		tInfo.pTarget = m_tInfo.pTerrain;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_AuraBlue"), LEVEL_FINALBOSS, TEXT("Layer_Effect"), &tInfo)))
+			return;
+
+		Safe_Release(pGameInstance);
+		m_tInfo.pTerrain->Set_Hp(-30);
+		m_tInfo.pTarget->Set_fX(0.02f);
+		Set_Dead();
+	}
 
 
 	Motion_Change();

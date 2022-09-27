@@ -44,7 +44,7 @@ HRESULT CBigBang::Initialize(void* pArg)
 	m_tInfo.fX = 0.f;
 	m_tInfo.iDmg = 100;
 	m_tInfo.iMoney = 11;
-
+	m_tInfo.iHp = 1000;
 
 
 	return S_OK;
@@ -56,7 +56,7 @@ void CBigBang::Tick(_float fTimeDelta)
 	m_fDarkCool += fTimeDelta;
 	m_fDeadTime += fTimeDelta;
 	Move_Frame(fTimeDelta);
-
+	
 	if (g_iCount != 8)
 	{
 		if (m_fDarkCool > 0.05f)
@@ -71,7 +71,9 @@ void CBigBang::Tick(_float fTimeDelta)
 		vPos.y -= 0.05f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	}
-
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	if (vPos.y < 0.f)
+		m_tInfo.iHp = -1;
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
@@ -89,10 +91,9 @@ void CBigBang::Tick(_float fTimeDelta)
 void CBigBang::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
-	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	if (vPos.y < 0.f)
+	if (m_tInfo.iHp <= 0)
 		Set_Dead();
+	
 	Motion_Change();
 	OnBillboard();
 	if (m_fDeadTime > 0.5f)
@@ -391,6 +392,7 @@ void CBigBang::Create_Dark()
 	tInfo.vPos.z = vPos.z + iTemp;
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	tInfo.pTarget = this;
+	tInfo.pTerrain = m_tInfo.pTarget;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dark"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo)))
 		return;
 	

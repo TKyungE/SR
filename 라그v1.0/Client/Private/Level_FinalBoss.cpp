@@ -43,7 +43,7 @@ HRESULT CLevel_FinalBoss::Initialize(void)
 
 	fSound = fSOUND;
 	CSoundMgr::Get_Instance()->BGM_Stop();
-	//CSoundMgr::Get_Instance()->PlayBGM(L".wav", fSOUND + 0.1f);
+	CSoundMgr::Get_Instance()->PlayBGM(L"FinalBoss.wav", fSOUND + 0.1f);
 
 	return S_OK;
 }
