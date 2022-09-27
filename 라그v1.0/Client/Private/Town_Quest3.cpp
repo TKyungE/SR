@@ -222,7 +222,7 @@ void CTown_Quest3::Tick(_float fTimeDelta)
 		tQInfo.pHuntGoal[0] = 1;
 		
 		tQInfo.pMonType = new MONSTERTYPE[tQInfo.iCount];
-		tQInfo.pMonType[0] = MON_DANDELION;
+		tQInfo.pMonType[0] = MON_RICH;
 		
 		tQInfo.tQInfo.eType = CClientQuest::QUEST_HUNT;
 

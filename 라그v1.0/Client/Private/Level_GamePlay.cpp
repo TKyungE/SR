@@ -47,8 +47,7 @@ HRESULT CLEVEL_GamePlay::Initialize()
 
 	fSound = fSOUND;
 	CSoundMgr::Get_Instance()->BGM_Stop();
-	CSoundMgr::Get_Instance()->PlayBGM(L"GAMEPLAY.wav", fSOUND+0.1f);
-
+	CSoundMgr::Get_Instance()->PlayBGM(L"GAMEPLAY.wav", fSOUND+0.1f);	
 	
 	return S_OK;
 }
@@ -439,19 +438,15 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 		++iCount;
 	}
 
-
-	Info.vPos = {20.f,1.f,15.f};
-	Info.iMonsterType = (_int)MON_ELDERWILOW;
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rich"), LEVEL_GAMEPLAY, TEXT("Layer_Boss"), &Info)))
+	Info.vPos = _float3(10.f, 0.f, 10.f);
+	Info.iMonsterType = (_int)MON_WRAITH;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
-
-
 
 	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
-
 
 HRESULT CLEVEL_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
 {
@@ -556,8 +551,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
 
 		++iCount;
 	}
-
-
 
 	Safe_Release(pGameInstance);
 	return S_OK;

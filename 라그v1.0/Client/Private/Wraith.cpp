@@ -984,6 +984,7 @@ void CWraith::CheckColl()
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, (m_pTransformCom->Get_State(CTransform::STATE_LOOK) * -1.f));
 	}
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_PLAYERSKILL, TEXT("Com_Collider"), &pTarget) && m_fCollTime > 0.1f)
 	{

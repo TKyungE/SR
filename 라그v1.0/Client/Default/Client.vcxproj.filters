@@ -463,6 +463,9 @@
     <Filter Include="03.Effect\Skill\18.DarkBall">
       <UniqueIdentifier>{d128853e-dfa8-4785-988e-88dc00d94529}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\Fade">
+      <UniqueIdentifier>{accbda90-886b-4f47-8c11-1e54464eff1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -900,6 +903,9 @@
     <ClInclude Include="..\public\DarkBall.h">
       <Filter>03.Effect\Skill\18.DarkBall</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Fade.h">
+      <Filter>04.UI\Fade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -1324,6 +1330,9 @@
     </ClCompile>
     <ClCompile Include="..\private\DarkBall.cpp">
       <Filter>03.Effect\Skill\18.DarkBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Fade.cpp">
+      <Filter>04.UI\Fade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

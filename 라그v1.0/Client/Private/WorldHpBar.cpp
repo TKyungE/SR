@@ -134,7 +134,9 @@ HRESULT CWorldHpBar::Render()
 	_float fHpBar = (m_tInfo.pTarget->Get_Info().iHp / (float)m_tInfo.pTarget->Get_Info().iMaxHp);
 
 	m_pShaderCom->Set_RawValue("g_fHPBar", &fHpBar, sizeof(_float));
-	
+
+	_float fAlpha = 1.f;
+	m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float));
 	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
 	{
 		_float fMin = 100.f;
