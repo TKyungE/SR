@@ -157,7 +157,7 @@ void CSkeleton::Tick(_float fTimeDelta)
 	{
 		m_fTimeDelta += fTimeDelta;
 
-		if (m_fTimeDelta > 7.f)
+		if (m_fTimeDelta > 6.f)
 		{
 			m_bCheck = false;
 			m_bPlay = true;

@@ -93,7 +93,10 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 void CWorldHpBar::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+
 	OnBillboard();
+
+	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
 	if (nullptr != m_pRendererCom && 0 == g_iCut)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
@@ -134,9 +137,11 @@ HRESULT CWorldHpBar::Render()
 	_float fHpBar = (m_tInfo.pTarget->Get_Info().iHp / (float)m_tInfo.pTarget->Get_Info().iMaxHp);
 
 	m_pShaderCom->Set_RawValue("g_fHPBar", &fHpBar, sizeof(_float));
+
 	_float fAlpha = 1.f;
 
 	m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof(_float));
+
 	if (m_tInfo.iLevelIndex != LEVEL_MAZE)
 	{
 		_float fMin = 113.f;
@@ -147,8 +152,8 @@ HRESULT CWorldHpBar::Render()
 	}
 	else
 	{
-		_float	fMin = 1.f;
-		_float	fMax = 4.f;
+		_float	fMin = 3.f;
+		_float	fMax = 6.f;
 
 
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fMinRange", &fMin, sizeof(_float))))
@@ -159,9 +164,6 @@ HRESULT CWorldHpBar::Render()
 	}
 
 	m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(2));
-
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
 
 	m_pShaderCom->Begin(7);
 
@@ -200,30 +202,6 @@ HRESULT CWorldHpBar::SetUp_Components()
 	if (FAILED(__super::Add_Components(TEXT("Com_Shader"), LEVEL_STATIC, TEXT("Prototype_Component_Shader_Rect"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	return S_OK;
-}
-
-HRESULT CWorldHpBar::SetUp_RenderState()
-{
-	if (nullptr == m_pGraphic_Device)
-		return E_FAIL;
-	m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-	m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
-
-	/*m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);*/
-	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-
-	return S_OK;
-}
-
-HRESULT CWorldHpBar::Release_RenderState()
-{
-	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 

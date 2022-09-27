@@ -42,16 +42,9 @@ HRESULT CDoor::Initialize(void * pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
 	if (m_IndexPos.iIndex == 1)
-	{
 		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), 1.f);
-	/*	m_pColliderCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_UP), 1.f);
-		m_pQuestColliderCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_UP), 1.f);*/
-
-	}
 
 	Ready_Script();
-
-			//  << 이걸로 열쇠 유무 확인 할 생각임.
 
 	return S_OK;
 }
