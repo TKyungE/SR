@@ -67,14 +67,11 @@ void CTown::Tick(_float fTimeDelta)
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-
-
 	if (GetKeyState(VK_F1) < 0)
 	{
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device,LEVEL_SKY))))
 			return;
 	}
-
 
 	if (GetKeyState('Y') < 0)
 	{
@@ -95,7 +92,6 @@ void CTown::Tick(_float fTimeDelta)
 void CTown::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
 
 	SetWindowText(g_hWnd, TEXT("타운레벨입니다."));
 
@@ -285,14 +281,11 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuestUI"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
-
 	
 	tInfo.iMp = 1;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Fade"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
-	
-
 
 	Safe_Release(pGameInstance);
 
