@@ -94,6 +94,8 @@ void CDarkShield::Late_Tick(_float fTimeDelta)
 		CheckColl();
 		m_fCollTime = 0.f;
 	}
+	if (m_tInfo.pTarget->Get_Info().iHp <= 0)
+		Set_Dead();
 	Set_Pos();
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 

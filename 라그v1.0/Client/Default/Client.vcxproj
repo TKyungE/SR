@@ -181,6 +181,7 @@
     <ClInclude Include="..\Public\BackGroundRect.h" />
     <ClInclude Include="..\Public\BackGroundTree.h" />
     <ClInclude Include="..\Public\Baphomet.h" />
+    <ClInclude Include="..\public\BigBang.h" />
     <ClInclude Include="..\public\Bigfoot.h" />
     <ClInclude Include="..\public\Bloodymurderer.h" />
     <ClInclude Include="..\public\BlueFire.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="..\public\CriHitUI.h" />
     <ClInclude Include="..\public\Dandelion.h" />
     <ClInclude Include="..\public\DandelionAttack.h" />
+    <ClInclude Include="..\public\Dark.h" />
     <ClInclude Include="..\public\DarkBall.h" />
     <ClInclude Include="..\public\DarkShield.h" />
     <ClInclude Include="..\public\DarkShield2.h" />
@@ -328,6 +330,7 @@
     <ClCompile Include="..\Private\BackGroundRect.cpp" />
     <ClCompile Include="..\Private\BackGroundTree.cpp" />
     <ClCompile Include="..\Private\Baphomet.cpp" />
+    <ClCompile Include="..\private\BigBang.cpp" />
     <ClCompile Include="..\private\Bigfoot.cpp" />
     <ClCompile Include="..\private\Bloodymurderer.cpp" />
     <ClCompile Include="..\private\BlueFire.cpp" />
@@ -341,6 +344,7 @@
     <ClCompile Include="..\private\CriHitUI.cpp" />
     <ClCompile Include="..\private\Dandelion.cpp" />
     <ClCompile Include="..\private\DandelionAttack.cpp" />
+    <ClCompile Include="..\private\Dark.cpp" />
     <ClCompile Include="..\private\DarkBall.cpp" />
     <ClCompile Include="..\private\DarkShield.cpp" />
     <ClCompile Include="..\private\DarkShield2.cpp" />

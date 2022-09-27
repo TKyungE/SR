@@ -122,6 +122,8 @@
 #include "DarkShield3.h"
 #include "DarkBall.h"
 #include "Fade.h"
+#include "Dark.h"
+#include "BigBang.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -1303,6 +1305,13 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_DarkBall"),
 		CDarkBall::Create(m_pGraphic_Device))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Dark"),
+		CDark::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BigBang"),
+		CBigBang::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	//Effect °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Angry"),
 		CAngry::Create(m_pGraphic_Device))))

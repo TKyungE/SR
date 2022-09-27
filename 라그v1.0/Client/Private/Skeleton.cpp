@@ -72,6 +72,9 @@ HRESULT CSkeleton::Initialize(void * pArg)
 	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
 
+	if (m_tInfo.iLevelIndex == LEVEL_FINALBOSS)
+		m_bPlay = true;
+
 	return S_OK;
 }
 

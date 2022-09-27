@@ -466,6 +466,12 @@
     <Filter Include="04.UI\Fade">
       <UniqueIdentifier>{accbda90-886b-4f47-8c11-1e54464eff1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Skill\19.BigBang">
+      <UniqueIdentifier>{7ee11f2d-e924-4e82-964d-1ac4d8aa0872}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\17.Dark">
+      <UniqueIdentifier>{a32869ee-baa3-4b71-8cf5-56b687c16657}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -503,9 +509,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Terrain.h">
       <Filter>02.GameObject\Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Camera_Dynamic.h">
-      <Filter>02.GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObject\Sky</Filter>
@@ -905,6 +908,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\WorldHpBar.h">
       <Filter>04.UI\WorldHpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Dynamic.h">
+      <Filter>02.GameObject\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BigBang.h">
+      <Filter>03.Effect\Skill\19.BigBang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dark.h">
+      <Filter>03.Effect\Default\17.Dark</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1333,6 +1345,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\WorldHpBar.cpp">
       <Filter>04.UI\WorldHpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BigBang.cpp">
+      <Filter>03.Effect\Skill\19.BigBang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dark.cpp">
+      <Filter>03.Effect\Default\17.Dark</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

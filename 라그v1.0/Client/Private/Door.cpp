@@ -103,7 +103,7 @@ void CDoor::Tick(_float fTimeDelta)
 
 			if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_DoorText"), &tTInfo)))
 				return;
-
+			g_bCheck = true;
 			m_bTalk = false;
 			m_bFirst = true;
 		}

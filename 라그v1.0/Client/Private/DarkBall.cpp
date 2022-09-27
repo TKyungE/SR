@@ -66,9 +66,9 @@ void CDarkBall::Tick(_float fTimeDelta)
 	vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 5.f * fTimeDelta;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.7f);
+	
 
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 1.f);
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.7f);
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
 		return;

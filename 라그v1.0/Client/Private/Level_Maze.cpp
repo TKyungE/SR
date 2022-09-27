@@ -96,7 +96,12 @@ void CLevel_Maze::Tick(_float fTimeDelta)
 			g_bCollider = false;
 		}
 	}
-
+	if (!g_bFirst && !g_bCheck)
+	{
+		RECT rcWindow{ 50,50,g_iWinSizeX + 50,g_iWinSizeY + 50 };
+		ClipCursor(&rcWindow);
+		SetCursorPos(690, 310);
+	}
 	if (g_iCount == 7)
 	{
 		CGameObject::INFO tInfo;
