@@ -14,6 +14,7 @@
 #include "Transparent_Wall.h"
 #include "House3.h"
 #include "House6.h"
+#include "QuestManager.h"
 
 //bool g_bCollider = false;
 //bool g_bTalk = false;
@@ -71,6 +72,7 @@ void CLevel_Town2::Tick(_float fTimeDelta)
 		m_bNextLevel = true;
 		pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
 	}*/
+
 	if (GetKeyState('Y') < 0)
 	{
 		if (!g_bCollider)
@@ -94,6 +96,45 @@ void CLevel_Town2::Late_Tick(_float fTimeDelta)
 	SetWindowText(g_hWnd, TEXT("타운레벨입니다."));
 
 	Open_Level();
+
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+
+	if (nullptr == pQuestManager)
+		return;
+
+	Safe_AddRef(pQuestManager);
+
+	if (nullptr != pQuestManager->Find_Finish(TEXT("Quest_HuntQuestFinal")))
+	{
+		if (!m_bEnd)
+		{
+			CGameObject::INFO tInfo;
+			ZeroMemory(&tInfo, sizeof(CGameObject::INFO));
+
+			tInfo.iLevelIndex = LEVEL_TOWN2;
+			tInfo.bHit = false;
+			tInfo.bDead = false;
+			tInfo.iMp = 0;
+
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Fade"), LEVEL_TOWN2, TEXT("Layer_Fade2"), &tInfo)))
+				return;
+			
+			m_bEnd = true;
+		}
+
+		if (nullptr != pGameInstance->Find_Layer(LEVEL_TOWN2, TEXT("Layer_Fade2")) && pGameInstance->Find_Layer(LEVEL_TOWN2, TEXT("Layer_Fade2"))->Get_Objects().front()->Get_Info().iMaxMp == 1)
+		{
+			if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_ENDING))))
+				return;
+		}
+	}
+
+	Safe_Release(pQuestManager);
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_Town2::Ready_Layer_BackGround(const _tchar * pLayerTag)

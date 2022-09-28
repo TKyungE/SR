@@ -24,6 +24,7 @@ bool g_bSky = false;
 bool g_bCheck = false;
 bool g_bMazeCut = false;
 int g_iCount = 0;
+bool g_bEnd = false;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -408,7 +409,7 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 		tInfo.iLevelIndex = LEVEL_TOWN;
 		tInfo.vPos = iter->BackGroundPos;
 		tInfo.vScale = iter->vScale;
-		tInfo.iNextLevel = LEVEL_FINALBOSS;
+		tInfo.iNextLevel = LEVEL_TOWN2;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
 			return E_FAIL;

@@ -124,6 +124,7 @@
 #include "Fade.h"
 #include "Dark.h"
 #include "BigBang.h"
+#include "Ending.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -168,6 +169,9 @@ unsigned int APIENTRY Thread_Main(void* pArg)
 		break;
 	case LEVEL_FINALBOSS:
 		pLoader->Loading_ForFinalBoss();
+		break;
+	case LEVEL_ENDING:
+		pLoader->Loading_ForEnding();
 		break;
 	}
 
@@ -264,6 +268,13 @@ HRESULT CLoader::Loading_ForMaze()
 }
 
 HRESULT CLoader::Loading_ForFinalBoss()
+{
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_ForEnding()
 {
 	m_isFinished = true;
 
@@ -1035,6 +1046,10 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Door/%d.png"), 1))))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Ending"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Ending/%d.png"), 2))))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -1449,8 +1464,13 @@ HRESULT CLoader::Loading_Prototype()
 		CDoor::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	Safe_Release(pGameInstance);
+	// End
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Ending"),
+		CEnding::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
+
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 

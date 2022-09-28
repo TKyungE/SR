@@ -208,6 +208,7 @@
     <ClInclude Include="..\public\Drain.h" />
     <ClInclude Include="..\Public\Dust.h" />
     <ClInclude Include="..\public\ElderWilow.h" />
+    <ClInclude Include="..\Public\Ending.h" />
     <ClInclude Include="..\public\Engineer.h" />
     <ClInclude Include="..\public\Equip.h" />
     <ClInclude Include="..\Public\Fade.h" />
@@ -227,6 +228,7 @@
     <ClInclude Include="..\Public\LetterBox.h" />
     <ClInclude Include="..\public\Level_ChoboField.h" />
     <ClInclude Include="..\Public\Level_Desert1.h" />
+    <ClInclude Include="..\Public\Level_End.h" />
     <ClInclude Include="..\Public\Level_FinalBoss.h" />
     <ClInclude Include="..\Public\Level_Maze.h" />
     <ClInclude Include="..\Public\Level_MidBoss.h" />
@@ -356,6 +358,7 @@
     <ClCompile Include="..\private\Drain.cpp" />
     <ClCompile Include="..\Private\Dust.cpp" />
     <ClCompile Include="..\private\ElderWilow.cpp" />
+    <ClCompile Include="..\Private\Ending.cpp" />
     <ClCompile Include="..\private\Engineer.cpp" />
     <ClCompile Include="..\private\Equip.cpp" />
     <ClCompile Include="..\Private\Fade.cpp" />
@@ -375,6 +378,7 @@
     <ClCompile Include="..\Private\LetterBox.cpp" />
     <ClCompile Include="..\private\Level_ChoboField.cpp" />
     <ClCompile Include="..\Private\Level_Desert1.cpp" />
+    <ClCompile Include="..\Private\Level_End.cpp" />
     <ClCompile Include="..\Private\Level_FinalBoss.cpp" />
     <ClCompile Include="..\Private\Level_Maze.cpp" />
     <ClCompile Include="..\Private\Level_MidBoss.cpp" />
