@@ -78,8 +78,14 @@ void CTerrainRect::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	if (nullptr != m_pRendererCom && m_tRectInfo.iLevelIndex != LEVEL_FINALBOSS)
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	else if (nullptr != m_pRendererCom && m_tRectInfo.iLevelIndex == LEVEL_FINALBOSS)
+	{
+		Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+	}
 }
 
 HRESULT CTerrainRect::Render(void)
@@ -88,27 +94,59 @@ HRESULT CTerrainRect::Render(void)
 		return E_FAIL;
 	if (m_tRectInfo.iLevelIndex != LEVEL_MAZE)
 	{
-		m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-		m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-		m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+		if (m_tRectInfo.iLevelIndex == LEVEL_FINALBOSS)
+		{
+			if (nullptr == m_pShaderCom)
+				return E_FAIL;
 
+			_float4x4		WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
+			_float4x4		ViewMatrixInv;
+			_float4			vCamPosition;
 
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
+			WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+			m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+			m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
 
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tRectInfo.iTex)))
-			return E_FAIL;
+			if (FAILED(m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_float4x4))))
+				return E_FAIL;
+			if (FAILED(m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_float4x4))))
+				return E_FAIL;
+			if (FAILED(m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_float4x4))))
+				return E_FAIL;
+			if (FAILED(m_pShaderCom->Set_Texture("g_Texture", m_pTextureCom->Get_Texture(m_tRectInfo.iTex))))
+				return E_FAIL;
 
-		if (nullptr == m_pGraphic_Device)
-			return E_FAIL;
+			m_pShaderCom->Begin(11);
 
-		m_pGraphic_Device->SetStreamSource(0, m_pVBuffer, 0, sizeof(VTXTEX));
-		m_pGraphic_Device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
-		m_pGraphic_Device->SetIndices(m_pIBuffer);
+			m_pGraphic_Device->SetStreamSource(0, m_pVBuffer, 0, sizeof(VTXTEX));
+			m_pGraphic_Device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
+			m_pGraphic_Device->SetIndices(m_pIBuffer);
 
-		
+			m_pGraphic_Device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
 
-		m_pGraphic_Device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+			m_pShaderCom->End();
+		}
+		else
+		{
+			m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+			m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+			m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+			if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+				return E_FAIL;
+
+			if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tRectInfo.iTex)))
+				return E_FAIL;
+
+			if (nullptr == m_pGraphic_Device)
+				return E_FAIL;
+
+			m_pGraphic_Device->SetStreamSource(0, m_pVBuffer, 0, sizeof(VTXTEX));
+			m_pGraphic_Device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
+			m_pGraphic_Device->SetIndices(m_pIBuffer);
+
+			m_pGraphic_Device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+		}
 	}
 	else
 	{
@@ -157,7 +195,6 @@ HRESULT CTerrainRect::SetUp_ShaderResource()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
-
 
 	_float4x4		WorldMatrix, ViewMatrix, ProjMatrix, PlayerWorldMatrix;
 	_float4x4		ViewMatrixInv;

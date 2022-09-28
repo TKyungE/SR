@@ -6,6 +6,7 @@
 #include "Layer.h"
 #include "Camera_Dynamic.h"
 #include "QuestManager.h"
+#include "TextBox.h"
 
 CRich::CRich(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -16,6 +17,7 @@ CRich::CRich(const CRich& rhs)
 	: CGameObject(rhs)
 {
 }
+
 HRESULT CRich::Initialize_Prototype(void)
 {
 	if (FAILED(__super::Initialize_Prototype()))
@@ -28,10 +30,11 @@ HRESULT CRich::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
+
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
 
 	_float3 vScale = { 4.f,4.f,2.5f };
 	m_pTransformCom->Set_Scaled(vScale);
@@ -49,7 +52,8 @@ HRESULT CRich::Initialize(void * pArg)
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 0;
 	m_tInfo.iExp = 50;
-	
+	m_tInfo.iMonsterType = (_int)MON_RICH;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -58,92 +62,24 @@ HRESULT CRich::Initialize(void * pArg)
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,1.f,1.f };
 	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
-	tInfo.iMonsterType = MON_WRAITH;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 1.f,1.f,1.f };
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 
 	Safe_Release(pGameInstance);
+
+	Ready_Script();
+
+	g_iCut = 60;
+
 	return S_OK;
 }
 
 void CRich::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	m_fFireSpearCool += fTimeDelta;
-	m_fSkillCool += fTimeDelta;
-	m_fCloneCool += fTimeDelta;
-	m_fMonster += fTimeDelta;
-	if (g_iCount == 8)
-	{
-		m_tInfo.iDmg = 66;
-		m_bCreateMonster = false;
-	}
+
 	OnTerrain();
-	if (!m_bDead)
-		Check_Front();
-	if (m_eCurState == DEAD)
-		{
-			if (m_tFrame.iFrameStart == 7)
-			{
-				m_fDeadTime += fTimeDelta;
-				if (m_fDeadTime > 2.f)
-				{	
-
-					m_tInfo.bDead = true;
-					return;
-				}
-			}
-			if (m_tFrame.iFrameStart != 7)
-				Move_Frame(fTimeDelta);
-				m_tInfo.bDead = false;
-				return;
-		}
-	if (m_bClone && m_iClone != 99)
-	{
-		m_bCreateClone = true;
-		if (m_fCloneCool > 0.15f)
-		{
-			Create_Clone();
-			m_fCloneCool = 0.f;
-		}
-	}
-	if (m_bMonster && m_iMonster != 99)
-	{
-		m_bCreateMonster = true;
-		if (m_fMonster > 0.15f)
-		{
-			Create_Monster();
-			m_fMonster = 0.f;
-		}
-	}
-	if (!m_bCreateClone && !m_bCreateMonster)
-	{
-		if (!m_bSkill && !m_bDead)
-			Chase(fTimeDelta);
-
-		if (m_eCurState == SKILL)
-			Use_Skill(fTimeDelta);
-
-		if (m_fFireSpearCool > 10.f)
-		{
-			if (!m_bMeteor)
-			{
-				Create_FireSpear();
-				CSoundMgr::Get_Instance()->PlayEffect(L"Fire.wav", fSOUND);
-			}
-			else
-			{
-				Create_Meteor();
-				CSoundMgr::Get_Instance()->PlayEffect(L"SkyMeteor.wav", fSOUND);
-			}
-
-			m_fFireSpearCool = 0.f;
-		}
-	}
-	
-	Move_Frame(fTimeDelta);
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.3f);
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
@@ -151,21 +87,122 @@ void CRich::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_BOSS, this)))
+	if (60 == g_iCut && !m_bTalk)
 	{
-		ERR_MSG(TEXT("Failed to Add CollisionGroup : CRich"));
-		return;
+		m_bTalk = true;
+
+		CTextBox::TINFO tTInfo;
+		tTInfo.iScriptSize = (_int)m_vScript.size();
+
+		tTInfo.pScript = new wstring[m_vScript.size()];
+		for (_int i = 0; i < m_vScript.size(); ++i)
+			tTInfo.pScript[i] = m_vScript[i];
+
+		tTInfo.iQuestIndex = 3;
+		tTInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		tTInfo.iNumQuest = 60;
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TextBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &tTInfo)))
+			return;
+	
+		if (60 == g_iReward)
+		{
+			g_iQuest = 0;
+			g_iReward = 0;
+		}
+	}
+	else if (0 == g_iCut)
+	{
+		m_fFireSpearCool += fTimeDelta;
+		m_fSkillCool += fTimeDelta;
+		m_fCloneCool += fTimeDelta;
+		m_fMonster += fTimeDelta;
+		if (g_iCount == 8)
+		{
+			m_tInfo.iDmg = 66;
+			m_bCreateMonster = false;
+		}
+
+		if (!m_bDead)
+			Check_Front();
+		if (m_eCurState == DEAD)
+		{
+			if (m_tFrame.iFrameStart == 7)
+			{
+				m_fDeadTime += fTimeDelta;
+				if (m_fDeadTime > 2.f)
+				{
+
+					m_tInfo.bDead = true;
+					return;
+				}
+			}
+			if (m_tFrame.iFrameStart != 7)
+				Move_Frame(fTimeDelta);
+			m_tInfo.bDead = false;
+			return;
+		}
+		if (m_bClone && m_iClone != 99)
+		{
+			m_bCreateClone = true;
+			if (m_fCloneCool > 0.15f)
+			{
+				Create_Clone();
+				m_fCloneCool = 0.f;
+			}
+		}
+		if (m_bMonster && m_iMonster != 99)
+		{
+			m_bCreateMonster = true;
+			if (m_fMonster > 0.15f)
+			{
+				Create_Monster();
+				m_fMonster = 0.f;
+			}
+		}
+		if (!m_bCreateClone && !m_bCreateMonster)
+		{
+			if (!m_bSkill && !m_bDead)
+				Chase(fTimeDelta);
+
+			if (m_eCurState == SKILL)
+				Use_Skill(fTimeDelta);
+
+			if (m_fFireSpearCool > 10.f)
+			{
+				if (!m_bMeteor)
+				{
+					Create_FireSpear();
+					CSoundMgr::Get_Instance()->PlayEffect(L"Fire.wav", fSOUND);
+				}
+				else
+				{
+					Create_Meteor();
+					CSoundMgr::Get_Instance()->PlayEffect(L"SkyMeteor.wav", fSOUND);
+				}
+
+				m_fFireSpearCool = 0.f;
+			}
+		}
+
+		Move_Frame(fTimeDelta);
+		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.3f);
+
+		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_BOSS, this)))
+		{
+			ERR_MSG(TEXT("Failed to Add CollisionGroup : CRich"));
+			return;
+		}
+
+		m_tInfo.bDead = false;
 	}
 
 	Safe_Release(pInstance);
-		
-	m_tInfo.bDead = false;
 }
 void CRich::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	
 	if (!m_bDead)
 	{
 		Check_Hit();
@@ -176,7 +213,6 @@ void CRich::Late_Tick(_float fTimeDelta)
 	Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
-	
 }
 
 HRESULT CRich::Render(void)
@@ -573,6 +609,16 @@ void CRich::Check_Front()
 		Motion_Change();
 
 		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Die.wav", fSOUND);
+
+		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+		if (nullptr == pQuestManager)
+			return;
+
+		Safe_AddRef(pQuestManager);
+
+		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
+
+		Safe_Release(pQuestManager);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && !m_bClone)
 	{
@@ -979,6 +1025,13 @@ HRESULT CRich::Create_Meteor()
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+void CRich::Ready_Script(void)
+{
+	m_vScript.push_back(TEXT("고작 네 녀석이 이 운명을 막을 수 있을 것 같은가..?"));
+	m_vScript.push_back(TEXT("너는 실패하고 이 세계는 멸망할 것이다.."));
+	m_vScript.push_back(TEXT("그럼에도... 내 앞에 서있다니..."));
+	m_vScript.push_back(TEXT("끝없는 죽음의 공포를 보여주마!"));
 }
 void CRich::OnBillboard()
 {
