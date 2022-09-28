@@ -44,6 +44,10 @@ HRESULT CStatInfo::Initialize(void * pArg)
 	for (int i = 0; i < 10; ++i)
 		m_EquipSlot[i] = { EITEM_END ,i,0 };
 	
+	m_tItem[0].iSlotNum = 0;
+	m_tItem[0].eItemNum = WING;
+	m_tItem[0].iCount = 1;
+
 	m_SkillSlot[0].eItemNum = SKILL_THUNDER;
 	m_SkillSlot[1].eItemNum = SKILL_TORNADO;
 	m_SkillSlot[2].eItemNum = SKILL_FIREBALL;

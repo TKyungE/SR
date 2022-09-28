@@ -360,7 +360,7 @@ void CGacha::Move_Frame(_float fTimeDelta)
 
 _int CGacha::Check_Item()
 {
-	_int iDest = rand() % 3;
+	_int iDest = rand() % 2;
 	_int iWin = rand() % 2;
 	_int iDraw = rand() % 10;
 	_int iLose = rand() % 14;

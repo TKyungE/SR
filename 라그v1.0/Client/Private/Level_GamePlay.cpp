@@ -438,10 +438,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 		++iCount;
 	}
 
-	Info.vPos = _float3(10.f, 0.f, 10.f);
-	Info.iMonsterType = (_int)MON_WRAITH;
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wraith"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
+
 
 	Safe_Release(pGameInstance);
 

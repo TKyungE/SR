@@ -1,0 +1,38 @@
+﻿  VIBuffer_WingRect.cpp
+  VIBuffer_Terrain.cpp
+  VIBuffer_RectLeft.cpp
+  VIBuffer_Rect3.cpp
+  VIBuffer_Rect2.cpp
+  VIBuffer_Rect.cpp
+  VIBuffer_Cube.cpp
+  VIBuffer.cpp
+  Transform.cpp
+  Timer_Manager.cpp
+  Timer.cpp
+  Texture.cpp
+  Shader.cpp
+  Renderer.cpp
+  Picking.cpp
+  Object_Manager.cpp
+  Level_Manager.cpp
+  Level.cpp
+  Layer.cpp
+  KeyMgr.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Input_Device.cpp
+  Graphic_Device.cpp
+  GameObject.cpp
+  GameInstance.cpp
+  Frustum.cpp
+  Component_Manager.cpp
+  Component.cpp
+  CollisionMgr.cpp
+  Collider.cpp
+  Camera.cpp
+  Base.cpp
+  코드를 생성하고 있습니다...
+  LINK : ..\Bin\Engine.dll을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+     ..\Bin\Engine.lib 라이브러리 및 ..\Bin\Engine.exp 개체를 생성하고 있습니다.
+  Engine.vcxproj -> C:\Users\KING\Desktop\수업\라그SR\SR\라그v1.0\Engine\Default\..\Bin\Engine.dll
+  Engine.vcxproj -> ..\Bin\Engine.pdb (Full PDB)
