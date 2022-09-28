@@ -41,7 +41,7 @@ HRESULT CLevel_End::Initialize()
 		return E_FAIL;
 
 	CSoundMgr::Get_Instance()->BGM_Stop();
-	CSoundMgr::Get_Instance()->PlayBGM(L"TOWN.wav", fSOUND+0.1f);
+	CSoundMgr::Get_Instance()->PlayBGM(L"Ending.wav", fSOUND+0.1f);
 
 	g_bEnd = true;
 
