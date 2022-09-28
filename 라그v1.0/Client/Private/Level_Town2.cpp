@@ -14,6 +14,7 @@
 #include "Transparent_Wall.h"
 #include "House3.h"
 #include "House6.h"
+#include "QuestManager.h"
 
 //bool g_bCollider = false;
 //bool g_bTalk = false;
@@ -99,7 +100,14 @@ void CLevel_Town2::Late_Tick(_float fTimeDelta)
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (GetKeyState('A') < 0)				// ¸¶Áö¸· Äù½ºÆ® ±ü´Ù ¶ó´Â Á¶°ÇÁÖ¸é µÊ.
+	CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+
+	if (nullptr == pQuestManager)
+		return;
+
+	Safe_AddRef(pQuestManager);
+
+	if (nullptr != pQuestManager->Find_Finish(TEXT("Quest_HuntQuestFinal")))
 	{
 		if (!m_bEnd)
 		{
@@ -113,15 +121,18 @@ void CLevel_Town2::Late_Tick(_float fTimeDelta)
 
 			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Fade"), LEVEL_TOWN2, TEXT("Layer_Fade2"), &tInfo)))
 				return;
-
+			
 			m_bEnd = true;
 		}
-	}	
-	if (nullptr != pGameInstance->Find_Layer(LEVEL_TOWN2, TEXT("Layer_Fade2")) && pGameInstance->Find_Layer(LEVEL_TOWN2, TEXT("Layer_Fade2"))->Get_Objects().front()->Get_Info().iMaxMp == 1)
-	{
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_ENDING))))
-			return;
+
+		if (nullptr != pGameInstance->Find_Layer(LEVEL_TOWN2, TEXT("Layer_Fade2")) && pGameInstance->Find_Layer(LEVEL_TOWN2, TEXT("Layer_Fade2"))->Get_Objects().front()->Get_Info().iMaxMp == 1)
+		{
+			if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_ENDING))))
+				return;
+		}
 	}
+
+	Safe_Release(pQuestManager);
 
 	Safe_Release(pGameInstance);
 }

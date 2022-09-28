@@ -36,6 +36,10 @@ HRESULT CLevel_End::Initialize()
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Fade"), LEVEL_ENDING, TEXT("Layer_Fade"), &info)))
 		return E_FAIL;
 
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Ending"), LEVEL_ENDING, TEXT("Layer_End"))))
+		return E_FAIL;
+
 	CSoundMgr::Get_Instance()->BGM_Stop();
 	CSoundMgr::Get_Instance()->PlayBGM(L"TOWN.wav", fSOUND+0.1f);
 
@@ -53,7 +57,7 @@ void CLevel_End::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	SetWindowText(g_hWnd, TEXT("타운레벨입니다."));
+	SetWindowText(g_hWnd, TEXT("엔드레벨입니다."));
 }
 
 
@@ -70,7 +74,7 @@ HRESULT CLevel_End::Ready_Layer_Camera(const _tchar * pLayerTag)
 	CameraDesc.CameraDesc.vEye = _float3(0.f, 10.f, -10.f);
 	CameraDesc.CameraDesc.vAt = _float3(0.f, 0.f, 0.f);
 
-	CameraDesc.CameraDesc.fFovy = D3DXToRadian(60.0f);
+	CameraDesc.CameraDesc.fFovy = D3DXToRadian(100.0f);
 	CameraDesc.CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 	CameraDesc.CameraDesc.fNear = 0.2f;
 	CameraDesc.CameraDesc.fFar = 500.f;

@@ -38,7 +38,9 @@ public:
 private:
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
+	CTransform*	m_pTransformCom2 = nullptr;
 	CVIBuffer_Rect* m_pVIBuffer = nullptr;
+	CVIBuffer_Rect* m_pVIBuffer2 = nullptr;
 	CTexture* m_pTextureCom = nullptr;
 	CShader*	m_pShaderCom = nullptr;
 private:

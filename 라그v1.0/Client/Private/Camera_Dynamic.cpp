@@ -259,13 +259,22 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 		if (FAILED(Bind_OnGraphicDev()))
 			return;
 	}
+
 	else if (g_bEnd)
 	{
-		m_pTransform->Set_State(CTransform::STATE_RIGHT, _float3(1.f, 0.f, 0.f));
-		m_pTransform->Set_State(CTransform::STATE_UP, _float3(0.f, 1.f, 0.f));
-		m_pTransform->Set_State(CTransform::STATE_LOOK, _float3(0.f, 0.f, 1.f));
+		if (!m_bMove)
+		{
+			m_pTransform->Set_State(CTransform::STATE_RIGHT, _float3(1.f, 0.f, 0.f));
+			m_pTransform->Set_State(CTransform::STATE_UP, _float3(0.f, 1.f, 0.f));
+			m_pTransform->Set_State(CTransform::STATE_LOOK, _float3(0.f, 0.f, 1.f));
 
-		m_pTransform->Set_State(CTransform::STATE_POSITION, _float3(0.f,0.f,0.f));
+			m_pTransform->Turn(_float3(1.f, 0.f, 0.f), 0.3f);
+		}
+		
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _float3(0.f, 0.f, 0.f));
+
+		if (FAILED(Bind_OnGraphicDev()))
+			return;
 	}
 }
 
@@ -344,6 +353,8 @@ void CCamera_Dynamic::Late_Tick(_float fTimeDelta)
 	//	m_pTransform->LookAt(_float3(47.f, 0.f, 14.f));
 	//	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 	//}
+
+
 }
 
 HRESULT CCamera_Dynamic::Render()

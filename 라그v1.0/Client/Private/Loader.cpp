@@ -122,6 +122,7 @@
 #include "DarkShield3.h"
 #include "DarkBall.h"
 #include "Fade.h"
+#include "Ending.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -1454,8 +1455,13 @@ HRESULT CLoader::Loading_Prototype()
 		CDoor::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	Safe_Release(pGameInstance);
+	// End
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Ending"),
+		CEnding::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
+
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 

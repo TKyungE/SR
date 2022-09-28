@@ -702,7 +702,7 @@ void CWraith::Check_Front()
 		m_bRun = true;
 		m_eCurState = BACK_ATTACK;
 	}
-	else if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && m_bCheck && !m_bCheck2)
+	/*else if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && m_bCheck && !m_bCheck2)				// 순간이동 얍 하는거 정지.
 	{
 		_uint iRandom = rand() % 2;
 
@@ -717,7 +717,7 @@ void CWraith::Check_Front()
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos2[iRandom]);
 
 		m_bCheck3 = true;
-	}
+	}*/
 
 }
 void CWraith::Use_Skill(_float fTimeDelta)
