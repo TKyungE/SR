@@ -253,6 +253,13 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 			m_pTransform->LookAt(MonPos);
 		}
 
+		if (g_iCut == 60)
+		{
+			_float3 MonPos = *(_float3*)&pGameInstance->Find_Layer(m_CameraDesc.Info.iLevelIndex, TEXT("Layer_Boss"))->Get_Objects().front()->Get_World().m[3][0];
+
+			m_pTransform->LookAt(MonPos);
+		}
+
 		Safe_Release(pGameInstance);
 
 		if (FAILED(Bind_OnGraphicDev()))
@@ -275,15 +282,6 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 		if (FAILED(Bind_OnGraphicDev()))
 			return;
 	}
-
-	if (g_iCut == 60)
-	{
-		_float3 MonPos = *(_float3*)&pGameInstance->Find_Layer(m_CameraDesc.Info.iLevelIndex, TEXT("Layer_Boss"))->Get_Objects().front()->Get_World().m[3][0];
-
-		m_pTransform->LookAt(MonPos);
-	}
-
-	Safe_Release(pGameInstance);
 
 	if (FAILED(Bind_OnGraphicDev()))
 		return;

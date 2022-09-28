@@ -52,7 +52,8 @@ HRESULT CRich::Initialize(void * pArg)
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 0;
 	m_tInfo.iExp = 50;
-	
+	m_tInfo.iMonsterType = (_int)MON_RICH;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -608,6 +609,16 @@ void CRich::Check_Front()
 		Motion_Change();
 
 		CSoundMgr::Get_Instance()->PlayEffect(L"Rich_Die.wav", fSOUND);
+
+		CQuestManager* pQuestManager = CQuestManager::Get_Instance();
+		if (nullptr == pQuestManager)
+			return;
+
+		Safe_AddRef(pQuestManager);
+
+		pQuestManager->Increase_Count((MONSTERTYPE)m_tInfo.iMonsterType);
+
+		Safe_Release(pQuestManager);
 	}
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && !m_bClone)
 	{
