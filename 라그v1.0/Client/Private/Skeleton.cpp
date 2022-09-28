@@ -118,17 +118,7 @@ void CSkeleton::Tick(_float fTimeDelta)
 			return;
 		}
 
-		_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-
-		if (0.25 < Distance)
-		{
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-
-			vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
+		Chase(fTimeDelta);
 
 		Move_Frame(fTimeDelta);
 
