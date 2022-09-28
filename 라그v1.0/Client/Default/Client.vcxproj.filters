@@ -472,6 +472,12 @@
     <Filter Include="03.Effect\Default\17.Dark">
       <UniqueIdentifier>{a32869ee-baa3-4b71-8cf5-56b687c16657}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\End">
+      <UniqueIdentifier>{2c0fa9d5-87f1-4830-84c1-1561890a52d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Ending">
+      <UniqueIdentifier>{09db8baf-7ac5-41c8-81e4-0dca2c38732a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -909,14 +915,20 @@
     <ClInclude Include="..\Public\WorldHpBar.h">
       <Filter>04.UI\WorldHpBar</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Camera_Dynamic.h">
-      <Filter>02.GameObject\Loading</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\BigBang.h">
       <Filter>03.Effect\Skill\19.BigBang</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Dark.h">
       <Filter>03.Effect\Default\17.Dark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_End.h">
+      <Filter>01.Levels\End</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Ending.h">
+      <Filter>02.GameObject\BackGroundObj\Ending</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Dynamic.h">
+      <Filter>02.GameObject\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1351,6 +1363,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Dark.cpp">
       <Filter>03.Effect\Default\17.Dark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_End.cpp">
+      <Filter>01.Levels\End</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Ending.cpp">
+      <Filter>02.GameObject\BackGroundObj\Ending</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
