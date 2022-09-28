@@ -70,6 +70,8 @@ HRESULT CZombie::Initialize(void * pArg)
 	m_StatInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_StatInfo"))->Get_Objects().front();
 	Safe_Release(pGameInstance);
 
+	if (m_tInfo.iLevelIndex == LEVEL_FINALBOSS)
+		m_bPlay = true;
 	return S_OK;
 }
 
@@ -166,7 +168,7 @@ void CZombie::Tick(_float fTimeDelta)
 	{
 		m_fTimeDelta += fTimeDelta;
 
-		if (m_fTimeDelta > 7.f)
+		if (m_fTimeDelta > 6.f)
 		{
 			m_bCheck = false;
 			m_bPlay = true;

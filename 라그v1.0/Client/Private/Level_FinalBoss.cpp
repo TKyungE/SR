@@ -43,7 +43,7 @@ HRESULT CLevel_FinalBoss::Initialize(void)
 
 	fSound = fSOUND;
 	CSoundMgr::Get_Instance()->BGM_Stop();
-	//CSoundMgr::Get_Instance()->PlayBGM(L".wav", fSOUND + 0.1f);
+	CSoundMgr::Get_Instance()->PlayBGM(L"FinalBoss.wav", fSOUND + 0.1f);
 
 	return S_OK;
 }
@@ -158,7 +158,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 
 	memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
-	if (Info.iLevelIndex == LEVEL_MAZE)
+	if (Info.iLevelIndex == LEVEL_TOWN)
 		Info.vPos = m_vPlayerPos;
 	else
 		Info.vPos = m_vBackPos;

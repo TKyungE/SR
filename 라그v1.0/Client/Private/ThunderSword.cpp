@@ -213,7 +213,7 @@ void CThunderSword::CheckColl()
 	}*/
 	if (pInstance->Collision(this, TEXT("Com_Collider"), COLLISION_BOSS, TEXT("Com_Collider"), &pTarget))
 	{
-		if (pTarget->Get_Info().iMp == 0)
+		if (pTarget->Get_Info().iMp == 0 && pTarget->Get_Info().iDmg != 666)
 		{
 			_float fCri = _float(rand() % 100 + 1);
 			_float fLUK = (_float)dynamic_cast<CStatInfo*>(m_StatInfo)->Get_Stat().iLUK / 2.f;

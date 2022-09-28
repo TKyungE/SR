@@ -37,6 +37,10 @@ HRESULT CSky::Initialize(void* pArg)
 	{
 		m_tInfo.iMp = 2;
 	}
+	else if (m_tInfo.iLevelIndex == LEVEL_FINALBOSS)
+	{
+		m_tInfo.iMp = 1;
+	}
 	else
 		m_tInfo.iMp = 2;
 

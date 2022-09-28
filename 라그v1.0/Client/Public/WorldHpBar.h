@@ -47,8 +47,7 @@ private:
 
 private:
 	HRESULT SetUp_Components();
-	HRESULT SetUp_RenderState();
-	HRESULT Release_RenderState();
+
 public:
 	void OnBillboard();
 
