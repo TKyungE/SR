@@ -396,26 +396,6 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 
 		++iCount;
 	}
-	
-	for (; iter != m_vecPortal.end(); ++iter)
-	{
-		if (iCount == 1)
-		{
-			iCount = 0;
-			break;
-		}
-
-		CGameObject::INFO tInfo;
-		tInfo.iLevelIndex = LEVEL_TOWN;
-		tInfo.vPos = iter->BackGroundPos;
-		tInfo.vScale = iter->vScale;
-		tInfo.iNextLevel = LEVEL_TOWN2;
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
-			return E_FAIL;
-
-		++iCount;
-	}
 
 	Safe_Release(pGameInstance);
 	return S_OK;

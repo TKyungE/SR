@@ -273,7 +273,7 @@ HRESULT CLevel_Town2::Ready_Layer_Player(const _tchar * pLayerTag)
 		CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 		memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
 		
-		if (Info.iLevelIndex == LEVEL_TOWN)
+		if (Info.iLevelIndex == LEVEL_SKY)
 		{
 			Info.vPos = m_vPlayerPos;
 		}
@@ -460,14 +460,6 @@ HRESULT CLevel_Town2::Ready_Layer_Portal(const _tchar * pLayerTag)
 			iCount = 0;
 			break;
 		}
-		CGameObject::INFO tInfo;
-		tInfo.iLevelIndex = LEVEL_TOWN2;
-		tInfo.vPos = iter->BackGroundPos;
-		tInfo.vScale = iter->vScale;
-		tInfo.iNextLevel = LEVEL_GAMEPLAY;
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN2, pLayerTag, &tInfo)))
-			return E_FAIL;
 
 		++iCount;
 	}
