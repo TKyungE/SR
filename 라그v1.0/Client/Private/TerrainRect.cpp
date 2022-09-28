@@ -81,7 +81,11 @@ void CTerrainRect::Late_Tick(_float fTimeDelta)
 	if (nullptr != m_pRendererCom && m_tRectInfo.iLevelIndex != LEVEL_FINALBOSS)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 	else if (nullptr != m_pRendererCom && m_tRectInfo.iLevelIndex == LEVEL_FINALBOSS)
+	{
+		Compute_CamDistance(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+	}
 }
 
 HRESULT CTerrainRect::Render(void)

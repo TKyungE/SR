@@ -96,7 +96,6 @@ void CAlphaUI::Late_Tick(_float fTimeDelta)
 		}
 	}
 
-
 	if (nullptr != m_pRendererCom && m_tInfo.bHit && m_fAlpha != 0.f)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }

@@ -184,7 +184,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar * pLayerTag)
 	Info.iLevelIndex = LEVEL_FINALBOSS;
 	Info.vPos = { 7.f,1.f,8.f };
 	Info.iMonsterType = (_int)MON_RICH;
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rich"), LEVEL_GAMEPLAY, TEXT("Layer_Boss"), &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rich"), LEVEL_FINALBOSS, TEXT("Layer_Boss"), &Info)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

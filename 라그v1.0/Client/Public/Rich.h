@@ -64,6 +64,7 @@ private:
 	void Create_Monster();
 	HRESULT Create_FireSpear();
 	HRESULT Create_Meteor();
+	void Ready_Script(void);
 
 private:
 	STATE				m_ePreState;
@@ -90,7 +91,9 @@ private:
 	_bool				m_bDarkBall = false;
 	CGameObject*			m_StatInfo;
 
-	
+	vector<wstring> m_vScript;
+	_bool m_bTalk = false;
+
 public:
 	static CRich* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
