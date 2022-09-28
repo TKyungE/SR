@@ -909,14 +909,14 @@
     <ClInclude Include="..\Public\WorldHpBar.h">
       <Filter>04.UI\WorldHpBar</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Camera_Dynamic.h">
-      <Filter>02.GameObject\Loading</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\BigBang.h">
       <Filter>03.Effect\Skill\19.BigBang</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Dark.h">
       <Filter>03.Effect\Default\17.Dark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Dynamic.h">
+      <Filter>02.GameObject\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
